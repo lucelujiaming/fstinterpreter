@@ -1,0 +1,14 @@
+all: interpreter xmlReader
+.PHONY : all
+interpreter:
+	g++ -o interpreter forsight_inter_control.cpp \
+        forsight_interpreter_shm.cpp\
+        forsight_innercmd.cpp forsight_innerfunc.cpp \
+        forsight_basint.cpp forsight_int_main.cpp \
+        -lrt -lpthread -std=c++11 -fpermissive
+
+xmlReader:
+	g++ -o xmlReader xmlReader.cpp \
+          -I/usr/local/include/libxml2 -L/usr/local/lib -lxml2  -std=c++11
+clean:
+	rm interpreter xmlReader 
