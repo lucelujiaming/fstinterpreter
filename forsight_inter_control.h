@@ -22,10 +22,10 @@
 #include "interpreter_common.h"
 #include "forsight_basint.h"
 
-bool parseScript(const char* file_name);
+bool parseScript(const char* fname);
 // void findLoopEnd(int index);
-ProgramState getPrgmState();
-void setPrgmState(ProgramState state);
+InterpreterState getPrgmState();
+void setPrgmState(InterpreterState state);
 void setCurLine(int line);
 #ifdef WIN32
 void setWarning(__int64 warn);

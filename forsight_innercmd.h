@@ -9,6 +9,8 @@ int find_internal_cmd(char *s);
 int call_internal_cmd_exec_sub_thread(int index);
 int call_internal_cmd(int index, int iLineNum, 
 					 struct thread_control_block* objThreadCntrolBlock);
-void generateXPathVector(char * file_name);
+void generateXPathVector(char * fname);
+int getLineNumFromXPathVector(char * xPath);
+int getMaxLineNum();
 
 #endif

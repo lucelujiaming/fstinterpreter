@@ -55,8 +55,8 @@ double call_ceil (char * valFirst, char * valSecond);
 double call_floor(char * valFirst, char * valSecond);
 double call_fabs (char * valFirst, char * valSecond);
 // double call_frexp(char * valFirst, char * valSecond);
-// double call_ldexp(char * valFirst, char * valSecond);
- double call_modf (char * valFirst, char * valSecond);
+double call_ldexp(char * valFirst, char * valSecond);
+double call_modf (char * valFirst, char * valSecond);
 double call_fmod (char * valFirst, char * valSecond);
 
 
@@ -86,7 +86,7 @@ struct intern_func_type {
     (char *)"floor", 1, call_floor,
     (char *)"fabs",  1, call_fabs ,
 //    (char *)"frexp", 2, call_frexp,
-//    (char *)"ldexp", 2, call_ldexp,
+    (char *)"ldexp", 2, call_ldexp,
     (char *)"modf",  2, call_modf ,
     (char *)"fmod",  2, call_fmod ,
     (char *)"",      0, 0 , 
@@ -218,6 +218,13 @@ double call_fabs (char * valFirst, char * valSecond)
 {
 	double val = atof(valFirst);
     return fabs(val) ;
+}
+
+double call_ldexp (char * valFirst, char * valSecond)
+{
+	double val = atof(valFirst);
+	int    valTwo = atoi(valSecond);
+    return ldexp(val, valTwo) ;
 }
 
 // 返回参数的小数部分, 整数部分不回传。

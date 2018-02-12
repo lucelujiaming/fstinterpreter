@@ -40,9 +40,11 @@ struct intern_cmd_type {
     int can_exec_sub_thread ;
     int (*p)(int , struct thread_control_block* );   // pointer to the function   
 } intern_cmd[] = {   
+    // move on the top
     (char *)"movel",      0, call_MoveL,
     (char *)"movej",      0, call_MoveJ,
     (char *)"movec",      0, call_MoveC,
+    // left
     (char *)"timer",      1, call_Timer,
     (char *)"useralarm",  1, call_UserAlarm,
     (char *)"wait",       1, call_Wait,
@@ -391,16 +393,16 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 			else if(strcmp(objThreadCntrolBlock->token, "call") == 0)
 			{
 				// prog_demo_dec::prog_1 (1, 2)
-				memset(additionalInfomation.execute.file_name, 0x00, 128);
+				memset(additionalInfomation.execute.fname, 0x00, 128);
 				get_token(objThreadCntrolBlock);
-				sprintf(additionalInfomation.execute.file_name, 
-					"%s%s", additionalInfomation.execute.file_name, 
+				sprintf(additionalInfomation.execute.fname, 
+					"%s%s", additionalInfomation.execute.fname, 
 						objThreadCntrolBlock->token);
 				while (strcmp(objThreadCntrolBlock->token, ")") != 0)
 				{
 					get_token(objThreadCntrolBlock);
-					sprintf(additionalInfomation.execute.file_name, 
-						"%s%s", additionalInfomation.execute.file_name, 
+					sprintf(additionalInfomation.execute.fname, 
+						"%s%s", additionalInfomation.execute.fname, 
 						objThreadCntrolBlock->token);
 				}
 			}
@@ -453,12 +455,20 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	get_token(objThreadCntrolBlock);
 	if(strcmp(objThreadCntrolBlock->token, "cnt") == 0)
     {
-        instr.target.cnt = -1;
+    	get_exp(objThreadCntrolBlock, &value, &boolValue);
+    	if(objThreadCntrolBlock->prog_mode == 1)
+    	{
+        	instr.target.cnt = -1;
+    	}
+	    else
+	    {
+	        instr.target.cnt = value;
+	    }
     }
     else
     {
-		get_token(objThreadCntrolBlock);
-        instr.target.cnt = atoi(objThreadCntrolBlock->token);
+    	get_exp(objThreadCntrolBlock, &value, &boolValue);
+        instr.target.cnt = value;
     }
 	
 	// Set to instrSet
@@ -532,12 +542,20 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	get_token(objThreadCntrolBlock);
 	if(strcmp(objThreadCntrolBlock->token, "cnt") == 0)
     {
-        instr.target.cnt = -1;
+    	get_exp(objThreadCntrolBlock, &value, &boolValue);
+    	if(objThreadCntrolBlock->prog_mode == 1)
+    	{
+        	instr.target.cnt = -1;
+    	}
+	    else
+	    {
+	        instr.target.cnt = value;
+	    }
     }
     else
     {
-		get_token(objThreadCntrolBlock);
-        instr.target.cnt = atoi(objThreadCntrolBlock->token);
+    	get_exp(objThreadCntrolBlock, &value, &boolValue);
+        instr.target.cnt = value;
     }
 	// Set to instrSet
 	memcpy(objThreadCntrolBlock->instrSet, &instr, sizeof(Instruction));
@@ -629,12 +647,20 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	get_token(objThreadCntrolBlock);
 	if(strcmp(objThreadCntrolBlock->token, "cnt") == 0)
     {
-        instr.target.cnt = -1;
+    	get_exp(objThreadCntrolBlock, &value, &boolValue);
+    	if(objThreadCntrolBlock->prog_mode == 1)
+    	{
+        	instr.target.cnt = -1;
+    	}
+	    else
+	    {
+	        instr.target.cnt = value;
+	    }
     }
     else
     {
-		get_token(objThreadCntrolBlock);
-        instr.target.cnt = atoi(objThreadCntrolBlock->token);
+    	get_exp(objThreadCntrolBlock, &value, &boolValue);
+        instr.target.cnt = value;
     }
 	// Set to instrSet
 	memcpy(objThreadCntrolBlock->instrSet, &instr, sizeof(Instruction));
@@ -739,7 +765,7 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		while(now - timeStart < timeWaitSeconds)
 		{
 #ifdef WIN32
-			Sleep(1000);
+			Sleep(100);
 #else
 			sleep(1);
 #endif
@@ -760,7 +786,7 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			while(!cond)
 			{
 #ifdef WIN32
-				Sleep(1000);
+				Sleep(100);
 #else
 				sleep(1);
 #endif
@@ -783,7 +809,7 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			while(!cond)
 			{
 #ifdef WIN32
-				Sleep(1000);
+				Sleep(100);
 #else
 				sleep(1);
 #endif
@@ -795,22 +821,28 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			}
 			
 			objThreadCntrolBlock->prog = wait_stack.loc;
-			get_token(objThreadCntrolBlock);
-			if(strcmp(objThreadCntrolBlock->token, "skip") == 0)
+			if(!cond)
 			{
-				; // Do nothing  
+				get_token(objThreadCntrolBlock);
+				if(strcmp(objThreadCntrolBlock->token, "skip") == 0)
+				{
+					; // Do nothing  
+				}
+				else if(strcmp(objThreadCntrolBlock->token, "call") == 0)
+				{
+					// exec_call(objThreadCntrolBlock) ;
+					int iRet = exec_call(objThreadCntrolBlock);
+					if(iRet == END_COMMND_RET)
+						return END_COMMND_RET;
+				}
+				else 
+				{
+					putback(objThreadCntrolBlock);
+				}
 			}
-			else if(strcmp(objThreadCntrolBlock->token, "call") == 0)
-			{
-				// exec_call(objThreadCntrolBlock) ;
-				int iRet = exec_call(objThreadCntrolBlock);
-				if(iRet == END_COMMND_RET)
-					return END_COMMND_RET;
-			}
-			else 
-			{
-				putback(objThreadCntrolBlock);
-			}
+			else
+				find_eol(objThreadCntrolBlock);
+			
 		}
 		else 
 		{
@@ -822,17 +854,17 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 
 int call_Pause(int iLineNum, struct thread_control_block* objThreadCntrolBlock) 
 {  
-	ProgramState programState  = PAUSED_R ;
+	InterpreterState interpreterState  = PAUSED_R ;
 	setPrgmState(PAUSED_R);
 
-	while(programState == PAUSED_R)
+	while(interpreterState == PAUSED_R)
 	{
 #ifdef WIN32
-		Sleep(1000);
-		programState = EXECUTE_R ;
+		Sleep(100);
+		interpreterState = EXECUTE_R ;
 #else
 		sleep(1);
-		programState = getPrgmState();
+		interpreterState = getPrgmState();
 #endif
 	}
     return 1;   
@@ -842,15 +874,16 @@ int call_Abort(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 {  
 	setPrgmState(IDLE_R);
 #ifdef WIN32
-	Sleep(1000);
+	Sleep(100);
+    return 0; 
 #else
 	sleep(1);
-#endif
     return END_COMMND_RET;   
+#endif
 }
 
 
-void generateXPathVector(char * file_name)
+void generateXPathVector(char * fname)
 {
 	char xpath_file_name[FILE_PATH_LEN];
 	int iLineNum = 0 ;
@@ -862,10 +895,7 @@ void generateXPathVector(char * file_name)
 	FILE *xpath_file ;
 
 	memset(xpath_file_name, 0x00, FILE_PATH_LEN);
-	char * fileNamePtr = strrchr(file_name, '.');
-	memcpy(xpath_file_name, file_name, 
-		fileNamePtr - file_name);
-	sprintf(xpath_file_name, "%s_xpath.txt", xpath_file_name);
+	sprintf(xpath_file_name, "%s_xpath.txt", fname);
 
 	if((xpath_file = fopen(xpath_file_name, "r"))==NULL){
 		perror("open file failed\n");  
@@ -899,4 +929,18 @@ void generateXPathVector(char * file_name)
 //	}
 }
 
+int getLineNumFromXPathVector(char * xPath)
+{
+    for(unsigned int i = 0; i < g_vecXPath.size(); ++i)  
+    {  
+        if(g_vecXPath[i] == xPath)
+			return i ;
+    }
+	return -1 ;
+}
+
+int getMaxLineNum()
+{
+	return g_vecXPath.size() ;
+}
 

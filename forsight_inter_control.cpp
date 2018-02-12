@@ -1,4 +1,5 @@
 #include "forsight_inter_control.h"
+#include "forsight_innercmd.h"
 
 #define VELOCITY    (500)
 using namespace std;
@@ -7,14 +8,18 @@ static std::vector<Instruction> g_script;
 static int block_start, block_end;
 bool terminated = false;
 
-
+bool is_abort = false;
+bool is_backward= false;
+InterpreterState prgm_state = IDLE_R;
+//bool send_flag = false;
+bool debug_flag = false;
 int target_line;
 static IntprtStatus intprt_status;
 static Instruction instruction;
 static CtrlStatus ctrl_status;
 static InterpreterControl intprt_ctrl;
 
-static ProgramState g_privateProgramState;
+static InterpreterState g_privateInterpreterState;
 
 vector<string> split(string str,string pattern)
 {
@@ -36,12 +41,12 @@ vector<string> split(string str,string pattern)
 	return result;
 }
 
-bool parseScript(const char* file_name)
+bool parseScript(const char* fname)
 {
     Instruction instr;
     char command[256];
     string path = "/home/fst/Program/";
-    path = path + file_name;
+    path = path + fname;
     ifstream fin(path.c_str());
     int count = 0;
     while(fin.getline(command, sizeof(command)))
@@ -134,14 +139,14 @@ void findLoopEnd(int index)
 }
 
 
-ProgramState getPrgmState()
+InterpreterState getPrgmState()
 {
-	return g_privateProgramState ;
+	return g_privateInterpreterState ;
 }
 
-void setPrgmState(ProgramState state)
+void setPrgmState(InterpreterState state)
 {
-	g_privateProgramState = state ;
+	g_privateInterpreterState = state ;
 #ifdef WIN32
     IntprtStatus temp,  * tempPtr = &temp;
     int offset = (int)&(tempPtr->state) - (int)tempPtr ;
@@ -189,6 +194,26 @@ void getSendPermission()
     readShm(SHM_CTRL_STATUS, offset, (void*)&ctrl_status.is_permitted, sizeof(ctrl_status.is_permitted));
 }
 
+UserOpMode getUserOpMode()
+{
+#ifdef WIN32
+	CtrlStatus temp,  * tempPtr = &temp;
+    int offset = (int)&(tempPtr->user_op_mode) - (int)tempPtr ;
+#else
+    int offset = &((CtrlStatus*)0)->user_op_mode;
+#endif  
+    readShm(SHM_CTRL_STATUS, offset, (void*)&ctrl_status.user_op_mode, sizeof(ctrl_status.user_op_mode));
+
+    return ctrl_status.user_op_mode;
+}
+
+/*SysCtrlMode getMotionMode()*/
+//{
+    //int offset = &((CtrlStatus*)0)->sys_ctrl_mode;
+    //readShm(SHM_CTRL_STATUS, offset, (void*)&ctrl_status.sys_ctrl_mode, sizeof(ctrl_status.sys_ctrl_mode));
+
+    //return ctrl_status.sys_ctrl_mode;
+//}
 
 bool setInstruction(Instruction * instruction)
 {
@@ -197,6 +222,19 @@ bool setInstruction(Instruction * instruction)
         return false;
     int count = 0;
     bool ret;
+    //printf("cur state:%d\n", prgm_state);
+    if ((debug_flag) && (prgm_state == EXECUTE_TO_PAUSE_T))
+    {
+        if (isInstructionEmpty(SHM_INTPRT_CMD))
+        {
+            //printf("check if step is done\n");
+            setPrgmState(PAUSED_R);
+        }
+        return false;
+    }
+
+    // if (prgm_state != EXECUTE_R)
+    //    return false;
     do
     {
 		if (instruction->is_additional == false)
@@ -209,8 +247,28 @@ bool setInstruction(Instruction * instruction)
 			ret = tryWrite(SHM_INTPRT_CMD, 0, 
 				(void*)instruction, sizeof(Instruction) + sizeof(AdditionalInfomation));
 		}
+
+	    if (ret)
+	    {
+	        if (is_backward)
+	        {
+	            is_backward = false;
+	            target_line--;
+	            setCurLine(target_line);
+	        }
+	        else
+	        {
+	            target_line++;
+	            setCurLine(target_line);
+	        }   
+
+	        if (debug_flag)
+	            setPrgmState(EXECUTE_TO_PAUSE_T);   //wait until this Instruction end
+	    }
+
 #ifdef WIN32
 		Sleep(1);
+		break ;
 #else
         usleep(1000);
 #endif
@@ -219,16 +277,6 @@ bool setInstruction(Instruction * instruction)
     }while(!ret);
 
     return true;
-}
-
-void initShm()
-{
-    openShm(SHM_INTPRT_CMD, 1024);
-    openShm(SHM_INTPRT_STATUS, 1024);
-    openShm(SHM_CTRL_CMD, 1024);
-    openShm(SHM_CTRL_STATUS, 1024);
-    intprt_ctrl.cmd = START;
-	g_privateProgramState = IDLE_R ;
 }
 
 bool getIntprtCtrl()
@@ -240,14 +288,23 @@ void parseCtrlComand(struct thread_control_block * objThdCtrlBlockPtr)
 {
     switch (intprt_ctrl.cmd)
     {
-	case LOAD:
-		break;
-	case JUMP:
-		target_line = intprt_ctrl.id;
-		break;
-	case START:
-		{
-			strcpy(objThdCtrlBlockPtr->file_name, "prog_demo_dec.bas"); // "BAS-EX1.BAS") ; // 
+        case LOAD:
+            // printf("load file_name\n");
+            break;
+        case JUMP:
+            printf("jump to line:%s\n", intprt_ctrl.line);
+			target_line = getLineNumFromXPathVector(intprt_ctrl.line);
+			break;
+        case DEBUG:
+            printf("debug...");
+            debug_flag = true;
+            setPrgmState(PAUSED_R);
+            // startFile();
+            break;
+        case START:
+            printf("start run...");
+            setPrgmState(EXECUTE_R);
+			strcpy(objThdCtrlBlockPtr->project_name, "prog_demo_dec"); // "BAS-EX1.BAS") ; // 
 			objThdCtrlBlockPtr->is_main_thread = 1 ;
 			objThdCtrlBlockPtr->iThreadIdx = 0 ;
 			objThdCtrlBlockPtr->instrSet   
@@ -256,24 +313,72 @@ void parseCtrlComand(struct thread_control_block * objThdCtrlBlockPtr)
 			base_thread_create(0, objThdCtrlBlockPtr);
 			intprt_ctrl.cmd = LOAD ;
             break;
-        }
-	case FORWARD:
-		break;
-	case BACKWARD:
-		if (g_script[target_line-1].type == MOTION)
-			target_line--;
-		else
-			perror("can't back\n");
-		break;
+        case FORWARD:
+            printf("step forward\n");
+            debug_flag = true;
+            setPrgmState(EXECUTE_R);
+            target_line++;
+            setLinenum(objThdCtrlBlockPtr, target_line);
+            break;
+        case BACKWARD:
+            printf("backward\n");
+           // setPrgmState(EXECUTE_R);            
+            if (target_line < 1)
+                break;
+            if (objThdCtrlBlockPtr->prog_jmp_line[target_line-1].type == MOTION)
+                is_backward = true;
+            else
+            {
+                perror("can't back\n");
+                break;
+            }
+            debug_flag = true;
+            setPrgmState(EXECUTE_R);
+	    	target_line--;
+		    setLinenum(objThdCtrlBlockPtr, target_line);
+		    break;
 	case CONTINUE:
 		if(getPrgmState() == PAUSED_R)
-		   setPrgmState(EXECUTE_R);
+        {
+            printf("continue move..\n");
+            debug_flag = false;
+            setPrgmState(EXECUTE_R);
+		}
 		else
-		   setWarning(1);
-		break;
-	case MOD_REG:
-		break;
-	default:
-		break;
+		    setWarning(1);
+
+            break;
+        case PAUSE:
+        {
+            UserOpMode mode = getUserOpMode();
+            if ((mode == SLOWLY_MANUAL_MODE_U)
+            || (mode == UNLIMITED_MANUAL_MODE_U))
+            {
+                debug_flag = true;
+            }
+            setPrgmState(PAUSED_R); 
+            break;
+        }
+        case ABORT:
+            printf("abort motion\n");
+	        is_abort = true;
+            target_line = getMaxLineNum();
+            break;
+        case MOD_REG:
+            break;
+        default:
+            break;
+
     }
 }
+
+void initShm()
+{
+    openShm(SHM_INTPRT_CMD, 1024);
+    openShm(SHM_INTPRT_STATUS, 1024);
+    openShm(SHM_CTRL_CMD, 1024);
+    openShm(SHM_CTRL_STATUS, 1024);
+    intprt_ctrl.cmd = START;
+	g_privateInterpreterState = IDLE_R ;
+}
+

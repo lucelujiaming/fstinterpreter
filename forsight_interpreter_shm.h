@@ -50,7 +50,11 @@ int createShm(const char* name, int size);
 int openShm(const char* name, int size);
 void readShm(const char* name, int offset,  void*buffer, int size);
 void writeShm(const char* name, int offset, void*buffer, int size);
+bool lockRead(const char* name, int offset, void*buffer, int size);
+bool unlockRead(const char* name);
 bool tryRead(const char* name, int offset, void*buffer, int size);
 bool tryWrite(const char* name, int offset, void*buffer, int size);
+bool isInstructionEmpty(const char* name);
+
 
 #endif

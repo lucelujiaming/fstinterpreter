@@ -14,6 +14,8 @@
 #include <algorithm>
 using namespace std;
 
+#include "forsight_xml_reader.h"
+
 #define PROG_HEAD         "head"
 #define LAB_LEN           128
 #define FILE_PATH_LEN     1024
@@ -49,12 +51,12 @@ int generateFunctionCall(xmlNodePtr nodeFunctionCall, LineInfo objLineInfo);
 int printBASCode(LineInfo objLineInfo, char *format, char * value)
 {
 	FILE * fpMix   = fopen(g_mix_file_name,"a");
-	printf(format, value);
+	// printf(format, value);
 	fprintf(fpMix, format, value);
 	fclose(fpMix);
 	
 	FILE * fpBasic = fopen(g_basic_file_name,"a");
-	printf(format, value);
+	// printf(format, value);
 	fprintf(fpBasic, format, value);
 	fclose(fpBasic);
 	return 1;
@@ -69,10 +71,10 @@ int exportBASCode(LineInfo objLineInfo, char *title, char *format, char * value)
 	FILE * fpXPath = fopen(g_xpath_file_name,"a");
 	FILE * fpBasic = fopen(g_basic_file_name,"a");
 
-	printf(title);
+	// printf(title);
 	fprintf(fpMix,"%s", title);
 	
-	printf("(%03d)", g_lineNum);
+	// printf("(%03d)", g_lineNum);
 	fprintf(fpMix,"(%03d)", g_lineNum);
 	fprintf(fpXPath,"%03d:", g_lineNum);
 
@@ -80,23 +82,23 @@ int exportBASCode(LineInfo objLineInfo, char *title, char *format, char * value)
 	if(strlen(title) > 0)
 	{
 		iPathLen =  strlen(objLineInfo.xPath) ;
-		printf("(%03d)%s", iPathLen, objLineInfo.xPath);
+		// printf("(%03d)%s", iPathLen, objLineInfo.xPath);
 		fprintf(fpMix,"(%03d)%s", iPathLen, objLineInfo.xPath);
 		fprintf(fpXPath,"%s\n", objLineInfo.xPath);
 		for(int i = 100 ; i > iPathLen; i--)
 		{
-			printf(" ");
+			// printf(" ");
 			fprintf(fpMix, " ");
 		}
 	}
 #endif
 	for(int i = 0 ; i < objLineInfo.indentValue ; i++)
 	{
-		printf("    ");
+		// printf("    ");
 		fprintf(fpMix, "    ");
 	    fprintf(fpBasic, "    ");
 	}
-	printf(format, value);
+	// printf(format, value);
 	fprintf(fpMix, format, value);
 	fprintf(fpBasic, format, value);
 	fclose(fpMix);
@@ -273,7 +275,7 @@ int generateOffsetPR(xmlNodePtr nodeInstructionParam, LineInfo objLineInfo)
 	name = xmlGetProp(nodeInstructionParam, BAD_CAST"name");
 	type = xmlGetProp(nodeInstructionParam, BAD_CAST"type");
 	memset(label_uf, 0x00, 32);
-	if(xmlStrcasecmp(type, BAD_CAST"uf")==0)
+	if(xmlStrcasecmp(type, BAD_CAST"with_uf")==0)
 		strcpy(label_uf, "_UF");
 	
 	if(xmlStrcasecmp(name, BAD_CAST"offset_pr")==0){
@@ -312,7 +314,7 @@ int generateOffsetVEC(xmlNodePtr nodeInstructionParam, LineInfo objLineInfo)
 	name = xmlGetProp(nodeInstructionParam, BAD_CAST"name");
 	type = xmlGetProp(nodeInstructionParam, BAD_CAST"type");
 	memset(label_uf, 0x00, 32);
-	if(xmlStrcasecmp(type, BAD_CAST"uf")==0)
+	if(xmlStrcasecmp(type, BAD_CAST"with_uf")==0)
 		strcpy(label_uf, "_UF");
 
 	if(xmlStrcasecmp(name, BAD_CAST"offset_cvec")==0){
@@ -338,7 +340,7 @@ int generateOffsetVEC(xmlNodePtr nodeInstructionParam, LineInfo objLineInfo)
 			label_vector.push_back(labelParam);
 		}
 	}
-	if(xmlStrcasecmp(type, BAD_CAST"uf")==0){
+	if(xmlStrcasecmp(type, BAD_CAST"with_uf")==0){
 		if (label_vector.size() == 7){
 			memset(label_uf, 0x00, 32);
 			strcpy(label_uf, label_vector[6].name);
@@ -620,13 +622,13 @@ int generateMoveInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLin
 			else if(xmlStrcasecmp(name, BAD_CAST"velocity")==0){
 				printBASCode(objLineInfo, "%s ", (char*)value);
 			}
-			else if(xmlStrcasecmp(name, BAD_CAST"smooth_cnt")==0){
-				printBASCode(objLineInfo, "CNT", "");
+			else if(xmlStrcasecmp(name, BAD_CAST"fine")==0){
+				printBASCode(objLineInfo, "CNT %s ", (char*)value);
 			}
-			else if(xmlStrcasecmp(name, BAD_CAST"smooth_sv")==0){
+			else if(xmlStrcasecmp(name, BAD_CAST"smooth_velocity")==0){
 				printBASCode(objLineInfo, "SV %s ", (char*)value);
 			}
-			else if(xmlStrcasecmp(name, BAD_CAST"smooth_sd")==0){
+			else if(xmlStrcasecmp(name, BAD_CAST"smooth_distance")==0){
 				printBASCode(objLineInfo, "SD %s ", (char*)value);
 			}
 			else if(xmlStrcasecmp(name, BAD_CAST"acceleration")==0){
@@ -1304,6 +1306,7 @@ int parse_xml_file(char * file_name){
         return -1;
     }
     xmlFreeDoc(doc);
+	xmlCleanupParser();
     return 0;
 }
 
@@ -1409,7 +1412,7 @@ static int iswhite(char c)
 // 		// printf("content:\n%s\n",content);	
 // 	}
 
-void generateXPathVector(char * xpath_file_name)
+void outputXPathVector(char * xpath_file_name)
 {
 	vector<string> vecXPath ;
 	int iLineNum = 0 ;
@@ -1451,18 +1454,24 @@ void generateXPathVector(char * xpath_file_name)
 	}
 }
 
-int main(int  argc, char *argv[]){
+int parse_xml_file_wrapper(char * xml_file_name){
+    xmlDocPtr doc;
 	char   xmlFileName[FILE_PATH_LEN];
-	if(argc==2) {
-		;
-	}
-	else
-	{
+	if(xml_file_name == 0) {
 		printf("usage: run <filename>\n");
-		exit(1);
+		return 0 ;
 	}
+	// Not translate unexist xml.
+	doc = xmlReadFile(xml_file_name,"UTF-8",XML_PARSE_RECOVER);
+    if(doc == NULL){
+        printf("\t\t\t\t ERROR: doc == null\n");
+        return -1;
+    }
+	xmlFreeDoc(doc);
+	xmlCleanupParser();
+	
 	memset(g_xml_file_name, 0x00, FILE_PATH_LEN);
-	strcpy(g_xml_file_name, argv[1]);
+	strcpy(g_xml_file_name, xml_file_name);
 	
 	memset(xmlFileName, 0x00, FILE_PATH_LEN);
 	char * fileNamePtr = strrchr(g_xml_file_name, '.');
@@ -1485,7 +1494,7 @@ int main(int  argc, char *argv[]){
             perror("parse xml failed");
     }
 
-	generateXPathVector(g_xpath_file_name);
+	// outputXPathVector(g_xpath_file_name);
     return 0;
 }
 

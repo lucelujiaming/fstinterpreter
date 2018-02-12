@@ -40,14 +40,15 @@ typedef enum __AdditionalExecuteInfomationType
 
 typedef enum _InstType
 {
+    COMMON,
     LOOP, 
     END,
     MOTION,
 }InstType;
 
-typedef enum _ProgramState
+typedef enum _InterpreterState
 {
-    IDLE_R      = 0,
+    IDLE_R      = 0,    
     EXECUTE_R   = 1,
     PAUSED_R    = 2,
 
@@ -55,16 +56,19 @@ typedef enum _ProgramState
     EXECUTE_TO_PAUSE_T  = 102,
     PAUSE_TO_IDLE_T     = 103,
     PAUSE_TO_EXECUTE_T  = 104,
-}ProgramState;
+}InterpreterState;
 
 typedef enum _InterpreterCommand
 {
     LOAD    = 101,
     JUMP    = 102,
     START   = 103,
-    FORWARD  = 104,
-    BACKWARD = 105,
-    CONTINUE = 106,
+    DEBUG   = 104,
+    FORWARD  = 105,
+    BACKWARD = 106,
+    CONTINUE = 107,
+    PAUSE   = 108,
+    ABORT   = 109,
 
     MOD_REG = 201,
 }InterpreterCommand;
@@ -106,16 +110,19 @@ typedef struct _RegMap
     char    value[128];
 }RegMap;
 
-typedef enum _StartMode
+typedef enum _UserOpMode
 {
-    FALL_SPEED  = 1,
-    DEBUG       = 2,
-}StartMode;
+    NONE_U                  = 0,
+    AUTO_MODE_U             = 1,
+    SLOWLY_MANUAL_MODE_U    = 2,
+    UNLIMITED_MANUAL_MODE_U = 3,
+}UserOpMode;
+
+
 
 typedef struct _StartCtrl
 {
     char        file_name[128];
-    StartMode   mode;
 }StartCtrl;
 
 typedef struct _InterpreterControl
@@ -124,7 +131,8 @@ typedef struct _InterpreterControl
     union
     {
         StartCtrl   start_ctrl;
-        int         id;
+        // int         id;
+        char           line[TP_XPATH_LEN];
         RegMap      reg;
         DIOMap      dio;
     };
@@ -133,13 +141,14 @@ typedef struct _InterpreterControl
 
 typedef struct _CtrlStatus
 {
-    bool is_permitted;
+    bool        is_permitted;  //if sending next move command is permitted
+    UserOpMode  user_op_mode;
 }CtrlStatus;
 
 typedef struct _IntprtStatus
 {
     char            line[TP_XPATH_LEN];
-    ProgramState    state;
+    InterpreterState    state;
 #ifdef WIN32
 	__int64         warn;
 #else
@@ -164,7 +173,7 @@ typedef struct _AdditionalExecuteInfomation
     double    range ;
     union {
         RegMap          assignment;
-        char            file_name[128];
+        char            fname[128];
     };
 } AdditionalExecuteInfomation;
 

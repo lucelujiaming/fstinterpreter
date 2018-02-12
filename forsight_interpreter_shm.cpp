@@ -168,9 +168,58 @@ bool tryWrite(const char* name, int offset, void*buffer, int size)
         *(ptr_latest) = MEM_WRITE_ALREADY;
         *(ptr_write) = MEM_FALSE;       
     } 
+    else
+    {
+        return false;
+    }
 
 
     return true;
+}
+
+
+bool lockRead(const char* name, int offset, void*buffer, int size)
+{
+    ShmData *data = getShm(name);
+    if (data == NULL)
+        return false;
+    volatile unsigned int *ptr_read, *ptr_write, *ptr_turn, *ptr_latest;
+    AcceFlag *flag = (AcceFlag *)&(((FuncTable*)data->ptr)->offset_flag);
+    ptr_read = &(flag->read);
+    ptr_write = &(flag->write);
+    ptr_turn = &(flag->turn);
+    ptr_latest = &(flag->latest);
+   // printf("read:%d, write:%d, turn:%d, latest:%d\n", flag->read, flag->write, flag->turn, flag->latest);
+
+    if (*(ptr_latest) == MEM_READ_ALREADY){return false;}
+
+    if (*(ptr_read) == MEM_FALSE && *(ptr_write)  ==  MEM_FALSE)
+    {
+        *(ptr_read) = MEM_TRUE;  //Indicating that it is going to be the reading state
+        *(ptr_turn) = MEM_READ_TURN; //mark that which process is using the memory
+        if (*(ptr_write) == MEM_TRUE &&  *(ptr_turn) != MEM_READ_TURN )
+        {
+            *(ptr_read) = MEM_FALSE; 
+            return false;
+        } //check if writing process is working on.
+        memcpy(buffer, ((FuncTable*)data->ptr)->param + offset, size);
+        *(ptr_latest) = MEM_READ_ALREADY;
+       // *(ptr_read) = MEM_FALSE;
+    }
+
+    return true; 
+}
+
+bool unlockRead(const char* name)
+{
+    ShmData *data = getShm(name);
+    if (data == NULL)
+        return false;
+//    volatile unsigned int *ptr_read, *ptr_write, *ptr_turn, *ptr_latest;
+    AcceFlag *flag = (AcceFlag *)&(((FuncTable*)data->ptr)->offset_flag);
+    if (flag->read == MEM_TRUE)
+        flag->read = MEM_FALSE;
+	return true;
 }
 
 bool tryRead(const char* name, int offset, void*buffer, int size)
@@ -205,9 +254,21 @@ bool tryRead(const char* name, int offset, void*buffer, int size)
     return true;    
 }
 
-bool isEmpty(const char* name)
+bool isInstructionEmpty(const char* name)
 {
     ShmData *data = getShm(name);
-	return true ;
+    if (data == NULL)
+    {
+        printf("can't find name:%s\n", name);
+        return false;
+    }
+    volatile unsigned int *ptr_read, *ptr_write; // , *ptr_turn, *ptr_latest;
+    AcceFlag *flag = (AcceFlag *)&(((FuncTable*)data->ptr)->offset_flag);
+    ptr_read = &(flag->read);
+    ptr_write = &(flag->write);
+    if (*(ptr_read) == MEM_FALSE && *(ptr_write)  == MEM_FALSE)
+        return true;
+
+    return false;
 }
 

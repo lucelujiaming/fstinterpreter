@@ -51,6 +51,13 @@ enum double_ops {
 	OR ,     // value OR  partial_value
 };
 
+typedef enum _LineNumState
+{
+    LINENUM_NONE,
+    LINENUM_PRODUCED, 
+    LINENUM_CONSUMED,
+}LineNumState;
+
 typedef enum _SubLabelType
 {
     SUBLABEL_NONE,
@@ -64,13 +71,18 @@ struct sub_label {
 	char *p;  /* points to place to go in source file*/
 };
 
-// This structure encapsulates the info
-// associated with variables.
 struct var_type {
     char var_name[80]; // name
     // var_inner_type v_type; // data type
 	float value ;
 };
+
+// This structure encapsulates the info
+// associated with variables.
+typedef struct prog_line_info_t {
+    char*     prog_pos; // name
+	InstType  type; ;
+} prog_line_info ;
 
 typedef struct select_and_cycle_stack {
 	int itokentype ;
@@ -87,7 +99,7 @@ typedef struct select_and_cycle_stack {
 
 struct thread_control_block {
 	int iThreadIdx ;
-	char file_name[128];
+	char project_name[128];
 	// This vector holds info for global variables.
 	vector<var_type> global_vars;
 	
@@ -106,7 +118,7 @@ struct thread_control_block {
 	int    iSubProgNum ;
 	char * sub_prog[NUM_SUBROUTINE];
 	
-	char *prog_jmp_line[1024];
+	prog_line_info prog_jmp_line[1024];
 	int  prog_mode ; // = 0;   /* 0 - run to end, 1 - step  */
 	int  is_main_thread ; // = 0;   /* 0 - run to end, 1 - step  */
 	
@@ -125,7 +137,13 @@ struct thread_control_block {
 	int gosub_tos;  /* index to top of GOSUB stack */
 
 	Instruction * instrSet ;
+	// LineNum and Update flag
+	int               iLineNum ;
+	LineNumState      stateLineNum ;
 } ;
+
+void setLinenum(struct thread_control_block* objThreadCntrolBlock, int iLinenum);
+LineNumState getLinenum(struct thread_control_block* objThreadCntrolBlock, int & num);
 
 int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode);
 #ifdef WIN32
@@ -147,5 +165,6 @@ int exec_call(struct thread_control_block * objThreadCntrolBlock);
 void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname, float value);
 float find_var(struct thread_control_block * objThreadCntrolBlock, char *s);
 
+void find_eol(struct thread_control_block * objThreadCntrolBlock);
 #endif
 

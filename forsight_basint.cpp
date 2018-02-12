@@ -6,6 +6,8 @@
 #include "forsight_innercmd.h"
 #include "forsight_innerfunc.h"
 #include "forsight_inter_control.h"
+#include "forsight_auto_lock.h"
+#include "forsight_xml_reader.h"
 
 // #define NUM_LAB 100
 
@@ -138,12 +140,11 @@ void    level1(struct thread_control_block * objThreadCntrolBlock, float *result
 void unary(char, float *r),
 	arith(char o, float *r, float *h);
 
-int load_program(char *p, char *fname);
+int load_program(char *p, char *pname);
 void assignment(struct thread_control_block * objThreadCntrolBlock) ;
 void scan_labels(struct thread_control_block * objThreadCntrolBlock, 
-				SubLabelType type, char * file_name);
+				SubLabelType type, char * pname);
 int add_label(struct thread_control_block * objThreadCntrolBlock, struct sub_label objLabel);
-void find_eol(struct thread_control_block * objThreadCntrolBlock);
 char *find_label(struct thread_control_block * objThreadCntrolBlock, char *s);
 
 int look_up(char *s);
@@ -191,6 +192,63 @@ void* basic_interpreter(void* arg)
 #endif // WIN32
 }
 
+void setLinenum(struct thread_control_block* objThreadCntrolBlock, int iLinenum)
+{
+#ifdef WIN32
+	win_cs_lock tempBaseLock ;
+#else
+	linux_mutex_lock tempBaseLock ;
+#endif 
+	auto_lock temp(&tempBaseLock) ;
+	if(objThreadCntrolBlock->stateLineNum == LINENUM_CONSUMED)
+	{
+		objThreadCntrolBlock->stateLineNum = LINENUM_PRODUCED;
+		objThreadCntrolBlock->iLineNum = iLinenum;
+	}
+	else
+	{
+		printf("setLinenum failure\n");
+	}
+}
+
+LineNumState getLinenumInternal(
+	struct thread_control_block* objThreadCntrolBlock, int & num)
+{
+#ifdef WIN32
+	win_cs_lock tempBaseLock ;
+#else
+	linux_mutex_lock tempBaseLock ;
+#endif 
+	auto_lock temp(&tempBaseLock) ;
+	if(objThreadCntrolBlock->stateLineNum == LINENUM_PRODUCED)
+	{
+		objThreadCntrolBlock->stateLineNum = LINENUM_CONSUMED;
+		num = objThreadCntrolBlock->iLineNum ;
+		return LINENUM_PRODUCED ;
+	}
+	else 
+	{
+		return objThreadCntrolBlock->stateLineNum ;
+	}
+}
+
+int getLinenum(
+	struct thread_control_block* objThreadCntrolBlock)
+{
+    int num ;
+	LineNumState state = getLinenumInternal(objThreadCntrolBlock, num);
+	while(state == LINENUM_CONSUMED)
+	{
+#ifdef WIN32
+	  Sleep(100);
+#else
+	  sleep(1);
+#endif
+		state = getLinenumInternal(objThreadCntrolBlock, num);
+	}
+	return num ;  // objThreadCntrolBlock->iLineNum ;
+}
+
 int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode)
 {
   int iRet = 0;
@@ -217,13 +275,13 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	  
       label_init(objThreadCntrolBlock);  /* zero all labels */
 	  /* load the program to execute */
-	  if(!load_program(objThreadCntrolBlock->p_buf,objThreadCntrolBlock->file_name)) exit(1);
-      generateXPathVector(objThreadCntrolBlock->file_name);
+	  if(!load_program(objThreadCntrolBlock->p_buf,objThreadCntrolBlock->project_name)) exit(1);
+      generateXPathVector(objThreadCntrolBlock->project_name);
 	  
 	  objThreadCntrolBlock->prog = objThreadCntrolBlock->p_buf;
 	  objThreadCntrolBlock->prog_end = objThreadCntrolBlock->prog + strlen(objThreadCntrolBlock->prog);
 	  memset(objThreadCntrolBlock->prog_jmp_line, 0x00, sizeof(objThreadCntrolBlock->prog_jmp_line));
-	  scan_labels(objThreadCntrolBlock, INSIDE_FUNC, objThreadCntrolBlock->file_name); /* find the labels in the program */
+	  scan_labels(objThreadCntrolBlock, INSIDE_FUNC, objThreadCntrolBlock->project_name); /* find the labels in the program */
 	  objThreadCntrolBlock->select_and_cycle_tos = 0; /* initialize the FOR stack index */
 	  objThreadCntrolBlock->gosub_tos = 0; /* initialize the GOSUB stack index */
 	  
@@ -242,16 +300,8 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 // 	  }
       
       memset(cLineContent, 0x00, 128);
-	  strFileName = objThreadCntrolBlock->file_name ;
-	  if(strFileName.substr(strFileName.size() -4) == ".bas")
-	  {
-		  sprintf(cLineContent, "%s::main", 
-			  strFileName.substr(0, strFileName.size() -4).c_str());
-	  }
-	  else
-	  {
-		  sprintf(cLineContent, "%s::main", objThreadCntrolBlock->file_name);
-	  }
+	  strFileName = objThreadCntrolBlock->project_name ;
+	  sprintf(cLineContent, "%s::main", objThreadCntrolBlock->project_name);
       char * loc = find_label(objThreadCntrolBlock, cLineContent); // "main");
 	  if(loc=='\0')
 	  {
@@ -297,7 +347,21 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 		    setPrgmState(PAUSED_R);
   			printf("Line number(%s) -> ", cLineContent);
 			int iOldLinenum = iLinenum ;
-			iScan = scanf("%d", &iLinenum);
+			
+			// iScan = scanf("%d", &iLinenum);
+			InterpreterState interpreterState  = PAUSED_R ;
+			while(interpreterState == PAUSED_R)
+			{
+#ifdef WIN32
+				Sleep(100);
+				// interpreterState = EXECUTE_R ;
+#else
+				sleep(1);
+				interpreterState = getPrgmState();
+#endif
+			}
+			iLinenum = objThreadCntrolBlock->iLineNum ;
+			// 
 			if(iScan == 0)
 			{
 				printf("illegal line number.");
@@ -316,10 +380,10 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 			// iLinenum = atoi(cLinenum);
 			if((iLinenum >0) && (iLinenum < 1024))
 			{
-				if(objThreadCntrolBlock->prog_jmp_line[iLinenum - 1] != 0)
+				if(objThreadCntrolBlock->prog_jmp_line[iLinenum - 1].prog_pos!= 0)
 				{
 					objThreadCntrolBlock->prog =
-						objThreadCntrolBlock->prog_jmp_line[iLinenum - 1];
+						objThreadCntrolBlock->prog_jmp_line[iLinenum - 1].prog_pos;
 				}
 			}
 		    setPrgmState(EXECUTE_R);
@@ -467,18 +531,22 @@ int  calc_line_from_prog(struct thread_control_block * objThreadCntrolBlock)
 {
 	for(int i = 0 ; i < 1024 ; i++)
 	{
-		if(objThreadCntrolBlock->prog < objThreadCntrolBlock->prog_jmp_line[i])
+		if(objThreadCntrolBlock->prog < objThreadCntrolBlock->prog_jmp_line[i].prog_pos)
 			return i ;
 	}
 	return 0;
 }
 
 /* Load a program. */
-int load_program(char *p, char *fname)
+int load_program(char *p, char *pname)
 {
+  char fname[128];
   FILE *fp = 0 ;
   int i=0;
-
+  
+  sprintf(fname, "%s.xml", pname);
+  parse_xml_file_wrapper(fname);
+  sprintf(fname, "%s.bas", pname);
   if(!(fp=fopen(fname, "r"))) return 0;
 
   i = 0;
@@ -570,10 +638,18 @@ void deal_array_element(struct thread_control_block * objThreadCntrolBlock)
 	   get_token(objThreadCntrolBlock);
 	   if(objThreadCntrolBlock->token[0] == '['){
 	   	  array_value = release_array_element(objThreadCntrolBlock);
+		  if(array_value < 0) {
+	   	     putback(objThreadCntrolBlock);
+		     serror(4);
+		     return;
+		  }
           sprintf(objThreadCntrolBlock->token, "%s[%d]", array_variable, (int)array_value);
+  	      objThreadCntrolBlock->prog--;
 	   }
-	   // return ']' to the prog
-	   objThreadCntrolBlock->prog--;
+	   else
+	   	  putback(objThreadCntrolBlock);
+//	   // return ']' to the prog
+//	   objThreadCntrolBlock->prog--;
 //	}
 }
 
@@ -676,35 +752,27 @@ void print(struct thread_control_block * objThreadCntrolBlock)
 
 /* Find all labels. */
 void scan_labels(struct thread_control_block * objThreadCntrolBlock, 
-				SubLabelType type, char * file_name)
+				SubLabelType type, char * pname)
 {
   struct sub_label  objLabel ;
    int iLineNum = 0 ;
   int addr;
   char *temp;
-  string strFileName ;
 
   temp = objThreadCntrolBlock->prog;   /* save pointer to top of program */
 
   /* if the first token in the file is a label */
-  objThreadCntrolBlock->prog_jmp_line[iLineNum++] = objThreadCntrolBlock->prog ;
+  objThreadCntrolBlock->prog_jmp_line[iLineNum].prog_pos = objThreadCntrolBlock->prog ;
+  iLineNum++ ;
   get_token(objThreadCntrolBlock);
   if(objThreadCntrolBlock->token_type==NUMBER) {
     // strcpy(label_table[0].name,token);
     // label_table[0].p=prog;
     objLabel.type = type ;
-	strFileName = file_name ;
-	if(strFileName.substr(strFileName.size() -4) == ".bas")
-	{
-		sprintf(objLabel.name, "%s::%s", 
-			    strFileName.substr(0, strFileName.size() -4).c_str(), 
+	
+	sprintf(objLabel.name, "%s::%s", pname, 
        			objThreadCntrolBlock->token);
-	}
-	else
-	{
-		sprintf(objLabel.name, "%s::%s", file_name, 
-       			objThreadCntrolBlock->token);
-	}
+	
 	objLabel.p = objThreadCntrolBlock->prog;
 	addr = add_label(objThreadCntrolBlock, objLabel);
       if(addr==-1 || addr==-2) {
@@ -716,18 +784,10 @@ void scan_labels(struct thread_control_block * objThreadCntrolBlock,
 	  {
 		  get_token(objThreadCntrolBlock);
 		  objLabel.type = type ;
-		  strFileName = file_name ;
-		  if(strFileName.substr(strFileName.size() -4) == ".bas")
-		  {
-			  sprintf(objLabel.name, "%s::%s", 
-				    strFileName.substr(0, strFileName.size() -4).c_str(), 
-	       			objThreadCntrolBlock->token);
-		  }
-		  else
-		  {
-			  sprintf(objLabel.name, "%s::%s", file_name, 
-	       			objThreadCntrolBlock->token);
-		  }
+		  
+		  sprintf(objLabel.name, "%s::%s", pname, 
+       			objThreadCntrolBlock->token);
+			  
 		  objLabel.p = objThreadCntrolBlock->prog;
 		  // Jump parameter
 		  find_eol(objThreadCntrolBlock);
@@ -740,26 +800,25 @@ void scan_labels(struct thread_control_block * objThreadCntrolBlock,
   else
 	  putback(objThreadCntrolBlock);
 
+  
+  objThreadCntrolBlock->prog_jmp_line[iLineNum].type = COMMON ;
+  if(objThreadCntrolBlock->token_type==INNERCMD) 
+  {
+	  int iIdx = find_internal_cmd(objThreadCntrolBlock->token) ;
+	  if((iIdx >= 0) && (iIdx <= 2))  // movel - 0 ; movej - 1 ; movec - 2
+		  objThreadCntrolBlock->prog_jmp_line[iLineNum].type = MOTION ;
+  }
   find_eol(objThreadCntrolBlock);
+  
   do {
-    objThreadCntrolBlock->prog_jmp_line[iLineNum++] = objThreadCntrolBlock->prog ;
+    objThreadCntrolBlock->prog_jmp_line[iLineNum].prog_pos = objThreadCntrolBlock->prog ;
     get_token(objThreadCntrolBlock);
     if(objThreadCntrolBlock->token_type==NUMBER) {
       // strcpy(label_table[addr].name, token);
       // label_table[addr].p = prog;  /* current point in program */
           objLabel.type = type ;
-	      strFileName = file_name ;
-		  if(strFileName.substr(strFileName.size() -4) == ".bas")
-		  {
-			  sprintf(objLabel.name, "%s::%s", 
-				    strFileName.substr(0, strFileName.size() -4).c_str(), 
+		  sprintf(objLabel.name, "%s::%s", pname, 
 	       			objThreadCntrolBlock->token);
-		  }
-		  else
-		  {
-			  sprintf(objLabel.name, "%s::%s", file_name, 
-	       			objThreadCntrolBlock->token);
-		  }
 		  objLabel.p = objThreadCntrolBlock->prog;
 
 		  addr = add_label(objThreadCntrolBlock, objLabel);
@@ -772,18 +831,8 @@ void scan_labels(struct thread_control_block * objThreadCntrolBlock,
 		{
 			get_token(objThreadCntrolBlock);
             objLabel.type = type ;
-			strFileName = file_name ;
-			if(strFileName.substr(strFileName.size() -4) == ".bas")
-			{
-				  sprintf(objLabel.name, "%s::%s", 
-					    strFileName.substr(0, strFileName.size() -4).c_str(), 
+			sprintf(objLabel.name, "%s::%s", pname, 
 		       			objThreadCntrolBlock->token);
-			}
-			else
-			{
-				  sprintf(objLabel.name, "%s::%s", file_name, 
-		       			objThreadCntrolBlock->token);
-			}
 		    objLabel.p = objThreadCntrolBlock->prog;
 			// Jump parameter
 			find_eol(objThreadCntrolBlock);
@@ -793,9 +842,19 @@ void scan_labels(struct thread_control_block * objThreadCntrolBlock,
 	        }
 		}
 	}
+
+	objThreadCntrolBlock->prog_jmp_line[iLineNum].type = COMMON ;
+	if(objThreadCntrolBlock->token_type==INNERCMD) 
+	{
+	    int iIdx = find_internal_cmd(objThreadCntrolBlock->token) ;
+		if((iIdx >= 0) && (iIdx <= 2))  // movel - 0 ; movej - 1 ; movec - 2
+			objThreadCntrolBlock->prog_jmp_line[iLineNum].type = MOTION ;
+	}
     /* if not on a blank line, find next line */
     if(objThreadCntrolBlock->tok!=EOL)
 		find_eol(objThreadCntrolBlock);
+	
+    iLineNum++ ;
   } while(objThreadCntrolBlock->tok!=FINISHED);
   objThreadCntrolBlock->prog = temp;  /* restore to original */
 }
@@ -1746,7 +1805,7 @@ void get_params(struct thread_control_block * objThreadCntrolBlock)
 void exec_import(struct thread_control_block * objThreadCntrolBlock)
 {
   char *proglabelsScan; 
-  char file_buffer[128];
+  
   // int addr;
   struct sub_label  objLabel ;
   char * temp = objLabel.name ;
@@ -1767,10 +1826,10 @@ void exec_import(struct thread_control_block * objThreadCntrolBlock)
 	  printf("allocation failure");
 	  exit(1);
   }
-  memset(file_buffer, 0x00, 128);
-  sprintf(file_buffer, "%s.bas", objLabel.name);
+  // memset(file_buffer, 0x00, 128);
+  // sprintf(file_buffer, "%s.bas", objLabel.name);
   // objLabel.p = objThreadCntrolBlock->sub_prog[objThreadCntrolBlock->iSubProgNum] ;
-  load_program(objThreadCntrolBlock->sub_prog[objThreadCntrolBlock->iSubProgNum], file_buffer);
+  load_program(objThreadCntrolBlock->sub_prog[objThreadCntrolBlock->iSubProgNum], objLabel.name);
   // Scan the labels in the import files
   proglabelsScan = objThreadCntrolBlock->prog ;
   objThreadCntrolBlock->prog = objThreadCntrolBlock->sub_prog[objThreadCntrolBlock->iSubProgNum];
