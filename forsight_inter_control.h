@@ -33,7 +33,7 @@ void setWarning(__int64 warn);
 void setWarning(long long int warn);
 #endif 
 void getSendPermission();
-bool setInstruction(Instruction * instruction);
+bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instruction * instruction);
 bool getIntprtCtrl();
 void executeBlock();
 void executeLoop(int loop_cnt);

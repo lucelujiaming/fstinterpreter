@@ -494,10 +494,10 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		}
 	}
 	
-	bool bRet = setInstruction(objThreadCntrolBlock->instrSet);
+	bool bRet = setInstruction(objThreadCntrolBlock, objThreadCntrolBlock->instrSet);
 	while(bRet == false)
 	{
-		bRet = setInstruction(objThreadCntrolBlock->instrSet);
+		bRet = setInstruction(objThreadCntrolBlock, objThreadCntrolBlock->instrSet);
 	}
     return 1;   
 }
@@ -580,10 +580,10 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		}
 	}
 	
-	bool bRet = setInstruction(objThreadCntrolBlock->instrSet);
+	bool bRet = setInstruction(objThreadCntrolBlock, objThreadCntrolBlock->instrSet);
 	while(bRet == false)
 	{
-		bRet = setInstruction(objThreadCntrolBlock->instrSet);
+		bRet = setInstruction(objThreadCntrolBlock, objThreadCntrolBlock->instrSet);
 	}
     return 1;   
 }
@@ -685,10 +685,10 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		}
 	}
 	
-	bool bRet = setInstruction(objThreadCntrolBlock->instrSet);
+	bool bRet = setInstruction(objThreadCntrolBlock, objThreadCntrolBlock->instrSet);
 	while(bRet == false)
 	{
-		bRet = setInstruction(objThreadCntrolBlock->instrSet);
+		bRet = setInstruction(objThreadCntrolBlock, objThreadCntrolBlock->instrSet);
 	}
     return 1;     
 }
