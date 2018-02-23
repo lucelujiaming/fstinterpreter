@@ -394,6 +394,11 @@
                             <element name="sin" type="function">
                                 <element type="num">2</element>
                             </element>
+                            <element type="operation">+</element>
+                            <element name="func_test" type="subroutine">
+                                <element type="num">2</element>
+                                <element type="num">3</element>
+                            </element>
                             <element type="boolean_operation">==</element>
                             <element type="num">2</element>
                         </determine>
@@ -544,10 +549,10 @@
            <body>
               <assignment>
                 <lvalue type="num">
-                    <element type="num">R[1]</element>
+                    <element type="num">R[6]</element>
                 </lvalue>
                 <rvalue>
-                    <element type="num">2</element>
+                    <element type="num">param0</element>
                     <element type="operation">+</element>
                     <element type="bracket">
                         <element type="num">2</element>
@@ -556,7 +561,7 @@
                     </element>
                 </rvalue>
               </assignment>
-              <return>R[1]</return>
+              <return>R[6]</return>
            </body>
         </function>
     </prog_body>

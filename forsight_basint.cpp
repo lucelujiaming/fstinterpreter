@@ -1700,7 +1700,7 @@ double call_inner_func(struct thread_control_block * objThreadCntrolBlock)
         get_token(objThreadCntrolBlock);
         count++;
     } while(*(objThreadCntrolBlock->token) == ',');
-    count--;
+    // count--;
 
     // Now, push on local_var_stack in reverse order.
     if(count == 1)
@@ -2428,8 +2428,9 @@ void primitive(struct thread_control_block * objThreadCntrolBlock, float *result
 	   *result = 0 ;
 	else
 	   *result = objThreadCntrolBlock->ret_value ;
-    objThreadCntrolBlock->prog = progFuncCall;
-	find_eol(objThreadCntrolBlock);
+    // objThreadCntrolBlock->prog = progFuncCall;
+	// find_eol(objThreadCntrolBlock);
+    get_token(objThreadCntrolBlock);
     return;
   case BUILTINFUNC:
   	// use objThreadCntrolBlock->token
