@@ -320,7 +320,8 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	  
 	  iRet = call_interpreter(objThreadCntrolBlock, 0);
 	  printf("Execute over.");
-	  free(objThreadCntrolBlock->p_buf);
+	  if(objThreadCntrolBlock->p_buf)
+		free(objThreadCntrolBlock->p_buf);
 	  for(int i = 0; i < objThreadCntrolBlock->iSubProgNum; i++)
 	  {
 		  if (objThreadCntrolBlock->sub_prog[i])

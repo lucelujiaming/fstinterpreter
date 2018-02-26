@@ -164,26 +164,26 @@ int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char *
 		// printf("%s, ", (char*)nodeStatement->name);
 		if(xmlStrcasecmp(name, BAD_CAST"num")==0){ 
 			value = xmlNodeGetContent(nodeValueElement);
-			sprintf(label_str, "%s%s ", label_str, (char*)value);
+			sprintf(label_str, "%s%s", label_str, (char*)value);
 		}
 		else if(xmlStrcasecmp(name, BAD_CAST"operation")==0){ 
 			value = xmlNodeGetContent(nodeValueElement);
-			sprintf(label_str, "%s%s ", label_str, (char*)value);
+			sprintf(label_str, "%s%s", label_str, (char*)value);
 		}
 		else if(xmlStrcasecmp(name, BAD_CAST"boolean_operation")==0){ 
 			value = xmlNodeGetContent(nodeValueElement);
-			sprintf(label_str, "%s%s ", label_str, (char*)value);
+			sprintf(label_str, "%s %s ", label_str, (char*)value);
 		}
 		else if(xmlStrcasecmp(name, BAD_CAST"entity")==0){ 
 			value = xmlNodeGetContent(nodeValueElement);
-			sprintf(label_str, "%s ", label_str, "");
+			sprintf(label_str, "%s", label_str, "");
 			
 			for(nodeSubValueElement = nodeValueElement->children; 
 				nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
 					objLineInfoTemp.indentValue = objLineInfo.indentValue ;
 					generateElementStr(nodeSubValueElement, objLineInfoTemp, label_str);
 			}
-			sprintf(label_str, "%s ", label_str);
+			sprintf(label_str, "%s", label_str);
 		}
 		else if(xmlStrcasecmp(name, BAD_CAST"bracket")==0){ 
 			value = xmlNodeGetContent(nodeValueElement);
@@ -194,12 +194,12 @@ int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char *
 					objLineInfoTemp.indentValue = objLineInfo.indentValue ;
 					generateElementStr(nodeSubValueElement, objLineInfoTemp, label_str);
 			}
-			sprintf(label_str, "%s) ", label_str);
+			sprintf(label_str, "%s )", label_str);
 		}
 		else if(xmlStrcasecmp(name, BAD_CAST"function")==0){ 
 			name = xmlGetProp(nodeValueElement,BAD_CAST"name");
 			value = xmlNodeGetContent(nodeValueElement);
-			sprintf(label_str, "%s%s( ", label_str, (char*)name);
+			sprintf(label_str, "%s%s(", label_str, (char*)name);
 			
 // 			for(nodeSubValueElement = nodeValueElement->children; 
 // 				nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
@@ -269,8 +269,10 @@ int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char *
 			for(nodeSubValueElement = nodeValueElement->children; 
 			nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
 				if(xmlStrcasecmp(nodeSubValueElement->name,BAD_CAST"element")==0){ 
-					value = xmlNodeGetContent(nodeSubValueElement);
-					sprintf(label_str, "%sR[%s] ", label_str, (char*)value);
+				//	value = xmlNodeGetContent(nodeSubValueElement);
+					memset(label_output, 0x00, 1024);
+					generateElementStr(nodeSubValueElement, objLineInfoTemp, label_output);
+					sprintf(label_str, "%sR[%s] ", label_str, (char*)label_output);
 				}
 			}
 		}
@@ -445,7 +447,7 @@ int generateAssignment(xmlNodePtr nodeAssignmentStatement, LineInfo objLineInfo)
 						//		(char*)nodeLeftValue->name, (char *)value);
 				generateElement(nodeLeftValue, objLineInfo);
 			}
-			printBASCode(objLineInfo, "= ", "");
+			printBASCode(objLineInfo, " = ", "");
         }
 		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"rvalue")==0){ 
             // printf("%s, ", (char*)nodeStatement->name);
@@ -627,13 +629,13 @@ int generateWaitInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLin
 				generateOffsetCondition(nodeInstructionParam, objLineInfo);
 			}
 			else if(xmlStrcasecmp(name, BAD_CAST"timeout")==0){
-				printBASCode(objLineInfo, "%s ", (char*)value);
+				printBASCode(objLineInfo, " %s", (char*)value);
 			}
 			else if(xmlStrcasecmp(name, BAD_CAST"call_back")==0){
-				printBASCode(objLineInfo, "%s ", (char*)value);
+				printBASCode(objLineInfo, " %s", (char*)value);
 			}
 			else if(xmlStrcasecmp(name, BAD_CAST"handle")==0){
-				printBASCode(objLineInfo, "%s ", (char*)value);
+				printBASCode(objLineInfo, " %s", (char*)value);
 			}
 		}
 		else if(xmlStrcasecmp(nodeInstructionParam->name,BAD_CAST"text")==0){
@@ -814,8 +816,10 @@ int generateMoveInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLin
 				for(nodeElement = nodeInstructionParam->children; 
 						nodeElement; nodeElement = nodeElement->next){
 					if(xmlStrcasecmp(nodeElement->name, BAD_CAST"element")==0){
-						value = xmlNodeGetContent(nodeElement);
-						printBASCode(objLineInfo, "%s ", (char*)value);
+					//	value = xmlNodeGetContent(nodeElement);
+					//	printBASCode(objLineInfo, "%s ", (char*)value);
+						generateElement(nodeElement, objLineInfo);
+						printBASCode(objLineInfo, " ", "");
 					}
 				}
 			}

@@ -408,6 +408,10 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 			}
 			iCount++ ;
 		}
+		else if (*(objThreadCntrolBlock->token) == '\r')
+		{
+			break;
+		}
 	    get_token(objThreadCntrolBlock);
 		memcpy(instrSetPtr, &additionalInfomation, sizeof(AdditionalInfomation));
 		instrSetPtr += sizeof(AdditionalInfomation);
@@ -760,6 +764,7 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
     {
 		putback(objThreadCntrolBlock);
     	get_exp(objThreadCntrolBlock, &value, &boolValue);
+		// Need not get_token again . let call_interpreter filter it .
 		timeWaitSeconds = (int)value ;
 		now = timeStart  = time(0);
 		while(now - timeStart < timeWaitSeconds)
