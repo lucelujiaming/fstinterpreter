@@ -145,7 +145,165 @@ void serializeFunctionParam(vector<Label> labels, char * result)
 	}
 }
 
+int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char * label_str)
+{
+    char label_output[1024];
+    Label labelParam ;
+	vector<Label> label_vector;
+
+	LineInfo objLineInfoTemp = objLineInfo;
+	// char currentChildPath[LAB_LEN];
+    xmlNodePtr nodeSubValueElement ;
+    xmlChar *name, *file, *value;
+	value = xmlNodeGetContent(nodeValueElement);
+			// printf("\t\t\t\t  --debug-- (nodeValueElement) %s = %s\n", 
+			//		(char*)nodeValueElement->name, (char *)value);
+		
+	if(xmlStrcasecmp(nodeValueElement->name, BAD_CAST"element")==0){ 
+	    name = xmlGetProp(nodeValueElement,BAD_CAST"type");
+		// printf("%s, ", (char*)nodeStatement->name);
+		if(xmlStrcasecmp(name, BAD_CAST"num")==0){ 
+			value = xmlNodeGetContent(nodeValueElement);
+			sprintf(label_str, "%s%s ", label_str, (char*)value);
+		}
+		else if(xmlStrcasecmp(name, BAD_CAST"operation")==0){ 
+			value = xmlNodeGetContent(nodeValueElement);
+			sprintf(label_str, "%s%s ", label_str, (char*)value);
+		}
+		else if(xmlStrcasecmp(name, BAD_CAST"boolean_operation")==0){ 
+			value = xmlNodeGetContent(nodeValueElement);
+			sprintf(label_str, "%s%s ", label_str, (char*)value);
+		}
+		else if(xmlStrcasecmp(name, BAD_CAST"entity")==0){ 
+			value = xmlNodeGetContent(nodeValueElement);
+			sprintf(label_str, "%s ", label_str, "");
+			
+			for(nodeSubValueElement = nodeValueElement->children; 
+				nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
+					objLineInfoTemp.indentValue = objLineInfo.indentValue ;
+					generateElementStr(nodeSubValueElement, objLineInfoTemp, label_str);
+			}
+			sprintf(label_str, "%s ", label_str);
+		}
+		else if(xmlStrcasecmp(name, BAD_CAST"bracket")==0){ 
+			value = xmlNodeGetContent(nodeValueElement);
+			sprintf(label_str, "%s( ", label_str, "");
+			
+			for(nodeSubValueElement = nodeValueElement->children; 
+				nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
+					objLineInfoTemp.indentValue = objLineInfo.indentValue ;
+					generateElementStr(nodeSubValueElement, objLineInfoTemp, label_str);
+			}
+			sprintf(label_str, "%s) ", label_str);
+		}
+		else if(xmlStrcasecmp(name, BAD_CAST"function")==0){ 
+			name = xmlGetProp(nodeValueElement,BAD_CAST"name");
+			value = xmlNodeGetContent(nodeValueElement);
+			sprintf(label_str, "%s%s( ", label_str, (char*)name);
+			
+// 			for(nodeSubValueElement = nodeValueElement->children; 
+// 				nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
+// 				generateElementStr(nodeSubValueElement, objLineInfoTemp, label_str);
+// 			}
+// 			sprintf(label_str, "%s) ", label_str);
+			
+			for(nodeSubValueElement = nodeValueElement->children; 
+			nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
+				// generateElement(nodeSubValueElement, objLineInfoTemp);
+				value = xmlNodeGetContent(nodeSubValueElement);
+				if(xmlStrcasecmp(nodeSubValueElement->name,BAD_CAST"element")==0){ 
+					memset(&labelParam, 0x00, sizeof(labelParam));
+					memset(label_output, 0x00, 1024);
+					generateElementStr(nodeSubValueElement, objLineInfoTemp, label_output);
+					strcpy(labelParam.name, (char*)label_output);
+					label_vector.push_back(labelParam);
+				}
+			}
+			// printBASCode(objLineInfo, ") ", "");
+			memset(label_output, 0x00, 1024);
+			serializeFunctionParam(label_vector, label_output);
+			sprintf(label_str, "%s%s)", label_str, label_output);
+		}
+		else if(xmlStrcasecmp(name, BAD_CAST"subroutine")==0){ 
+			file = xmlGetProp(nodeValueElement, BAD_CAST"file");
+			name = xmlGetProp(nodeValueElement, BAD_CAST"name");
+
+			value = xmlNodeGetContent(nodeValueElement);
+			// printf(label_str, "%s( ", (char*)name);
+
+			if(xmlStrlen(file)==0){        // Inside function
+				memset(label_output, 0x00, 1024);
+				sprintf(label_output, "%s::%s", objLineInfo.fileName, (char*)name);
+				sprintf(label_str, "%s%s(", label_str, label_output);
+			}
+			else if(xmlStrlen(name)==0){   // Outside main
+				memset(label_output, 0x00, 1024);
+				sprintf(label_output, "%s::main", (char*)file);
+				sprintf(label_str, "%s%s(", label_str, label_output);
+			}
+			else {                            // Outside function
+				memset(label_output, 0x00, 1024);
+				sprintf(label_output, "%s::%s", (char*)file, (char*)name);
+				sprintf(label_str, "%s%s(", label_str, label_output);
+			}
+			
+			for(nodeSubValueElement = nodeValueElement->children; 
+			nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
+				// generateElement(nodeSubValueElement, objLineInfoTemp);
+				value = xmlNodeGetContent(nodeSubValueElement);
+				if(xmlStrcasecmp(nodeSubValueElement->name,BAD_CAST"element")==0){ 
+					memset(&labelParam, 0x00, sizeof(labelParam));
+					// strcpy(labelParam.name, (char*)value);
+					memset(label_output, 0x00, 1024);
+					generateElementStr(nodeSubValueElement, objLineInfoTemp, label_output);
+					strcpy(labelParam.name, (char*)label_output);
+					label_vector.push_back(labelParam);
+				}
+			}
+			// printBASCode(objLineInfo, ") ", "");
+			memset(label_output, 0x00, 1024);
+			serializeFunctionParam(label_vector, label_output);
+			sprintf(label_str, "%s%s)", label_str, label_output);
+		}
+		else if(xmlStrcasecmp(name, BAD_CAST"register")==0){ 
+			for(nodeSubValueElement = nodeValueElement->children; 
+			nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
+				if(xmlStrcasecmp(nodeSubValueElement->name,BAD_CAST"element")==0){ 
+					value = xmlNodeGetContent(nodeSubValueElement);
+					sprintf(label_str, "%sR[%s] ", label_str, (char*)value);
+				}
+			}
+		}
+		else if(xmlStrcasecmp(name, BAD_CAST"di")==0){ 
+			for(nodeSubValueElement = nodeValueElement->children; 
+			nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
+				if(xmlStrcasecmp(nodeSubValueElement->name,BAD_CAST"element")==0){ 
+					value = xmlNodeGetContent(nodeSubValueElement);
+					sprintf(label_str, "%sDI[%s] ", label_str, (char*)value);
+				}
+			}
+		}
+		else if(xmlStrcasecmp(name, BAD_CAST"io_val")==0){ 
+			value = xmlNodeGetContent(nodeValueElement);
+			sprintf(label_str, "%s%s ", label_str, (char*)value);
+		}
+		else { 
+			printf("Wrong Type (%s) in element. \n", (char *)name);
+		}
+	}
+	return 1 ;
+}
+
 int generateElement(xmlNodePtr nodeValueElement, LineInfo objLineInfo)
+{
+    char label_params[1024];
+	memset(label_params, 0x00, 1024);
+	generateElementStr(nodeValueElement, objLineInfo, label_params);
+	printBASCode(objLineInfo, "%s", (char*)label_params);
+	return 1 ;
+}
+
+int generateElementOld(xmlNodePtr nodeValueElement, LineInfo objLineInfo)
 {
     char label_params[1024];
     Label labelParam ;
@@ -206,17 +364,17 @@ int generateElement(xmlNodePtr nodeValueElement, LineInfo objLineInfo)
 			if(xmlStrlen(file)==0){        // Inside function
 				memset(label_params, 0x00, 1024);
 				sprintf(label_params, "%s::%s", objLineInfo.fileName, (char*)name);
-				printBASCode(objLineInfo, "%s (", label_params);
+				printBASCode(objLineInfo, "%s(", label_params);
 			}
 			else if(xmlStrlen(name)==0){   // Outside main
 				memset(label_params, 0x00, 1024);
 				sprintf(label_params, "%s::main", (char*)file);
-				printBASCode(objLineInfo, "%s (", label_params);
+				printBASCode(objLineInfo, "%s(", label_params);
 			}
 			else {                            // Outside function
 				memset(label_params, 0x00, 1024);
 				sprintf(label_params, "%s::%s", (char*)file, (char*)name);
-				printBASCode(objLineInfo, "%s (", label_params);
+				printBASCode(objLineInfo, "%s(", label_params);
 			}
 			
 			for(nodeSubValueElement = nodeValueElement->children; 
@@ -1049,6 +1207,14 @@ int generateFunctionCall(xmlNodePtr nodeFunctionCall, LineInfo objLineInfo)
             strcpy(labelParam.name, (char*)value);
             label_vector.push_back(labelParam);
 		}
+		else if(xmlStrcasecmp(nodeFunctionCallParam->name,BAD_CAST"element")==0){ 
+			memset(&labelParam, 0x00, sizeof(labelParam));
+			// strcpy(labelParam.name, (char*)value);
+			memset(label_params, 0x00, 1024);
+			generateElementStr(nodeFunctionCallParam, objLineInfo, label_params);
+			strcpy(labelParam.name, (char*)label_params);
+			label_vector.push_back(labelParam);
+		}
     }
     memset(label_params, 0x00, 1024);
     serializeFunctionParam(label_vector, label_params);
@@ -1219,6 +1385,14 @@ int generateFunction(xmlNodePtr nodeFunction, LineInfo objLineInfo)
             strcpy(labelParam.name, (char*)value);
             label_vector.push_back(labelParam);
         }
+		else if(xmlStrcasecmp(nodeFunctionParam->name,BAD_CAST"element")==0){ 
+			memset(&labelParam, 0x00, sizeof(labelParam));
+			// strcpy(labelParam.name, (char*)value);
+			memset(label_params, 0x00, 1024);
+			generateElementStr(nodeFunctionParam, objLineInfo, label_params);
+			strcpy(labelParam.name, (char*)label_params);
+			label_vector.push_back(labelParam);
+		}
     }
     memset(label_params, 0x00, 1024);
     serializeFunctionParam(label_vector, label_params);

@@ -321,7 +321,11 @@
                     <element type="num">R[1]</element>
                     <element type="operation">+</element>
                     <element name="sin" type="function">
-                        <element type="num">2</element>
+                        <element type="entity">
+                            <element type="num">6</element>
+                            <element type="operation">+</element>
+                            <element type="num">7</element>
+                        </element>
                     </element>
                     <element type="boolean_operation">==</element>
                     <element type="num">100</element>
@@ -396,7 +400,15 @@
                             </element>
                             <element type="operation">+</element>
                             <element name="func_test" type="subroutine">
-                                <element type="num">2</element>
+                                <element type="entity">
+                                    <element type="num">6</element>
+                                    <element type="operation">+</element>
+                                    <element type="bracket">
+                                        <element type="num">6</element>
+                                        <element type="operation">-</element>
+                                        <element type="num">7</element>
+                                    </element>
+                                </element>
                                 <element type="num">3</element>
                             </element>
                             <element type="boolean_operation">==</element>
@@ -513,7 +525,15 @@
 
             <comment type="string">comment thing</comment>
             <call name="func_test">
-                <parameter name="param0" type="num">1</parameter>
+                <element type="entity">
+                    <element type="num">6</element>
+                    <element type="operation">+</element>
+                    <element type="bracket">
+                        <element type="num">6</element>
+                        <element type="operation">-</element>
+                        <element type="num">7</element>
+                    </element>
+                </element>
                 <parameter name="param0" type="num">2</parameter>
             </call>
             <call file="prog_1">

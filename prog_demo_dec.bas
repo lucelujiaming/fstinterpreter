@@ -19,18 +19,18 @@ SUB main (param0, param1)
     WAIT COND DI[1] = PE 
     WAIT COND R[1] > 10 3 skip 
     R[1] = 5  
-    IF R[1] + sin( 2 ) == 100  THEN 
+    IF R[1] + sin(  6 + 7  )== 100  THEN 
         MOVEL 1.1 2.2 3.3 4.4 5.5 6.6 100 SV 50 ;ACC 40 
     ELSEIF R[1] == 1  THEN 
         WAIT COND DI[0] = ON 10 skip 
     ENDIF 
-    WHILE R[1] + sin( 2 ) <= 100  
+    WHILE R[1] + sin( 2 )<= 100  
         MOVEL 1.1 2.2 3.3 4.4 5.5 6.6 100 SV 50 ;ACC 40 
-        IF 8 + sin( 2 ) + prog_demo_dec::func_test (2, 3)== 2  THEN 
+        IF 8 + sin( 2 )+ prog_demo_dec::func_test( 6 + ( 6 - 7 )  , 3 )== 2  THEN 
             MOVEL 1.1 2.2 3.3 4.4 5.5 6.6 100 SV 50 ;ACC 40 
             BREAK 
         ENDIF 
-        IF 5 + sin( 2 ) == 2  THEN 
+        IF 5 + sin( 2 )== 2  THEN 
             MOVEL 1.1 2.2 3.3 4.4 5.5 6.6 100 SV 50 ;ACC 40 
             CONTINUE 
         ENDIF 
@@ -46,7 +46,7 @@ SUB main (param0, param1)
         BREAK 
     END SELECT 
     # comment thing 
-    CALL prog_demo_dec::func_test (1, 2) 
+    CALL prog_demo_dec::func_test ( 6 + ( 6 - 7 )  , 2) 
     CALL prog_1::main (1, 2) 
     CALL prog_1::LujiamingParamsSub (1, 2, 3) 
     
