@@ -190,7 +190,11 @@ typedef struct _AdditionalInfomation
 
 typedef struct _Instruction
 {
+#ifdef USE_XPATH
     char            line[TP_XPATH_LEN];
+#else
+    int             line;
+#endif
     InstType        type;
     union 
     {

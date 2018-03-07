@@ -76,7 +76,7 @@ int exportBASCode(LineInfo objLineInfo, char *title, char *format, char * value)
 	
 	// printf("(%03d)", g_lineNum);
 	fprintf(fpMix,"(%03d)", g_lineNum);
-	fprintf(fpXPath,"%03d:", g_lineNum);
+	fprintf(fpXPath,"%03d:%s:", g_lineNum, objLineInfo.fileName);
 
 #ifdef PRINT_XPATH
 	if(strlen(title) > 0)
@@ -288,6 +288,10 @@ int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char *
 		else if(xmlStrcasecmp(name, BAD_CAST"io_val")==0){ 
 			value = xmlNodeGetContent(nodeValueElement);
 			sprintf(label_str, "%s%s ", label_str, (char*)value);
+		}
+		else if(xmlStrcasecmp(name, BAD_CAST"string")==0){ 
+			value = xmlNodeGetContent(nodeValueElement);
+			printBASCode(objLineInfo, " %s ", (char*)value);
 		}
 		else { 
 			printf("Wrong Type (%s) in element. \n", (char *)name);
@@ -541,6 +545,14 @@ int generateOffsetVEC(xmlNodePtr nodeInstructionParam, LineInfo objLineInfo)
 			strcpy(labelParam.name, (char*)value);
 			label_vector.push_back(labelParam);
 		}
+		else if(xmlStrcasecmp(nodeElement->name, BAD_CAST"element")==0){
+			// value = xmlNodeGetContent(nodeElement);
+			memset(&labelParam, 0x00, sizeof(labelParam));
+			memset(label_params, 0x00, 1024);
+			generateElementStr(nodeElement, objLineInfo, label_params);
+			strcpy(labelParam.name, (char*)label_params);
+			label_vector.push_back(labelParam);
+		}
 	}
 	if(xmlStrcasecmp(type, BAD_CAST"with_uf")==0){
 		if (label_vector.size() == 7){
@@ -735,6 +747,9 @@ int generatePrintInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLi
 				printBASCode(objLineInfo, "\"%s\", ", (char*)value);
 			}
 			else if(xmlStrcasecmp(type, BAD_CAST"register")==0){
+				printBASCode(objLineInfo, "%s; ", (char*)value);
+			}
+			else if(xmlStrcasecmp(type, BAD_CAST"variable")==0){
 				printBASCode(objLineInfo, "%s; ", (char*)value);
 			}
 		}
@@ -1226,6 +1241,110 @@ int generateFunctionCall(xmlNodePtr nodeFunctionCall, LineInfo objLineInfo)
 	return 1 ;
 }
 
+int generateLogicalLOOP(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
+{
+	LineInfo objLineInfoTemp = objLineInfo;
+	// char currentChildPath[LAB_LEN];
+    xmlNodePtr nodeStatement ;
+    xmlNodePtr nodeDetermine ;
+    xmlChar *name, *value;
+	
+	name = xmlGetProp(nodeLogicalStatement,BAD_CAST"type");
+	if(xmlStrcasecmp(name,BAD_CAST"LOOP")==0){
+		sprintf(objLineInfoTemp.xPath, "%s", 
+			 (char *)xmlGetNodePath(nodeLogicalStatement));
+		exportBASCode(objLineInfoTemp, "EXPORT: ", "%s ", "LOOP");
+	}
+	
+    for(nodeStatement = nodeLogicalStatement->children; 
+	nodeStatement; nodeStatement = nodeStatement->next){
+		// printf("\t\t\t\t  --debug-- %s \n", (char*)nodeStatement->name);
+		if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"determine")==0){ 
+			// printf("%s, ", (char*)nodeStatement->name);
+			for(nodeDetermine = nodeStatement->children; 
+			nodeDetermine; nodeDetermine = nodeDetermine->next){
+				if(xmlStrcasecmp(nodeDetermine->name, BAD_CAST"element")==0){ 
+					value = xmlNodeGetContent(nodeDetermine);
+					//		printf("\t\t\t\t  --debug-- (nodeRightValue) %s = %s\n", (char*)nodeRightValue->name, (char *)value);
+					generateElement(nodeDetermine, objLineInfoTemp);
+				}
+			}
+			printBASCode(objLineInfoTemp, " \n", "");
+        }
+		else if((xmlStrcasecmp(nodeStatement->name,BAD_CAST"logical_body")==0)
+			||(xmlStrcasecmp(nodeStatement->name,BAD_CAST"vice_logical_body")==0)) { 
+			// printf("%s, ", (char*)nodeStatement->name);
+			objLineInfoTemp.indentValue = objLineInfo.indentValue + 1;
+			// sprintf(currentChildPath, "%s/%s", currentXPath, (char *)nodeStatement->name);
+			generateFunctionBody(nodeStatement, objLineInfoTemp);
+        }
+		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"text")==0){
+			;
+		}
+		else { 
+			printf("Wrong Name (%s) in LOOP. \n", (char *)nodeStatement->name);
+		}
+        // printf("%s \n", (char*)nodeStatement->name);
+    }
+    objLineInfoTemp.indentValue = objLineInfo.indentValue ;
+    sprintf(objLineInfoTemp.xPath, "%s", 
+			 (char *)xmlGetNodePath(nodeLogicalStatement));
+	exportBASCode(objLineInfoTemp, "EXPORT: ", "%s \n", "ENDLOOP");
+	return 1 ;
+}
+
+int generateLogicalFOR(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
+{
+	LineInfo objLineInfoTemp = objLineInfo;
+	// char currentChildPath[LAB_LEN];
+    xmlNodePtr nodeStatement ;
+    xmlNodePtr nodeDetermine ;
+    xmlChar *name, *value;
+	
+	name = xmlGetProp(nodeLogicalStatement,BAD_CAST"type");
+	if(xmlStrcasecmp(name,BAD_CAST"for")==0){
+		sprintf(objLineInfoTemp.xPath, "%s", 
+			 (char *)xmlGetNodePath(nodeLogicalStatement));
+		exportBASCode(objLineInfoTemp, "EXPORT: ", "%s ", "FOR");
+	}
+	
+    for(nodeStatement = nodeLogicalStatement->children; 
+	nodeStatement; nodeStatement = nodeStatement->next){
+		// printf("\t\t\t\t  --debug-- %s \n", (char*)nodeStatement->name);
+		if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"determine")==0){ 
+			// printf("%s, ", (char*)nodeStatement->name);
+			for(nodeDetermine = nodeStatement->children; 
+			nodeDetermine; nodeDetermine = nodeDetermine->next){
+				if(xmlStrcasecmp(nodeDetermine->name, BAD_CAST"element")==0){ 
+					value = xmlNodeGetContent(nodeDetermine);
+					//		printf("\t\t\t\t  --debug-- (nodeRightValue) %s = %s\n", (char*)nodeRightValue->name, (char *)value);
+					generateElement(nodeDetermine, objLineInfoTemp);
+				}
+			}
+			printBASCode(objLineInfoTemp, " \n", "");
+        }
+		else if((xmlStrcasecmp(nodeStatement->name,BAD_CAST"logical_body")==0)
+			||(xmlStrcasecmp(nodeStatement->name,BAD_CAST"vice_logical_body")==0)) { 
+			// printf("%s, ", (char*)nodeStatement->name);
+			objLineInfoTemp.indentValue = objLineInfo.indentValue + 1;
+			// sprintf(currentChildPath, "%s/%s", currentXPath, (char *)nodeStatement->name);
+			generateFunctionBody(nodeStatement, objLineInfoTemp);
+        }
+		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"text")==0){
+			;
+		}
+		else { 
+			printf("Wrong Name (%s) in WHILE. \n", (char *)nodeStatement->name);
+		}
+        // printf("%s \n", (char*)nodeStatement->name);
+    }
+    objLineInfoTemp.indentValue = objLineInfo.indentValue ;
+    sprintf(objLineInfoTemp.xPath, "%s", 
+			 (char *)xmlGetNodePath(nodeLogicalStatement));
+	exportBASCode(objLineInfoTemp, "EXPORT: ", "%s \n", "NEXT");
+	return 1 ;
+}
+
 int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
 {
     int iAssignmentIdx = 0 , iInstructionIdx = 0 , iLogicalIdx = 0  , 
@@ -1298,6 +1417,16 @@ int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
 				sprintf(objLineInfoTemp.xPath, "%s", 
 					 (char *)xmlGetNodePath(nodeStatement));
 				generateLogicalSWITCH(nodeStatement, objLineInfoTemp);
+			}
+			else if(xmlStrcasecmp(name,BAD_CAST"for")==0){ 
+				sprintf(objLineInfoTemp.xPath, "%s", 
+					 (char *)xmlGetNodePath(nodeStatement));
+				generateLogicalFOR(nodeStatement, objLineInfoTemp);
+			}
+			else if(xmlStrcasecmp(name,BAD_CAST"loop")==0){ 
+				sprintf(objLineInfoTemp.xPath, "%s", 
+					 (char *)xmlGetNodePath(nodeStatement));
+				generateLogicalLOOP(nodeStatement, objLineInfoTemp);
 			}
 			else { 
 				printf("Wrong Command (%s) in logical Command. \n", (char *)name);
@@ -1674,7 +1803,7 @@ void outputXPathVector(char * xpath_file_name)
 	}
 }
 
-int parse_xml_file_wrapper(char * xml_file_name){
+int parse_xml_file_wrapper(char * project_name, char * xml_file_name){
     xmlDocPtr doc;
 	char   xmlFileName[FILE_PATH_LEN];
 	if(xml_file_name == 0) {
@@ -1700,6 +1829,7 @@ int parse_xml_file_wrapper(char * xml_file_name){
 
 	memset(g_xpath_file_name, 0x00, FILE_PATH_LEN);
 	sprintf(g_xpath_file_name, "%s_xpath.txt", xmlFileName);
+	// sprintf(g_xpath_file_name, "%s_xpath.txt", project_name);
 	
 	memset(g_basic_file_name, 0x00, FILE_PATH_LEN);
 	sprintf(g_basic_file_name, "%s.bas", xmlFileName);

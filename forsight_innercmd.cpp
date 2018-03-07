@@ -430,11 +430,15 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
     char * commandParamPtr = commandParam;
 	
 	instr.target.type = MOTION_JOINT;
+#ifdef USE_XPATH
 	if(iLineNum <= g_vecXPath.size())
 		sprintf(instr.line, "%s", g_vecXPath[iLineNum].c_str());
 	else
 		sprintf(instr.line, "OutRange with %d", iLineNum);
-
+#else
+	instr.line = iLineNum;
+	printf("call_MoveJ XPATH: %s", g_vecXPath[iLineNum].c_str());
+#endif
     get_exp(objThreadCntrolBlock, &value, &boolValue);
 	instr.target.joint_target.j1 = value;
 	
@@ -498,6 +502,11 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		}
 	}
 	
+// 	#ifdef USE_XPATH
+// 		printf("setInstruction MOTION_JOINT at %s\n", instr.line);
+// 	#else
+// 		printf("setInstruction MOTION_JOINT at %d\n", instr.line);
+// 	#endif
 	bool bRet = setInstruction(objThreadCntrolBlock, objThreadCntrolBlock->instrSet);
 	while(bRet == false)
 	{
@@ -516,10 +525,15 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
     char * commandParamptr = commandParam;
 	
 	instr.target.type = MOTION_LINE;
+#ifdef USE_XPATH
 	if(iLineNum <= g_vecXPath.size())
 		sprintf(instr.line, "%s", g_vecXPath[iLineNum].c_str());
 	else
 		sprintf(instr.line, "OutRange with %d", iLineNum);
+#else
+	instr.line = iLineNum;
+	printf("call_MoveL XPATH: %s", g_vecXPath[iLineNum].c_str());
+#endif
 	
     // result.size() == MOVJ_COMMAND_PARAM_MIN
     get_exp(objThreadCntrolBlock, &value, &boolValue);
@@ -584,11 +598,18 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		}
 	}
 	
+// 	#ifdef USE_XPATH
+// 		printf("setInstruction MOTION_LINE at %s\n", instr.line);
+// 	#else
+// 		printf("setInstruction MOTION_LINE at %d\n", instr.line);
+// 	#endif
 	bool bRet = setInstruction(objThreadCntrolBlock, objThreadCntrolBlock->instrSet);
 	while(bRet == false)
 	{
+        printf("setInstruction return false\n");
 		bRet = setInstruction(objThreadCntrolBlock, objThreadCntrolBlock->instrSet);
 	}
+//    printf("setInstruction return true\n");
     return 1;   
 }
 
@@ -602,10 +623,15 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
     char * commandParamptr = commandParam;
 		
 	instr.target.type = MOTION_CIRCLE;
+#ifdef USE_XPATH
 	if(iLineNum <= g_vecXPath.size())
 		sprintf(instr.line, "%s", g_vecXPath[iLineNum].c_str());
 	else
 		sprintf(instr.line, "OutRange with %d", iLineNum);
+#else
+	instr.line = iLineNum;
+	printf("call_MoveC XPATH: %s", g_vecXPath[iLineNum].c_str());
+#endif
 
     // result.size() == MOVJ_COMMAND_PARAM_MIN
     get_exp(objThreadCntrolBlock, &value, &boolValue);
@@ -689,6 +715,11 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		}
 	}
 	
+// 	#ifdef USE_XPATH
+// 		printf("setInstruction MOTION_CURVE at %s\n", instr.line);
+// 	#else
+// 		printf("setInstruction MOTION_CURVE at %d\n", instr.line);
+// 	#endif
 	bool bRet = setInstruction(objThreadCntrolBlock, objThreadCntrolBlock->instrSet);
 	while(bRet == false)
 	{
@@ -754,10 +785,15 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
     Instruction instr;
 	
 	instr.target.type = MOTION_JOINT;
+#ifdef USE_XPATH
 	if(iLineNum <= g_vecXPath.size())
 		sprintf(instr.line, "%s", g_vecXPath[iLineNum].c_str());
 	else
 		sprintf(instr.line, "OutRange with %d", iLineNum);
+#else
+	instr.line = iLineNum;
+	printf("call_Wait XPATH: %s", g_vecXPath[iLineNum].c_str());
+#endif
 	
 	get_token(objThreadCntrolBlock);
 	if(strcmp(objThreadCntrolBlock->token, "cond") != 0)
@@ -887,6 +923,74 @@ int call_Abort(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 #endif
 }
 
+int getXPathLinenum(char * file_name)
+{
+	int iLineCount = 0 ;
+	char contentLine[FILE_PATH_LEN];
+	FILE *xpath_file ;
+	if((xpath_file = fopen(file_name, "r"))==NULL){
+		perror("open file failed\n");  
+	}
+	
+	memset(contentLine,    0x00, FILE_PATH_LEN);
+	while(fgets(contentLine, sizeof(contentLine), xpath_file)!=NULL)  
+	{  
+		iLineCount++ ;
+	}
+	fclose(xpath_file);
+	return iLineCount ;
+}
+
+void mergeImportXPathToProjectXPath(
+		struct thread_control_block* objThreadCntrolBlock, char * fname)
+{
+	int iImportLineNum = 0 , iMainLineCount = 0 ;
+	char contentImportLine[FILE_PATH_LEN];
+	char * contentImportSepPtr; 
+	char contentImportLineNum[LAB_LEN];
+	char contentImportXPath[FILE_PATH_LEN];
+	
+	char xpath_import_file_name[FILE_PATH_LEN];
+	char xpath_main_file_name[FILE_PATH_LEN];
+
+	FILE *xpath_import_file ;
+	FILE *xpath_main_file ;
+	
+	memset(xpath_import_file_name, 0x00, FILE_PATH_LEN);
+	sprintf(xpath_import_file_name, "%s_xpath.txt", fname);
+	memset(xpath_main_file_name, 0x00, FILE_PATH_LEN);
+	sprintf(xpath_main_file_name, "%s_xpath.txt", objThreadCntrolBlock->project_name);
+	iMainLineCount = getXPathLinenum(xpath_main_file_name);
+	
+	if((xpath_import_file = fopen(xpath_import_file_name, "r"))==NULL){
+		perror("open file failed\n");  
+	}
+	if((xpath_main_file = fopen(xpath_main_file_name, "a"))==NULL){
+		perror("open file failed\n");  
+	}
+	
+	memset(contentImportLine,    0x00, FILE_PATH_LEN);
+	while(fgets(contentImportLine, 
+		sizeof(contentImportLine), xpath_import_file)!=NULL)  
+	{  
+		memset(contentImportLineNum, 0x00, LAB_LEN);
+		memset(contentImportXPath,   0x00, FILE_PATH_LEN);
+		contentImportSepPtr = strchr(contentImportLine, ':');
+		if(contentImportSepPtr)
+		{
+			memcpy(contentImportLineNum, contentImportLine, 
+				contentImportSepPtr - contentImportLine);
+			strcpy(contentImportXPath,   contentImportSepPtr + 1);
+			iImportLineNum = atoi(contentImportLineNum);
+		//	printf("%03d:%s", iImportLineNum + iMainLineCount, 
+		//		contentImportSepPtr + 1);
+			fprintf(xpath_main_file, "%03d:%s", iImportLineNum + iMainLineCount, 
+				contentImportSepPtr + 1);
+		}
+	}
+	fclose(xpath_import_file);
+	fclose(xpath_main_file);
+}
 
 void generateXPathVector(char * fname)
 {
@@ -927,7 +1031,7 @@ void generateXPathVector(char * fname)
 		}
 	}
 	g_vecXPath.resize(iLineNum + 2);
-	
+	fclose(xpath_file);
 //	for(int i =1 ; i < g_vecXPath.size() ; i++)
 //	{
 //		printf("%d - %s" , i, g_vecXPath[i].c_str());

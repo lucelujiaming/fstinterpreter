@@ -151,7 +151,7 @@ bool tryWrite(const char* name, int offset, void*buffer, int size)
     ptr_turn = &(flag->turn);
     ptr_latest = &(flag->latest);
 
-    //printf("read:%d, write:%d, turn:%d, latest:%d\n", flag->read, flag->write, flag->turn, flag->latest);
+    // printf("read:%d, write:%d, turn:%d, latest:%d\n", flag->read, flag->write, flag->turn, flag->latest);
 
     if (*(ptr_latest) == MEM_WRITE_ALREADY){return false;}
 
@@ -161,19 +161,19 @@ bool tryWrite(const char* name, int offset, void*buffer, int size)
         *(ptr_turn) = MEM_WRITE_TURN; //mark that which process is using the memory
         if (*(ptr_read) == MEM_TRUE &&  *(ptr_turn) != MEM_WRITE_TURN )
         {
+           //  printf("WARN: ptr_read:%d, ptr_turn:%d, \n", ptr_read, ptr_turn);   
             *(ptr_write) = MEM_FALSE; 
             return false;
         } //check if writing process is working on.
         memcpy(((FuncTable*)data->ptr)->param + offset, buffer, size);
         *(ptr_latest) = MEM_WRITE_ALREADY;
-        *(ptr_write) = MEM_FALSE;       
+        *(ptr_write) = MEM_FALSE;     
     } 
     else
     {
+    //    printf("WARN: ptr_read:%d, ptr_write:%d, \n", ptr_read, ptr_write);   
         return false;
     }
-
-
     return true;
 }
 

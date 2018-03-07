@@ -140,7 +140,7 @@ void    level1(struct thread_control_block * objThreadCntrolBlock, float *result
 void unary(char, float *r),
 	arith(char o, float *r, float *h);
 
-int load_program(char *p, char *pname);
+int load_program(struct thread_control_block * objThreadCntrolBlock, char *p, char *pname);
 void assignment(struct thread_control_block * objThreadCntrolBlock) ;
 void scan_labels(struct thread_control_block * objThreadCntrolBlock, 
 				SubLabelType type, char * pname);
@@ -275,12 +275,16 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	  
       label_init(objThreadCntrolBlock);  /* zero all labels */
 	  /* load the program to execute */
-	  if(!load_program(objThreadCntrolBlock->p_buf,objThreadCntrolBlock->project_name)) exit(1);
-      generateXPathVector(objThreadCntrolBlock->project_name);
+	  if(!load_program(objThreadCntrolBlock, objThreadCntrolBlock->p_buf,objThreadCntrolBlock->project_name)) 
+	  {
+		printf("no project : %s", objThreadCntrolBlock->project_name);
+	  	// exit(1);
+		return -1;
+	  }
 	  
 	  objThreadCntrolBlock->prog = objThreadCntrolBlock->p_buf;
 	  objThreadCntrolBlock->prog_end = objThreadCntrolBlock->prog + strlen(objThreadCntrolBlock->prog);
-	  memset(objThreadCntrolBlock->prog_jmp_line, 0x00, sizeof(objThreadCntrolBlock->prog_jmp_line));
+	  objThreadCntrolBlock->prog_jmp_line.clear();
 	  scan_labels(objThreadCntrolBlock, INSIDE_FUNC, objThreadCntrolBlock->project_name); /* find the labels in the program */
 	  objThreadCntrolBlock->select_and_cycle_tos = 0; /* initialize the FOR stack index */
 	  objThreadCntrolBlock->gosub_tos = 0; /* initialize the GOSUB stack index */
@@ -291,6 +295,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 		  exec_import(objThreadCntrolBlock);
 		  get_token(objThreadCntrolBlock);
 	  }
+      generateXPathVector(objThreadCntrolBlock->project_name);
 
 // 	  for(vector<sub_label>::iterator it
 // 		  = objThreadCntrolBlock->sub_label_table.begin();
@@ -321,11 +326,17 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	  iRet = call_interpreter(objThreadCntrolBlock, 0);
 	  printf("Execute over.");
 	  if(objThreadCntrolBlock->p_buf)
+	  {
 		free(objThreadCntrolBlock->p_buf);
+		objThreadCntrolBlock->p_buf = NULL ;
+	  }
 	  for(int i = 0; i < objThreadCntrolBlock->iSubProgNum; i++)
 	  {
 		  if (objThreadCntrolBlock->sub_prog[i])
-			 free(objThreadCntrolBlock->sub_prog[i]);
+		  {
+			  free(objThreadCntrolBlock->sub_prog[i]);
+			  objThreadCntrolBlock->sub_prog[i] = NULL ;
+		  }
 	  }
 	  return iRet;
   }
@@ -390,9 +401,9 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 		    setPrgmState(EXECUTE_R);
 		}
   	}
-	
     objThreadCntrolBlock->token_type = get_token(objThreadCntrolBlock);
     /* check for assignment statement */
+    printf("objThreadCntrolBlock->token_type = %d\n", objThreadCntrolBlock->token_type);
     if(objThreadCntrolBlock->token_type==VARIABLE) {
       putback(objThreadCntrolBlock); /* return the var to the input stream */
       assignment(objThreadCntrolBlock); /* must be assignment statement */
@@ -415,14 +426,15 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	{
 	    int iIdx = find_internal_cmd(objThreadCntrolBlock->token) ;
 		int iLineNum = calc_line_from_prog(objThreadCntrolBlock);
-		if(objThreadCntrolBlock->is_main_thread == 0)
+		if(objThreadCntrolBlock->is_main_thread == 0)  // not main
 		{
-			if(call_internal_cmd_exec_sub_thread(iIdx) == 0)
+			if(call_internal_cmd_exec_sub_thread(iIdx) == 0) // 0 - mov 1 - nonmov
 			{
 				printf("Non execution permissions : %s\n", objThreadCntrolBlock->token);
 			}
 			else
 			{
+    				printf("call_internal_cmd objThreadCntrolBlock at %d\n", iIdx);
 				int iRet = call_internal_cmd(iIdx, iLineNum, 
 					objThreadCntrolBlock);
 				// find_eol(objThreadCntrolBlock);
@@ -430,8 +442,19 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 					return END_COMMND_RET;
 			}
 		}
-		else
+		else // main
 		{
+		
+			if(call_internal_cmd_exec_sub_thread(iIdx) == 0) // 0 - mov 1 - nonmov
+			{
+				if (isInstructionEmpty(SHM_INTPRT_CMD))
+		        {
+		            //printf("check if step is done\n");
+		            setPrgmState(PAUSED_R);
+		        }
+			} 
+    		printf("call_internal_cmd execution : %s at %d, iLineNum = %d\n", 
+						objThreadCntrolBlock->token, iIdx, iLineNum);
 			int iRet = call_internal_cmd(iIdx, iLineNum, 
 				objThreadCntrolBlock);
 			// find_eol(objThreadCntrolBlock);
@@ -524,6 +547,8 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
       }
 	}
   } while (objThreadCntrolBlock->tok != FINISHED);
+  
+  printf("call_interpreter execution over\n");
   return 0 ; // NULL ;
 }
 
@@ -533,20 +558,26 @@ int  calc_line_from_prog(struct thread_control_block * objThreadCntrolBlock)
 	for(int i = 0 ; i < 1024 ; i++)
 	{
 		if(objThreadCntrolBlock->prog < objThreadCntrolBlock->prog_jmp_line[i].prog_pos)
-			return i ;
+		{
+		   // printf("calc_line_from_prog return %d at (%08X, %08X) \n", 
+		   //	    i + 1, objThreadCntrolBlock->prog,
+		   //	    objThreadCntrolBlock->prog_jmp_line[i].prog_pos);
+		   return i + 1 ;
+		}
 	}
+	// printf("calc_line_from_prog Failed return \n");
 	return 0;
 }
 
 /* Load a program. */
-int load_program(char *p, char *pname)
+int load_program(struct thread_control_block * objThreadCntrolBlock, char *p, char *pname)
 {
   char fname[128];
   FILE *fp = 0 ;
   int i=0;
   
   sprintf(fname, "%s.xml", pname);
-  parse_xml_file_wrapper(fname);
+  parse_xml_file_wrapper(objThreadCntrolBlock->project_name, fname);
   sprintf(fname, "%s.bas", pname);
   if(!(fp=fopen(fname, "r"))) return 0;
 
@@ -755,16 +786,17 @@ void print(struct thread_control_block * objThreadCntrolBlock)
 void scan_labels(struct thread_control_block * objThreadCntrolBlock, 
 				SubLabelType type, char * pname)
 {
+  struct prog_line_info_t objProgLineInfo ;
   struct sub_label  objLabel ;
-   int iLineNum = 0 ;
+  // int iLineNum = 0 ;
   int addr;
   char *temp;
 
   temp = objThreadCntrolBlock->prog;   /* save pointer to top of program */
 
   /* if the first token in the file is a label */
-  objThreadCntrolBlock->prog_jmp_line[iLineNum].prog_pos = objThreadCntrolBlock->prog ;
-  iLineNum++ ;
+  objProgLineInfo.prog_pos = objThreadCntrolBlock->prog ;
+  // iLineNum++ ;
   get_token(objThreadCntrolBlock);
   if(objThreadCntrolBlock->token_type==NUMBER) {
     // strcpy(label_table[0].name,token);
@@ -802,17 +834,19 @@ void scan_labels(struct thread_control_block * objThreadCntrolBlock,
 	  putback(objThreadCntrolBlock);
 
   
-  objThreadCntrolBlock->prog_jmp_line[iLineNum].type = COMMON ;
+  objProgLineInfo.type = COMMON ;
   if(objThreadCntrolBlock->token_type==INNERCMD) 
   {
 	  int iIdx = find_internal_cmd(objThreadCntrolBlock->token) ;
 	  if((iIdx >= 0) && (iIdx <= 2))  // movel - 0 ; movej - 1 ; movec - 2
-		  objThreadCntrolBlock->prog_jmp_line[iLineNum].type = MOTION ;
+		  objProgLineInfo.type = MOTION ;
   }
   find_eol(objThreadCntrolBlock);
+  objThreadCntrolBlock->prog_jmp_line.push_back(objProgLineInfo);
+  // iLineNum++ ;
   
   do {
-    objThreadCntrolBlock->prog_jmp_line[iLineNum].prog_pos = objThreadCntrolBlock->prog ;
+    objProgLineInfo.prog_pos = objThreadCntrolBlock->prog ;
     get_token(objThreadCntrolBlock);
     if(objThreadCntrolBlock->token_type==NUMBER) {
       // strcpy(label_table[addr].name, token);
@@ -844,18 +878,18 @@ void scan_labels(struct thread_control_block * objThreadCntrolBlock,
 		}
 	}
 
-	objThreadCntrolBlock->prog_jmp_line[iLineNum].type = COMMON ;
+	objProgLineInfo.type = COMMON ;
 	if(objThreadCntrolBlock->token_type==INNERCMD) 
 	{
 	    int iIdx = find_internal_cmd(objThreadCntrolBlock->token) ;
 		if((iIdx >= 0) && (iIdx <= 2))  // movel - 0 ; movej - 1 ; movec - 2
-			objThreadCntrolBlock->prog_jmp_line[iLineNum].type = MOTION ;
+			objProgLineInfo.type = MOTION ;
 	}
     /* if not on a blank line, find next line */
     if(objThreadCntrolBlock->tok!=EOL)
 		find_eol(objThreadCntrolBlock);
-	
-    iLineNum++ ;
+	objThreadCntrolBlock->prog_jmp_line.push_back(objProgLineInfo);
+    // iLineNum++ ;
   } while(objThreadCntrolBlock->tok!=FINISHED);
   objThreadCntrolBlock->prog = temp;  /* restore to original */
 }
@@ -1830,14 +1864,16 @@ void exec_import(struct thread_control_block * objThreadCntrolBlock)
   // memset(file_buffer, 0x00, 128);
   // sprintf(file_buffer, "%s.bas", objLabel.name);
   // objLabel.p = objThreadCntrolBlock->sub_prog[objThreadCntrolBlock->iSubProgNum] ;
-  load_program(objThreadCntrolBlock->sub_prog[objThreadCntrolBlock->iSubProgNum], objLabel.name);
+  load_program(objThreadCntrolBlock, 
+	  objThreadCntrolBlock->sub_prog[objThreadCntrolBlock->iSubProgNum], objLabel.name);
   // Scan the labels in the import files
   proglabelsScan = objThreadCntrolBlock->prog ;
   objThreadCntrolBlock->prog = objThreadCntrolBlock->sub_prog[objThreadCntrolBlock->iSubProgNum];
   scan_labels(objThreadCntrolBlock, OUTSIDE_FUNC, objLabel.name);
   objThreadCntrolBlock->prog = proglabelsScan;
   objThreadCntrolBlock->iSubProgNum++ ;
-    
+  
+  mergeImportXPathToProjectXPath(objThreadCntrolBlock, objLabel.name);
 /*
  *	  addr = add_label(objThreadCntrolBlock, objLabel);
  *    if(addr==-1 || addr==-2) {

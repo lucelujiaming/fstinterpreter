@@ -118,7 +118,7 @@ struct thread_control_block {
 	int    iSubProgNum ;
 	char * sub_prog[NUM_SUBROUTINE];
 	
-	prog_line_info prog_jmp_line[1024];
+	vector<prog_line_info> prog_jmp_line;
 	int  prog_mode ; // = 0;   /* 0 - run to end, 1 - step  */
 	bool is_abort ; 
 	int  is_main_thread ; // = 0;   /* 0 - run to end, 1 - step  */

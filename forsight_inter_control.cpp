@@ -50,9 +50,12 @@ bool parseScript(const char* fname)
     while(fin.getline(command, sizeof(command)))
     {
         printf("command:%s\n",command);
-        // instr.line = ++count;
+#ifdef USE_XPATH
 	    // itoa(++count, instr.line, 10);
         sprintf(instr.line, "%d", ++count);
+#else
+        instr.line = ++count;
+#endif
         vector<string> result=split(command, " "); //use space to split
         if (result[0] == "LOOP")
         {
@@ -163,6 +166,7 @@ void setCurLine(int line)
    // int offset = (int)&intprt_status.line - (int)&intprt_status;
     int offset = &((Instruction*)0)->line;   
 #endif  
+    printf("setCurLine (%d) at %d\n", line, offset);
     writeShm(SHM_INTPRT_STATUS, offset, (void*)&line, sizeof(line));    
 }
 
@@ -268,7 +272,7 @@ bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instructio
 	            setCurLine(target_line);
 	        }   
 
-	        if (objThdCtrlBlockPtr->prog_mode = 1)
+	        if (objThdCtrlBlockPtr->prog_mode == 1)
 	            setPrgmState(EXECUTE_TO_PAUSE_T);   //wait until this Instruction end
 	    }
 
@@ -290,9 +294,9 @@ bool getIntprtCtrl()
     return tryRead(SHM_CTRL_CMD, 0, (void*)&intprt_ctrl, sizeof(intprt_ctrl));
 }
 
-void startFile(struct thread_control_block * objThdCtrlBlockPtr)
+void startFile(struct thread_control_block * objThdCtrlBlockPtr, char * proj_name)
 {
-	strcpy(objThdCtrlBlockPtr->project_name, "prog_demo_dec"); // "BAS-EX1.BAS") ; // 
+	strcpy(objThdCtrlBlockPtr->project_name, proj_name); // "prog_demo_dec"); // "BAS-EX1.BAS") ; // 
 	objThdCtrlBlockPtr->is_main_thread = 1 ;
 	objThdCtrlBlockPtr->iThreadIdx = 0 ;
 	objThdCtrlBlockPtr->instrSet   
@@ -317,12 +321,20 @@ void parseCtrlComand(struct thread_control_block * objThdCtrlBlockPtr)
             printf("debug...");
             objThdCtrlBlockPtr->prog_mode = 1 ;
             setPrgmState(PAUSED_R);
-            startFile(objThdCtrlBlockPtr);
+			if(strlen(intprt_ctrl.start_ctrl.file_name) == 0)
+			{
+			   strcpy(intprt_ctrl.start_ctrl.file_name, "prog_demo_dec");
+			}
+            startFile(objThdCtrlBlockPtr, intprt_ctrl.start_ctrl.file_name);
             break;
         case START:
             printf("start run...");
             setPrgmState(EXECUTE_R);
-			startFile(objThdCtrlBlockPtr);
+			if(strlen(intprt_ctrl.start_ctrl.file_name) == 0)
+			{
+			   strcpy(intprt_ctrl.start_ctrl.file_name, "prog_demo_dec");
+			}
+			startFile(objThdCtrlBlockPtr, intprt_ctrl.start_ctrl.file_name);
             break;
         case FORWARD:
             printf("step forward\n");

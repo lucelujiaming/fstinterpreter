@@ -10,7 +10,16 @@
           <body>
             <instruction type="move_line">
                 <argument name="pose" type="pose">
-                    <element name="x" type="num">11.1</element>
+                    <!-- element name="x" type="num">11.1</element -->
+                    <element name="x" type="entity">
+                        <element type="num">13.1</element>
+                        <element type="operation">+</element>
+                        <element type="bracket">
+                            <element type="num">6</element>
+                            <element type="operation">-</element>
+                            <element type="num">7</element>
+                        </element>
+                    </element>
                     <element name="y" type="num">2.2</element>
                     <element name="z" type="num">3.3</element>
                     <element name="a" type="num">4.4</element>
@@ -21,7 +30,16 @@
                 <argument name="fine" type="num"          >-1</argument>
                 <argument name="acceleration" type="num" unit="%">40</argument>
                 <argument name="offset_jvec" type="without_uf">
-                    <argument name="j1" type="num">100</argument>
+                    <!-- argument name="j1" type="num">100</argument -->
+                    <element name="j1" type="entity">
+                        <element type="num">100</element>
+                        <element type="operation">+</element>
+                        <element type="bracket">
+                            <element type="num">6</element>
+                            <element type="operation">-</element>
+                            <element type="num">7</element>
+                        </element>
+                    </element>
                     <argument name="j2" type="num">0</argument>
                     <argument name="j3" type="num">0</argument>
                     <argument name="j4" type="num">45</argument>
@@ -55,7 +73,7 @@
 		        </argument>
                 <argument name="TB">
                     <argument name="range" type="num">100</argument>
-                    <call name="prog_1">
+                    <call file="prog_1">
                         <parameter name="param0" type="num">1</parameter>
                         <parameter name="param0" type="num">2</parameter>
                     </call>
@@ -105,13 +123,13 @@
                 <argument name="smooth_velocity" type="num" unit="%">50</argument>
                 <argument name="acceleration" type="num" unit="%">40</argument>
                 <argument name="offset_pr" type="with_uf">
-		            <argument name="pose" type="pose_register">2</argument>
+                    <argument name="pose" type="pose_register">2</argument>
                     <argument name="uf" type="num">1</argument>
-		        </argument>
+                </argument>
                 <argument name="tool_offset_pr" type="with_uf">
-		            <argument name="pose" type="pose_register">2</argument>
+                    <argument name="pose" type="pose_register">2</argument>
                     <argument name="uf" type="num">1</argument>
-		        </argument>
+                </argument>
             </instruction>
             <instruction type="move_joint">
                 <argument name="pose" type="pose">
@@ -171,7 +189,7 @@
 		        </argument>
                 <argument name="TB">
                     <argument name="range" type="num">100</argument>
-                    <call name="prog_1">
+                    <call file="prog_1">
                         <parameter name="param0" type="num">1</parameter>
                         <parameter name="param0" type="num">2</parameter>
                     </call>
@@ -272,8 +290,17 @@
                     <element type="num">5</element>
                     <element type="operation">+</element>
                     <element type="register">
-		                <element type="num">1</element>
-		            </element>
+		                <!-- element type="num">1</element -->
+                        <element type="entity">
+                            <element type="num">2</element>
+                            <element type="operation">+</element>
+                            <element type="bracket">
+                                <element type="num">6</element>
+                                <element type="operation">-</element>
+                                <element type="num">7</element>
+                            </element>
+                        </element>
+                    </element>
                 </rvalue>
             </assignment>
             <instruction type="timer">
@@ -284,7 +311,7 @@
 		           <argument name="useralarm" type="useralarm">1</argument>
 		    </instruction>
             <instruction type="pause">PAUSE</instruction>
-            <instruction type="abort">ABORT</instruction>
+            <!-- instruction type="abort">ABORT</instruction -->
             <instruction type="wait">
 		           <argument name="timeout" type="num" unit="sec">3</argument>
 		    </instruction>
@@ -478,7 +505,19 @@
 
             <logical type="switch">
                 <determine>
-                    <element type="num">R[1]</element>
+                    <!-- element type="num">R[1]</element -->
+                    <element type="register">
+		                <!-- element type="num">1</element -->
+                        <element type="entity">
+                            <element type="num">2</element>
+                            <element type="operation">+</element>
+                            <element type="bracket">
+                                <element type="num">6</element>
+                                <element type="operation">-</element>
+                                <element type="num">7</element>
+                            </element>
+                        </element>
+                    </element>
                 </determine>
                 <logical_body />
                 <vice-logical type="case">
