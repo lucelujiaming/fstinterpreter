@@ -305,17 +305,41 @@ void startFile(struct thread_control_block * objThdCtrlBlockPtr, char * proj_nam
 	base_thread_create(0, objThdCtrlBlockPtr);
 	intprt_ctrl.cmd = LOAD ;
 }
+
+void waitInterpreterStateToPaused()
+{
+	InterpreterState interpreterState  = getPrgmState();
+	while(interpreterState != PAUSED_R)
+	{
+#ifdef WIN32
+		Sleep(100);
+		// interpreterState = EXECUTE_R ;
+#else
+		sleep(1);
+		interpreterState = getPrgmState();
+#endif
+	}
+}	
+
 void parseCtrlComand(struct thread_control_block * objThdCtrlBlockPtr)
 {
-
+    printf("parseCtrlComand: %d\n", intprt_ctrl.cmd);
     switch (intprt_ctrl.cmd)
     {
         case LOAD:
             // printf("load file_name\n");
             break;
         case JUMP:
+#ifdef USE_XPATH
             printf("jump to line:%s\n", intprt_ctrl.line);
 			target_line = getLineNumFromXPathVector(intprt_ctrl.line);
+#else
+            printf("jump to line:%d\n", intprt_ctrl.line);
+			target_line = intprt_ctrl.line;
+            setLinenum(objThdCtrlBlockPtr, target_line);
+            setPrgmState(EXECUTE_R);
+#endif
+			fflush(stdout);
 			break;
         case DEBUG:
             printf("debug...");
@@ -339,13 +363,22 @@ void parseCtrlComand(struct thread_control_block * objThdCtrlBlockPtr)
         case FORWARD:
             printf("step forward\n");
             objThdCtrlBlockPtr->prog_mode = 1 ;
+            // target_line++;
+            target_line = getLinenum(objThdCtrlBlockPtr);
+            printf("step forward to %d \n", target_line);
             setPrgmState(EXECUTE_R);
-            target_line++;
+			
+            printf("Enter waitInterpreterStateToPaused %d \n", target_line);
+			waitInterpreterStateToPaused();
+			// target_line++ in setInstruction
+            printf("Left  waitInterpreterStateToPaused %d \n", target_line);
+			
             setLinenum(objThdCtrlBlockPtr, target_line);
             break;
         case BACKWARD:
             printf("backward\n");
-           // setPrgmState(EXECUTE_R);            
+           // setPrgmState(EXECUTE_R);  
+            target_line = getLinenum(objThdCtrlBlockPtr);          
             if (target_line < 1)
                 break;
             if (objThdCtrlBlockPtr->prog_jmp_line[target_line-1].type == MOTION)
@@ -356,19 +389,25 @@ void parseCtrlComand(struct thread_control_block * objThdCtrlBlockPtr)
                 break;
             }
             objThdCtrlBlockPtr->prog_mode = 1 ;
+	    	// target_line--;
+            target_line = getLinenum(objThdCtrlBlockPtr);
             setPrgmState(EXECUTE_R);
-	    	target_line--;
+			
+            printf("Enter waitInterpreterStateToPaused %d \n", target_line);
+			waitInterpreterStateToPaused();
+			// target_line-- in setInstruction
+            printf("Left  waitInterpreterStateToPaused %d \n", target_line);
 		    setLinenum(objThdCtrlBlockPtr, target_line);
 		    break;
-	case CONTINUE:
-		if(getPrgmState() == PAUSED_R)
-        {
-            printf("continue move..\n");
-            objThdCtrlBlockPtr->prog_mode = 0 ;
-            setPrgmState(EXECUTE_R);
-		}
-		else
-		    setWarning(1);
+		case CONTINUE:
+			if(getPrgmState() == PAUSED_R)
+	        {
+	            printf("continue move..\n");
+	            objThdCtrlBlockPtr->prog_mode = 0 ;
+	            setPrgmState(EXECUTE_R);
+			}
+			else
+			    setWarning(1);
 
             break;
         case PAUSE:

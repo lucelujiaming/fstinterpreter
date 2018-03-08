@@ -1,7 +1,7 @@
 all: interpreter 
 .PHONY : all
 interpreter:
-	g++ -o interpreter forsight_inter_control.cpp \
+	g++ -g -o interpreter forsight_inter_control.cpp \
         forsight_interpreter_shm.cpp\
         forsight_xml_reader.cpp\
         forsight_innercmd.cpp forsight_innerfunc.cpp \

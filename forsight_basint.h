@@ -140,11 +140,12 @@ struct thread_control_block {
 	Instruction * instrSet ;
 	// LineNum and Update flag
 	int               iLineNum ;
-	LineNumState      stateLineNum ;
+//	LineNumState      stateLineNum ;
 } ;
 
 void setLinenum(struct thread_control_block* objThreadCntrolBlock, int iLinenum);
-LineNumState getLinenum(struct thread_control_block* objThreadCntrolBlock, int & num);
+// LineNumState getLinenum(struct thread_control_block* objThreadCntrolBlock, int & num);
+int getLinenum(struct thread_control_block* objThreadCntrolBlock) ;
 
 int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode);
 #ifdef WIN32

@@ -434,10 +434,11 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	if(iLineNum <= g_vecXPath.size())
 		sprintf(instr.line, "%s", g_vecXPath[iLineNum].c_str());
 	else
-		sprintf(instr.line, "OutRange with %d", iLineNum);
+		sprintf(instr.line, "OutRange with %d\n", iLineNum);
 #else
+	printf("call_MoveJ XPATH at %d\n", iLineNum);
 	instr.line = iLineNum;
-	printf("call_MoveJ XPATH: %s", g_vecXPath[iLineNum].c_str());
+	printf("call_MoveJ XPATH: %s\n", g_vecXPath[iLineNum].c_str());
 #endif
     get_exp(objThreadCntrolBlock, &value, &boolValue);
 	instr.target.joint_target.j1 = value;
@@ -531,8 +532,9 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	else
 		sprintf(instr.line, "OutRange with %d", iLineNum);
 #else
+	printf("call_MoveJ XPATH at %d\n", iLineNum);
 	instr.line = iLineNum;
-	printf("call_MoveL XPATH: %s", g_vecXPath[iLineNum].c_str());
+	printf("call_MoveL XPATH: %s\n", g_vecXPath[iLineNum].c_str());
 #endif
 	
     // result.size() == MOVJ_COMMAND_PARAM_MIN
@@ -629,8 +631,9 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	else
 		sprintf(instr.line, "OutRange with %d", iLineNum);
 #else
+	printf("call_MoveJ XPATH at %d\n", iLineNum);
 	instr.line = iLineNum;
-	printf("call_MoveC XPATH: %s", g_vecXPath[iLineNum].c_str());
+	printf("call_MoveC XPATH: %s\n", g_vecXPath[iLineNum].c_str());
 #endif
 
     // result.size() == MOVJ_COMMAND_PARAM_MIN
@@ -791,8 +794,9 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	else
 		sprintf(instr.line, "OutRange with %d", iLineNum);
 #else
+	printf("call_MoveJ XPATH at %d\n", iLineNum);
 	instr.line = iLineNum;
-	printf("call_Wait XPATH: %s", g_vecXPath[iLineNum].c_str());
+	printf("call_Wait XPATH: %s\n", g_vecXPath[iLineNum].c_str());
 #endif
 	
 	get_token(objThreadCntrolBlock);

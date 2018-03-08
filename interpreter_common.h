@@ -132,7 +132,11 @@ typedef struct _InterpreterControl
     {
         StartCtrl   start_ctrl;
         // int         id;
+#ifdef USE_XPATH
         char           line[TP_XPATH_LEN];
+#else
+    int             line;
+#endif
         RegMap      reg;
         DIOMap      dio;
     };
@@ -147,7 +151,11 @@ typedef struct _CtrlStatus
 
 typedef struct _IntprtStatus
 {
+#ifdef USE_XPATH
     char            line[TP_XPATH_LEN];
+#else
+    int             line;
+#endif
     InterpreterState    state;
 #ifdef WIN32
 	__int64         warn;

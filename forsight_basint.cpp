@@ -175,8 +175,9 @@ void* basic_interpreter(void* arg)
   				= (struct thread_control_block*)arg;
   
   setPrgmState(EXECUTE_R);
-
+  printf("Enter call_interpreter.\n");
   iRet = call_interpreter(objThreadCntrolBlock, 1);
+  printf("Left  call_interpreter.\n");
   setPrgmState(IDLE_R);
 
   free(objThreadCntrolBlock->instrSet);
@@ -187,11 +188,15 @@ void* basic_interpreter(void* arg)
   g_basic_interpreter_handle[iIdx] = NULL; 
   return NULL;
 #else
+  printf("Enter pthread_join.\n");
   pthread_join(g_basic_interpreter_handle[iIdx], NULL);
+  printf("Left  pthread_join.\n");
+  fflush(stdout);
   g_basic_interpreter_handle[iIdx] = 0;
 #endif // WIN32
 }
 
+/*
 void setLinenum(struct thread_control_block* objThreadCntrolBlock, int iLinenum)
 {
 #ifdef WIN32
@@ -200,6 +205,7 @@ void setLinenum(struct thread_control_block* objThreadCntrolBlock, int iLinenum)
 	linux_mutex_lock tempBaseLock ;
 #endif 
 	auto_lock temp(&tempBaseLock) ;
+    printf("setLinenum : %d\n", iLinenum);
 	if(objThreadCntrolBlock->stateLineNum == LINENUM_CONSUMED)
 	{
 		objThreadCntrolBlock->stateLineNum = LINENUM_PRODUCED;
@@ -235,7 +241,7 @@ LineNumState getLinenumInternal(
 int getLinenum(
 	struct thread_control_block* objThreadCntrolBlock)
 {
-    int num ;
+    int num = 0;
 	LineNumState state = getLinenumInternal(objThreadCntrolBlock, num);
 	while(state == LINENUM_CONSUMED)
 	{
@@ -247,6 +253,56 @@ int getLinenum(
 		state = getLinenumInternal(objThreadCntrolBlock, num);
 	}
 	return num ;  // objThreadCntrolBlock->iLineNum ;
+}
+*/
+	
+void setLinenum(struct thread_control_block* objThreadCntrolBlock, int iLinenum)
+{
+    printf("setLinenum : %d\n", iLinenum);
+	objThreadCntrolBlock->iLineNum = iLinenum;
+}
+
+int getLinenum(
+	struct thread_control_block* objThreadCntrolBlock)
+{
+    printf("getLinenum : %d\n", objThreadCntrolBlock->iLineNum);
+	return objThreadCntrolBlock->iLineNum ;
+}
+
+void printCurrentLine(struct thread_control_block* objThreadCntrolBlock)
+{
+	char cLineContent[2046];
+	char * cLineContentPtr = 0 ;
+	char * cLineContentProgPtr = 0 ;
+
+	memset(cLineContent, 0x00, 2046);
+	cLineContentPtr = cLineContent ;
+	cLineContentProgPtr = objThreadCntrolBlock->prog ;
+	while(*cLineContentProgPtr!='\n'
+		&& *cLineContentProgPtr!='\r'
+		&& *cLineContentProgPtr!='\0')
+	{
+		*cLineContentPtr++=*cLineContentProgPtr++;
+	}
+	printf("\t(%d)-(%08X): (%s)\n", 
+		objThreadCntrolBlock->iLineNum, objThreadCntrolBlock->prog, cLineContent);
+}
+
+void printProgJmpLine(struct thread_control_block* objThreadCntrolBlock)
+{
+	int iLineNumTemp = 0 ; 
+	char *proglabelsScan; 
+	// Scan the labels in the import files
+	proglabelsScan = objThreadCntrolBlock->prog ;
+	iLineNumTemp   = objThreadCntrolBlock->iLineNum ;
+	for(unsigned i=0; i < objThreadCntrolBlock->prog_jmp_line.size(); i++)
+	{
+	    objThreadCntrolBlock->iLineNum = i; 
+		objThreadCntrolBlock->prog = objThreadCntrolBlock->prog_jmp_line[i].prog_pos;
+		printCurrentLine(objThreadCntrolBlock);
+	}
+	objThreadCntrolBlock->iLineNum = iLineNumTemp;
+	objThreadCntrolBlock->prog     = proglabelsScan;
 }
 
 int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode)
@@ -263,6 +319,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
   string strFileName ;
 
   objThreadCntrolBlock->ret_value = 0.0 ;
+//  objThreadCntrolBlock->stateLineNum = LINENUM_PRODUCED ;
   if(mode == 1)
   {
 	  /* allocate memory for the program */
@@ -311,6 +368,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	  if(loc=='\0')
 	  {
 		  serror(7); /* label not defined */
+		  printf("label not defined.");
 		  return 1;
 	  }
 	  // Save local var stack index.
@@ -325,6 +383,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	  
 	  iRet = call_interpreter(objThreadCntrolBlock, 0);
 	  printf("Execute over.");
+	  fflush(stdout);
 	  if(objThreadCntrolBlock->p_buf)
 	  {
 		free(objThreadCntrolBlock->p_buf);
@@ -341,6 +400,10 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	  return iRet;
   }
 
+  printProgJmpLine(objThreadCntrolBlock);
+  objThreadCntrolBlock->iLineNum = calc_line_from_prog(objThreadCntrolBlock);
+  printf("Start Interaptor : Line number = %d \n", objThreadCntrolBlock->iLineNum);
+  iLinenum = objThreadCntrolBlock->iLineNum;
   do {
   	if(objThreadCntrolBlock->prog_mode == 1)
   	{
@@ -357,7 +420,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 		if(strlen(cLineContent) != 0)
 		{
 		    setPrgmState(PAUSED_R);
-  			printf("Line number(%s) -> ", cLineContent);
+  			printf("Line number(%s) at %d\n", cLineContent, iLinenum);
 			int iOldLinenum = iLinenum ;
 			
 			// iScan = scanf("%d", &iLinenum);
@@ -374,19 +437,26 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 			}
 			iLinenum = objThreadCntrolBlock->iLineNum ;
 			// 
-			if(iScan == 0)
+  			printf("interpreterState : Line number(%d) with %d\n", iLinenum, iOldLinenum);
+			if(iLinenum == 0)
 			{
-				printf("illegal line number.");
+				printf("illegal line number: %d.\n", iLinenum);
 				exit(1);
 			}
 			if(iOldLinenum != iLinenum - 1)
 			{
 			    //
+  			    // printf("Insert movej at (%d) with %d\n", iLinenum, iOldLinenum);
+/*
 				int iRet = call_internal_cmd(
-						find_internal_cmd((char *)"movej"), -1,
+						find_internal_cmd((char *)"movej"), iLinenum,
 						objThreadCntrolBlock);
 				if(iRet == END_COMMND_RET)
+				{
+  			    	printf("Insert movej Failed at (%d) \n", iLinenum);
 					return END_COMMND_RET;
+				}
+ */
 			}
 			// scanf("%s", cLinenum);
 			// iLinenum = atoi(cLinenum);
@@ -396,8 +466,11 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 				{
 					objThreadCntrolBlock->prog =
 						objThreadCntrolBlock->prog_jmp_line[iLinenum - 1].prog_pos;
+  			        printf("objThreadCntrolBlock->prog : Line number(%d) \n", iLinenum);
 				}
 			}
+  			// printf("interpreterState : Line number(%d) \n", iLinenum);
+  			printCurrentLine(objThreadCntrolBlock);
 		    setPrgmState(EXECUTE_R);
 		}
   	}
@@ -424,8 +497,10 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	}
 	else if(objThreadCntrolBlock->token_type==INNERCMD) /* is command */
 	{
-	    int iIdx = find_internal_cmd(objThreadCntrolBlock->token) ;
+	    int iIdx = find_internal_cmd(objThreadCntrolBlock->token);
 		int iLineNum = calc_line_from_prog(objThreadCntrolBlock);
+		// We had eaten MOV* as token. 
+		iLineNum = iLineNum - 1 ;
 		if(objThreadCntrolBlock->is_main_thread == 0)  // not main
 		{
 			if(call_internal_cmd_exec_sub_thread(iIdx) == 0) // 0 - mov 1 - nonmov
@@ -455,6 +530,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 			} 
     		printf("call_internal_cmd execution : %s at %d, iLineNum = %d\n", 
 						objThreadCntrolBlock->token, iIdx, iLineNum);
+			printCurrentLine(objThreadCntrolBlock);
 			int iRet = call_internal_cmd(iIdx, iLineNum, 
 				objThreadCntrolBlock);
 			// find_eol(objThreadCntrolBlock);
@@ -555,13 +631,14 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 
 int  calc_line_from_prog(struct thread_control_block * objThreadCntrolBlock)
 {
-	for(int i = 0 ; i < 1024 ; i++)
+	for(int i = 0 ; i < objThreadCntrolBlock->prog_jmp_line.size() ; i++)
 	{
-		if(objThreadCntrolBlock->prog < objThreadCntrolBlock->prog_jmp_line[i].prog_pos)
+		if(objThreadCntrolBlock->prog <= objThreadCntrolBlock->prog_jmp_line[i].prog_pos)
 		{
-		   // printf("calc_line_from_prog return %d at (%08X, %08X) \n", 
-		   //	    i + 1, objThreadCntrolBlock->prog,
-		   //	    objThreadCntrolBlock->prog_jmp_line[i].prog_pos);
+		   printf("calc_line_from_prog get %d at (%08X, %08X) \n", 
+		   	    i + 1, objThreadCntrolBlock->prog,
+		   	    objThreadCntrolBlock->prog_jmp_line[i].prog_pos);
+		   printCurrentLine(objThreadCntrolBlock);
 		   return i + 1 ;
 		}
 	}
@@ -786,6 +863,7 @@ void print(struct thread_control_block * objThreadCntrolBlock)
 void scan_labels(struct thread_control_block * objThreadCntrolBlock, 
 				SubLabelType type, char * pname)
 {
+  int bisFindEOL = 0 ;
   struct prog_line_info_t objProgLineInfo ;
   struct sub_label  objLabel ;
   // int iLineNum = 0 ;
@@ -798,6 +876,7 @@ void scan_labels(struct thread_control_block * objThreadCntrolBlock,
   objProgLineInfo.prog_pos = objThreadCntrolBlock->prog ;
   // iLineNum++ ;
   get_token(objThreadCntrolBlock);
+  bisFindEOL = 0 ;
   if(objThreadCntrolBlock->token_type==NUMBER) {
     // strcpy(label_table[0].name,token);
     // label_table[0].p=prog;
@@ -824,6 +903,7 @@ void scan_labels(struct thread_control_block * objThreadCntrolBlock,
 		  objLabel.p = objThreadCntrolBlock->prog;
 		  // Jump parameter
 		  find_eol(objThreadCntrolBlock);
+		  bisFindEOL = 1 ;
 		  addr = add_label(objThreadCntrolBlock, objLabel);
 		  if(addr==-1 || addr==-2) {
 			  (addr==-1) ?serror(5):serror(6);
@@ -841,13 +921,17 @@ void scan_labels(struct thread_control_block * objThreadCntrolBlock,
 	  if((iIdx >= 0) && (iIdx <= 2))  // movel - 0 ; movej - 1 ; movec - 2
 		  objProgLineInfo.type = MOTION ;
   }
-  find_eol(objThreadCntrolBlock);
+  if (bisFindEOL == 0)
+  {
+     find_eol(objThreadCntrolBlock);
+  }
   objThreadCntrolBlock->prog_jmp_line.push_back(objProgLineInfo);
   // iLineNum++ ;
   
   do {
     objProgLineInfo.prog_pos = objThreadCntrolBlock->prog ;
     get_token(objThreadCntrolBlock);
+    bisFindEOL = 0 ;
     if(objThreadCntrolBlock->token_type==NUMBER) {
       // strcpy(label_table[addr].name, token);
       // label_table[addr].p = prog;  /* current point in program */
@@ -871,6 +955,7 @@ void scan_labels(struct thread_control_block * objThreadCntrolBlock,
 		    objLabel.p = objThreadCntrolBlock->prog;
 			// Jump parameter
 			find_eol(objThreadCntrolBlock);
+		    bisFindEOL = 1 ;
 	        addr = add_label(objThreadCntrolBlock, objLabel);
 	        if(addr==-1 || addr==-2) {
 	          (addr==-1) ?serror(5):serror(6);
@@ -886,8 +971,10 @@ void scan_labels(struct thread_control_block * objThreadCntrolBlock,
 			objProgLineInfo.type = MOTION ;
 	}
     /* if not on a blank line, find next line */
-    if(objThreadCntrolBlock->tok!=EOL)
+	if (bisFindEOL == 0)
+	{
 		find_eol(objThreadCntrolBlock);
+	}
 	objThreadCntrolBlock->prog_jmp_line.push_back(objProgLineInfo);
     // iLineNum++ ;
   } while(objThreadCntrolBlock->tok!=FINISHED);
