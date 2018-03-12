@@ -26,7 +26,7 @@ SUB main (param0, param1)
     ENDIF 
     WHILE R[1]+sin(2) <= 100 
         MOVEL 1.1 2.2 3.3 4.4 5.5 6.6 100 SV 50 ;ACC 40 
-        IF 8+sin(2)+prog_demo_dec::func_test(6+( 6-7 ), 3) == 2 THEN 
+        IF 8+sin(2) == 2 THEN 
             MOVEL 1.1 2.2 3.3 4.4 5.5 6.6 100 SV 50 ;ACC 40 
             BREAK 
         ENDIF 
@@ -46,7 +46,6 @@ SUB main (param0, param1)
         BREAK 
     END SELECT 
     # comment thing 
-    CALL prog_demo_dec::func_test (6+( 6-7 ), 2) 
     CALL prog_1::main (1, 2) 
     CALL prog_1::LujiamingParamsSub (1, 2, 3) 
     

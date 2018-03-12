@@ -323,7 +323,9 @@ void waitInterpreterStateToPaused()
 
 void parseCtrlComand(struct thread_control_block * objThdCtrlBlockPtr)
 {
+#ifndef WIN32
     printf("parseCtrlComand: %d\n", intprt_ctrl.cmd);
+#endif
     switch (intprt_ctrl.cmd)
     {
         case LOAD:
@@ -337,12 +339,12 @@ void parseCtrlComand(struct thread_control_block * objThdCtrlBlockPtr)
             printf("jump to line:%d\n", intprt_ctrl.line);
 			target_line = intprt_ctrl.line;
             setLinenum(objThdCtrlBlockPtr, target_line);
-            setPrgmState(EXECUTE_R);
 #endif
+            // setPrgmState(EXECUTE_R);
 			fflush(stdout);
 			break;
         case DEBUG:
-            printf("debug...");
+            printf("debug...\n");
             objThdCtrlBlockPtr->prog_mode = 1 ;
             setPrgmState(PAUSED_R);
 			if(strlen(intprt_ctrl.start_ctrl.file_name) == 0)
@@ -352,7 +354,7 @@ void parseCtrlComand(struct thread_control_block * objThdCtrlBlockPtr)
             startFile(objThdCtrlBlockPtr, intprt_ctrl.start_ctrl.file_name);
             break;
         case START:
-            printf("start run...");
+            printf("start run...\n");
             setPrgmState(EXECUTE_R);
 			if(strlen(intprt_ctrl.start_ctrl.file_name) == 0)
 			{

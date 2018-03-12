@@ -173,8 +173,8 @@ void* basic_interpreter(void* arg)
   int iRet = 0;
   struct thread_control_block * objThreadCntrolBlock
   				= (struct thread_control_block*)arg;
-  
-  setPrgmState(EXECUTE_R);
+  // Set this state outside according prog_mode
+  // setPrgmState(EXECUTE_R);  
   printf("Enter call_interpreter.\n");
   iRet = call_interpreter(objThreadCntrolBlock, 1);
   printf("Left  call_interpreter.\n");
@@ -400,7 +400,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	  return iRet;
   }
 
-  printProgJmpLine(objThreadCntrolBlock);
+  // printProgJmpLine(objThreadCntrolBlock);
   objThreadCntrolBlock->iLineNum = calc_line_from_prog(objThreadCntrolBlock);
   printf("Start Interaptor : Line number = %d \n", objThreadCntrolBlock->iLineNum);
   iLinenum = objThreadCntrolBlock->iLineNum;
@@ -420,7 +420,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 		if(strlen(cLineContent) != 0)
 		{
 		    setPrgmState(PAUSED_R);
-  			printf("Line number(%s) at %d\n", cLineContent, iLinenum);
+  			printf("PAUSED: Line number(%s) at %d\n", cLineContent, iLinenum);
 			int iOldLinenum = iLinenum ;
 			
 			// iScan = scanf("%d", &iLinenum);
@@ -469,8 +469,17 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
   			        printf("objThreadCntrolBlock->prog : Line number(%d) \n", iLinenum);
 				}
 			}
+  			printf("setPrgmState(EXECUTE_TO_PAUSE_T).\n");
+		    setPrgmState(EXECUTE_TO_PAUSE_T);
+#ifdef WIN32
+			Sleep(1);
+			break ;
+#else
+	        usleep(1000);
+#endif
   			// printf("interpreterState : Line number(%d) \n", iLinenum);
   			printCurrentLine(objThreadCntrolBlock);
+  			printf("setPrgmState(EXECUTE_R).\n");
 		    setPrgmState(EXECUTE_R);
 		}
   	}
