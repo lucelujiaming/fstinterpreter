@@ -255,7 +255,9 @@ bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instructio
 		else
 		{
 			ret = tryWrite(SHM_INTPRT_CMD, 0, 
-				(void*)instruction, sizeof(Instruction) + sizeof(AdditionalInfomation));
+				(void*)instruction, 
+				sizeof(Instruction) 
+					+ sizeof(AdditionalInfomation) * instruction->add_num);
 		}
 
 	    if (ret)
@@ -306,7 +308,73 @@ void startFile(struct thread_control_block * objThdCtrlBlockPtr, char * proj_nam
 	intprt_ctrl.cmd = LOAD ;
 }
 
-void waitInterpreterStateToPaused()
+
+void waitInterpreterStateleftWaiting(
+	struct thread_control_block * objThdCtrlBlockPtr)
+{
+	InterpreterState interpreterState  = getPrgmState();
+	while(interpreterState == WAITING_R)
+	{
+#ifdef WIN32
+		Sleep(100);
+		interpreterState = EXECUTE_R ;
+#else
+		sleep(1);
+		interpreterState = getPrgmState();
+		if(objThdCtrlBlockPtr->is_abort == true)
+		{
+			// setPrgmState(PAUSE_TO_IDLE_T) ;
+			break;
+		}
+#endif
+	}
+}
+
+void waitInterpreterStateToWaiting(
+	struct thread_control_block * objThdCtrlBlockPtr)
+{
+	InterpreterState interpreterState  = getPrgmState();
+	while(interpreterState != WAITING_R)
+	{
+#ifdef WIN32
+		Sleep(100);
+		// interpreterState = EXECUTE_R ;
+#else
+		sleep(1);
+		interpreterState = getPrgmState();
+		if(objThdCtrlBlockPtr->is_abort == true)
+		{
+			// setPrgmState(PAUSE_TO_IDLE_T) ;
+			break;
+		}
+#endif
+	}
+}	
+
+
+void waitInterpreterStateleftPaused(
+	struct thread_control_block * objThdCtrlBlockPtr)
+{
+	InterpreterState interpreterState  = getPrgmState();
+	while(interpreterState == PAUSED_R)
+	{
+#ifdef WIN32
+		Sleep(100);
+		interpreterState = EXECUTE_R ;
+#else
+		sleep(1);
+		interpreterState = getPrgmState();
+		if(objThdCtrlBlockPtr->is_abort == true)
+		{
+			// setPrgmState(PAUSE_TO_IDLE_T) ;
+			break;
+		}
+#endif
+	}
+}
+
+void waitInterpreterStateToPaused(
+	struct thread_control_block * objThdCtrlBlockPtr)
 {
 	InterpreterState interpreterState  = getPrgmState();
 	while(interpreterState != PAUSED_R)
@@ -317,6 +385,11 @@ void waitInterpreterStateToPaused()
 #else
 		sleep(1);
 		interpreterState = getPrgmState();
+		if(objThdCtrlBlockPtr->is_abort == true)
+		{
+			// setPrgmState(PAUSE_TO_IDLE_T) ;
+			break;
+		}
 #endif
 	}
 }	
@@ -371,10 +444,16 @@ void parseCtrlComand(struct thread_control_block * objThdCtrlBlockPtr)
             setPrgmState(EXECUTE_R);
 			
             printf("Enter waitInterpreterStateToPaused %d \n", target_line);
-			waitInterpreterStateToPaused();
+			waitInterpreterStateToPaused(objThdCtrlBlockPtr);
 			// target_line++ in setInstruction
             printf("Left  waitInterpreterStateToPaused %d \n", target_line);
 			
+//           printf("Enter waitInterpreterStateToWaiting %d \n", target_line);
+//			waitInterpreterStateToWaiting(objThdCtrlBlockPtr);
+//			// target_line++ in setInstruction
+//           printf("Left  waitInterpreterStateToWaiting %d \n", target_line);
+			
+
             setLinenum(objThdCtrlBlockPtr, target_line);
             break;
         case BACKWARD:
@@ -394,11 +473,17 @@ void parseCtrlComand(struct thread_control_block * objThdCtrlBlockPtr)
 	    	// target_line--;
             target_line = getLinenum(objThdCtrlBlockPtr);
             setPrgmState(EXECUTE_R);
-			
+
             printf("Enter waitInterpreterStateToPaused %d \n", target_line);
-			waitInterpreterStateToPaused();
+			waitInterpreterStateToPaused(objThdCtrlBlockPtr);
 			// target_line-- in setInstruction
             printf("Left  waitInterpreterStateToPaused %d \n", target_line);
+			
+//            printf("Enter waitInterpreterStateToWaiting %d \n", target_line);
+//			waitInterpreterStateToWaiting(objThdCtrlBlockPtr);
+//			// target_line-- in setInstruction
+//            printf("Left  waitInterpreterStateToWaiting %d \n", target_line);
+			
 		    setLinenum(objThdCtrlBlockPtr, target_line);
 		    break;
 		case CONTINUE:
@@ -426,7 +511,17 @@ void parseCtrlComand(struct thread_control_block * objThdCtrlBlockPtr)
         case ABORT:
             printf("abort motion\n");
 	        objThdCtrlBlockPtr->is_abort = true;
-            target_line = getMaxLineNum();
+            // target_line = getMaxLineNum();
+            target_line = 0;
+			
+		    setPrgmState(PAUSE_TO_IDLE_T);
+#ifdef WIN32
+			Sleep(1);
+#else
+	        usleep(1000);
+#endif
+  			printf("setPrgmState(IDLE_R).\n");
+		    setPrgmState(IDLE_R);
             break;
         case MOD_REG:
             break;

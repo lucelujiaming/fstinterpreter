@@ -51,6 +51,7 @@ typedef enum _InterpreterState
     IDLE_R      = 0,    
     EXECUTE_R   = 1,
     PAUSED_R    = 2,
+    WAITING_R   = 3,
 
     IDLE_TO_EXECUTE_T   = 101,
     EXECUTE_TO_PAUSE_T  = 102,

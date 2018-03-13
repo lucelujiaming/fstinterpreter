@@ -20,13 +20,13 @@
 
 using namespace std;
 
-#define NUM_SUBROUTINE 128
-#define NUM_THREAD     256
+#define NUM_SUBROUTINE 64
+#define NUM_THREAD     32
 
 #define LAB_LEN 128
-#define SELECT_AND_CYCLE_NEST 128
-#define SUB_NEST 25
-#define PROG_SIZE 10000
+#define SELECT_AND_CYCLE_NEST 64
+#define SUB_NEST 16
+#define PROG_SIZE 4096
 const int NUM_OF_PARAMS = 31;    // max number of parameters
 
 #define DELIMITER    1

@@ -47,6 +47,14 @@ void parseCtrlComand(struct thread_control_block * objThdCtrlBlock);
 void initShm();
 vector<string> split(string str,string pattern);
 
+void waitInterpreterStateleftWaiting(
+	struct thread_control_block * objThdCtrlBlockPtr);
+void waitInterpreterStateleftPaused(
+	struct thread_control_block * objThdCtrlBlockPtr);
+
+void waitInterpreterStateToPaused(
+	struct thread_control_block * objThdCtrlBlockPtr);
+
 #endif
 
 

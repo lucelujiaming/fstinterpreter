@@ -10,6 +10,7 @@
 #include "forsight_xml_reader.h"
 
 // #define NUM_LAB 100
+#define LINE_CONTENT_LEN   2046
 
 #define PRINT      1
 #define INPUT      2
@@ -271,11 +272,11 @@ int getLinenum(
 
 void printCurrentLine(struct thread_control_block* objThreadCntrolBlock)
 {
-	char cLineContent[2046];
+	char cLineContent[LINE_CONTENT_LEN];
 	char * cLineContentPtr = 0 ;
 	char * cLineContentProgPtr = 0 ;
 
-	memset(cLineContent, 0x00, 2046);
+	memset(cLineContent, 0x00, LINE_CONTENT_LEN);
 	cLineContentPtr = cLineContent ;
 	cLineContentProgPtr = objThreadCntrolBlock->prog ;
 	while(*cLineContentProgPtr!='\n'
@@ -311,12 +312,11 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
   int iLinenum;
   char * cLineContentPtr = 0 ;
   char * cLineContentProgPtr = 0 ;
-  char cLineContent[128];
+  char cLineContent[LINE_CONTENT_LEN];
   int iScan = 0 ;
   // char in[80];
   // char *p_buf;
   char *t = 0;
-  string strFileName ;
 
   objThreadCntrolBlock->ret_value = 0.0 ;
 //  objThreadCntrolBlock->stateLineNum = LINENUM_PRODUCED ;
@@ -361,8 +361,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 // 		  printf("%d %s %08X\n", (int)it->type, it->name, (int)it->p);
 // 	  }
       
-      memset(cLineContent, 0x00, 128);
-	  strFileName = objThreadCntrolBlock->project_name ;
+      memset(cLineContent, 0x00, LINE_CONTENT_LEN);
 	  sprintf(cLineContent, "%s::main", objThreadCntrolBlock->project_name);
       char * loc = find_label(objThreadCntrolBlock, cLineContent); // "main");
 	  if(loc=='\0')
@@ -380,23 +379,28 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	  {
 		  get_token(objThreadCntrolBlock);
 	  }
-	  
+	  printf("Execute call_interpreter begin at call_interpreter.\n");
 	  iRet = call_interpreter(objThreadCntrolBlock, 0);
-	  printf("Execute over.");
-	  fflush(stdout);
+	  printf("Execute call_interpreter over at call_interpreter.\n");
 	  if(objThreadCntrolBlock->p_buf)
 	  {
+	    printf("free(objThreadCntrolBlock->p_buf);\n");
 		free(objThreadCntrolBlock->p_buf);
 		objThreadCntrolBlock->p_buf = NULL ;
 	  }
+
+	  printf("free(objThreadCntrolBlock->iSubProgNum);\n");
 	  for(int i = 0; i < objThreadCntrolBlock->iSubProgNum; i++)
 	  {
+	      printf("objThreadCntrolBlock->sub_prog[%d]\n", i);
 		  if (objThreadCntrolBlock->sub_prog[i])
 		  {
+	          printf("free objThreadCntrolBlock->sub_prog[%d]\n", i);
 			  free(objThreadCntrolBlock->sub_prog[i]);
 			  objThreadCntrolBlock->sub_prog[i] = NULL ;
 		  }
 	  }
+	  printf("return %d\n", iRet);
 	  return iRet;
   }
 
@@ -407,7 +411,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
   do {
   	if(objThreadCntrolBlock->prog_mode == 1)
   	{
-	    memset(cLineContent, 0x00, 128);
+	    memset(cLineContent, 0x00, LINE_CONTENT_LEN);
 		cLineContentPtr = cLineContent ;
 		cLineContentProgPtr = objThreadCntrolBlock->prog ;
         while(*cLineContentProgPtr!='\n'
@@ -419,12 +423,18 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 
 		if(strlen(cLineContent) != 0)
 		{
-		    setPrgmState(PAUSED_R);
+//		    setPrgmState(PAUSED_R);
   			printf("PAUSED: Line number(%s) at %d\n", cLineContent, iLinenum);
 			int iOldLinenum = iLinenum ;
 			
 			// iScan = scanf("%d", &iLinenum);
-			InterpreterState interpreterState  = PAUSED_R ;
+			setPrgmState(PAUSED_R) ; // WAITING_R ;
+			waitInterpreterStateleftPaused(objThreadCntrolBlock);
+			
+//			setPrgmState(WAITING_R) ;
+//			waitInterpreterStateleftWaiting(objThreadCntrolBlock);
+
+/*
 			while(interpreterState == PAUSED_R)
 			{
 #ifdef WIN32
@@ -435,6 +445,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 				interpreterState = getPrgmState();
 #endif
 			}
+*/
 			iLinenum = objThreadCntrolBlock->iLineNum ;
 			// 
   			printf("interpreterState : Line number(%d) with %d\n", iLinenum, iOldLinenum);
@@ -469,11 +480,12 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
   			        printf("objThreadCntrolBlock->prog : Line number(%d) \n", iLinenum);
 				}
 			}
+			// Not need to execute this state
+		    // setPrgmState(PAUSED_R);
   			printf("setPrgmState(EXECUTE_TO_PAUSE_T).\n");
 		    setPrgmState(EXECUTE_TO_PAUSE_T);
 #ifdef WIN32
 			Sleep(1);
-			break ;
 #else
 	        usleep(1000);
 #endif
@@ -484,6 +496,13 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 		}
   	}
     objThreadCntrolBlock->token_type = get_token(objThreadCntrolBlock);
+	// Deal abort
+	if(objThreadCntrolBlock->is_abort == true)
+	{
+		// setPrgmState(PAUSE_TO_IDLE_T) ;
+  		printf("objThreadCntrolBlock->is_abort == true.\n");
+        break ; // return 0 ; // NULL ;
+	}
     /* check for assignment statement */
     printf("objThreadCntrolBlock->token_type = %d\n", objThreadCntrolBlock->token_type);
     if(objThreadCntrolBlock->token_type==VARIABLE) {
@@ -2004,7 +2023,9 @@ int exec_call_submain(struct thread_control_block * objThreadCntrolBlock)
 	
 	get_params(objThreadCntrolBlock); // load the function's parameters with
 	
+	printf("Execute call_interpreter at exec_call_submain.\n");
 	return call_interpreter(objThreadCntrolBlock, 0);
+	printf("Left   call_interpreter at exec_call_submain.\n");
 }
 
 int exec_call(struct thread_control_block * objThreadCntrolBlock)
@@ -2039,8 +2060,10 @@ int exec_call(struct thread_control_block * objThreadCntrolBlock)
   objThreadCntrolBlock->prog = loc;  /* start program running at that loc */
 
   get_params(objThreadCntrolBlock); // load the function's parameters with
-
+  
+  printf("Execute call_interpreter at exec_call.\n");
   int iRet = call_interpreter(objThreadCntrolBlock, 0);
+  printf("Left   call_interpreter at exec_call.\n");
   if(iRet == END_COMMND_RET)
 	 return END_COMMND_RET;
   return 1;
@@ -2059,6 +2082,8 @@ int gosub(struct thread_control_block * objThreadCntrolBlock)
   else {
     gosub_push(objThreadCntrolBlock, objThreadCntrolBlock->prog); /* save place to return to */
     objThreadCntrolBlock->prog = loc;  /* start program running at that loc */
+	
+	printf("Execute call_interpreter at gosub.\n");
     return call_interpreter(objThreadCntrolBlock, 0);
   }
   return 1 ;

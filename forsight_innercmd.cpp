@@ -901,7 +901,7 @@ int call_Pause(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 {  
 	InterpreterState interpreterState  = PAUSED_R ;
 	setPrgmState(PAUSED_R);
-
+/*
 	while(interpreterState == PAUSED_R)
 	{
 #ifdef WIN32
@@ -912,6 +912,8 @@ int call_Pause(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		interpreterState = getPrgmState();
 #endif
 	}
+*/
+	waitInterpreterStateleftPaused(objThreadCntrolBlock);
     return 1;   
 }
 
