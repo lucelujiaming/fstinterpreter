@@ -740,6 +740,7 @@ int call_UserAlarm(int iLineNum, struct thread_control_block* objThreadCntrolBlo
     get_exp(objThreadCntrolBlock, &value, &boolValue);
 	alarmNumber = (int)value ;
 	setWarning(alarmNumber);
+    find_eol(objThreadCntrolBlock);
     return 1;
 }
 
@@ -771,8 +772,10 @@ int call_Timer(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	}
 	else 
     {
+        find_eol(objThreadCntrolBlock);
     	return 0;
 	}
+    find_eol(objThreadCntrolBlock);
     return 1;   
 }
 
@@ -816,6 +819,7 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 #endif
 			now = time(0);
 		}
+		find_eol(objThreadCntrolBlock);
     }
     else  // Deal wait with condition
     {
@@ -893,6 +897,7 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		{
 			putback(objThreadCntrolBlock);
 		}
+		find_eol(objThreadCntrolBlock);
     }
     return 1;   
 }
@@ -918,6 +923,7 @@ int call_Pause(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	waitInterpreterStateleftPaused(objThreadCntrolBlock);
     printf("call_Pause: Left  waitInterpreterStateleftPaused %d \n", iLineNum);
     objThreadCntrolBlock->is_paused = false;
+    find_eol(objThreadCntrolBlock);
     return 1;   
 }
 

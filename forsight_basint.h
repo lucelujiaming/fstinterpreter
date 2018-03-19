@@ -39,6 +39,7 @@ const int NUM_OF_PARAMS = 31;    // max number of parameters
 #define INSIDEFUNC   8
 #define BUILTINFUNC  9
 #define OUTSIDEFUNC  10
+#define COMMENT      11
 
 enum double_ops {
 	LT=1,    // value < partial_value
@@ -86,7 +87,8 @@ struct var_type {
 // This structure encapsulates the info
 // associated with variables.
 typedef struct prog_line_info_t {
-    char*     prog_pos; // name
+    char*     start_prog_pos; // name
+    char*     end_prog_pos; // name
 	InstType  type; ;
 } prog_line_info ;
 
