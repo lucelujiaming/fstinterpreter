@@ -465,7 +465,7 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	if(strcmp(objThreadCntrolBlock->token, "cnt") == 0)
     {
     	get_exp(objThreadCntrolBlock, &value, &boolValue);
-    	if(objThreadCntrolBlock->prog_mode == 1)
+    	if(objThreadCntrolBlock->prog_mode == STEP_MODE)
     	{
         	instr.target.cnt = -1;
     	}
@@ -563,7 +563,7 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	if(strcmp(objThreadCntrolBlock->token, "cnt") == 0)
     {
     	get_exp(objThreadCntrolBlock, &value, &boolValue);
-    	if(objThreadCntrolBlock->prog_mode == 1)
+    	if(objThreadCntrolBlock->prog_mode == STEP_MODE)
     	{
         	instr.target.cnt = -1;
     	}
@@ -681,7 +681,7 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	if(strcmp(objThreadCntrolBlock->token, "cnt") == 0)
     {
     	get_exp(objThreadCntrolBlock, &value, &boolValue);
-    	if(objThreadCntrolBlock->prog_mode == 1)
+    	if(objThreadCntrolBlock->prog_mode == STEP_MODE)
     	{
         	instr.target.cnt = -1;
     	}
@@ -913,7 +913,11 @@ int call_Pause(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 #endif
 	}
 */
+    objThreadCntrolBlock->is_paused = true;
+    printf("call_Pause: Enter waitInterpreterStateleftPaused %d \n", iLineNum);
 	waitInterpreterStateleftPaused(objThreadCntrolBlock);
+    printf("call_Pause: Left  waitInterpreterStateleftPaused %d \n", iLineNum);
+    objThreadCntrolBlock->is_paused = false;
     return 1;   
 }
 

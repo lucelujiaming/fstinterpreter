@@ -65,6 +65,12 @@ typedef enum _SubLabelType
     OUTSIDE_FUNC,
 }SubLabelType;
 
+typedef enum _ProgMode
+{
+    FULL_MODE = 0,
+    STEP_MODE,
+}ProgMode;
+
 struct sub_label {
 	SubLabelType  type ;
 	char name[LAB_LEN];
@@ -119,8 +125,8 @@ struct thread_control_block {
 	char * sub_prog[NUM_SUBROUTINE];
 	
 	vector<prog_line_info> prog_jmp_line;
-	int  prog_mode ; // = 0;   /* 0 - run to end, 1 - step  */
-	bool is_abort ; 
+	ProgMode  prog_mode ; // = 0;   /* 0 - run to end, 1 - step  */
+	bool is_abort , is_paused; 
 	int  is_main_thread ; // = 0;   /* 0 - run to end, 1 - step  */
 	
 	char token[80];
@@ -168,5 +174,6 @@ void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname,
 float find_var(struct thread_control_block * objThreadCntrolBlock, char *s);
 
 void find_eol(struct thread_control_block * objThreadCntrolBlock);
+int  calc_line_from_prog(struct thread_control_block * objThreadCntrolBlock);
 #endif
 

@@ -22,6 +22,8 @@
 #include "interpreter_common.h"
 #include "forsight_basint.h"
 
+// #define USE_WAITING_R
+
 bool parseScript(const char* fname);
 // void findLoopEnd(int index);
 InterpreterState getPrgmState();
@@ -43,7 +45,7 @@ unsigned __stdcall script_func(void* arg);
 #else
 void* script_func(void* arg);
 #endif
-void parseCtrlComand(struct thread_control_block * objThdCtrlBlock);
+void parseCtrlComand(); // (struct thread_control_block * objThdCtrlBlock);
 void initShm();
 vector<string> split(string str,string pattern);
 

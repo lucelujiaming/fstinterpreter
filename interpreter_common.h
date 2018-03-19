@@ -40,10 +40,11 @@ typedef enum __AdditionalExecuteInfomationType
 
 typedef enum _InstType
 {
-    COMMON,
-    LOOP, 
-    END,
+    COMMON = 1,
+    LOGIC_TOK,
+    END_TOK,
     MOTION,
+    END_PROG,
 }InstType;
 
 typedef enum _InterpreterState
@@ -51,7 +52,6 @@ typedef enum _InterpreterState
     IDLE_R      = 0,    
     EXECUTE_R   = 1,
     PAUSED_R    = 2,
-    WAITING_R   = 3,
 
     IDLE_TO_EXECUTE_T   = 101,
     EXECUTE_TO_PAUSE_T  = 102,

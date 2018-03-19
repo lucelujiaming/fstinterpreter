@@ -181,10 +181,10 @@ void* basic_interpreter(void* arg)
   printf("Left  call_interpreter.\n");
   setPrgmState(IDLE_R);
 
-  free(objThreadCntrolBlock->instrSet);
+  // free(objThreadCntrolBlock->instrSet);
   objThreadCntrolBlock->instrSet = 0 ;
-#ifdef WIN32
   iIdx = g_thread_control_block[0].iThreadIdx ;
+#ifdef WIN32
   CloseHandle( g_basic_interpreter_handle[iIdx] );  
   g_basic_interpreter_handle[iIdx] = NULL; 
   return NULL;
@@ -261,6 +261,7 @@ void setLinenum(struct thread_control_block* objThreadCntrolBlock, int iLinenum)
 {
     printf("setLinenum : %d\n", iLinenum);
 	objThreadCntrolBlock->iLineNum = iLinenum;
+	setCurLine(iLinenum);
 }
 
 int getLinenum(
@@ -327,6 +328,13 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 		printf("allocation failure");
 		exit(1);
 	  }
+	  if(!(objThreadCntrolBlock->instrSet   
+		= (Instruction * )malloc(sizeof(Instruction) + 
+		  sizeof(AdditionalInfomation) * ADD_INFO_NUM))) {
+		printf("allocation failure");
+		exit(1);
+	  }
+	
 	  objThreadCntrolBlock->iSubProgNum = 0 ;
 	  memset(objThreadCntrolBlock->sub_prog, 0x00, sizeof(char *) * NUM_SUBROUTINE);
 	  
@@ -345,6 +353,8 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	  scan_labels(objThreadCntrolBlock, INSIDE_FUNC, objThreadCntrolBlock->project_name); /* find the labels in the program */
 	  objThreadCntrolBlock->select_and_cycle_tos = 0; /* initialize the FOR stack index */
 	  objThreadCntrolBlock->gosub_tos = 0; /* initialize the GOSUB stack index */
+	  objThreadCntrolBlock->is_abort  = false;
+	  objThreadCntrolBlock->is_paused = false;
 	  
 	  get_token(objThreadCntrolBlock);
 	  while(objThreadCntrolBlock->tok == IMPORT)
@@ -353,6 +363,10 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 		  get_token(objThreadCntrolBlock);
 	  }
       generateXPathVector(objThreadCntrolBlock->project_name);
+	  struct prog_line_info_t objProgLineInfo ;
+	  objProgLineInfo.prog_pos = objThreadCntrolBlock->prog_end ;
+	  objProgLineInfo.type     = END_PROG ;
+	  objThreadCntrolBlock->prog_jmp_line.push_back(objProgLineInfo);
 
 // 	  for(vector<sub_label>::iterator it
 // 		  = objThreadCntrolBlock->sub_label_table.begin();
@@ -388,7 +402,13 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 		free(objThreadCntrolBlock->p_buf);
 		objThreadCntrolBlock->p_buf = NULL ;
 	  }
-
+	  printf("free(objThreadCntrolBlock->instrSet);\n");
+	  if(objThreadCntrolBlock->instrSet)
+	  {
+	    printf("free(objThreadCntrolBlock->instrSet);\n");
+		free(objThreadCntrolBlock->instrSet);
+		objThreadCntrolBlock->instrSet = NULL ;
+	  }
 	  printf("free(objThreadCntrolBlock->iSubProgNum);\n");
 	  for(int i = 0; i < objThreadCntrolBlock->iSubProgNum; i++)
 	  {
@@ -409,7 +429,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
   printf("Start Interaptor : Line number = %d \n", objThreadCntrolBlock->iLineNum);
   iLinenum = objThreadCntrolBlock->iLineNum;
   do {
-  	if(objThreadCntrolBlock->prog_mode == 1)
+  	if(objThreadCntrolBlock->prog_mode == STEP_MODE)
   	{
 	    memset(cLineContent, 0x00, LINE_CONTENT_LEN);
 		cLineContentPtr = cLineContent ;
@@ -426,13 +446,12 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 //		    setPrgmState(PAUSED_R);
   			printf("PAUSED: Line number(%s) at %d\n", cLineContent, iLinenum);
 			int iOldLinenum = iLinenum ;
-			
 			// iScan = scanf("%d", &iLinenum);
-			setPrgmState(PAUSED_R) ; // WAITING_R ;
-			waitInterpreterStateleftPaused(objThreadCntrolBlock);
 			
-//			setPrgmState(WAITING_R) ;
-//			waitInterpreterStateleftWaiting(objThreadCntrolBlock);
+			setPrgmState(PAUSED_R) ; // WAITING_R ;
+            printf("call_interpreter : Enter waitInterpreterStateleftPaused %d \n", iLinenum);
+			waitInterpreterStateleftPaused(objThreadCntrolBlock);
+            printf("call_interpreter : Left  waitInterpreterStateleftPaused %d \n", iLinenum);
 
 /*
 			while(interpreterState == PAUSED_R)
@@ -547,7 +566,6 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 		}
 		else // main
 		{
-		
 			if(call_internal_cmd_exec_sub_thread(iIdx) == 0) // 0 - mov 1 - nonmov
 			{
 				if (isInstructionEmpty(SHM_INTPRT_CMD))
@@ -949,6 +967,13 @@ void scan_labels(struct thread_control_block * objThreadCntrolBlock,
 	  if((iIdx >= 0) && (iIdx <= 2))  // movel - 0 ; movej - 1 ; movec - 2
 		  objProgLineInfo.type = MOTION ;
   }
+  else if(objThreadCntrolBlock->token_type==COMMAND) 
+  {
+  	  if(objThreadCntrolBlock->tok == END)
+	  	objProgLineInfo.type = END_TOK ;
+	  else
+	  	objProgLineInfo.type = LOGIC_TOK ;
+  }
   if (bisFindEOL == 0)
   {
      find_eol(objThreadCntrolBlock);
@@ -994,10 +1019,18 @@ void scan_labels(struct thread_control_block * objThreadCntrolBlock,
 	objProgLineInfo.type = COMMON ;
 	if(objThreadCntrolBlock->token_type==INNERCMD) 
 	{
-	    int iIdx = find_internal_cmd(objThreadCntrolBlock->token) ;
-		if((iIdx >= 0) && (iIdx <= 2))  // movel - 0 ; movej - 1 ; movec - 2
+		int iIdx = find_internal_cmd(objThreadCntrolBlock->token) ;
+		if((iIdx >= 0) && (iIdx <= 2))	// movel - 0 ; movej - 1 ; movec - 2
 			objProgLineInfo.type = MOTION ;
 	}
+	else if(objThreadCntrolBlock->token_type==COMMAND) 
+	{
+		if(objThreadCntrolBlock->tok == END)
+		  objProgLineInfo.type = END_TOK ;
+		else
+		  objProgLineInfo.type = LOGIC_TOK ;
+	}
+
     /* if not on a blank line, find next line */
 	if (bisFindEOL == 0)
 	{
