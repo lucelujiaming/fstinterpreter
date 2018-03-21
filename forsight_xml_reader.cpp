@@ -457,10 +457,14 @@ int generateAssignment(xmlNodePtr nodeAssignmentStatement, LineInfo objLineInfo)
             // printf("%s, ", (char*)nodeStatement->name);
 			for(nodeRightValue = nodeStatement->children; 
 				nodeRightValue; nodeRightValue = nodeRightValue->next){
-						value = xmlNodeGetContent(nodeRightValue);
+				value = xmlNodeGetContent(nodeRightValue);
 						//		printf("\t\t\t\t  --debug-- (nodeRightValue) %s = %s\n", 
 						//			(char*)nodeRightValue->name, (char *)value);
-				generateElement(nodeRightValue, objLineInfo);
+						
+				if(xmlStrcasecmp(nodeRightValue->name, BAD_CAST"element")==0){ 
+					generateElement(nodeRightValue, objLineInfo);
+					printBASCode(objLineInfo, " ", "");
+				}
 			}
         }
 		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"text")==0){

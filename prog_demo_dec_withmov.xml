@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prog>
+    <head>
+        <include>prog_1</include>
+    </head>
+    <prog_body name="test">
+        <function name="main">
+          <parameter type="num">param0</parameter>
+          <parameter type="string">param1</parameter>
+          <body>
+            <instruction type="move_line">
+                <argument name="pose" type="pose">
+                    <!-- element name="x" type="num">11.1</element -->
+                    <element name="x" type="entity">
+                        <element type="num">13.1</element>
+                        <element type="operation">+</element>
+                        <element type="bracket">
+                            <element type="num">6</element>
+                            <element type="operation">-</element>
+                            <element type="num">7</element>
+                        </element>
+                    </element>
+                    <element name="y" type="num">2.2</element>
+                    <element name="z" type="num">3.3</element>
+                    <element name="a" type="num">4.4</element>
+                    <element name="b" type="num">5.5</element>
+                    <element name="c" type="num">6.6</element>
+                </argument>
+                <argument name="velocity" type="num" unit="mm/s">50</argument>
+                <argument name="fine" type="num"          >-1</argument>
+                <argument name="acceleration" type="num" unit="%">40</argument>
+                <argument name="offset_jvec" type="without_uf">
+                    <!-- argument name="j1" type="num">100</argument -->
+                    <element name="j1" type="entity">
+                        <element type="num">100</element>
+                        <element type="operation">+</element>
+                        <element type="bracket">
+                            <element type="num">6</element>
+                            <element type="operation">-</element>
+                            <element type="num">7</element>
+                        </element>
+                    </element>
+                    <argument name="j2" type="num">0</argument>
+                    <argument name="j3" type="num">0</argument>
+                    <argument name="j4" type="num">45</argument>
+                    <argument name="j5" type="num">0</argument>
+                    <argument name="j6" type="num">0</argument>
+		        </argument>
+                <argument name="tool_offset_jvec" type="without_uf">
+                    <argument name="j1" type="num">100</argument>
+                    <argument name="j2" type="num">0</argument>
+                    <argument name="j3" type="num">0</argument>
+                    <argument name="j4" type="num">45</argument>
+                    <argument name="j5" type="num">0</argument>
+                    <argument name="j6" type="num">0</argument>
+		        </argument>
+                <argument name="TA">
+                    <argument name="range" type="num">100</argument>
+                    <assignment>
+                        <lvalue type="num">
+                            <element type="num">R[1]</element>
+                        </lvalue>
+                        <rvalue>
+                            <element type="num">5</element>
+                            <element type="operation">+</element>
+                            <element type="bracket">
+                                <element type="num">6</element>
+                                <element type="operation">-</element>
+                                <element type="num">7</element>
+                            </element>
+                        </rvalue>
+                    </assignment>
+		        </argument>
+                <argument name="TB">
+                    <argument name="range" type="num">100</argument>
+                    <call file="prog_1">
+                        <parameter name="param0" type="num">1</parameter>
+                        <parameter name="param0" type="num">2</parameter>
+                    </call>
+		        </argument>
+            </instruction>
+            <instruction type="move_line">
+                <argument name="pose" type="pose">
+                    <element name="x" type="num">12.1</element>
+                    <element name="y" type="num">2.2</element>
+                    <element name="z" type="num">3.3</element>
+                    <element name="a" type="num">4.4</element>
+                    <element name="b" type="num">5.5</element>
+                    <element name="c" type="num">6.6</element>
+                </argument>
+                <argument name="velocity" type="num" unit="mm/s">30</argument>
+                <argument name="smooth_distance" type="num" unit="mm">50</argument>
+                <argument name="acceleration" type="num" unit="%">40</argument>
+                <argument name="offset_cvec" type="with_uf">
+                    <argument name="x" type="num">0</argument>
+                    <argument name="y" type="num">0</argument>
+                    <argument name="z" type="num">100</argument>
+                    <argument name="a" type="num">40.5</argument>
+                    <argument name="b" type="num">0</argument>
+                    <argument name="c" type="num">0</argument>
+                    <argument name="uf" type="num">1</argument>
+                </argument>
+                <argument name="tool_offset_cvec" type="with_uf">
+                    <argument name="x" type="num">0</argument>
+                    <argument name="y" type="num">0</argument>
+                    <argument name="z" type="num">100</argument>
+                    <argument name="a" type="num">40.5</argument>
+                    <argument name="b" type="num">0</argument>
+                    <argument name="c" type="num">0</argument>
+                    <argument name="uf" type="num">1</argument>
+		        </argument>
+            </instruction>
+            <instruction type="move_line">
+                <argument name="pose" type="pose">
+                    <element name="x" type="num">13.1</element>
+                    <element name="y" type="num">2.2</element>
+                    <element name="z" type="num">3.3</element>
+                    <element name="a" type="num">4.4</element>
+                    <element name="b" type="num">5.5</element>
+                    <element name="c" type="num">6.6</element>
+                </argument>
+                <argument name="velocity" type="num" unit="mm/s">100</argument>
+                <argument name="smooth_velocity" type="num" unit="%">50</argument>
+                <argument name="acceleration" type="num" unit="%">40</argument>
+                <argument name="offset_pr" type="with_uf">
+                    <argument name="pose" type="pose_register">2</argument>
+                    <argument name="uf" type="num">1</argument>
+                </argument>
+                <argument name="tool_offset_pr" type="with_uf">
+                    <argument name="pose" type="pose_register">2</argument>
+                    <argument name="uf" type="num">1</argument>
+                </argument>
+            </instruction>
+            <instruction type="move_joint">
+                <argument name="pose" type="pose">
+                    <element name="j1" type="num">14.1</element>
+                    <element name="j2" type="num">2.2</element>
+                    <element name="j3" type="num">3.3</element>
+                    <element name="j4" type="num">4.4</element>
+                    <element name="j5" type="num">5.5</element>
+                    <element name="j6" type="num">6.6</element>
+                </argument>
+                <argument name="velocity" type="num" unit="mm/s">100</argument>
+                <argument name="smooth_velocity" type="num" unit="%">50</argument>
+            </instruction>
+            <instruction type="move_joint">
+                <argument name="pose" type="pose">
+                    <element name="j1" type="num">15.1</element>
+                    <element name="j2" type="num">2.2</element>
+                    <element name="j3" type="num">3.3</element>
+                    <element name="j4" type="num">4.4</element>
+                    <element name="j5" type="num">5.5</element>
+                    <element name="j6" type="num">6.6</element>
+                </argument>
+                <argument name="velocity" type="num" unit="mm/s">50</argument>
+                <argument name="fine" type="num"          >999</argument>
+                <argument name="acceleration" type="num" unit="%">40</argument>
+                <argument name="ev" type="num" unit="%">40</argument>
+                <argument name="ind_ev" type="num" unit="%">40</argument>
+            </instruction>
+            <instruction type="move_joint">
+                <argument name="pose" type="pose">
+                    <element name="j1" type="num">16.1</element>
+                    <element name="j2" type="num">2.2</element>
+                    <element name="j3" type="num">3.3</element>
+                    <element name="j4" type="num">4.4</element>
+                    <element name="j5" type="num">5.5</element>
+                    <element name="j6" type="num">6.6</element>
+                </argument>
+                <argument name="velocity" type="num" unit="mm/s">30</argument>
+                <argument name="smooth_distance" type="num" unit="mm">50</argument>
+                <argument name="acceleration" type="num" unit="%">40</argument>
+                <argument name="TA">
+                    <argument name="range" type="num">100</argument>
+                    <assignment>
+                        <lvalue type="num">
+                            <element type="num">R[1]</element>
+                        </lvalue>
+                        <rvalue>
+                            <element type="num">5</element>
+                            <element type="operation">+</element>
+                            <element type="bracket">
+                                <element type="num">6</element>
+                                <element type="operation">-</element>
+                                <element type="num">7</element>
+                            </element>
+                        </rvalue>
+                    </assignment>
+		        </argument>
+                <argument name="TB">
+                    <argument name="range" type="num">100</argument>
+                    <call file="prog_1">
+                        <parameter name="param0" type="num">1</parameter>
+                        <parameter name="param0" type="num">2</parameter>
+                    </call>
+		        </argument>
+            </instruction>
+            <instruction type="move_joint">
+                <argument name="pose" type="pose">
+                    <element name="j1" type="num">17.1</element>
+                    <element name="j2" type="num">2.2</element>
+                    <element name="j3" type="num">3.3</element>
+                    <element name="j4" type="num">4.4</element>
+                    <element name="j5" type="num">5.5</element>
+                    <element name="j6" type="num">6.6</element>
+                </argument>
+                <argument name="velocity" type="num" unit="mm/s">100</argument>
+                <argument name="smooth_velocity" type="num" unit="%">50</argument>
+                <argument name="acceleration" type="num" unit="%">40</argument>
+                <argument name="DB">
+                    <argument name="range" type="num">100</argument>
+                    <assignment>
+                        <lvalue type="num">
+                            <element type="num">R[1]</element>
+                        </lvalue>
+                        <rvalue>
+                            <element type="num">5</element>
+                            <element type="operation">+</element>
+                            <element type="bracket">
+                                <element type="num">6</element>
+                                <element type="operation">-</element>
+                                <element type="num">7</element>
+                            </element>
+                        </rvalue>
+                    </assignment>
+		        </argument>
+            </instruction>
+            <instruction type="move_curve">
+                <argument name="pose" type="pose">
+                    <element name="px1" type="num">18.1</element>
+                    <element name="py1" type="num">2.2</element>
+                    <element name="pz1" type="num">3.3</element>
+                    <element name="pa1" type="num">4.4</element>
+                    <element name="pb1" type="num">5.5</element>
+                    <element name="pc1" type="num">6.6</element>
+                    <element name="px2" type="num">7.7</element>
+                    <element name="py2" type="num">8.8</element>
+                    <element name="pz2" type="num">9.9</element>
+                    <element name="pa2" type="num">10.10</element>
+                    <element name="pb2" type="num">11.11</element>
+                    <element name="pc2" type="num">12.12</element>
+                </argument>
+                <argument name="velocity" type="num" unit="mm/s">50</argument>
+                <argument name="fine" type="num"          >333</argument>
+                <argument name="acceleration" type="num" unit="%">40</argument>
+            </instruction>
+            <instruction type="move_curve">
+                <argument name="pose" type="pose">
+                    <element name="px1" type="num">19.1</element>
+                    <element name="py1" type="num">2.2</element>
+                    <element name="pz1" type="num">3.3</element>
+                    <element name="pa1" type="num">4.4</element>
+                    <element name="pb1" type="num">5.5</element>
+                    <element name="pc1" type="num">6.6</element>
+                    <element name="px2" type="num">7.7</element>
+                    <element name="py2" type="num">8.8</element>
+                    <element name="pz2" type="num">9.9</element>
+                    <element name="pa2" type="num">10.10</element>
+                    <element name="pb2" type="num">11.11</element>
+                    <element name="pc2" type="num">12.12</element>
+                </argument>
+                <argument name="velocity" type="num" unit="mm/s">30</argument>
+                <argument name="smooth_distance" type="num" unit="mm">50</argument>
+                <argument name="acceleration" type="num" unit="%">40</argument>
+            </instruction>
+            <instruction type="move_curve">
+                <argument name="pose" type="pose">
+                    <element name="px1" type="num">10.1</element>
+                    <element name="py1" type="num">2.2</element>
+                    <element name="pz1" type="num">3.3</element>
+                    <element name="pa1" type="num">4.4</element>
+                    <element name="pb1" type="num">5.5</element>
+                    <element name="pc1" type="num">6.6</element>
+                    <element name="px2" type="num">7.7</element>
+                    <element name="py2" type="num">8.8</element>
+                    <element name="pz2" type="num">9.9</element>
+                    <element name="pa2" type="num">10.10</element>
+                    <element name="pb2" type="num">11.11</element>
+                    <element name="pc2" type="num">12.12</element>
+                </argument>
+                <argument name="velocity" type="num" unit="mm/s">100</argument>
+                <argument name="smooth_velocity" type="num" unit="%">50</argument>
+                <argument name="acceleration" type="num" unit="%">40</argument>
+            </instruction>
+            <assignment>
+                <lvalue type="num">
+                    <element type="num">TF_No</element>
+                </lvalue>
+                <rvalue>
+                    <element type="num">5</element>
+                    <element type="operation">+</element>
+                    <element type="register">
+		                <!-- element type="num">1</element -->
+                        <element type="entity">
+                            <element type="num">2</element>
+                            <element type="operation">+</element>
+                            <element type="bracket">
+                                <element type="num">6</element>
+                                <element type="operation">-</element>
+                                <element type="num">7</element>
+                            </element>
+                        </element>
+                    </element>
+                </rvalue>
+            </assignment>
+            <instruction type="timer">
+		           <argument name="timer" type="timer">1</argument>
+		           <argument name="timer_status" type="status">start</argument>
+		    </instruction>
+            <instruction type="useralarm">
+		           <argument name="useralarm" type="useralarm">1</argument>
+		    </instruction>
+            <instruction type="pause">PAUSE</instruction>
+            <!-- instruction type="abort">ABORT</instruction -->
+            <instruction type="wait">
+		           <argument name="timeout" type="num" unit="sec">3</argument>
+		    </instruction>
+            <instruction type="wait">
+		           <argument name="condition" type="expression">
+                        <element type="di">
+                            <element tpye="num">1</element>
+                        </element>
+                        <element type="boolean_operation">=</element>
+                        <element type="io_val">PE</element>
+		           </argument>
+		    </instruction>
+            <instruction type="wait">
+		           <argument name="condition" type="expression">
+                        <element type="register">
+                            <element type="num">1</element>
+                        </element>
+                        <element type="boolean_operation">></element>
+                        <element type="num">10</element>
+		           </argument>
+		           <argument name="timeout" type="num">3</argument>
+		           <argument name="handle" type="function">skip</argument>
+            </instruction>
+            <assignment>
+                <lvalue type="num">
+                    <element type="num">R[1]</element>
+                </lvalue>
+                <rvalue>
+                    <element type="num">5</element>
+                </rvalue>
+            </assignment>
+            <logical type="if">
+                <determine>
+                    <element type="num">R[1]</element>
+                    <element type="operation">+</element>
+                    <element name="sin" type="function">
+                        <element type="entity">
+                            <element type="num">6</element>
+                            <element type="operation">+</element>
+                            <element type="num">7</element>
+                        </element>
+                    </element>
+                    <element type="boolean_operation">==</element>
+                    <element type="num">100</element>
+                </determine>
+                <logical_body>
+                    <instruction type="move_line">
+                        <argument name="pose" type="pose">
+                            <element type="num">1.1</element>
+                            <element type="num">2.2</element>
+                            <element type="num">3.3</element>
+                            <element type="num">4.4</element>
+                            <element type="num">5.5</element>
+                            <element type="num">6.6</element>
+                        </argument>
+                        <argument name="velocity" type="num" unit="mm/s">100</argument>
+                        <argument name="smooth_velocity" type="num" unit="%">50</argument>
+                        <argument name="acceleration" type="num" unit="%">40</argument>
+                    </instruction>
+                </logical_body>
+                <vice_logical type="elif">
+                    <determine>
+                        <element type="num">R[1]</element>
+                        <element type="boolean_operation">==</element>
+                        <element type="num">1</element>
+                    </determine>
+                    <vice_logical_body>
+                        <instruction type="wait">
+                            <argument name="condition" type="expression">
+                                <element type="di">
+                                    <element tpye="num">0</element>
+                                </element>
+                                <element type="boolean_operation">=</element>
+                                <element type="io_val">ON</element>
+                            </argument>
+                            <argument name="timeout" type="num">10</argument>
+		                    <argument name="call_back" type="function">skip</argument>
+                        </instruction>
+                    </vice_logical_body>
+                </vice_logical>
+            </logical>
+            <logical type="while">
+                <determine>
+                    <element type="num">R[1]</element>
+                    <element type="operation">+</element>
+                    <element name="sin" type="function">
+                        <element type="num">2</element>
+                    </element>
+                    <element type="boolean_operation">&#60;=</element>
+                    <element type="num">100</element>
+                </determine>
+                <logical_body>
+                    <instruction type="move_line">
+                        <argument name="pose" type="pose">
+                            <element type="num">1.1</element>
+                            <element type="num">2.2</element>
+                            <element type="num">3.3</element>
+                            <element type="num">4.4</element>
+                            <element type="num">5.5</element>
+                            <element type="num">6.6</element>
+                        </argument>
+                        <argument name="velocity" type="num" unit="mm/s">100</argument>
+                        <argument name="smooth_velocity" type="num" unit="%">50</argument>
+                        <argument name="acceleration" type="num" unit="%">40</argument>
+                    </instruction>
+
+                    <logical type="if">
+                        <determine>
+                            <element type="num">8</element>
+                            <element type="operation">+</element>
+                            <element name="sin" type="function">
+                                <element type="num">2</element>
+                            </element>
+                            <element type="boolean_operation">==</element>
+                            <element type="num">2</element>
+                        </determine>
+                        <logical_body>
+                            <instruction type="move_line">
+                                <argument name="pose" type="pose">
+                                    <element type="num">1.1</element>
+                                    <element type="num">2.2</element>
+                                    <element type="num">3.3</element>
+                                    <element type="num">4.4</element>
+                                    <element type="num">5.5</element>
+                                    <element type="num">6.6</element>
+                                </argument>
+                                <argument name="velocity" type="num" unit="mm/s">100</argument>
+                                <argument name="smooth_velocity" type="num" unit="%">50</argument>
+                                <argument name="acceleration" type="num" unit="%">40</argument>
+                            </instruction>
+                            <break/>
+                        </logical_body>
+                     </logical>
+                    <logical type="if">
+                        <determine>
+                            <element type="num">5</element>
+                            <element type="operation">+</element>
+                            <element name="sin" type="function">
+                                <element type="num">2</element>
+                            </element>
+                            <element type="boolean_operation">==</element>
+                            <element type="num">2</element>
+                        </determine>
+                        <logical_body>
+                            <instruction type="move_line">
+                                <argument name="pose" type="pose">
+                                    <element type="num">1.1</element>
+                                    <element type="num">2.2</element>
+                                    <element type="num">3.3</element>
+                                    <element type="num">4.4</element>
+                                    <element type="num">5.5</element>
+                                    <element type="num">6.6</element>
+                                </argument>
+                                <argument name="velocity" type="num" unit="mm/s">100</argument>
+                                <argument name="smooth_velocity" type="num" unit="%">50</argument>
+                                <argument name="acceleration" type="num" unit="%">40</argument>
+                            </instruction>
+                            <continue/>
+                        </logical_body>
+                     </logical>
+                    <instruction type="print">
+                        <argument name="prompt" type="string">R[1] = </argument>
+                        <argument name="register" type="register">R[1]</argument>
+                     </instruction>
+                    <assignment>
+                        <lvalue type="num">
+                            <element type="num">R[1]</element>
+                        </lvalue>
+                        <rvalue>
+                            <element type="num">R[1]</element>
+                            <element type="operation">+</element>
+                            <element type="num">5</element>
+                        </rvalue>
+                    </assignment>
+
+                </logical_body>
+            </logical>
+
+            <logical type="switch">
+                <determine>
+                    <!-- element type="num">R[1]</element -->
+                    <element type="register">
+		                <!-- element type="num">1</element -->
+                        <element type="entity">
+                            <element type="num">2</element>
+                            <element type="operation">+</element>
+                            <element type="bracket">
+                                <element type="num">6</element>
+                                <element type="operation">-</element>
+                                <element type="num">7</element>
+                            </element>
+                        </element>
+                    </element>
+                </determine>
+                <logical_body />
+                <vice-logical type="case">
+                    <determine>
+                          <element type="num">5</element>
+                    </determine>
+                    <vice-logical_body>
+                        <instruction type="move_line">
+                            <argument name="pose" type="pose">
+                                <element type="num">1.1</element>
+                                <element type="num">2.2</element>
+                                <element type="num">3.3</element>
+                                <element type="num">4.4</element>
+                                <element type="num">5.5</element>
+                                <element type="num">6.6</element>
+                            </argument>
+                            <argument name="velocity" type="num" unit="mm/s">100</argument>
+                            <argument name="smooth_velocity" type="num" unit="%">50</argument>
+                            <argument name="acceleration" type="num" unit="%">40</argument>
+                        </instruction>
+                    </vice-logical_body>
+                </vice-logical>
+                <vice-logical type="case_default">
+                    <determine>
+                          <element type="num">5</element>
+                    </determine>
+                    <vice-logical_body>
+                        <instruction type="move_line">
+                            <argument name="pose" type="pose">
+                                <element type="num">1.1</element>
+                                <element type="num">2.2</element>
+                                <element type="num">3.3</element>
+                                <element type="num">4.4</element>
+                                <element type="num">5.5</element>
+                                <element type="num">6.6</element>
+                            </argument>
+                            <argument name="velocity" type="num" unit="mm/s">100</argument>
+                            <argument name="smooth_velocity" type="num" unit="%">50</argument>
+                            <argument name="acceleration" type="num" unit="%">40</argument>
+                        </instruction>
+                    </vice-logical_body>
+                </vice-logical>
+            </logical>
+
+            <comment type="string">comment thing</comment>
+            <call file="prog_1">
+                <parameter name="param0" type="num">1</parameter>
+                <parameter name="param0" type="num">2</parameter>
+            </call>
+            <call file="prog_1" name="LujiamingParamsSub">
+                <parameter name="param0" type="num">1</parameter>
+                <parameter name="param1" type="num">2</parameter>
+                <parameter name="param2" type="num">3</parameter>
+            </call>
+            <nop/>
+            <assignment>
+                <lvalue type="num">
+                    <element type="num">R[1]</element>
+                </lvalue>
+                <rvalue>
+                    <element type="num">5</element>
+                    <element type="operation">+</element>
+                    <element type="bracket">
+                        <element type="num">6</element>
+                        <element type="operation">-</element>
+                        <element type="num">7</element>
+                    </element>
+                </rvalue>
+            </assignment>
+           </body>
+        </function>
+        <nop/>
+        <function name="func_test">
+           <parameter type="num">param0</parameter>
+           <parameter type="string">param1</parameter>
+           <body>
+              <assignment>
+                <lvalue type="num">
+                    <element type="num">R[6]</element>
+                </lvalue>
+                <rvalue>
+                    <element type="num">param0</element>
+                    <element type="operation">+</element>
+                    <element type="bracket">
+                        <element type="num">2</element>
+                        <element type="operation">+</element>
+                        <element type="num">2</element>
+                    </element>
+                </rvalue>
+              </assignment>
+              <return>R[6]</return>
+           </body>
+        </function>
+    </prog_body>
+</prog>
+<!--python   
+    " osnouatem lusbelpe wlos to ry sn
+    import prog_1
+    def main()
+        MoveL p_1, 100, 2000m/s
+        If 2 + sin(2) == 2
+            MoveL p_2, 100, 2000m/s
+        Else R[1] == 1
+            Wait di_1, ON, 10
+        End If
+        // comment thing
+        prog_1.func_test(0)
+
+        R[1] = 2 + (2 + 2)
+    End main
+
+    def func_test():
+        R[1] = 2 + (2 + 2)
+    End func_test
+-->

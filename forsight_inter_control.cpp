@@ -164,6 +164,7 @@ void setPrgmState(InterpreterState state)
 #else
     int offset = &((IntprtStatus*)0)->state;
 #endif
+    printf("setPrgmState to %d\n", (int)state);
     writeShm(SHM_INTPRT_STATUS, offset, (void*)&state, sizeof(state));
 }
 
@@ -229,9 +230,8 @@ UserOpMode getUserOpMode()
 
 bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instruction * instruction)
 {
-    int iLineNum = calc_line_from_prog(objThdCtrlBlockPtr);
+    int iLineNum = 0;
 	// We had eaten MOV* as token. 
-	iLineNum = iLineNum - 1 ;
     if (objThdCtrlBlockPtr->is_abort)
     {
         // target_line++;
@@ -251,7 +251,7 @@ bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instructio
     {
         if (isInstructionEmpty(SHM_INTPRT_CMD))
         {
-            //printf("check if step is done\n");
+            printf("check if step is done in setInstruction\n");
             setPrgmState(PAUSED_R);
         }
         return false;
@@ -280,14 +280,16 @@ bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instructio
 	        if (is_backward)
 	        {
 	            is_backward = false;
-	        //    iLineNum--;
-	        //    setCurLine(iLineNum);
+		        //    iLineNum--;
+		        //    setCurLine(iLineNum);
 	        }
-	        //else
-	        //{
-	        //    iLineNum++;
-	        //    setCurLine(iLineNum);
-	        //}   
+		        //else
+		        //{
+		        //    iLineNum++;
+		        //    setCurLine(iLineNum);
+		        //}   
+			iLineNum = calc_line_from_prog(objThdCtrlBlockPtr);
+            setLinenum(objThdCtrlBlockPtr, iLineNum);
 
 	        if (objThdCtrlBlockPtr->prog_mode == STEP_MODE)
 	            setPrgmState(EXECUTE_TO_PAUSE_T);   //wait until this Instruction end

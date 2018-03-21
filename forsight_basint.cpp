@@ -8,6 +8,7 @@
 #include "forsight_inter_control.h"
 #include "forsight_auto_lock.h"
 #include "forsight_xml_reader.h"
+#include "forsight_registers.h"
 
 // #define NUM_LAB 100
 #define LINE_CONTENT_LEN   2046
@@ -430,9 +431,9 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
   printf("Start Interaptor : Line number = %d \n", objThreadCntrolBlock->iLineNum);
   iLinenum = objThreadCntrolBlock->iLineNum;
   
-#ifdef WIN32
-  objThreadCntrolBlock->prog_mode = STEP_MODE;
-#endif
+// #ifdef WIN32
+//   objThreadCntrolBlock->prog_mode = STEP_MODE;
+// #endif
   do {
   	if(objThreadCntrolBlock->prog_mode == STEP_MODE)
   	{
@@ -585,8 +586,8 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 			{
 				if (isInstructionEmpty(SHM_INTPRT_CMD))
 		        {
-		            //printf("check if step is done\n");
-		            setPrgmState(PAUSED_R);
+		            printf("check if step is done in call_interpreter\n");
+		            // setPrgmState(PAUSED_R);
 		        }
 			} 
     		printf("call_internal_cmd execution : %s at %d, iLineNum = %d\n", 
@@ -857,7 +858,21 @@ void assignment(struct thread_control_block * objThreadCntrolBlock)
 	strcpy(var, objThreadCntrolBlock->token);
 	// Eat ]
 	get_token(objThreadCntrolBlock);
+	if(objThreadCntrolBlock->token[0] != ']') { /* is string */
+      serror(3);
+      return;
+	}
+	// Check the Member of the structure
+	get_token(objThreadCntrolBlock);
+	if(objThreadCntrolBlock->token[0] == '.') {
 	// var = toupper(*token)-'A';
+		get_token(objThreadCntrolBlock);
+		sprintf(var, "%s.%s", var, objThreadCntrolBlock->token);
+	}
+	else
+	{
+	  	putback(objThreadCntrolBlock);
+	}
   }
   else
   {
@@ -2322,7 +2337,7 @@ int get_token(struct thread_control_block * objThreadCntrolBlock)
 	return (objThreadCntrolBlock->token_type = COMMENT);
   }
 
-  if(strchr("+-*^/%=;(),><[]", *objThreadCntrolBlock->prog)){ /* delimiter */
+  if(strchr("+-*^/%=;(),><[].", *objThreadCntrolBlock->prog)){ /* delimiter */
     // *temp=*objThreadCntrolBlock->prog;
   	if(strchr("<>=", *objThreadCntrolBlock->prog)) {
 		switch(*objThreadCntrolBlock->prog) {
@@ -2736,10 +2751,41 @@ void unary(char o, float *r)
   if(o=='-') *r = -(*r);
 }
 
+static int get_char_token(char * src, char * dst)
+{
+	char * tmp = src ;
+	if(isalpha(*src)) { /* var or command */
+		while(!isdelim(*(src))) 
+			*dst++=*(src)++;
+	}
+	return tmp - src ;
+}
 
 // Declare a global variable.
 void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname, float value)
 {
+	char reg_name[256] ;
+    char  charValue[1024];
+	char *temp = NULL ;
+	
+	memset(reg_name, 0x00, 256);
+	temp = reg_name ;
+	get_char_token(vname, temp);
+    if(strstr(REGSITER_NAMES, reg_name))
+    {
+		if(strchr(vname, '['))
+		{
+			memset(charValue, 0x00, 1024);
+			sprintf(charValue, "%f", value);
+			int iRet = forgesight_set_register(
+				objThreadCntrolBlock, vname, &charValue);
+			if(iRet == 0)
+			{
+				return ;
+			}
+		}
+    }
+
     var_type vt;
     // Otherwise, try global vars.
     for(unsigned i=0; i < objThreadCntrolBlock->global_vars.size(); i++)
@@ -2758,18 +2804,41 @@ void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname,
 /* Reverse Find the value of a variable. */
 float find_var(struct thread_control_block * objThreadCntrolBlock, char *vname)
 {
-         vector<var_type>::reverse_iterator it ;
+	char reg_name[256] ;
+    char  charValue[1024];
+	char *temp = NULL ;
+
+    vector<var_type>::reverse_iterator it ;
 	  objThreadCntrolBlock->g_variable_error = 0 ;
 //	  if(!isalpha(*s)){
 //	    serror(4); /* not a variable */
 //	    return 0;
 //	  }
 //	  return variables[toupper(*s)-'A'];
+
 	if(!strcmp(vname, FORSIGHT_RETURN_VALUE))
 	{
 		return objThreadCntrolBlock->ret_value ;
 	}
-
+	
+	memset(reg_name, 0x00, 256);
+	temp = reg_name ;
+	get_char_token(vname, temp);
+    if(strstr(REGSITER_NAMES, reg_name))
+    {
+		if(strchr(vname, '['))
+		{
+			float fValue = 0.0 ;
+			memset(charValue, 0x00, 1024);
+    		int iRet = forgesight_get_register(
+				objThreadCntrolBlock, vname, &charValue);
+			if(iRet == 0)
+			{
+				fValue = atof(charValue);
+				return fValue ;
+			}
+		}
+    }
 	// First, try local vars.
 	for(it
 		= objThreadCntrolBlock->local_var_stack.rbegin();
