@@ -1,0 +1,7 @@
+EXPORT: (001)(018)/prog/head/include                                                                                  IMPORT prog_1
+EXPORT: (002)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (003)(044)/prog/prog_body/function/body/instruction[1]                                                            MOVEL  2000 SV 100 
+EXPORT: (004)(044)/prog/prog_body/function/body/instruction[2]                                                            MOVEL  2000 CNT -1 
+EXPORT: (005)(044)/prog/prog_body/function/body/instruction[3]                                                            MOVEJ 1 2000 CNT -1 
+EXPORT: (006)(015)/prog/prog_body                                                                                         R[1]  = 2 + ( 2+2 )  
+EXPORT: (007)(024)/prog/prog_body/function                                                                            END SUB 

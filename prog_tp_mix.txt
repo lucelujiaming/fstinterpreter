@@ -1,0 +1,17 @@
+EXPORT: (001)(018)/prog/head/include                                                                                  IMPORT prog_luce
+EXPORT: (002)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (003)(044)/prog/prog_body/function/body/instruction[1]                                                            MOVEL P[MR[1]], 2000 CNT -1 
+EXPORT: (004)(044)/prog/prog_body/function/body/instruction[2]                                                            MOVEJ P[1], 2000 CNT -1 
+EXPORT: (005)(015)/prog/prog_body                                                                                         R[1]  = 2 + ( 2+2 )  
+EXPORT: (006)(040)/prog/prog_body/function/body/logical[1]                                                                IF R[1]  == 2 THEN 
+EXPORT: (007)(065)/prog/prog_body/function/body/logical[1]/logical_body/instruction                                           WAIT COND DI[1] PE  3 skip
+EXPORT: (008)(040)/prog/prog_body/function/body/logical[1]                                                                ENDIF 
+EXPORT: (009)(040)/prog/prog_body/function/body/logical[2]                                                                IF 2+R[2]  == 2 THEN 
+EXPORT: (010)(065)/prog/prog_body/function/body/logical[2]/logical_body/instruction                                           WAIT COND R[1]  > 10 3 skip
+EXPORT: (011)(053)/prog/prog_body/function/body/logical[2]/vice_logical                                                   ELSEIF R[1]  == 1 THEN 
+EXPORT: (012)(079)/prog/prog_body/function/body/logical[2]/vice_logical/vice_logical_body/logical                             IF 2 == 2 THEN 
+EXPORT: (013)(096)/prog/prog_body/function/body/logical[2]/vice_logical/vice_logical_body/logical/logical_body/nop                
+EXPORT: (014)(079)/prog/prog_body/function/body/logical[2]/vice_logical/vice_logical_body/logical                             ENDIF 
+EXPORT: (015)(083)/prog/prog_body/function/body/logical[2]/vice_logical/vice_logical_body/instruction                         MOVEL PR[MR[3]], 2000 SV 100 
+EXPORT: (016)(040)/prog/prog_body/function/body/logical[2]                                                                ENDIF 
+EXPORT: (017)(024)/prog/prog_body/function                                                                            END SUB 

@@ -1,0 +1,6 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(033)/prog/prog_body/function/body/nop                                                                       
+EXPORT: (003)(044)/prog/prog_body/function/body/instruction[1]                                                            MOVEL P[6], 2000 CNT -1 
+EXPORT: (004)(044)/prog/prog_body/function/body/instruction[2]                                                            WAIT  10
+EXPORT: (005)(044)/prog/prog_body/function/body/instruction[3]                                                            WAIT  5
+EXPORT: (006)(024)/prog/prog_body/function                                                                            END SUB 

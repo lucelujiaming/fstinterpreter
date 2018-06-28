@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prog>
+    <head>
+        <include>prog_1</include>
+    </head>
+    <prog_body name="test">
+        <function name="main">
+          <parameter type="num">param0</parameter>
+          <parameter type="string">param1</parameter>
+          <body>
+                    <instruction type="move_line">
+                        <argument name="pose" type="num">
+                            <element type="num">400</element>
+                            <element type="num">0</element>
+                            <element type="num">500</element>
+                            <element type="num">0</element>
+                            <element type="num">0</element>
+                            <element type="num">3.1416</element>
+                        </argument>
+                        <argument name="velocity" type="num" unit="mm/s">5.5</argument>
+                        <argument name="smooth_velocity" type="num" unit="%">50</argument>
+                        <argument name="acceleration" type="num" unit="%">40</argument>
+                    </instruction>
+           </body>
+        </function>
+    </prog_body>
+</prog>
+<!--python   
+    " osnouatem lusbelpe wlos to ry sn
+    import prog_1
+    def main()
+        MoveL p_1, 100, 2000m/s
+        If 2 + sin(2) == 2
+            MoveL p_2, 100, 2000m/s
+        Else R[1] == 1
+            Wait di_1, ON, 10
+        End If
+        // comment thing
+        prog_1.func_test(0)
+
+        R[1] = 2 + (2 + 2)
+    End main
+
+    def func_test():
+        R[1] = 2 + (2 + 2)
+    End func_test
+-->

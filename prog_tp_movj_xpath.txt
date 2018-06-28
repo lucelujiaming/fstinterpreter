@@ -1,0 +1,4 @@
+001:prog_tp_movj:/prog/prog_body/function
+002:prog_tp_movj:/prog/prog_body/function/body/instruction[1]
+003:prog_tp_movj:/prog/prog_body/function/body/instruction[2]
+004:prog_tp_movj:/prog/prog_body/function

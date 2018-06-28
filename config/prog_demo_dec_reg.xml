@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prog>
+    <head>
+        <include>prog_1</include>
+    </head>
+    <prog_body name="test">
+        <function name="main">
+          <parameter type="num">param0</parameter>
+          <parameter type="string">param1</parameter>
+          <body>
+            <assignment>
+                <lvalue type="num">
+                    <element type="num">PR[1].POSE</element>
+                </lvalue>
+                <rvalue>
+                    <element name="x" type="num">5.9</element>
+                    <element name="y" type="num">6.7</element>
+                    <element name="z" type="num">7.4</element>
+                    <element name="a" type="num">8.5</element>
+                    <element name="b" type="num">12.4</element>
+                    <element name="c" type="num">15.3</element>
+                </rvalue>
+            </assignment>
+            <assignment>
+                <lvalue type="num">
+                    <element type="num">PR[2].POSE</element>
+                </lvalue>
+                <rvalue>
+                    <element name="x" type="num">PR[1].POSE</element>
+                </rvalue>
+            </assignment>
+            <assignment>
+                <lvalue type="num">
+                    <element type="num">PR[1].JOINT</element>
+                </lvalue>
+                <rvalue>
+                    <element name="x" type="num">35.9</element>
+                    <element name="y" type="num">46.7</element>
+                    <element name="z" type="num">76.4</element>
+                    <element name="a" type="num">18.5</element>
+                    <element name="b" type="num">152.4</element>
+                    <element name="c" type="num">145.3</element>
+                </rvalue>
+            </assignment>
+            <assignment>
+                <lvalue type="num">
+                    <element type="num">PR[1].ID</element>
+                </lvalue>
+                <rvalue>
+                    <element name="x" type="num">123</element>
+                </rvalue>
+            </assignment>
+            <assignment>
+                <lvalue type="num">
+                    <element type="num">PR[1].TYPE</element>
+                </lvalue>
+                <rvalue>
+                    <element name="x" type="num">123</element>
+                </rvalue>
+            </assignment>
+            <assignment>
+                <lvalue type="num">
+                    <element type="num">PR[1].COMMENT</element>
+                </lvalue>
+                <rvalue>
+                    <element name="x" type="string">lujiaming test for comment</element>
+                </rvalue>
+            </assignment>
+            <assignment>
+                <lvalue type="num">
+                    <element type="num">R[1]</element>
+                </lvalue>
+                <rvalue>
+                    <element type="num">5</element>
+                </rvalue>
+            </assignment>
+            <assignment>
+                <lvalue type="num">
+                    <element type="num">R[1]</element>
+                </lvalue>
+                <rvalue>
+                    <element type="num">R[1]</element>
+                    <element type="operation">+</element>
+                    <element type="num">5</element>
+                </rvalue>
+            </assignment>
+            <logical type="if">
+                <determine>
+                    <element type="num">R[1]</element>
+                    <element type="operation">+</element>
+                    <element name="sin" type="function">
+                        <element type="entity">
+                            <element type="num">6</element>
+                            <element type="operation">+</element>
+                            <element type="num">7</element>
+                        </element>
+                    </element>
+                    <element type="boolean_operation">==</element>
+                    <element type="num">100</element>
+                </determine>
+                <logical_body>
+                    <instruction type="move_line">
+                        <argument name="pose" type="pose">
+                            <element type="num">1.1</element>
+                            <element type="num">2.2</element>
+                            <element type="num">3.3</element>
+                            <element type="num">4.4</element>
+                            <element type="num">5.5</element>
+                            <element type="num">6.6</element>
+                        </argument>
+                        <argument name="velocity" type="num" unit="mm/s">0.0</argument>
+                        <argument name="smooth_velocity" type="num" unit="%">50</argument>
+                        <argument name="acceleration" type="num" unit="%">40</argument>
+                    </instruction>
+                </logical_body>
+                <vice_logical type="elif">
+                    <determine>
+                        <element type="num">R[1]</element>
+                        <element type="boolean_operation">==</element>
+                        <element type="num">1</element>
+                    </determine>
+                    <vice_logical_body>
+                        <instruction type="wait">
+                            <argument name="condition" type="expression">
+                                <element type="di">
+                                    <element tpye="num">0</element>
+                                </element>
+                                <element type="boolean_operation">=</element>
+                                <element type="io_val">ON</element>
+                            </argument>
+                            <argument name="timeout" type="num">10</argument>
+		                    <argument name="call_back" type="function">skip</argument>
+                        </instruction>
+                    </vice_logical_body>
+                </vice_logical>
+            </logical>
+            <assignment>
+                <lvalue type="num">
+                    <element type="num">RRRRR</element>
+                </lvalue>
+                <rvalue>
+                    <element type="num">5</element>
+                </rvalue>
+            </assignment>
+            <logical type="while">
+                <determine>
+                    <element type="num">RRRRR</element>
+                    <element type="operation">+</element>
+                    <element name="sin" type="function">
+                        <element type="num">2</element>
+                    </element>
+                    <element type="boolean_operation">&#60;=</element>
+                    <element type="num">100</element>
+                </determine>
+                <logical_body>
+                    <instruction type="move_line">
+                        <argument name="pose" type="pose">
+                            <element type="num">1.1</element>
+                            <element type="num">2.2</element>
+                            <element type="num">3.3</element>
+                            <element type="num">4.4</element>
+                            <element type="num">5.5</element>
+                            <element type="num">6.6</element>
+                        </argument>
+                        <argument name="velocity" type="num" unit="mm/s">0.0</argument>
+                        <argument name="smooth_velocity" type="num" unit="%">50</argument>
+                        <argument name="acceleration" type="num" unit="%">40</argument>
+                    </instruction>
+
+                    <logical type="if">
+                        <determine>
+                            <element type="num">R[1]</element>
+                            <element type="operation">+</element>
+                            <element name="sin" type="function">
+                                <element type="num">2</element>
+                            </element>
+                            <element type="boolean_operation">==</element>
+                            <element type="num">2</element>
+                        </determine>
+                        <logical_body>
+                            <instruction type="move_line">
+                                <argument name="pose" type="pose">
+                                    <element type="num">1.1</element>
+                                    <element type="num">2.2</element>
+                                    <element type="num">3.3</element>
+                                    <element type="num">4.4</element>
+                                    <element type="num">5.5</element>
+                                    <element type="num">6.6</element>
+                                </argument>
+                                <argument name="velocity" type="num" unit="mm/s">0.0</argument>
+                                <argument name="smooth_velocity" type="num" unit="%">50</argument>
+                                <argument name="acceleration" type="num" unit="%">40</argument>
+                            </instruction>
+                            <break/>
+                        </logical_body>
+                     </logical>
+                    <logical type="if">
+                        <determine>
+                            <element type="num">RRRRR</element>
+                            <element type="operation">+</element>
+                            <element name="sin" type="function">
+                                <element type="num">2</element>
+                            </element>
+                            <element type="boolean_operation">==</element>
+                            <element type="num">2</element>
+                        </determine>
+                        <logical_body>
+                            <instruction type="move_line">
+                                <argument name="pose" type="pose">
+                                    <element type="num">1.1</element>
+                                    <element type="num">2.2</element>
+                                    <element type="num">3.3</element>
+                                    <element type="num">4.4</element>
+                                    <element type="num">5.5</element>
+                                    <element type="num">6.6</element>
+                                </argument>
+                                <argument name="velocity" type="num" unit="mm/s">0.0</argument>
+                                <argument name="smooth_velocity" type="num" unit="%">50</argument>
+                                <argument name="acceleration" type="num" unit="%">40</argument>
+                            </instruction>
+                            <continue/>
+                        </logical_body>
+                     </logical>
+                    <instruction type="print">
+                        <argument name="prompt" type="string">RRRRR = </argument>
+                        <argument name="register" type="register">RRRRR</argument>
+                     </instruction>
+                    <assignment>
+                        <lvalue type="num">
+                            <element type="num">RRRRR</element>
+                        </lvalue>
+                        <rvalue>
+                            <element type="num">RRRRR</element>
+                            <element type="operation">+</element>
+                            <element type="num">5</element>
+                        </rvalue>
+                    </assignment>
+
+                </logical_body>
+            </logical>
+
+            <logical type="switch">
+                <determine>
+                    <!-- element type="num">R[1]</element -->
+                    <element type="register">
+		                <!-- element type="num">1</element -->
+                        <element type="entity">
+                            <element type="num">2</element>
+                            <element type="operation">+</element>
+                            <element type="bracket">
+                                <element type="num">6</element>
+                                <element type="operation">-</element>
+                                <element type="num">7</element>
+                            </element>
+                        </element>
+                    </element>
+                </determine>
+                <logical_body />
+                <vice-logical type="case">
+                    <determine>
+                          <element type="num">5</element>
+                    </determine>
+                    <vice-logical_body>
+                        <instruction type="move_line">
+                            <argument name="pose" type="pose">
+                                <element type="num">1.1</element>
+                                <element type="num">2.2</element>
+                                <element type="num">3.3</element>
+                                <element type="num">4.4</element>
+                                <element type="num">5.5</element>
+                                <element type="num">6.6</element>
+                            </argument>
+                            <argument name="velocity" type="num" unit="mm/s">0.0</argument>
+                            <argument name="smooth_velocity" type="num" unit="%">50</argument>
+                            <argument name="acceleration" type="num" unit="%">40</argument>
+                        </instruction>
+                    </vice-logical_body>
+                </vice-logical>
+                <vice-logical type="case_default">
+                    <determine>
+                          <element type="num">5</element>
+                    </determine>
+                    <vice-logical_body>
+                        <instruction type="move_line">
+                            <argument name="pose" type="pose">
+                                <element type="num">1.1</element>
+                                <element type="num">2.2</element>
+                                <element type="num">3.3</element>
+                                <element type="num">4.4</element>
+                                <element type="num">5.5</element>
+                                <element type="num">6.6</element>
+                            </argument>
+                            <argument name="velocity" type="num" unit="mm/s">0.0</argument>
+                            <argument name="smooth_velocity" type="num" unit="%">50</argument>
+                            <argument name="acceleration" type="num" unit="%">40</argument>
+                        </instruction>
+                    </vice-logical_body>
+                </vice-logical>
+            </logical>
+
+            <comment type="string">comment thing</comment>
+            <call file="prog_1">
+                <parameter name="param0" type="num">1</parameter>
+                <parameter name="param0" type="num">2</parameter>
+            </call>
+            <call file="prog_1" name="LujiamingParamsSub">
+                <parameter name="param0" type="num">1</parameter>
+                <parameter name="param1" type="num">2</parameter>
+                <parameter name="param2" type="num">3</parameter>
+            </call>
+            <nop/>
+            <assignment>
+                <lvalue type="num">
+                    <element type="num">R[1]</element>
+                </lvalue>
+                <rvalue>
+                    <element type="num">5</element>
+                    <element type="operation">+</element>
+                    <element type="bracket">
+                        <element type="num">6</element>
+                        <element type="operation">-</element>
+                        <element type="num">7</element>
+                    </element>
+                </rvalue>
+            </assignment>
+           </body>
+        </function>
+        <nop/>
+        <function name="func_test">
+           <parameter type="num">param0</parameter>
+           <parameter type="string">param1</parameter>
+           <body>
+              <assignment>
+                <lvalue type="num">
+                    <element type="num">R[6]</element>
+                </lvalue>
+                <rvalue>
+                    <element type="num">param0</element>
+                    <element type="operation">+</element>
+                    <element type="bracket">
+                        <element type="num">2</element>
+                        <element type="operation">+</element>
+                        <element type="num">2</element>
+                    </element>
+                </rvalue>
+              </assignment>
+              <return>R[6]</return>
+           </body>
+        </function>
+    </prog_body>
+</prog>
+<!--python   
+    " osnouatem lusbelpe wlos to ry sn
+    import prog_1
+    def main()
+        MoveL p_1, 100, 2000m/s
+        If 2 + sin(2) == 2
+            MoveL p_2, 100, 2000m/s
+        Else R[1] == 1
+            Wait di_1, ON, 10
+        End If
+        // comment thing
+        prog_1.func_test(0)
+
+        R[1] = 2 + (2 + 2)
+    End main
+
+    def func_test():
+        R[1] = 2 + (2 + 2)
+    End func_test
+-->

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prog>
+    <prog_body name="test">
+        <function name="main">
+          <parameter type="num">param0</parameter>
+          <parameter type="string">param1</parameter>
+          <body>
+            <assignment>
+                <lvalue type="num">
+                    <element type="num">R[1]</element>
+                </lvalue>
+                <rvalue>
+                    <element type="num">5</element>
+                </rvalue>
+            </assignment>
+           <assignment>
+                <lvalue type="num">
+                    <element type="num">PR[1].JOINT</element>
+                </lvalue>
+                <rvalue>
+                    <element name="x" type="num">35.9</element>
+                    <element name="y" type="num">46.7</element>
+                    <element name="z" type="num">76.4</element>
+                    <element name="a" type="num">18.5</element>
+                    <element name="b" type="num">152.4</element>
+                    <element name="c" type="num">145.3</element>
+                </rvalue>
+            </assignment>
+            <assignment>
+                <lvalue type="num">
+                    <element type="num">PR[1].ID</element>
+                </lvalue>
+                <rvalue>
+                    <element name="x" type="num">123</element>
+                </rvalue>
+            </assignment>
+            <assignment>
+                <lvalue type="num">
+                    <element type="num">PR[1].TYPE</element>
+                </lvalue>
+                <rvalue>
+                    <element name="x" type="num">123</element>
+                </rvalue>
+            </assignment>
+            <assignment>
+                <lvalue type="num">
+                    <element type="num">PR[1].COMMENT</element>
+                </lvalue>
+                <rvalue>
+                    <element name="x" type="string">lujiaming test for comment</element>
+                </rvalue>
+            </assignment>
+            <assignment>
+				<lvalue type="num">
+				    <element type="pose_register">
+	                    <element type="num">1</element>
+	                    <element type="param">X</element>
+					</element>
+				</lvalue>
+				<rvalue>
+	                <element type="num">7</element>
+		            <element type="operation">+</element>
+				    <element type="register">
+						<element type="num">1</element>
+				    </element>
+				</rvalue>
+			</assignment>
+            <assignment>
+				<lvalue type="num">
+				    <element type="pose_register">
+	                    <element type="num">1</element>
+	                    <element type="num">3</element>
+					</element>
+				</lvalue>
+				<rvalue>
+	                <element type="num">5</element>
+		            <element type="operation">+</element>
+				    <element type="register">
+						<element type="num">1</element>
+				    </element>
+				</rvalue>
+			</assignment>
+           </body>
+        </function>
+    </prog_body>
+</prog>

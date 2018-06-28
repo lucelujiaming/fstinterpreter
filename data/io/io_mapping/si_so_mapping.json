@@ -1,0 +1,55 @@
+{
+    "SI": [
+        {
+            "from": 11,
+            "index": 11,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "e_stop",
+            "to": 11
+        },
+        {
+            "from": 12,
+            "index": 12,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "fence_door",
+            "to": 12
+        },
+        {
+            "from": 13,
+            "index": 13,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "pos_limit",
+            "to": 13
+        }
+    ],
+    "SO": [
+        {
+            "from": 11,
+            "index": 11,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "main_power",
+            "to": 11
+        },
+        {
+            "from": 12,
+            "index": 12,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "int_servo_1",
+            "to": 12
+        },
+        {
+            "from": 13,
+            "index": 20,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "int_servo_2",
+            "to": 13
+        },
+        {
+            "from": 14,
+            "index": 20,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "e_stop_reset",
+            "to": 14
+        }
+    ]
+}

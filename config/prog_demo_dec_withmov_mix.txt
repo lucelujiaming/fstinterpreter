@@ -1,0 +1,58 @@
+EXPORT: (001)(018)/prog/head/include                                                                                  IMPORT prog_1
+EXPORT: (002)(027)/prog/prog_body/function[1]                                                                         SUB main (param0, param1)
+EXPORT: (003)(047)/prog/prog_body/function[1]/body/instruction[1]                                                         MOVEL 13.1+( 6-7 ) 2.2 3.3 4.4 5.5 6.6 50 CNT -1 ;ACC 40 ;OFFSET J_VEC (100+( 6-7 ), 0, 0, 45, 0, 0);TOOL_OFFSET J_VEC (100, 0, 0, 45, 0, 0);TA 100 ASSIGN R[1] = 5 + ( 6-7 ) ;TB 100 CALL prog_1::main (1, 2)
+EXPORT: (004)(047)/prog/prog_body/function[1]/body/instruction[2]                                                         MOVEL 12.1 2.2 3.3 4.4 5.5 6.6 30 SD 50 ;ACC 40 ;OFFSET C_VEC_UF (0, 0, 100, 40.5, 0, 0) UF[1];TOOL_OFFSET C_VEC_UF (0, 0, 100, 40.5, 0, 0) UF[1]
+EXPORT: (005)(047)/prog/prog_body/function[1]/body/instruction[3]                                                         MOVEL 13.1 2.2 3.3 4.4 5.5 6.6 100 SV 50 ;ACC 40 ;OFFSET PR_UF PR[2] UF[1];TOOL_OFFSET PR_UF PR[2] UF[1]
+EXPORT: (006)(047)/prog/prog_body/function[1]/body/instruction[4]                                                         MOVEJ 14.1 2.2 3.3 4.4 5.5 6.6 100 SV 50 
+EXPORT: (007)(047)/prog/prog_body/function[1]/body/instruction[5]                                                         MOVEJ 15.1 2.2 3.3 4.4 5.5 6.6 50 CNT 999 ;ACC 40 ;EV 40 ;Ind_EV 40 
+EXPORT: (008)(047)/prog/prog_body/function[1]/body/instruction[6]                                                         MOVEJ 16.1 2.2 3.3 4.4 5.5 6.6 30 SD 50 ;ACC 40 ;TA 100 ASSIGN R[1] = 5 + ( 6-7 ) ;TB 100 CALL prog_1::main (1, 2)
+EXPORT: (009)(047)/prog/prog_body/function[1]/body/instruction[7]                                                         MOVEJ 17.1 2.2 3.3 4.4 5.5 6.6 100 SV 50 ;ACC 40 ;DB 100 ASSIGN R[1] = 5 + ( 6-7 ) 
+EXPORT: (010)(047)/prog/prog_body/function[1]/body/instruction[8]                                                         MOVEC 18.1 2.2 3.3 4.4 5.5 6.6 7.7 8.8 9.9 10.10 11.11 12.12 50 CNT 333 ;ACC 40 
+EXPORT: (011)(047)/prog/prog_body/function[1]/body/instruction[9]                                                         MOVEC 19.1 2.2 3.3 4.4 5.5 6.6 7.7 8.8 9.9 10.10 11.11 12.12 30 SD 50 ;ACC 40 
+EXPORT: (012)(048)/prog/prog_body/function[1]/body/instruction[10]                                                        MOVEC 10.1 2.2 3.3 4.4 5.5 6.6 7.7 8.8 9.9 10.10 11.11 12.12 100 SV 50 ;ACC 40 
+EXPORT: (013)(015)/prog/prog_body                                                                                         TF_No = 5 + R[2+( 6-7 )]   
+EXPORT: (014)(048)/prog/prog_body/function[1]/body/instruction[11]                                                        TIMER 1 start 
+EXPORT: (015)(048)/prog/prog_body/function[1]/body/instruction[12]                                                        USERALARM 1 
+EXPORT: (016)(048)/prog/prog_body/function[1]/body/instruction[13]                                                        PAUSE 
+EXPORT: (017)(042)/prog/prog_body/function[1]/body/comment()                                                              #  instruction type="abort">ABORT</instruction  
+EXPORT: (018)(048)/prog/prog_body/function[1]/body/instruction[14]                                                        WAIT  3
+EXPORT: (019)(048)/prog/prog_body/function[1]/body/instruction[15]                                                        WAIT COND DI[1]  = PE 
+EXPORT: (020)(048)/prog/prog_body/function[1]/body/instruction[16]                                                        WAIT COND R[1]  > 10 3 skip
+EXPORT: (021)(015)/prog/prog_body                                                                                         R[1] = 5  
+EXPORT: (022)(043)/prog/prog_body/function[1]/body/logical[1]                                                             IF R[1]+sin(6+7) == 100 THEN 
+EXPORT: (023)(068)/prog/prog_body/function[1]/body/logical[1]/logical_body/instruction                                        MOVEL 1.1 2.2 3.3 4.4 5.5 6.6 100 SV 50 ;ACC 40 
+EXPORT: (024)(056)/prog/prog_body/function[1]/body/logical[1]/vice_logical                                                ELSEIF R[1] == 1 THEN 
+EXPORT: (025)(086)/prog/prog_body/function[1]/body/logical[1]/vice_logical/vice_logical_body/instruction                      WAIT COND DI[0]  = ON  10 skip
+EXPORT: (026)(043)/prog/prog_body/function[1]/body/logical[1]                                                             ENDIF 
+EXPORT: (027)(043)/prog/prog_body/function[1]/body/logical[2]                                                             WHILE R[1]+sin(2) <= 100 
+EXPORT: (028)(071)/prog/prog_body/function[1]/body/logical[2]/logical_body/instruction[1]                                     MOVEL 1.1 2.2 3.3 4.4 5.5 6.6 100 SV 50 ;ACC 40 
+EXPORT: (029)(067)/prog/prog_body/function[1]/body/logical[2]/logical_body/logical[1]                                         IF 8+sin(2) == 2 THEN 
+EXPORT: (030)(092)/prog/prog_body/function[1]/body/logical[2]/logical_body/logical[1]/logical_body/instruction                    MOVEL 1.1 2.2 3.3 4.4 5.5 6.6 100 SV 50 ;ACC 40 
+EXPORT: (031)(086)/prog/prog_body/function[1]/body/logical[2]/logical_body/logical[1]/logical_body/break                          BREAK 
+EXPORT: (032)(067)/prog/prog_body/function[1]/body/logical[2]/logical_body/logical[1]                                         ENDIF 
+EXPORT: (033)(067)/prog/prog_body/function[1]/body/logical[2]/logical_body/logical[2]                                         IF 5+sin(2) == 2 THEN 
+EXPORT: (034)(092)/prog/prog_body/function[1]/body/logical[2]/logical_body/logical[2]/logical_body/instruction                    MOVEL 1.1 2.2 3.3 4.4 5.5 6.6 100 SV 50 ;ACC 40 
+EXPORT: (035)(089)/prog/prog_body/function[1]/body/logical[2]/logical_body/logical[2]/logical_body/continue                       CONTINUE 
+EXPORT: (036)(067)/prog/prog_body/function[1]/body/logical[2]/logical_body/logical[2]                                         ENDIF 
+EXPORT: (037)(071)/prog/prog_body/function[1]/body/logical[2]/logical_body/instruction[2]                                     PRINT "R[1] = ", R[1]; "" 
+EXPORT: (038)(043)/prog/prog_body/function[1]/body/logical[2]                                                                 R[1] = R[1] + 5  
+EXPORT: (039)(043)/prog/prog_body/function[1]/body/logical[2]                                                             WEND 
+EXPORT: (040)(043)/prog/prog_body/function[1]/body/logical[3]                                                             SELECT CASE  R[2+( 6-7 )]  
+EXPORT: (041)(059)/prog/prog_body/function[1]/body/logical[3]/vice-logical[1]                                                 CASE  5 
+EXPORT: (042)(089)/prog/prog_body/function[1]/body/logical[3]/vice-logical[1]/vice-logical_body/instruction                       MOVEL 1.1 2.2 3.3 4.4 5.5 6.6 100 SV 50 ;ACC 40 
+EXPORT: (043)(043)/prog/prog_body/function[1]/body/logical[3]                                                                 BREAK 
+EXPORT: (044)(059)/prog/prog_body/function[1]/body/logical[3]/vice-logical[2]                                                 DEFAULT  5 
+EXPORT: (045)(089)/prog/prog_body/function[1]/body/logical[3]/vice-logical[2]/vice-logical_body/instruction                       MOVEL 1.1 2.2 3.3 4.4 5.5 6.6 100 SV 50 ;ACC 40 
+EXPORT: (046)(043)/prog/prog_body/function[1]/body/logical[3]                                                                 BREAK 
+EXPORT: (047)(043)/prog/prog_body/function[1]/body/logical[3]                                                             END SELECT 
+EXPORT: (048)(040)/prog/prog_body/function[1]/body/comment                                                                # comment thing 
+EXPORT: (049)(015)/prog/prog_body                                                                                         CALL prog_1::main (1, 2) 
+EXPORT: (050)(015)/prog/prog_body                                                                                         CALL prog_1::LujiamingParamsSub (1, 2, 3) 
+EXPORT: (051)(036)/prog/prog_body/function[1]/body/nop                                                                    
+EXPORT: (052)(015)/prog/prog_body                                                                                         R[1] = 5 + ( 6-7 )  
+EXPORT: (053)(027)/prog/prog_body/function[1]                                                                         END SUB 
+EXPORT: (054)(019)/prog/prog_body/nop                                                                                 
+EXPORT: (055)(027)/prog/prog_body/function[2]                                                                         SUB func_test (param0, param1)
+EXPORT: (056)(019)/prog/prog_body/nop                                                                                     R[6] = param0 + ( 2+2 )  
+EXPORT: (057)(039)/prog/prog_body/function[2]/body/return                                                                 RETURN R[6] 
+EXPORT: (058)(027)/prog/prog_body/function[2]                                                                         END SUB 

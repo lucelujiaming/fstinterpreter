@@ -1,0 +1,8 @@
+001:wait_test:/prog/prog_body/function
+002:wait_test:/prog/prog_body
+003:wait_test:/prog/prog_body/function/body/logical
+004:wait_test:/prog/prog_body/function/body/logical/logical_body/instruction[1]
+005:wait_test:/prog/prog_body/function/body/logical/logical_body/instruction[2]
+006:wait_test:/prog/prog_body/function/body/logical
+007:wait_test:/prog/prog_body/function/body/logical
+008:wait_test:/prog/prog_body/function

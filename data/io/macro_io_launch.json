@@ -1,0 +1,21 @@
+{
+    "macro_io_list": [
+        {
+            "program": "print_test7.py",
+            "di": "7"
+        },
+        {
+            "program": "print_test8.py",
+            "di": "20"
+        },
+        {
+            "program": "print_test9.py",
+            "di": "9"
+        },
+        {
+            "program": "prog_1.xml",
+            "comment": "",
+            "di": "6"
+        }
+    ]
+}

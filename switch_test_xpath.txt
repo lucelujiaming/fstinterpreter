@@ -1,0 +1,12 @@
+001:switch_test:/prog/prog_body/function
+002:switch_test:/prog/prog_body/function/body/logical
+003:switch_test:/prog/prog_body/function/body/logical/vice-logical[1]
+004:switch_test:/prog/prog_body/function/body/logical/vice-logical[1]/vice-logical_body/instruction[1]
+005:switch_test:/prog/prog_body/function/body/logical/vice-logical[1]/vice-logical_body/instruction[2]
+006:switch_test:/prog/prog_body/function/body/logical/vice-logical[1]/vice-logical_body/instruction[3]
+007:switch_test:/prog/prog_body/function/body/logical
+008:switch_test:/prog/prog_body/function/body/logical/vice-logical[2]
+009:switch_test:/prog/prog_body/function/body/logical/vice-logical[2]/vice-logical_body/instruction
+010:switch_test:/prog/prog_body/function/body/logical
+011:switch_test:/prog/prog_body/function/body/logical
+012:switch_test:/prog/prog_body/function

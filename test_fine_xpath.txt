@@ -1,0 +1,6 @@
+001:test_fine:/prog/prog_body/function
+002:test_fine:/prog/prog_body/function/body/instruction[1]
+003:test_fine:/prog/prog_body/function/body/instruction[2]
+004:test_fine:/prog/prog_body/function/body/instruction[3]
+005:test_fine:/prog/prog_body/function/body/instruction[4]
+006:test_fine:/prog/prog_body/function

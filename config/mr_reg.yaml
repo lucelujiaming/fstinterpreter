@@ -1,0 +1,52 @@
+MrReg1:
+    comment: empty
+    id: 1
+    is_valid: false
+    value: 0
+MrReg10:
+    comment: empty
+    id: 10
+    is_valid: false
+    value: 0
+MrReg2:
+    comment: empty 
+    id: 2
+    is_valid: false
+    value: 0
+MrReg3:
+    comment: empty
+    id: 3
+    is_valid: false
+    value: 0
+MrReg4:
+    comment: empty
+    id: 4
+    is_valid: false
+    value: 0
+MrReg5:
+    comment: empty
+    id: 5
+    is_valid: false
+    value: 0
+MrReg6:
+    comment: empty
+    id: 6
+    is_valid: false
+    value: 0
+MrReg7:
+    comment: empty
+    id: 7
+    is_valid: false
+    value: 0
+MrReg8:
+    comment: empty
+    id: 8
+    is_valid: false
+    value: 0
+MrReg9:
+    comment: empty
+    id: 9
+    is_valid: false
+    value: 0
+
+#END

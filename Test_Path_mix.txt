@@ -1,0 +1,12 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(033)/prog/prog_body/function/body/nop                                                                       
+EXPORT: (003)(015)/prog/prog_body                                                                                         R[1]  = 1  
+EXPORT: (004)(015)/prog/prog_body                                                                                         R[2]  = 1  
+EXPORT: (005)(044)/prog/prog_body/function/body/instruction[1]                                                            MOVEL P[20], 1600 CNT -1 
+EXPORT: (006)(037)/prog/prog_body/function/body/logical                                                                   WHILE R[1]  < 10 
+EXPORT: (007)(065)/prog/prog_body/function/body/logical/logical_body/instruction[1]                                           MOVEL P[20], 1600 CNT -1 
+EXPORT: (008)(065)/prog/prog_body/function/body/logical/logical_body/instruction[2]                                           MOVEL P[30], 1600 CNT -1 
+EXPORT: (009)(037)/prog/prog_body/function/body/logical                                                                       R[1]  = R[1]  + 1  
+EXPORT: (010)(037)/prog/prog_body/function/body/logical                                                                   WEND 
+EXPORT: (011)(044)/prog/prog_body/function/body/instruction[2]                                                            MOVEL P[20], 1600 CNT -1 
+EXPORT: (012)(024)/prog/prog_body/function                                                                            END SUB 

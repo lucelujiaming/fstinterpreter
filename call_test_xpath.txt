@@ -1,0 +1,11 @@
+001:call_test:/prog/prog_body/function[1]
+002:call_test:/prog/prog_body/function[1]/body/instruction
+003:call_test:/prog/prog_body
+004:call_test:/prog/prog_body
+005:call_test:/prog/prog_body/function[1]
+006:call_test:/prog/prog_body/function[2]
+007:call_test:/prog/prog_body/function[2]/body/instruction
+008:call_test:/prog/prog_body/function[2]
+009:call_test:/prog/prog_body/function[3]
+010:call_test:/prog/prog_body/function[3]/body/instruction
+011:call_test:/prog/prog_body/function[3]

@@ -1,0 +1,4 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(044)/prog/prog_body/function/body/instruction[1]                                                            MOVEL P[1], 2000 SV 100 ;ACC 40 
+EXPORT: (003)(044)/prog/prog_body/function/body/instruction[2]                                                            WAIT  10 SKIP
+EXPORT: (004)(024)/prog/prog_body/function                                                                            END SUB 

@@ -1,0 +1,34 @@
+{
+    "users": [
+        {
+            "name": "admin",
+            "note": "拥有超级权限",
+            "password": "123",
+            "role": "administrator"
+        },
+        {
+            "name": "zhangsan",
+            "note": "路人甲",
+            "password": "1111",
+            "role": "programmer"
+        },
+        {
+            "name": "xiaowang",
+            "note": "龙套乙",
+            "password": "123",
+            "role": "operator"
+        },
+        {
+            "name": "alice",
+            "note": "芭芭拉小魔仙",
+            "password": "123",
+            "role": "programmer"
+        },
+        {
+            "name": "1",
+            "note": "1",
+            "password": "1",
+            "role": "programmer"
+        }
+    ]
+}

@@ -1,0 +1,62 @@
+{
+    "UI": [
+        {
+            "from": 7,
+            "index": 7,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "servo_enable",
+            "to": 7
+        },
+        {
+            "from": 8,
+            "index": 8,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "hold",
+            "to": 8
+        },
+        {
+            "from": 9,
+            "index": 9,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "reset",
+            "to": 9
+        },
+        {
+            "from": 10,
+            "index": 10,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "start_restart",
+            "to": 10
+        }
+    ],
+    "UO": [
+        {
+            "from": 7,
+            "index": 7,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "cmd_enabled",
+            "to": 7
+        },
+        {
+            "from": 8,
+            "index": 8,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "held",
+            "to": 8
+        },
+        {
+            "from": 9,
+            "index": 9,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "fault",
+            "to": 9
+        },
+        {
+            "from": 10,
+            "index": 10,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "prog_running",
+            "to": 10
+        }
+    ]
+}

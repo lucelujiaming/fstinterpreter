@@ -1,0 +1,6 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main (param0, param1)
+EXPORT: (002)(015)/prog/prog_body                                                                                         SR[3] =  "This program demostrates all commands."   
+EXPORT: (003)(015)/prog/prog_body                                                                                         SR[4] = SR[3]  
+EXPORT: (004)(041)/prog/prog_body/function/body/instruction                                                               MOVEJ 0, 0, 0, 0, -1.5708, 0, 50 SV 100 ;ACC 100 
+EXPORT: (005)(015)/prog/prog_body                                                                                         uf_no = 5  
+EXPORT: (006)(024)/prog/prog_body/function                                                                            END SUB 

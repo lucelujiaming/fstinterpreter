@@ -1,0 +1,11 @@
+EXPORT: (001)(027)/prog/prog_body/function[1]                                                                         SUB main (param0, param1)
+EXPORT: (002)(044)/prog/prog_body/function[1]/body/instruction                                                            MOVEJ 0, 0, 0, 0, -1.5708, 0, 0.5 SV 100 ;ACC 100 
+EXPORT: (003)(015)/prog/prog_body                                                                                         CALL call_test::func_test (1) 
+EXPORT: (004)(015)/prog/prog_body                                                                                         CALL call_test::func_noparam_test () 
+EXPORT: (005)(027)/prog/prog_body/function[1]                                                                         END SUB 
+EXPORT: (006)(027)/prog/prog_body/function[2]                                                                         SUB func_noparam_test ()
+EXPORT: (007)(044)/prog/prog_body/function[2]/body/instruction                                                            MOVEL 400, -150, 425, 0, 0, 3.1416, 1000 CNT 0 ;ACC 100 
+EXPORT: (008)(027)/prog/prog_body/function[2]                                                                         END SUB 
+EXPORT: (009)(027)/prog/prog_body/function[3]                                                                         SUB func_test (param0)
+EXPORT: (010)(044)/prog/prog_body/function[3]/body/instruction                                                            MOVEL 400, -150, 425, 0, 0, 3.1416, 1000 CNT 0 ;ACC 100 
+EXPORT: (011)(027)/prog/prog_body/function[3]                                                                         END SUB 

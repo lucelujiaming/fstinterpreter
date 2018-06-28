@@ -1,0 +1,5 @@
+EXPORT: (001)(018)/prog/head/include                                                                                  IMPORT prog_1
+EXPORT: (002)(024)/prog/prog_body/function                                                                            SUB main (param0, param1)
+EXPORT: (003)(044)/prog/prog_body/function/body/instruction[1]                                                            MOVEJ 0, 0, 0, 0, -1.5708, 0, 50 CNT 0 ;ACC 40 
+EXPORT: (004)(044)/prog/prog_body/function/body/instruction[2]                                                            MOVEL 400, 100, 500, 0, 0, 3.1416, 500 CNT 0 ;ACC 40 
+EXPORT: (005)(024)/prog/prog_body/function                                                                            END SUB 

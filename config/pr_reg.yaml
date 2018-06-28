@@ -1,0 +1,351 @@
+PrReg1:
+    comment: empty
+    id: 1
+    is_valid: false
+    cartesian:
+        position:
+            x: 0.0
+            y: 0.0
+            z: 0.0
+        orientation:
+            a: 0.0
+            b: 0.0
+            c: 0.0
+    joint:
+        j1: 0.0
+        j2: 0.0
+        j3: 0.0
+        j4: 0.0
+        j5: 0.0
+        j6: 0.0
+    pos_type: 0
+    ext_pos:
+        ext1: 0.0
+        ext2: 0.0
+        ext3: 0.0
+    group_id: 0
+    posture:
+        is_flip: 0
+        is_left: 0
+        is_up: 0
+        is_front: 0
+    multiturn:
+        axis_a: 0
+        axis_b: 0
+        axis_c: 0
+PrReg2:
+    comment: empty
+    id: 2
+    is_valid: false
+    cartesian:
+        position:
+            x: 0.0
+            y: 0.0
+            z: 0.0
+        orientation:
+            a: 0.0
+            b: 0.0
+            c: 0.0
+    joint:
+        j1: 0.0
+        j2: 0.0
+        j3: 0.0
+        j4: 0.0
+        j5: 0.0
+        j6: 0.0
+    pos_type: 0
+    ext_pos:
+        ext1: 0.0
+        ext2: 0.0
+        ext3: 0.0
+    group_id: 0
+    posture:
+        is_flip: 0
+        is_left: 0
+        is_up: 0
+        is_front: 0
+    multiturn:
+        axis_a: 0
+        axis_b: 0
+        axis_c: 0
+PrReg3:
+    comment: empty
+    id: 3
+    is_valid: false
+    cartesian:
+        position:
+            x: 0.0
+            y: 0.0
+            z: 0.0
+        orientation:
+            a: 0.0
+            b: 0.0
+            c: 0.0
+    joint:
+        j1: 0.0
+        j2: 0.0
+        j3: 0.0
+        j4: 0.0
+        j5: 0.0
+        j6: 0.0
+    pos_type: 0
+    ext_pos:
+        ext1: 0.0
+        ext2: 0.0
+        ext3: 0.0
+    group_id: 0
+    posture:
+        is_flip: 0
+        is_left: 0
+        is_up: 0
+        is_front: 0
+    multiturn:
+        axis_a: 0
+        axis_b: 0
+        axis_c: 0
+PrReg4:
+    comment: empty
+    id: 4
+    is_valid: false
+    cartesian:
+        position:
+            x: 0.0
+            y: 0.0
+            z: 0.0
+        orientation:
+            a: 0.0
+            b: 0.0
+            c: 0.0
+    joint:
+        j1: 0.0
+        j2: 0.0
+        j3: 0.0
+        j4: 0.0
+        j5: 0.0
+        j6: 0.0
+    pos_type: 0
+    ext_pos:
+        ext1: 0.0
+        ext2: 0.0
+        ext3: 0.0
+    group_id: 0
+    posture:
+        is_flip: 0
+        is_left: 0
+        is_up: 0
+        is_front: 0
+    multiturn:
+        axis_a: 0
+        axis_b: 0
+        axis_c: 0
+PrReg5:
+    comment: empty
+    id: 5
+    is_valid: false
+    cartesian:
+        position:
+            x: 0.0
+            y: 0.0
+            z: 0.0
+        orientation:
+            a: 0.0
+            b: 0.0
+            c: 0.0
+    joint:
+        j1: 0.0
+        j2: 0.0
+        j3: 0.0
+        j4: 0.0
+        j5: 0.0
+        j6: 0.0
+    pos_type: 0
+    ext_pos:
+        ext1: 0.0
+        ext2: 0.0
+        ext3: 0.0
+    group_id: 0
+    posture:
+        is_flip: 0
+        is_left: 0
+        is_up: 0
+        is_front: 0
+    multiturn:
+        axis_a: 0
+        axis_b: 0
+        axis_c: 0
+PrReg6:
+    comment: empty
+    id: 6
+    is_valid: false
+    cartesian:
+        position:
+            x: 0.0
+            y: 0.0
+            z: 0.0
+        orientation:
+            a: 0.0
+            b: 0.0
+            c: 0.0
+    joint:
+        j1: 0.0
+        j2: 0.0
+        j3: 0.0
+        j4: 0.0
+        j5: 0.0
+        j6: 0.0
+    pos_type: 0
+    ext_pos:
+        ext1: 0.0
+        ext2: 0.0
+        ext3: 0.0
+    group_id: 0
+    posture:
+        is_flip: 0
+        is_left: 0
+        is_up: 0
+        is_front: 0
+    multiturn:
+        axis_a: 0
+        axis_b: 0
+        axis_c: 0
+PrReg7:
+    comment: empty
+    id: 7
+    is_valid: false
+    cartesian:
+        position:
+            x: 0.0
+            y: 0.0
+            z: 0.0
+        orientation:
+            a: 0.0
+            b: 0.0
+            c: 0.0
+    joint:
+        j1: 0.0
+        j2: 0.0
+        j3: 0.0
+        j4: 0.0
+        j5: 0.0
+        j6: 0.0
+    pos_type: 0
+    ext_pos:
+        ext1: 0.0
+        ext2: 0.0
+        ext3: 0.0
+    group_id: 0
+    posture:
+        is_flip: 0
+        is_left: 0
+        is_up: 0
+        is_front: 0
+    multiturn:
+        axis_a: 0
+        axis_b: 0
+        axis_c: 0
+PrReg8:
+    comment: empty
+    id: 8
+    is_valid: false
+    cartesian:
+        position:
+            x: 0.0
+            y: 0.0
+            z: 0.0
+        orientation:
+            a: 0.0
+            b: 0.0
+            c: 0.0
+    joint:
+        j1: 0.0
+        j2: 0.0
+        j3: 0.0
+        j4: 0.0
+        j5: 0.0
+        j6: 0.0
+    pos_type: 0
+    ext_pos:
+        ext1: 0.0
+        ext2: 0.0
+        ext3: 0.0
+    group_id: 0
+    posture:
+        is_flip: 0
+        is_left: 0
+        is_up: 0
+        is_front: 0
+    multiturn:
+        axis_a: 0
+        axis_b: 0
+        axis_c: 0
+PrReg9:
+    comment: empty
+    id: 9
+    is_valid: false
+    cartesian:
+        position:
+            x: 0.0
+            y: 0.0
+            z: 0.0
+        orientation:
+            a: 0.0
+            b: 0.0
+            c: 0.0
+    joint:
+        j1: 0.0
+        j2: 0.0
+        j3: 0.0
+        j4: 0.0
+        j5: 0.0
+        j6: 0.0
+    pos_type: 0
+    ext_pos:
+        ext1: 0.0
+        ext2: 0.0
+        ext3: 0.0
+    group_id: 0
+    posture:
+        is_flip: 0
+        is_left: 0
+        is_up: 0
+        is_front: 0
+    multiturn:
+        axis_a: 0
+        axis_b: 0
+        axis_c: 0
+PrReg10:
+    comment: empty
+    id: 10
+    is_valid: false
+    cartesian:
+        position:
+            x: 0.0
+            y: 0.0
+            z: 0.0
+        orientation:
+            a: 0.0
+            b: 0.0
+            c: 0.0
+    joint:
+        j1: 0.0
+        j2: 0.0
+        j3: 0.0
+        j4: 0.0
+        j5: 0.0
+        j6: 0.0
+    pos_type: 0
+    ext_pos:
+        ext1: 0.0
+        ext2: 0.0
+        ext3: 0.0
+    group_id: 0
+    posture:
+        is_flip: 0
+        is_left: 0
+        is_up: 0
+        is_front: 0
+    multiturn:
+        axis_a: 0
+        axis_b: 0
+        axis_c: 0
+#END

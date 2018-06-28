@@ -1,0 +1,52 @@
+RReg1:
+    comment: empty
+    id: 1
+    is_valid: false
+    value: 0.0
+RReg10:
+    comment: empty
+    id: 10
+    is_valid: false
+    value: 0.0
+RReg2:
+    comment: empty 
+    id: 2
+    is_valid: false
+    value: 0.0
+RReg3:
+    comment: empty
+    id: 3
+    is_valid: false
+    value: 0.0
+RReg4:
+    comment: empty
+    id: 4
+    is_valid: false
+    value: 0.0
+RReg5:
+    comment: empty
+    id: 5
+    is_valid: false
+    value: 0.0
+RReg6:
+    comment: empty
+    id: 6
+    is_valid: false
+    value: 0.0
+RReg7:
+    comment: empty
+    id: 7
+    is_valid: false
+    value: 0.0
+RReg8:
+    comment: empty
+    id: 8
+    is_valid: false
+    value: 0.0
+RReg9:
+    comment: empty
+    id: 9
+    is_valid: false
+    value: 0.0
+
+#END

@@ -1,0 +1,6 @@
+001:ad_v:/prog/prog_body/function
+002:ad_v:/prog/prog_body/function/body/nop
+003:ad_v:/prog/prog_body/function/body/instruction[1]
+004:ad_v:/prog/prog_body/function/body/instruction[2]
+005:ad_v:/prog/prog_body/function/body/instruction[3]
+006:ad_v:/prog/prog_body/function

@@ -1,0 +1,12 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main (param0, param1)
+EXPORT: (002)(037)/prog/prog_body/function/body/logical                                                                   SELECT CASE  R[2]  
+EXPORT: (003)(053)/prog/prog_body/function/body/logical/vice-logical[1]                                                       CASE  5 
+EXPORT: (004)(086)/prog/prog_body/function/body/logical/vice-logical[1]/vice-logical_body/instruction[1]                          MOVEJ 0, 0, 0, 0, -1.5708, 0, 0.5 SV 100 ;ACC 100 
+EXPORT: (005)(086)/prog/prog_body/function/body/logical/vice-logical[1]/vice-logical_body/instruction[2]                          WAIT  1
+EXPORT: (006)(086)/prog/prog_body/function/body/logical/vice-logical[1]/vice-logical_body/instruction[3]                          MOVEL 400, -150, 425, 0, 0, 3.1416, 1000 CNT 0 ;ACC 100 
+EXPORT: (007)(037)/prog/prog_body/function/body/logical                                                                       BREAK 
+EXPORT: (008)(053)/prog/prog_body/function/body/logical/vice-logical[2]                                                       DEFAULT   
+EXPORT: (009)(083)/prog/prog_body/function/body/logical/vice-logical[2]/vice-logical_body/instruction                             WAIT  1
+EXPORT: (010)(037)/prog/prog_body/function/body/logical                                                                       BREAK 
+EXPORT: (011)(037)/prog/prog_body/function/body/logical                                                                   END SELECT 
+EXPORT: (012)(024)/prog/prog_body/function                                                                            END SUB 

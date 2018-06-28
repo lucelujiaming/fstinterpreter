@@ -1,0 +1,15 @@
+{
+    "application": {
+        "config": {
+            "tf": "1",
+            "tpMode": "3",
+            "uf": "2"
+        },
+        "velocity": "{\"maxAv\":5,\"max\":4,\"stepAv\":0.035,\"stepEnable\":false,\"step\":0.001,\"limit\":true,\"percent\":6.25}"
+    },
+    "system": {
+        "program": {
+            "stepFlag": "0"
+        }
+    }
+}

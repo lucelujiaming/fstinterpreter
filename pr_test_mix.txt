@@ -1,0 +1,9 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main (param0, param1)
+EXPORT: (002)(015)/prog/prog_body                                                                                         R[1] = 5  
+EXPORT: (003)(015)/prog/prog_body                                                                                         PR[1].JOINT = 35.9 46.7 76.4 18.5 152.4 145.3  
+EXPORT: (004)(015)/prog/prog_body                                                                                         PR[1].ID = 123  
+EXPORT: (005)(015)/prog/prog_body                                                                                         PR[1].TYPE = 123  
+EXPORT: (006)(015)/prog/prog_body                                                                                         PR[1].COMMENT =  "lujiaming test for comment"   
+EXPORT: (007)(015)/prog/prog_body                                                                                         PR[1].X  = 7 + R[1]   
+EXPORT: (008)(015)/prog/prog_body                                                                                         PR[1].PJ3  = 5 + R[1]   
+EXPORT: (009)(024)/prog/prog_body/function                                                                            END SUB 

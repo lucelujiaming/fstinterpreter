@@ -1,0 +1,35 @@
+{
+    "UI": [
+        {
+            "bypassValue": "OFF", 
+            "useBypass": "YES", 
+            "comment": "hold", 
+            "userPort": 2
+        },
+        {
+            "bypassValue": "OFF", 
+            "useBypass": "YES", 
+            "comment": "reset", 
+            "userPort": 3
+        }
+
+    ],
+    "UO": [
+        {
+            "actualValue": "unknown", 
+            "comment": "cmd_enabled",
+            "userPort": 1
+        },
+        {
+            "actualValue": "unknown",
+            "comment": "held", 
+            "userPort": 2
+        },
+        {
+            "actualValue": "unknown",
+            "comment": "prog_running", 
+            "userPort": 3
+        }
+    ]
+
+}

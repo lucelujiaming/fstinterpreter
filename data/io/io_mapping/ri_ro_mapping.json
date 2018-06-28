@@ -1,0 +1,90 @@
+{
+    "RI": [
+        {
+            "from": 1,
+            "index": 1,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "robot_arm1",
+            "to": 1
+        },
+        {
+            "from": 2,
+            "index": 2,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "robot_arm2",
+            "to": 2
+        },
+        {
+            "from": 3,
+            "index": 3,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "robot_arm3",
+            "to": 3
+        },
+        {
+            "from": 4,
+            "index": 4,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "robot_arm4",
+            "to": 4
+        },
+        {
+            "from": 5,
+            "index": 5,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "robot_arm5",
+            "to": 5
+        },
+        {
+            "from": 6,
+            "index": 6,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "robot_arm6",
+            "to": 6
+        }
+    ],
+    "RO": [
+        {
+            "from": 1,
+            "index": 1,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "robot_arm1",
+            "to": 1
+        },
+        {
+            "from": 2,
+            "index": 2,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "robot_arm2",
+            "to": 2
+        },
+        {
+            "from": 3,
+            "index": 3,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "robot_arm3",
+            "to": 3
+        },
+        {
+            "from": 4,
+            "index": 4,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "robot_arm4",
+            "to": 4
+        },
+        {
+            "from": 5,
+            "index": 5,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "robot_arm5",
+            "to": 5
+        },
+        {
+            "from": 6,
+            "index": 6,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "note": "robot_arm6",
+            "to": 6
+        }
+    ]
+}

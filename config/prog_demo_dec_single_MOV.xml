@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prog>
+    <head>
+        <include>prog_1</include>
+    </head>
+    <prog_body name="test">
+        <function name="main">
+          <parameter type="num">param0</parameter>
+          <parameter type="string">param1</parameter>
+          <body>
+                    <instruction type="move_joint">
+                        <argument name="pose" type="pose">
+                            <element name="j1" type="num">0</element>
+                            <element name="j2" type="num">0</element>
+                            <element name="j3" type="num">0</element>
+                            <element name="j4" type="num">0</element>
+                            <element name="j5" type="num">-1.5708</element>
+                            <element name="j6" type="num">0</element>
+                        </argument>
+                        <argument name="velocity" type="num" unit="%">50</argument>
+                        <argument name="fine" type="num">0</argument>
+                        <argument name="acceleration" type="num" unit="%">40</argument>
+                    </instruction>
+                    <instruction type="move_line">
+                        <argument name="pose" type="pose">
+                            <element type="num">400</element>
+                            <element type="num">100</element>
+                            <element type="num">500</element>
+                            <element type="num">0</element>
+                            <element type="num">0</element>
+                            <element type="num">3.1416</element>
+                        </argument>
+                        <argument name="velocity" type="num" unit="mm/s">500</argument>
+                        <argument name="fine" type="num">0</argument>
+                        <argument name="acceleration" type="num" unit="%">40</argument>
+                    </instruction>
+           </body>
+        </function>
+    </prog_body>
+</prog>

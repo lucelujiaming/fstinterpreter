@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prog>
     <head>
-        <include>prog_1</include>
+        <include>prog_luce</include>
     </head>
     <prog_body name="test">
         <function name="main">
@@ -10,20 +10,23 @@
           <body>
             <assignment>
                 <lvalue type="num">
-                    <element type="num">PR[1].POSE</element>
+                    <element type="num">DI[2]</element>
                 </lvalue>
                 <rvalue>
-                    <element name="x" type="num">5.9</element>
-                    <element name="y" type="num">6.7</element>
-                    <element name="z" type="num">7.4</element>
-                    <element name="a" type="num">8.5</element>
-                    <element name="b" type="num">12.4</element>
-                    <element name="c" type="num">15.3</element>
+                    <element name="x" type="num">1</element>
                 </rvalue>
             </assignment>
             <assignment>
                 <lvalue type="num">
-                    <element type="num">PR[1]</element>
+                    <element type="num">DI[3]</element>
+                </lvalue>
+                <rvalue>
+                    <element name="x" type="num">DI[2]</element>
+                </rvalue>
+            </assignment>
+            <assignment>
+                <lvalue type="num">
+                    <element type="num">PR[1].JOINT</element>
                 </lvalue>
                 <rvalue>
                     <element name="x" type="num">35.9</element>
@@ -36,7 +39,31 @@
             </assignment>
             <assignment>
                 <lvalue type="num">
-                    <element type="num">R[1].JOINT</element>
+                    <element type="num">PR[1].ID</element>
+                </lvalue>
+                <rvalue>
+                    <element name="x" type="num">123</element>
+                </rvalue>
+            </assignment>
+            <assignment>
+                <lvalue type="num">
+                    <element type="num">PR[1].TYPE</element>
+                </lvalue>
+                <rvalue>
+                    <element name="x" type="num">123</element>
+                </rvalue>
+            </assignment>
+            <assignment>
+                <lvalue type="num">
+                    <element type="num">PR[1].COMMENT</element>
+                </lvalue>
+                <rvalue>
+                    <element name="x" type="string">lujiaming test for comment</element>
+                </rvalue>
+            </assignment>
+            <assignment>
+                <lvalue type="num">
+                    <element type="num">R[1]</element>
                 </lvalue>
                 <rvalue>
                     <element type="num">5</element>
@@ -68,7 +95,7 @@
                 </determine>
                 <logical_body>
                     <instruction type="move_line">
-                        <argument name="pose" type="pose">
+                        <argument name="pose" type="num">
                             <element type="num">1.1</element>
                             <element type="num">2.2</element>
                             <element type="num">3.3</element>
@@ -76,7 +103,7 @@
                             <element type="num">5.5</element>
                             <element type="num">6.6</element>
                         </argument>
-                        <argument name="velocity" type="num" unit="mm/s">100</argument>
+                        <argument name="velocity" type="num" unit="mm/s">0.0</argument>
                         <argument name="smooth_velocity" type="num" unit="%">50</argument>
                         <argument name="acceleration" type="num" unit="%">40</argument>
                     </instruction>
@@ -102,9 +129,17 @@
                     </vice_logical_body>
                 </vice_logical>
             </logical>
+            <assignment>
+                <lvalue type="num">
+                    <element type="num">RRRRR</element>
+                </lvalue>
+                <rvalue>
+                    <element type="num">5</element>
+                </rvalue>
+            </assignment>
             <logical type="while">
                 <determine>
-                    <element type="num">R[1]</element>
+                    <element type="num">RRRRR</element>
                     <element type="operation">+</element>
                     <element name="sin" type="function">
                         <element type="num">2</element>
@@ -114,7 +149,7 @@
                 </determine>
                 <logical_body>
                     <instruction type="move_line">
-                        <argument name="pose" type="pose">
+                        <argument name="pose" type="num">
                             <element type="num">1.1</element>
                             <element type="num">2.2</element>
                             <element type="num">3.3</element>
@@ -122,14 +157,14 @@
                             <element type="num">5.5</element>
                             <element type="num">6.6</element>
                         </argument>
-                        <argument name="velocity" type="num" unit="mm/s">100</argument>
+                        <argument name="velocity" type="num" unit="mm/s">0.0</argument>
                         <argument name="smooth_velocity" type="num" unit="%">50</argument>
                         <argument name="acceleration" type="num" unit="%">40</argument>
                     </instruction>
 
                     <logical type="if">
                         <determine>
-                            <element type="num">8</element>
+                            <element type="num">R[1]</element>
                             <element type="operation">+</element>
                             <element name="sin" type="function">
                                 <element type="num">2</element>
@@ -139,7 +174,7 @@
                         </determine>
                         <logical_body>
                             <instruction type="move_line">
-                                <argument name="pose" type="pose">
+                                <argument name="pose" type="num">
                                     <element type="num">1.1</element>
                                     <element type="num">2.2</element>
                                     <element type="num">3.3</element>
@@ -147,7 +182,7 @@
                                     <element type="num">5.5</element>
                                     <element type="num">6.6</element>
                                 </argument>
-                                <argument name="velocity" type="num" unit="mm/s">100</argument>
+                                <argument name="velocity" type="num" unit="mm/s">0.0</argument>
                                 <argument name="smooth_velocity" type="num" unit="%">50</argument>
                                 <argument name="acceleration" type="num" unit="%">40</argument>
                             </instruction>
@@ -156,7 +191,7 @@
                      </logical>
                     <logical type="if">
                         <determine>
-                            <element type="num">5</element>
+                            <element type="num">RRRRR</element>
                             <element type="operation">+</element>
                             <element name="sin" type="function">
                                 <element type="num">2</element>
@@ -166,7 +201,7 @@
                         </determine>
                         <logical_body>
                             <instruction type="move_line">
-                                <argument name="pose" type="pose">
+                                <argument name="pose" type="num">
                                     <element type="num">1.1</element>
                                     <element type="num">2.2</element>
                                     <element type="num">3.3</element>
@@ -174,7 +209,7 @@
                                     <element type="num">5.5</element>
                                     <element type="num">6.6</element>
                                 </argument>
-                                <argument name="velocity" type="num" unit="mm/s">100</argument>
+                                <argument name="velocity" type="num" unit="mm/s">0.0</argument>
                                 <argument name="smooth_velocity" type="num" unit="%">50</argument>
                                 <argument name="acceleration" type="num" unit="%">40</argument>
                             </instruction>
@@ -182,17 +217,17 @@
                         </logical_body>
                      </logical>
                     <instruction type="print">
-                        <argument name="prompt" type="string">R[1] = </argument>
-                        <argument name="register" type="register">R[1]</argument>
+                        <argument name="prompt" type="string">RRRRR = </argument>
+                        <argument name="register" type="register">RRRRR</argument>
                      </instruction>
                     <assignment>
                         <lvalue type="num">
-                            <element type="num">R[1]</element>
+                            <element type="num">RRRRR</element>
                         </lvalue>
                         <rvalue>
-                            <element type="num">R[1]</element>
+                            <element type="num">RRRRR</element>
                             <element type="operation">+</element>
-                            <element type="num">5</element>
+                            <element type="num">1</element>
                         </rvalue>
                     </assignment>
 
@@ -222,7 +257,7 @@
                     </determine>
                     <vice-logical_body>
                         <instruction type="move_line">
-                            <argument name="pose" type="pose">
+                            <argument name="pose" type="num">
                                 <element type="num">1.1</element>
                                 <element type="num">2.2</element>
                                 <element type="num">3.3</element>
@@ -230,7 +265,7 @@
                                 <element type="num">5.5</element>
                                 <element type="num">6.6</element>
                             </argument>
-                            <argument name="velocity" type="num" unit="mm/s">100</argument>
+                            <argument name="velocity" type="num" unit="mm/s">0.0</argument>
                             <argument name="smooth_velocity" type="num" unit="%">50</argument>
                             <argument name="acceleration" type="num" unit="%">40</argument>
                         </instruction>
@@ -242,7 +277,7 @@
                     </determine>
                     <vice-logical_body>
                         <instruction type="move_line">
-                            <argument name="pose" type="pose">
+                            <argument name="pose" type="num">
                                 <element type="num">1.1</element>
                                 <element type="num">2.2</element>
                                 <element type="num">3.3</element>
@@ -250,7 +285,7 @@
                                 <element type="num">5.5</element>
                                 <element type="num">6.6</element>
                             </argument>
-                            <argument name="velocity" type="num" unit="mm/s">100</argument>
+                            <argument name="velocity" type="num" unit="mm/s">0.0</argument>
                             <argument name="smooth_velocity" type="num" unit="%">50</argument>
                             <argument name="acceleration" type="num" unit="%">40</argument>
                         </instruction>

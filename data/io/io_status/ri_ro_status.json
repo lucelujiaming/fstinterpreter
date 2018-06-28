@@ -1,0 +1,66 @@
+{
+    "RI": [
+        {
+            "comment": "robot_arm1",
+            "simUsed": "NO",
+            "simValue": "OFF",
+            "userPort": 1
+        },
+        {
+            "comment": "robot_arm2",
+            "simUsed": "NO",
+            "simValue": "OFF",
+            "userPort": 2
+        },
+        {
+            "comment": "robot_arm3",
+            "simUsed": "NO",
+            "simValue": "OFF",
+            "userPort": 3
+        },
+        {
+            "comment": "robot_arm4",
+            "simUsed": "NO",
+            "simValue": "OFF",
+            "userPort": 4
+        },
+        {
+            "comment": "robot_arm5",
+            "simUsed": "NO",
+            "simValue": "OFF",
+            "userPort": 5
+        }
+    ],
+    "RO": [
+        {
+            "forceUsed": "NO",
+            "comment": "robot_arm7",
+            "forceValue": "OFF",
+            "userPort": 1
+        },
+        {
+            "forceUsed": "NO",
+            "comment": "robot_arm8",
+            "forceValue": "OFF",
+            "userPort": 2
+        },
+        {
+            "forceUsed": "NO",
+            "comment": "robot_arm9",
+            "forceValue": "OFF",
+            "userPort": 3
+        },
+        {
+            "forceUsed": "NO",
+            "comment": "robot_arm10",
+            "forceValue": "OFF",
+            "userPort": 4
+        },
+        {
+            "forceUsed": "NO",
+            "comment": "robot_arm11",
+            "forceValue": "OFF",
+            "userPort": 5
+        }
+    ]
+}

@@ -1,0 +1,8 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main (param0, param1)
+EXPORT: (002)(015)/prog/prog_body                                                                                         uf_no = 5  
+EXPORT: (003)(037)/prog/prog_body/function/body/logical                                                                   WHILE R[1] >= 30 
+EXPORT: (004)(065)/prog/prog_body/function/body/logical/logical_body/instruction[1]                                           MOVEJ 0, 0, 0, 0, -1.5708, 0, 0.5 CNT -1 ;ACC 100 
+EXPORT: (005)(065)/prog/prog_body/function/body/logical/logical_body/instruction[2]                                           MOVEL 400, -150, 425, 0, 0, 3.1416, 1000 CNT 0 ;ACC 100 
+EXPORT: (006)(037)/prog/prog_body/function/body/logical                                                                       R[1] = R[1] - 1  
+EXPORT: (007)(037)/prog/prog_body/function/body/logical                                                                   WEND 
+EXPORT: (008)(024)/prog/prog_body/function                                                                            END SUB 

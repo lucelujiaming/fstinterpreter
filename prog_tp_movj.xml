@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<prog>
+    <head>
+    </head>
+    <prog_body name="test">
+        <function name="main">
+            <body>
+                <instruction type="move_joint">
+                    <argument name="pose" type="num">
+                        <element type="num">0</element>
+                        <element type="num">0</element>
+                        <element type="num">0</element>
+                        <element type="num">0</element>
+                        <element type="num">-1.5708</element>
+                        <element type="num">0</element>
+                    </argument>
+                    <argument name="velocity" type="num" unit="mm/s">1</argument>
+                    <argument name="smooth_velocity" type="num" unit="%">0</argument>
+                    <argument name="acceleration" type="num" unit="%">1</argument>
+                </instruction>
+                <instruction type="move_joint">
+                    <argument name="pose" type="num">
+                        <element type="num">0</element>
+                        <element type="num">0</element>
+                        <element type="num">0</element>
+                        <element type="num">0</element>
+                        <element type="num">0</element>
+                        <element type="num">0</element>
+                    </argument>
+                    <argument name="velocity" type="num" unit="mm/s">1</argument>
+                    <argument name="smooth_velocity" type="num" unit="%">0</argument>
+                    <argument name="acceleration" type="num" unit="%">1</argument>
+                </instruction>
+            </body>
+        </function>
+    </prog_body>
+</prog>

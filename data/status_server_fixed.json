@@ -1,0 +1,38 @@
+{
+    "active_alarm_service": {
+        "ip": "0.0.0.0",
+        "port": 5589
+    },
+    "broadcast_node": {
+        "ip": "0.0.0.0",
+        "port": 5588
+    },
+    "controller_node": {
+        "ip": "0.0.0.0",
+        "port": 5582
+    },
+    "message_hub": {
+        "ip": "0.0.0.0",
+        "port": 5566
+    },
+    "pure_web_server_service": {
+        "ip": "0.0.0.0",
+        "port": 5599
+    },
+    "tp_dev_server": {
+        "ip": "0.0.0.0",
+        "port": 9001
+    },
+    "tp_hardware_web_service": {
+        "ip": "0.0.0.0",
+        "port": 7002
+    },
+    "tp_routine_node": {
+        "ip": "0.0.0.0",
+        "port": 7001
+    },
+    "tp_web_node": {
+        "ip": "0.0.0.0",
+        "port": 5581
+    }
+}

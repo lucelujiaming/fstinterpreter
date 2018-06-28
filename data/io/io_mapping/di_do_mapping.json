@@ -1,0 +1,30 @@
+{
+    "DI": [
+        {
+            "from": 2,
+            "index": 20,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "to": 2
+        },
+        {
+            "from": 3,
+            "index": 20,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/10",
+            "to": 3
+        },
+        {
+            "from": 4,
+            "index": 20,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "to": 4
+        }
+    ],
+    "DO": [
+        {
+            "from": 2,
+            "index": 10,
+            "module": "RS485/DIGITAL_IN_OUT_DEVICE/0",
+            "to": 3
+        }
+    ]
+}

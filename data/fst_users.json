@@ -1,0 +1,10 @@
+{
+    "fst_user": [
+        {
+            "name": "fst",
+            "note": "拥有厂商权限",
+            "password": "123456",
+            "role": "factory"
+        }
+    ]
+}

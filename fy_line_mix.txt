@@ -1,0 +1,4 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(044)/prog/prog_body/function/body/instruction[1]                                                            MOVEJ P[0], P[0], P[0], P[0], P[-1.5708], P[0], 0.5 SV 100 ;ACC 100 
+EXPORT: (003)(044)/prog/prog_body/function/body/instruction[2]                                                            MOVEL P[400], P[-150], P[425], P[0], P[0], P[3.1416], 50 CNT 0 ;ACC 100 
+EXPORT: (004)(024)/prog/prog_body/function                                                                            END SUB 
