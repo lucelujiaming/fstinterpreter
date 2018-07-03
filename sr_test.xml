@@ -19,6 +19,39 @@
 				    <element type="num">R[3]</element>
 				</lvalue>
 				<rvalue>
+                    <element name="lower" type="function">
+				        <element type="string">This program demostrates all commands.</element>
+                    </element>
+				</rvalue>
+			</assignment>
+			
+            <assignment>
+				<lvalue type="num">
+				    <element type="num">R[3]</element>
+				</lvalue>
+				<rvalue>
+                    <element name="upper" type="function">
+				        <element type="string">This program demostrates all commands.</element>
+                    </element>
+				</rvalue>
+			</assignment>
+			
+            <assignment>
+				<lvalue type="num">
+				    <element type="num">R[3]</element>
+				</lvalue>
+				<rvalue>
+                    <element name="revert" type="function">
+				        <element type="string">This program demostrates all commands.</element>
+                    </element>
+				</rvalue>
+			</assignment>
+			
+            <assignment>
+				<lvalue type="num">
+				    <element type="num">R[3]</element>
+				</lvalue>
+				<rvalue>
                     <element name="findstr" type="function">
 				        <element type="string">This program demostrates all commands.</element>
 				        <element type="string">demostrates</element>

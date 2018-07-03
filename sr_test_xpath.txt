@@ -4,4 +4,7 @@
 004:sr_test:/prog/prog_body
 005:sr_test:/prog/prog_body
 006:sr_test:/prog/prog_body
-007:sr_test:/prog/prog_body/function
+007:sr_test:/prog/prog_body
+008:sr_test:/prog/prog_body
+009:sr_test:/prog/prog_body
+010:sr_test:/prog/prog_body/function

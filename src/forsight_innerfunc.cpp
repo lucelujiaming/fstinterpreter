@@ -6,6 +6,7 @@
 #include "ctype.h"
 #include "stdlib.h" 
 #include "forsight_innerfunc.h"
+#include <algorithm> 
 
 //        A Èý½Çº¯Êý
 //    01. double sin (double);
@@ -60,11 +61,26 @@ bool call_ldexp(eval_value *result, char * valFirst, char * valSecond, char * va
 bool call_modf (eval_value *result, char * valFirst, char * valSecond, char * valThird);
 bool call_fmod (eval_value *result, char * valFirst, char * valSecond, char * valThird);
 
+//        I ×Ö·û´®²Ù×÷º¯Êý
+//    23. strlen  (char *);
+//    24. findstr (char *, char *);
+//    25. substr  (char *, char *, char *);
 bool call_strlen     (eval_value *result, char * valFirst, char * valSecond, char * valThird);
 bool call_findstr    (eval_value *result, char * valFirst, char * valSecond, char * valThird);
 bool call_substr     (eval_value *result, char * valFirst, char * valSecond, char * valThird);
+//    26. replace    (char *, char *, char *); // 12212, 12, 21 ->  21212 
+//    27. replaceall (char *, char *, char *); // 12212, 12, 21 ->  21221 
 bool call_replace    (eval_value *result, char * valFirst, char * valSecond, char * valThird);
 bool call_replaceall (eval_value *result, char * valFirst, char * valSecond, char * valThird);
+//    28. replacealliteration (char *, char *, char *);  // 12212, 12, 21 ->  22211
+bool call_replaceall_iteration
+					 (eval_value *result, char * valFirst, char * valSecond, char * valThird);
+//    28. lower  (char *);  
+//    28. upper  (char *);  
+//    28. revert (char *);  
+bool call_lower      (eval_value *result, char * valFirst, char * valSecond, char * valThird);
+bool call_upper      (eval_value *result, char * valFirst, char * valSecond, char * valThird);
+bool call_revert     (eval_value *result, char * valFirst, char * valSecond, char * valThird);
 
 // This structure links a library function name   
 // with a pointer to that function.   
@@ -101,6 +117,11 @@ struct intern_func_type {
 	(char *)"substr",     3, call_substr ,
 	(char *)"replace",    3, call_replace ,
 	(char *)"replaceall", 3, call_replaceall ,
+	(char *)"replacealliteration", 
+	                      3, call_replaceall_iteration ,
+	(char *)"lower",      1, call_lower ,
+	(char *)"upper",      1, call_upper ,
+	(char *)"revert",     1, call_revert ,
     (char *)"",           0, 0 , 
 };
 
@@ -326,29 +347,118 @@ bool call_substr (eval_value *result, char * valFirst, char * valSecond, char * 
 	}
 }
 
+// replace helper starts
+string& replace(string& str, const string& old_value, const string& new_value)   
+{    
+    string::size_type pos(0);   
+    if((pos=str.find(old_value))!=string::npos)   
+    {
+		str.replace(pos,old_value.length(),new_value);
+	}
+    return   str;   
+}
+
+string& replace_all_no_distinct(string& str, const string& old_value, const string& new_value)   
+{   
+    while(true){   
+        string::size_type pos(0);   
+        if((pos=str.find(old_value))!=string::npos)   
+            str.replace(pos,old_value.length(),new_value);   
+        else   
+			break;   
+    }   
+    return   str;   
+}
+
+string& replace_all_distinct(string& str,const string& old_value,const string& new_value)   
+{   
+    for(string::size_type pos(0); pos!=string::npos; pos+=new_value.length()){   
+        if((pos=str.find(old_value,pos))!=string::npos)   
+            str.replace(pos,old_value.length(),new_value);   
+        else
+			break;   
+    }   
+    return str;   
+}  
+// replace helper ends
+
 bool call_replace (eval_value *result, char * valFirst, char * valSecond, char * valThird)
 {
-    char * strRet = strstr(valFirst, valSecond);
-	if(strRet == NULL)
+	string strVal = string(valFirst);
+	string strTwo = string(valSecond);  // (int)atof(valSecond);
+	string strThr = string(valThird);  // (int)atof(valThird);
+
+    string strRet = replace(strVal, strTwo, strThr);
+	if(strRet == strVal)
 	{
+		result->setStringValue(strRet);
 		return false ;
 	}
 	else 
 	{
+		result->setStringValue(strRet);
 		return true ;
 	}
 }
 
 bool call_replaceall (eval_value *result, char * valFirst, char * valSecond, char * valThird)
 {
-    char * strRet = strstr(valFirst, valSecond);
-	if(strRet == NULL)
+	string strVal = string(valFirst);
+	string strTwo = string(valSecond);  // (int)atof(valSecond);
+	string strThr = string(valThird);  // (int)atof(valThird);
+	
+    string strRet = replace_all_distinct(strVal, strTwo, strThr);
+	if(strRet == strVal)
 	{
+		result->setStringValue(strRet);
 		return false ;
 	}
 	else 
 	{
+		result->setStringValue(strRet);
 		return true ;
 	}
+}
+
+bool call_replaceall_iteration (eval_value *result, char * valFirst, char * valSecond, char * valThird)
+{
+	string strVal = string(valFirst);
+	string strTwo = string(valSecond);  // (int)atof(valSecond);
+	string strThr = string(valThird);  // (int)atof(valThird);
+	
+    string strRet = replace_all_no_distinct(strVal, strTwo, strThr);
+	if(strRet == strVal)
+	{
+		result->setStringValue(strRet);
+		return false ;
+	}
+	else 
+	{
+		result->setStringValue(strRet);
+		return true ;
+	}
+}
+
+bool call_lower(eval_value *result, char * valFirst, char * valSecond, char * valThird)
+{
+	string strRet = string(valFirst);
+    transform(strRet.begin(), strRet.end(), strRet.begin(), ::tolower);  
+	result->setStringValue(strRet);
+	return true ;
+}
+
+bool call_upper      (eval_value *result, char * valFirst, char * valSecond, char * valThird)
+{
+	string strRet = string(valFirst);
+    transform(strRet.begin(), strRet.end(), strRet.begin(), ::toupper);  
+	result->setStringValue(strRet);
+	return true ;
+}
+bool call_revert     (eval_value *result, char * valFirst, char * valSecond, char * valThird)
+{
+	string strRet = string(valFirst);
+	reverse(strRet.begin(),strRet.end());
+	result->setStringValue(strRet);
+	return true ;
 }
 
