@@ -362,7 +362,8 @@ int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char *
 		}
 		else if(xmlStrcasecmp(name, BAD_CAST"string")==0){ 
 			value = xmlNodeGetContent(nodeValueElement);
-			printBASCode(objLineInfo, " \"%s\" ", (char*)value);
+			// printBASCode(objLineInfo, " \"%s\" ", (char*)value);
+			sprintf(label_str, "%s\"%s\"", label_str, (char*)value);
 		}
 		else if(xmlStrcasecmp(name, BAD_CAST"command")==0){ 
 			value = xmlNodeGetContent(nodeValueElement);

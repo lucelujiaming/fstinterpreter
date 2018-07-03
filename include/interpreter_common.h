@@ -1,5 +1,5 @@
-#ifndef INTERPRETER_COMMON_H_
-#define INTERPRETER_COMMON_H_
+#ifndef PRG_INTERPRETER_COMMON_H_
+#define PRG_INTERPRETER_COMMON_H_
 
 #include "fst_datatype.h"
 #include "stdint.h"
@@ -118,7 +118,7 @@ typedef enum _DIOType
     DO = 2,
 }DIOType;
 
-typedef enum _RegType
+typedef enum _RegOperateType
 {
     POSE_REG           = 101,
     POSE_REG_POSE      = 102,
@@ -159,7 +159,7 @@ typedef enum _RegType
     PL_REG_ID          = 705,
     PL_REG_COMMENT     = 706,
 	// 26 + 6 = 32
-}RegType;
+}RegOperateType;
 
 #define REG_TYPE_NUM    32
 
@@ -192,13 +192,13 @@ typedef struct _IOPathInfo
 
 typedef struct _Reg
 {
-    RegType type;
+    RegOperateType type;
     int     index;
 }Reg;
 
 typedef struct _RegMap
 {
-    RegType type;
+    RegOperateType type;
     int     index;
     char    value[1024];
 }RegMap;

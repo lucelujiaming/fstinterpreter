@@ -5,19 +5,32 @@
  * @version 1.0.0
  * @date 2017-06-12
  */
+	 
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <netinet/in.h>
+#include <net/if.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+#include "ip_address.h"
 
 #include "io_interface.h"
 #include "common.h"
 #include "error_code.h"
+#ifndef WIN32
+#include "common/error_code.h"
+#endif
 #include "error_monitor.h"
 #include <boost/algorithm/string.hpp>
+#include "forsight_inter_control.h"
 
 IOInterface::IOInterface()
 {
     U64 result = initial();
     if (result != TPI_SUCCESS)
     {
-        // rcs::Error::instance()->add(result);
+        setWarning(result);
     }
 }
 
@@ -36,11 +49,51 @@ IOInterface* IOInterface::instance()
     return &io_interface;
 }
 
+/**
+ * @brief : get local ip address
+ *
+ * @return : the ip address in the form of string
+ */
+std::string getLocalIP()
+{
+	int fd;
+    struct ifreq ifr;
+
+    char iface[] = "eth0";
+     
+    fd = socket(AF_INET, SOCK_DGRAM, 0);
+ 
+    //Type of address to retrieve - IPv4 IP address
+    ifr.ifr_addr.sa_family = AF_INET;
+ 
+    //Copy the interface name in the ifreq structure
+    strncpy(ifr.ifr_name , iface , IFNAMSIZ-1);
+ 
+    ioctl(fd, SIOCGIFADDR, &ifr);
+ 
+    close(fd);
+ 
+    //display result
+    //printf("%s - %s\n" , iface , inet_ntoa(( (struct sockaddr_in *)&ifr.ifr_addr )->sin_addr) );
+	std::string ret = inet_ntoa(( (struct sockaddr_in *)&ifr.ifr_addr )->sin_addr);
+	return ret;
+}
+
 U64 IOInterface::initial()
 {
     U64 result = 0;
     io_manager_ = new fst_io_manager::IOManager;
-    result = io_manager_->init(1);
+    std::string str_addr = getLocalIP();
+	if(str_addr.substr(0,3) == "192")
+	{
+    	FST_INFO("Use Fake io_manager_");
+        result = io_manager_->init(1);
+	}
+    else
+	{
+    	FST_INFO("Use True io_manager_");
+	    result = io_manager_->init(0);
+	}
     if (result != TPI_SUCCESS)
     {
         FST_ERROR("io_manager_ init failed:%llx", result);
@@ -55,7 +108,7 @@ U64 IOInterface::initial()
     for (int i = 0; i < io_num_; i++)
     {
         result = io_manager_->getDeviceInfo(i, dev_info_[i]);
-        FST_INFO("IOInterface::initial input:%d,output:%d", dev_info_[i].input, dev_info_[i].output);
+        //FST_INFO("input:%d,output:%d", dev_info_[i].input, dev_info_[i].output);
         if (result != TPI_SUCCESS)
             return result;
     }
@@ -82,6 +135,7 @@ void IOInterface::getIODevices(motion_spec_DeviceList &dev_list)
     }
 }
 
+/*
 bool IOInterface::encDevList(BaseTypes_ParameterMsg *param_msg, pb_ostream_t *stream, const pb_field_t *field)
 {
     param_msg->has_info = true;
@@ -106,7 +160,7 @@ bool IOInterface::encDevList(BaseTypes_ParameterMsg *param_msg, pb_ostream_t *st
 
     return true;
 }
-
+*/
 
 U64 IOInterface::setDO(const char *path, char value)
 {
@@ -238,16 +292,15 @@ U64 IOInterface::getDIO(IOPortInfo *io_info, uint8_t *buffer, int buf_len)
     if (io_info->port_index == 0)
     {
         int io_len;
+        printf("io_info->port_index == 0 with %d.\n", io_info->dev_id);
         return io_manager_->getModuleValues(io_info->dev_id, buf_len, buffer, io_len);
     }
     else
     {
-        U64 iRet = 0 ;
-        iRet = io_manager_->getModuleValue(io_info->dev_id, io_info->port_type, io_info->port_index, buffer[0]);
-        printf("IOInterface::getDIO (%d) at %d with %d\n", 
-			buffer[0], io_info->port_index, io_info->bytes_len);
-		return iRet ;
-    }
+		printf("IOInterface::getDIO (%d) at %d with %d\n", 
+			 buffer[0], io_info->port_index, io_info->bytes_len);
+        return io_manager_->getModuleValue(io_info->dev_id, io_info->port_type, io_info->port_index, buffer[0]);
+     }
 
 }
 
@@ -257,8 +310,12 @@ U64 IOInterface::checkIO(const char *path, IOPortInfo* io_info)
     boost::split(vc_path, path, boost::is_any_of("/"));
     
     int size = vc_path.size();
+    printf("\t Io_interface::getIODevNum: %d\n", getIODevNum());
     for (int i = 0; i < getIODevNum(); i++)
     {
+    		printf("\t device_number: %s\n", dev_info_[i].path.c_str());
+    		printf("\t id: %d\n", dev_info_[i].id);
+    		printf("\t device_number: %d\n", dev_info_[i].device_number);
         if ((vc_path[2] == dev_info_[i].communication_type) 
         && (stoi(vc_path[3]) == dev_info_[i].device_number))
         {
@@ -322,12 +379,13 @@ int IOInterface::getIODevIndex(int dev_address)
 }
 
 
-void IOInterface::updateIOError()
+U64 IOInterface::updateIOError()
 {
     static U64 result = io_manager_->getIOError();
     if (result != TPI_SUCCESS)
     {
-        // rcs::Error::instance()->add(result);
+        setWarning(result);
     }
+	return result ;
 }
 

@@ -2,6 +2,7 @@
 #define FORSIGHT_EVAL_TYPE_H
 #include <stdlib.h>
 #include "fst_datatype.h" 
+using namespace fst_controller;
 
 #ifdef WIN32
 #include "tp_reg_manager_interface.h"
@@ -264,6 +265,8 @@ public:
 	void setSrRegDataValue(SrRegData * srRegDataVal){
 		evalType  |= TYPE_SR ;
 		reg_sr     = * srRegDataVal ;
+		evalType  |= TYPE_STRING ;
+		strContent = srRegDataVal->value ;
 	}
 	
 	SrRegData getSrRegDataValue(){

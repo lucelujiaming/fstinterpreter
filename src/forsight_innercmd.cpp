@@ -13,7 +13,7 @@
 #include "forsight_innercmd.h"
 
 #ifndef WIN32
-#include "common/error_code.h"
+#include "error_code.h"
 #endif
 
 

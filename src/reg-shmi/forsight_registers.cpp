@@ -9,11 +9,7 @@
 #include "forsight_innercmd.h"
 #include "reg-shmi/forsight_op_regs_shmi.h"
 #include "reg-shmi/forsight_registers.h"
-#ifdef WIN32
 #include "interpreter_common.h"
-#else
-#include "common/interpreter_common.h"
-#endif
 
 // Register name
 #define TXT_PR    "pr"
@@ -460,10 +456,10 @@ int forgesight_set_register(struct thread_control_block* objThreadCntrolBlock,
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
-			get_token(objThreadCntrolBlock);
+			// get_token(objThreadCntrolBlock);
 			printf("Set COMMENT:(%s) to PR[%s]\n", 
 				objThreadCntrolBlock->token, reg_idx);
-			setCommentPr(objThreadCntrolBlock->token, iRegIdx);
+			setCommentPr((char *)valueStart->getStringValue().c_str(), iRegIdx);
 		}
 	}
 	else if(!strcmp(reg_name, TXT_SR))
@@ -487,10 +483,10 @@ int forgesight_set_register(struct thread_control_block* objThreadCntrolBlock,
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
-			get_token(objThreadCntrolBlock);
+			// get_token(objThreadCntrolBlock);
 			printf("Set COMMENT:(%s) to SR[%s]\n", 
 				objThreadCntrolBlock->token, reg_idx);
-			setCommentSr(valueStart, iRegIdx);
+			setCommentSr((char *)valueStart->getStringValue().c_str(), iRegIdx);
 		}
 	}
 	else if(!strcmp(reg_name, TXT_R))
@@ -513,10 +509,10 @@ int forgesight_set_register(struct thread_control_block* objThreadCntrolBlock,
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
-			get_token(objThreadCntrolBlock);
+			// get_token(objThreadCntrolBlock);
 			printf("Set COMMENT:(%s) to SR[%s]\n", 
 				objThreadCntrolBlock->token, reg_idx);
-			setCommentR(valueStart, iRegIdx);
+			setCommentR((char *)valueStart->getStringValue().c_str(), iRegIdx);
 		}
 	}
 	else if(!strcmp(reg_name, TXT_MR))
@@ -539,10 +535,10 @@ int forgesight_set_register(struct thread_control_block* objThreadCntrolBlock,
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
-			get_token(objThreadCntrolBlock);
+			// get_token(objThreadCntrolBlock);
 			printf("Set COMMENT:(%s) to MR[%s]\n", 
 				objThreadCntrolBlock->token, reg_idx);
-			setCommentMr(valueStart, iRegIdx);
+			setCommentMr((char *)valueStart->getStringValue().c_str(), iRegIdx);
 		}
 	}
 	else if(!strcmp(reg_name, TXT_UF))
@@ -596,10 +592,10 @@ int forgesight_set_register(struct thread_control_block* objThreadCntrolBlock,
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
-			get_token(objThreadCntrolBlock);
+			// get_token(objThreadCntrolBlock);
 			printf("Set COMMENT:(%s) to MR[%s]\n", 
 				objThreadCntrolBlock->token, reg_idx);
-			setCommentUf(valueStart, iRegIdx);
+			setCommentUf((char *)valueStart->getStringValue().c_str(), iRegIdx);
 		}
 	}
 	else if(!strcmp(reg_name, TXT_TF))
@@ -653,10 +649,10 @@ int forgesight_set_register(struct thread_control_block* objThreadCntrolBlock,
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
-			get_token(objThreadCntrolBlock);
+			// get_token(objThreadCntrolBlock);
 			printf("Set COMMENT:(%s) to MR[%s]\n", 
 				objThreadCntrolBlock->token, reg_idx);
-			setCommentTf(valueStart, iRegIdx);
+			setCommentTf((char *)valueStart->getStringValue().c_str(), iRegIdx);
 		}
 	}
 	else if(!strcmp(reg_name, TXT_PL))
@@ -720,10 +716,10 @@ int forgesight_set_register(struct thread_control_block* objThreadCntrolBlock,
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
-			get_token(objThreadCntrolBlock);
+			// get_token(objThreadCntrolBlock);
 			printf("Set COMMENT:(%s) to MR[%s]\n", 
 				objThreadCntrolBlock->token, reg_idx);
-			setCommentPl(valueStart, iRegIdx);
+			setCommentPl((char *)valueStart->getStringValue().c_str(), iRegIdx);
 		}
 	}
 	return 0 ;

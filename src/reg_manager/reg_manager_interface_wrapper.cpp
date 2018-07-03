@@ -9,11 +9,10 @@
 #include "forsight_innercmd.h"
 #include "reg_manager/reg_manager_interface.h"
 #include "reg_manager/reg_manager_interface_wrapper.h"
-#ifdef WIN32
 #include "interpreter_common.h"
-#else
+#ifndef WIN32
 #include "motion_plan_frame_manager.h"
-#include "common/interpreter_common.h"
+using namespace fst_reg ;
 #endif
 
 

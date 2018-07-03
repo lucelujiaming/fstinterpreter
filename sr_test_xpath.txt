@@ -1,6 +1,7 @@
 001:sr_test:/prog/prog_body/function
 002:sr_test:/prog/prog_body
 003:sr_test:/prog/prog_body
-004:sr_test:/prog/prog_body/function/body/instruction
+004:sr_test:/prog/prog_body
 005:sr_test:/prog/prog_body
-006:sr_test:/prog/prog_body/function
+006:sr_test:/prog/prog_body
+007:sr_test:/prog/prog_body/function

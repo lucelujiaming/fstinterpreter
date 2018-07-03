@@ -19,16 +19,17 @@
 #include <map>
 #include <stack>
 
+#include "interpreter_common.h"
+#include "forsight_eval_type.h"
+
 #ifdef WIN32
 #include <Windows.h>
 #include <process.h>
-#include "interpreter_common.h"
 #else
 #include <pthread.h>
-#include "common/interpreter_common.h"
 #include "motion_plan_arm_group.h"
 #endif
-#include "forsight_eval_type.h"
+
 
 using namespace std;
 
@@ -113,7 +114,7 @@ struct var_type {
 typedef struct prog_line_info_t {
     char*     start_prog_pos; // name
     char*     end_prog_pos; // name
-	InstType  type; ;
+	InstType  type;
 } prog_line_info ;
 
 typedef struct select_and_cycle_stack {

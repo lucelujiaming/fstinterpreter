@@ -9,10 +9,9 @@
 #include "forsight_xml_reader.h"
 #include "forsight_io_mapping.h"
 #include "forsight_io_controller.h"
-#include "forsight_misc_func.h"
 
 #ifndef WIN32
-#include "common/error_code.h"
+#include "error_code.h"
 #endif
 
 #ifdef USE_FORSIGHT_REGISTERS_MANAGER
@@ -2027,7 +2026,7 @@ void input(struct thread_control_block * objThreadCntrolBlock)
   assign_var(objThreadCntrolBlock, var, value); // i) ;
 }
 
-double call_inner_func(struct thread_control_block * objThreadCntrolBlock)
+bool call_inner_func(struct thread_control_block * objThreadCntrolBlock, eval_value *result)
 {
     eval_value value;
     int boolValue;
@@ -2041,36 +2040,63 @@ double call_inner_func(struct thread_control_block * objThreadCntrolBlock)
 	// Fit for circumstance without parameter
 	if((*(objThreadCntrolBlock->token) == '\r')
 		|| (*(objThreadCntrolBlock->token) == '\n'))
-		return 0.0;
+	{
+		result->setFloatValue(0.0);
+		return false;
+	}
     if(*(objThreadCntrolBlock->token) != '(')
     {
-    	serror(objThreadCntrolBlock, 2);
-		return 0.0;
+		serror(objThreadCntrolBlock, 2);
+		result->setFloatValue(0.0);
+		return false;
 	}
 
     // Process a comma-separated list of values.
     do {
         get_exp(objThreadCntrolBlock, &value, &boolValue);
-        sprintf(temp[count], "%f", value.getFloatValue()); // save temporarily
+		if( (value.getType() == (int)(TYPE_STRING | TYPE_SR))
+		  ||(value.getType() == (int)(TYPE_STRING)))
+		{
+			sprintf(temp[count], "%s", value.getStringValue().c_str()); // save temporarily
+		}
+		else if( (value.getType() == (int)(TYPE_JOINT | TYPE_PR))
+		       ||(value.getType() ==  (int)(TYPE_POSE | TYPE_PR)))
+		{
+			// sprintf(temp[count], "%f", value.getFloatValue()); // save temporarily
+		}
+		else // It is number in most times
+		{
+			sprintf(temp[count], "%f", value.getFloatValue()); // save temporarily
+		}
         get_token(objThreadCntrolBlock);
         count++;
     } while(*(objThreadCntrolBlock->token) == ',');
     // count--;
-
-    // Now, push on local_var_stack in reverse order.
-    if(count == 1)
+	
+	if(count != get_func_params_num(funcIdx))
 	{
-		return call_internal_func(funcIdx, temp[0]);
+		serror(objThreadCntrolBlock, 18);
+		return false;
     }
-	else if(count == 2)
+    // Now, push on local_var_stack in reverse order.
+    if(count == PARAM_NUM_ONE)
 	{
-		return call_internal_func(funcIdx, temp[0], temp[1]);
+		return call_internal_func(funcIdx, result, temp[0]);
+    }
+	else if(count == PARAM_NUM_TWO)
+	{
+		return call_internal_func(funcIdx, result, temp[0], temp[1]);
+    }
+	else if(count == PARAM_NUM_THR)
+	{
+		return call_internal_func(funcIdx, result, temp[0], temp[1], temp[2]);
     }
 	else 
 	{
-    	serror(objThreadCntrolBlock, 18);
+		serror(objThreadCntrolBlock, 18);
+		return false;
     }
-	return 0.0;
+	return true;
 }
 
 // Push the arguments to a function onto the local
@@ -2865,15 +2891,7 @@ void primitive(struct thread_control_block * objThreadCntrolBlock, eval_value *r
     get_token(objThreadCntrolBlock);
     return;
   case BUILTINFUNC:
-  	// use objThreadCntrolBlock->token
-  	if(strstr(STR_MISC_FUNC, objThreadCntrolBlock->token))
-  	{
-  		deal_misc_func(objThreadCntrolBlock, result);
-  	}
-	else
-	{
-  		result->setFloatValue(call_inner_func(objThreadCntrolBlock));
-  	}
+  	call_inner_func(objThreadCntrolBlock, result);
     get_token(objThreadCntrolBlock);
     return;
   case QUOTE:
@@ -2953,7 +2971,7 @@ void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname,
 	temp = reg_name ;
 	get_char_token(vname, temp);
 	// deal "pr;sr;r;mr;uf;tf;pl" except p
-    if(strstr(REGSITER_NAMES, reg_name)) //  && reg_name[0] != 'p')
+    if(strstr(REGSITER_NAMES, reg_name) && (strcmp(reg_name, "p") != 0))
     {
 		if(strchr(vname, '['))
 		{
@@ -3085,7 +3103,7 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 	temp = reg_name ;
 	get_char_token(vname, temp);
 	// deal "pr;sr;r;mr;uf;tf;pl" except p
-    if(strstr(REGSITER_NAMES, reg_name) && strcmp("p", reg_name))
+    if(strstr(REGSITER_NAMES, reg_name) && (strcmp(reg_name, "p") != 0))
     {
 		if(strchr(vname, '['))
 		{
@@ -3118,7 +3136,6 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 			return value;
 		}
 	}
-	
 	
 	// First, try local vars.
 	for(it

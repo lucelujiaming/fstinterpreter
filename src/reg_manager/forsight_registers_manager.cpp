@@ -12,15 +12,13 @@
 #include "reg_manager_interface.h"
 #endif
 
+#include "interpreter_common.h"
 #ifdef WIN32
 #include "reg_manager/reg_manager_interface_wrapper.h"
-#include "interpreter_common.h"
 #else
 #include "reg_manager_interface_wrapper.h"
-#include "common/interpreter_common.h"
 using namespace fst_reg ;
 #endif
-
 
 // Register name
 #define TXT_PR    "pr"
@@ -160,15 +158,15 @@ int forgesight_registers_manager_get_register(
 	namePtr++ ;
 
 	namePtr = strchr(namePtr, '.');
+	memset(reg_member, 0x00, 16);
 	if(namePtr)
 	{
 		namePtr++ ;
-		memset(reg_member, 0x00, 16);
 		temp = reg_member ;
 		get_char_token(namePtr, temp);
 	}
 	// memset(reg_content_buffer, 0x00, sizeof(reg_content_buffer));
-
+ 
 	printf("forgesight_registers_manager_get_register at %s \n", reg_name);
 
 	if(!strcmp(reg_name, TXT_PR))
@@ -1139,10 +1137,11 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
-			get_token(objThreadCntrolBlock);
+			// get_token(objThreadCntrolBlock);
 			printf("Set COMMENT:(%s) to PR[%s]\n", 
 				objThreadCntrolBlock->token, reg_idx);
-			reg_manager_interface_setCommentPr(objThreadCntrolBlock->token, iRegIdx);
+			reg_manager_interface_setCommentPr(
+				(char *)valueStart->getStringValue().c_str(), iRegIdx);
 	       	return 0 ;
 		}
 	}
@@ -1201,10 +1200,11 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
-			get_token(objThreadCntrolBlock);
+			// get_token(objThreadCntrolBlock);
 			printf("Set COMMENT:(%s) to SR[%s]\n", 
 				objThreadCntrolBlock->token, reg_idx);
-			reg_manager_interface_setCommentSr(objThreadCntrolBlock->token, iRegIdx);
+			reg_manager_interface_setCommentSr(
+				(char *)valueStart->getStringValue().c_str(), iRegIdx);
 	       	return 0 ;
 		}
 	}
@@ -1252,10 +1252,11 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
-			get_token(objThreadCntrolBlock);
+			// get_token(objThreadCntrolBlock);
 			printf("Set COMMENT:(%s) to SR[%s]\n", 
 				objThreadCntrolBlock->token, reg_idx);
-			reg_manager_interface_setCommentR(objThreadCntrolBlock->token, iRegIdx);
+			reg_manager_interface_setCommentR(
+				(char *)valueStart->getStringValue().c_str(), iRegIdx);
 	       	return 0 ;
 		}
 	}
@@ -1305,10 +1306,11 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
-			get_token(objThreadCntrolBlock);
+			// get_token(objThreadCntrolBlock);
 			printf("Set COMMENT:(%s) to MR[%s]\n", 
 				objThreadCntrolBlock->token, reg_idx);
-			reg_manager_interface_setCommentMr(objThreadCntrolBlock->token, iRegIdx);
+			reg_manager_interface_setCommentMr(
+				(char *)valueStart->getStringValue().c_str(), iRegIdx);
 	       	return 0 ;
 		}
 	}
@@ -1368,10 +1370,11 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
-			get_token(objThreadCntrolBlock);
+			// get_token(objThreadCntrolBlock);
 			printf("Set COMMENT:(%s) to MR[%s]\n", 
 				objThreadCntrolBlock->token, reg_idx);
-			reg_manager_interface_setCommentUf(objThreadCntrolBlock->token, iRegIdx);
+			reg_manager_interface_setCommentUf(
+				(char *)valueStart->getStringValue().c_str(), iRegIdx);
 	        return 0 ;
 		}
 	}
@@ -1431,10 +1434,11 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
-			get_token(objThreadCntrolBlock);
+			// get_token(objThreadCntrolBlock);
 			printf("Set COMMENT:(%s) to MR[%s]\n", 
 				objThreadCntrolBlock->token, reg_idx);
-			reg_manager_interface_setCommentTf(objThreadCntrolBlock->token, iRegIdx);
+			reg_manager_interface_setCommentTf(
+				(char *)valueStart->getStringValue().c_str(), iRegIdx);
 	        return 0 ;
 		}
 	}
@@ -1507,10 +1511,11 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
-			get_token(objThreadCntrolBlock);
+			// get_token(objThreadCntrolBlock);
 			printf("Set COMMENT:(%s) to MR[%s]\n", 
 				objThreadCntrolBlock->token, reg_idx);
-			reg_manager_interface_setCommentPl(objThreadCntrolBlock->token, iRegIdx);
+			reg_manager_interface_setCommentPl(
+				(char *)valueStart->getStringValue().c_str(), iRegIdx);
 	        return 0 ;
 		}
 	}

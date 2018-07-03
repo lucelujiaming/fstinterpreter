@@ -208,32 +208,6 @@ SOURCE=.\src\forsight_misc_func.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\reg-shmi\forsight_op_reg_shmi.cpp"
-
-!IF  "$(CFG)" == "Forsight_BASINT - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "Forsight_BASINT - Win32 Debug"
-
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=".\src\reg-shmi\forsight_op_shmi.cpp"
-
-!IF  "$(CFG)" == "Forsight_BASINT - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "Forsight_BASINT - Win32 Debug"
-
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
 SOURCE=".\src\reg-shmi\forsight_peterson.cpp"
 
 !IF  "$(CFG)" == "Forsight_BASINT - Win32 Release"
@@ -260,16 +234,7 @@ SOURCE=.\src\forsight_program_property.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\reg-shmi\forsight_registers.cpp"
-
-!IF  "$(CFG)" == "Forsight_BASINT - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "Forsight_BASINT - Win32 Debug"
-
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
+SOURCE=.\src\reg_manager\forsight_registers_manager.cpp
 # End Source File
 # Begin Source File
 
@@ -284,14 +249,14 @@ SOURCE=.\src\forsight_xml_reader.cpp
 !ENDIF 
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\src\reg_manager\reg_manager_interface_wrapper.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE=.\include\reg_manager\base_reg.h
-# End Source File
 # Begin Source File
 
 SOURCE=.\include\error_monitor.h
@@ -354,14 +319,6 @@ SOURCE=.\include\forsight_misc_func.h
 # End Source File
 # Begin Source File
 
-SOURCE=".\include\reg-shmi\forsight_op_regs_shmi.h"
-# End Source File
-# Begin Source File
-
-SOURCE=".\include\reg-shmi\forsight_op_shmi.h"
-# End Source File
-# Begin Source File
-
 SOURCE=".\include\reg-shmi\forsight_peterson.h"
 # End Source File
 # Begin Source File
@@ -374,7 +331,7 @@ SOURCE=".\include\reg-shmi\forsight_registers.h"
 # End Source File
 # Begin Source File
 
-SOURCE=".\include\reg-shmi\forsight_regs_shmi.h"
+SOURCE=.\include\reg_manager\forsight_registers_manager.h
 # End Source File
 # Begin Source File
 
@@ -387,6 +344,10 @@ SOURCE=.\include\fst_datatype.h
 # Begin Source File
 
 SOURCE=.\include\interpreter_common.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\reg_manager\reg_manager_interface_wrapper.h
 # End Source File
 # Begin Source File
 

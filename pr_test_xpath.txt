@@ -6,4 +6,6 @@
 006:pr_test:/prog/prog_body
 007:pr_test:/prog/prog_body
 008:pr_test:/prog/prog_body
-009:pr_test:/prog/prog_body/function
+009:pr_test:/prog/prog_body
+010:pr_test:/prog/prog_body
+011:pr_test:/prog/prog_body/function

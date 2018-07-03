@@ -5,48 +5,59 @@
           <parameter type="num">param0</parameter>
           <parameter type="string">param1</parameter>
           <body>
-                            <assignment>
+            <assignment>
 				<lvalue type="num">
 				    <element type="num">SR[3]</element>
 				</lvalue>
 				<rvalue>
 				    <element type="string">This program demostrates all commands.</element>
 				</rvalue>
-			    </assignment>
+			</assignment>
 
-                            <assignment>
+            <assignment>
+				<lvalue type="num">
+				    <element type="num">R[3]</element>
+				</lvalue>
+				<rvalue>
+                    <element name="findstr" type="function">
+				        <element type="string">This program demostrates all commands.</element>
+				        <element type="string">demostrates</element>
+                    </element>
+				</rvalue>
+			</assignment>
+			
+            <assignment>
+				<lvalue type="num">
+				    <element type="num">R[3]</element>
+				</lvalue>
+				<rvalue>
+                    <element name="strlen" type="function">
+				        <element type="string">This program demostrates all commands.</element>
+                    </element>
+				</rvalue>
+			</assignment>
+
+            <assignment>
+				<lvalue type="num">
+				    <element type="num">SR[3]</element>
+				</lvalue>
+				<rvalue>
+                    <element name="substr" type="function">
+				        <element type="string">This program demostrates all commands.</element>
+                        <element type="num">2</element>
+                        <element type="num">10</element>
+                    </element>
+				</rvalue>
+			</assignment>
+			
+            <assignment>
 				<lvalue type="num">
 				    <element type="num">SR[4]</element>
 				</lvalue>
 				<rvalue>
 				    <element type="num">SR[3]</element>
 				</rvalue>
-			    </assignment>
-
-                    <instruction type="move_joint">
-                        <argument name="pose" type="num">
-                            <element name="j1" type="num">0</element>
-                            <element name="j2" type="num">0</element>
-                            <element name="j3" type="num">0</element>
-                            <element name="j4" type="num">0</element>
-                            <element name="j5" type="num">-1.5708</element>
-                            <element name="j6" type="num">0</element>
-                        </argument>
-                        <argument name="velocity" type="num" unit="%">50</argument>
-                        <argument name="smooth_velocity" type="num" unit="%">100</argument>
-                        <argument name="acceleration" type="num" unit="%">100</argument>
-                    </instruction>
-
-
-
-                           <assignment>
-                            <lvalue type="num">
-                                <element type="num">uf_no</element>
-                            </lvalue>
-                            <rvalue>
-                                <element type="num">5</element>
-                            </rvalue>
-                            </assignment>
+			</assignment>
  
            </body>
         </function>

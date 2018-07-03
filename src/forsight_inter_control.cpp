@@ -8,7 +8,7 @@
 #include "forsight_io_controller.h"
 #ifndef WIN32
 #include "io_interface.h"
-#include "common/error_code.h"
+#include "error_code.h"
 #endif
 
 #ifdef USE_FORSIGHT_REGISTERS_MANAGER
@@ -612,7 +612,7 @@ void parseCtrlComand() // (struct thread_control_block * objThdCtrlBlockPtr)
             setPrgmState(EXECUTE_R);
 			if(strlen(intprt_ctrl.start_ctrl.file_name) == 0)
 			{
-			   strcpy(intprt_ctrl.start_ctrl.file_name, "pr_test");
+			   strcpy(intprt_ctrl.start_ctrl.file_name, "sr_test");
 			}
 			startFile(objThdCtrlBlockPtr, 
 				intprt_ctrl.start_ctrl.file_name, g_iCurrentThreadSeq);

@@ -4,11 +4,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+
 #ifdef WIN32
 #include <windows.h>
 #include <process.h>
 #pragma warning(disable : 4786)
 #endif
+
 #include <vector>
 #include <string>
 #include <string.h>
@@ -16,11 +18,9 @@
 
 #ifndef WIN32
 #include <unistd.h>
-#include "common/interpreter_common.h"
-#include "reg_manager/reg_manager_interface_wrapper.h"
-#else
-#include "interpreter_common.h"
 #endif
+#include "interpreter_common.h"
+#include "reg_manager/reg_manager_interface_wrapper.h"
 
 #include "forsight_interpreter_shm.h"
 #include "forsight_basint.h"

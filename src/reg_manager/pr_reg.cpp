@@ -64,7 +64,7 @@ bool PrReg::addReg(void* data_ptr)
     }
     memcpy(&data_list_[reg_data.id], &reg_ptr->value, sizeof(PrValue));
 
-	
+#if 0
 	PrRegData objPrRegData = * reg_ptr;
 		printf("setPr: id = %d, comment = %s\n", objPrRegData.id, objPrRegData.comment);
 		printf("setPr: id = (%f, %f, %f, %f, %f, %f) \n", 
@@ -75,7 +75,7 @@ bool PrReg::addReg(void* data_ptr)
 			objPrRegData.value.cartesian_pos.position.x, objPrRegData.value.cartesian_pos.position.y, 
 			objPrRegData.value.cartesian_pos.position.z, objPrRegData.value.cartesian_pos.orientation.a, 
 			objPrRegData.value.cartesian_pos.orientation.b, objPrRegData.value.cartesian_pos.orientation.c);
-		
+#endif	
     return writeRegDataToYaml(reg_data, data_list_[reg_data.id]);
 }
 

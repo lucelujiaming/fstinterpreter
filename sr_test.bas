@@ -1,6 +1,7 @@
 SUB main (param0, param1)
-    SR[3] =  "This program demostrates all commands."   
+    SR[3] = "This program demostrates all commands."  
+    R[3] = findstr("This program demostrates all commands.", "demostrates")  
+    R[3] = strlen("This program demostrates all commands.")  
+    SR[3] = substr("This program demostrates all commands.", 2, 10)  
     SR[4] = SR[3]  
-    MOVEJ 0, 0, 0, 0, -1.5708, 0, 50 SV 100 ;ACC 100 
-    uf_no = 5  
 END SUB 

@@ -10,11 +10,9 @@
 
 #ifndef WIN32
 #include <atomic>
-#include <pb_encode.h>
+#include "io_manager/io_manager.h"
 #endif
 #include "motionSL.pb.h"
-#include "base_types.pb.h"
-#include "io_manager/io_manager.h"
 
 #define IO_BASE_ADDRESS (100000)
 #define IO_MAX_NUM      (1000)
@@ -45,7 +43,7 @@ class IOInterface
     U64 addIODevices();
     void getIODevices(motion_spec_DeviceList &dev_list);
 
-    bool encDevList(BaseTypes_ParameterMsg *param_msg, pb_ostream_t *stream, const pb_field_t *field);
+    //bool encDevList(BaseTypes_ParameterMsg *param_msg, pb_ostream_t *stream, const pb_field_t *field);
 
     /**
      * @brief: get io devices number 
@@ -140,7 +138,7 @@ class IOInterface
     /**
      * @brief: update IO error 
      */
-    void updateIOError();
+    U64 updateIOError();
 
 	fst_io_manager::IODeviceInfo* getDevInfoPtr(){ return dev_info_ ; }
 
