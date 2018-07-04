@@ -204,10 +204,6 @@ SOURCE=.\src\forsight_io_mapping.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\forsight_misc_func.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=".\src\reg-shmi\forsight_peterson.cpp"
 
 !IF  "$(CFG)" == "Forsight_BASINT - Win32 Release"
@@ -312,10 +308,6 @@ SOURCE=.\include\forsight_io_mapping.h
 # Begin Source File
 
 SOURCE=.\include\forsight_manual_lock.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\include\forsight_misc_func.h
 # End Source File
 # Begin Source File
 
