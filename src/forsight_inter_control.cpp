@@ -23,6 +23,9 @@ using namespace fst_reg ;
 #include "reg-shmi/forsight_op_regs_shmi.h"
 #endif
 
+#include "forsight_launch_code_startup.h"
+#include "forsight_macro_instr_startup.h"
+
 #define VELOCITY    (500)
 using namespace std;
 
@@ -50,6 +53,8 @@ extern HANDLE    g_basic_interpreter_handle[NUM_THREAD];
 extern pthread_t g_basic_interpreter_handle[NUM_THREAD];
 #endif
 int  g_iCurrentThreadSeq = -1 ;  // minus one add one equals to zero
+
+AutoMode g_current_auto_mode = AUTOMODE_NONE_U;
 
 vector<string> split(string str,string pattern)
 {
@@ -368,13 +373,13 @@ bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instructio
     {
 		if (instruction->is_additional == false)
 		{
-	     	printf("instr.target.cnt = %f .\n", instruction->target.cnt);
+	     	// printf("instr.target.cnt = %f .\n", instruction->target.cnt);
 			ret = tryWrite(SHM_INTPRT_CMD, 0, 
 				(void*)instruction, sizeof(Instruction));
 		}
 		else
 		{
-	     	printf("instr.target.cnt = %f .\n", instruction->target.cnt);
+	     	// printf("instr.target.cnt = %f .\n", instruction->target.cnt);
 			ret = tryWrite(SHM_INTPRT_CMD, 0, 
 				(void*)instruction, 
 				sizeof(Instruction) 
@@ -441,10 +446,73 @@ void startFile(struct thread_control_block * objThdCtrlBlockPtr,
 {
 	strcpy(objThdCtrlBlockPtr->project_name, proj_name); // "prog_demo_dec"); // "BAS-EX1.BAS") ; // 
 	objThdCtrlBlockPtr->is_main_thread = MAIN_THREAD ;
+	objThdCtrlBlockPtr->is_in_macro    = false ;
 	objThdCtrlBlockPtr->iThreadIdx = idx ;
 	append_program_prop_mapper(objThdCtrlBlockPtr, proj_name);
-	base_thread_create(idx, objThdCtrlBlockPtr);
+	basic_thread_create(idx, objThdCtrlBlockPtr);
 	intprt_ctrl.cmd = LOAD ;
+}
+
+bool deal_auto_mode(AutoMode autoMode)
+{
+	if(g_current_auto_mode == autoMode)
+	{
+    	return true;
+	}	
+	switch(g_current_auto_mode) 	
+	{
+	// NoThread -> Thread
+	case AUTOMODE_NONE_U:
+	case LOCAL_TRIGGER_U:
+		if(autoMode == LOCAL_TRIGGER_U)
+		{
+    		return true;
+		}
+		else if(autoMode == LAUNCH_CODE_U)
+		{
+			launch_code_thread_create(NULL);
+    		return true;
+		}
+		else if(autoMode == MACRO_TRIGGER_U)
+		{
+			macro_instr_thread_create(NULL);
+    		return true;
+		}
+		break;
+	// Thread -> NoThread/OtherThread
+	case LAUNCH_CODE_U:
+		// Thread -> NoThread
+		if(autoMode == LOCAL_TRIGGER_U)
+		{
+			launch_code_thread_destroy();
+    		return true;
+		}
+		else if(autoMode == MACRO_TRIGGER_U)
+		{
+			launch_code_thread_destroy();
+			macro_instr_thread_create(NULL);
+    		return true;
+		}
+		break;
+	// Thread -> NoThread/OtherThread
+	case MACRO_TRIGGER_U:
+		// Thread -> NoThread
+		if(autoMode == LOCAL_TRIGGER_U)
+		{
+			launch_code_thread_destroy();
+    		return true;
+		}
+		else if(autoMode == LAUNCH_CODE_U)
+		{
+			macro_instr_thread_destroy();
+			launch_code_thread_create(NULL);
+    		return true;
+		}
+		break;
+	default:
+		break;
+	}
+    return true;
 }
 
 /*
@@ -546,7 +614,8 @@ void parseCtrlComand() // (struct thread_control_block * objThdCtrlBlockPtr)
 	
 	int iLineNum = 0 ;
 	static InterpreterCommand lastCmd ;
-	UserOpMode mode ;
+	UserOpMode userOpMode ;
+	AutoMode   autoMode ;
     thread_control_block * objThdCtrlBlockPtr = NULL;
 
 #ifndef WIN32
@@ -612,7 +681,7 @@ void parseCtrlComand() // (struct thread_control_block * objThdCtrlBlockPtr)
             setPrgmState(EXECUTE_R);
 			if(strlen(intprt_ctrl.start_ctrl.file_name) == 0)
 			{
-			   strcpy(intprt_ctrl.start_ctrl.file_name, "sr_test");
+			   strcpy(intprt_ctrl.start_ctrl.file_name, "call_test");
 			}
 			startFile(objThdCtrlBlockPtr, 
 				intprt_ctrl.start_ctrl.file_name, g_iCurrentThreadSeq);
@@ -712,9 +781,9 @@ void parseCtrlComand() // (struct thread_control_block * objThdCtrlBlockPtr)
 			if(g_iCurrentThreadSeq < 0) break ;
 		    objThdCtrlBlockPtr = &g_thread_control_block[g_iCurrentThreadSeq];
 			
-            mode = getUserOpMode();
-            if ((mode == SLOWLY_MANUAL_MODE_U)
-            || (mode == UNLIMITED_MANUAL_MODE_U))
+            userOpMode = getUserOpMode();
+            if ((userOpMode == SLOWLY_MANUAL_MODE_U)
+            || (userOpMode == UNLIMITED_MANUAL_MODE_U))
             {
                 objThdCtrlBlockPtr->prog_mode = STEP_MODE ;
             }
@@ -739,6 +808,17 @@ void parseCtrlComand() // (struct thread_control_block * objThdCtrlBlockPtr)
 #endif
   			printf("setPrgmState(IDLE_R).\n");
 		    setPrgmState(IDLE_R);
+            break;
+        case SET_AUTO_MODE:
+			// intprt_ctrl.RegMap.
+			autoMode = intprt_ctrl.autoMode ;
+			// deal_auto_mode(autoMode);
+			// forgesight_simulate_launch_config_values();
+			// launch_code_thread_create(NULL);
+			macro_instr_thread_create(NULL);
+			g_current_auto_mode = autoMode ;
+			// Do nothing after it.
+			intprt_ctrl.cmd = LOAD ;
             break;
         case READ_REG:
 			// intprt_ctrl.RegMap.
@@ -992,6 +1072,7 @@ void initShm()
     openShm(SHM_CTRL_CMD, 1024);
     openShm(SHM_CTRL_STATUS, 1024);
     openShm(SHM_INTPRT_DST, 1024);
+    // intprt_ctrl.cmd = SET_AUTO_MODE;
     intprt_ctrl.cmd = START;
 	g_privateInterpreterState = IDLE_R ;
 	

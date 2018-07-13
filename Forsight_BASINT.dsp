@@ -204,6 +204,14 @@ SOURCE=.\src\forsight_io_mapping.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\forsight_launch_code_startup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\forsight_macro_instr_startup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=".\src\reg-shmi\forsight_peterson.cpp"
 
 !IF  "$(CFG)" == "Forsight_BASINT - Win32 Release"
@@ -244,6 +252,14 @@ SOURCE=.\src\forsight_xml_reader.cpp
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\launch_code_mgr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\macro_instr_mgr.cpp
 # End Source File
 # Begin Source File
 
@@ -307,6 +323,14 @@ SOURCE=.\include\forsight_io_mapping.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\include\forsight_launch_code_startup.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\forsight_macro_instr_startup.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\include\forsight_manual_lock.h
 # End Source File
 # Begin Source File
@@ -336,6 +360,14 @@ SOURCE=.\include\fst_datatype.h
 # Begin Source File
 
 SOURCE=.\include\interpreter_common.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\launch_code_mgr.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\macro_instr_mgr.h
 # End Source File
 # Begin Source File
 

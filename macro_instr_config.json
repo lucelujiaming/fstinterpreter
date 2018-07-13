@@ -1,0 +1,38 @@
+{
+	"Macro0":	{
+		"MacroProgram":	"Program0",
+		"IO":	"DI[0]"
+	},
+	"Macro1":	{
+		"MacroProgram":	"Program1",
+		"IO":	"DI[1]"
+	},
+	"Macro2":	{
+		"MacroProgram":	"Program2",
+		"IO":	"DI[2]"
+	},
+	"Macro4":	{
+		"MacroProgram":	"Program4",
+		"IO":	"DI[4]"
+	},
+	"Macro5":	{
+		"MacroProgram":	"Program5",
+		"IO":	"DI[5]"
+	},
+	"Macro6":	{
+		"MacroProgram":	"Program6",
+		"IO":	"DI[6]"
+	},
+	"Macro7":	{
+		"MacroProgram":	"FFFF7",
+		"IO":	"DI[7]"
+	},
+	"Macro8":	{
+		"MacroProgram":	"Program8",
+		"IO":	"DI[8]"
+	},
+	"Macro9":	{
+		"MacroProgram":	"Program9",
+		"IO":	"DI[9]"
+	}
+}

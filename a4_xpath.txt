@@ -1,0 +1,3 @@
+001:a4:/prog/prog_body/function
+002:a4:/prog/prog_body/function/body/nop
+003:a4:/prog/prog_body/function

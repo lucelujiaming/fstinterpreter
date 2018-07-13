@@ -79,6 +79,7 @@ typedef enum _InterpreterCommand
     CONTINUE = 107,
     PAUSE   = 108,
     ABORT   = 109,
+    SET_AUTO_MODE  = 110,
 		
     MOD_REG  = 201,
 	READ_REG = 202,
@@ -211,7 +212,13 @@ typedef enum _UserOpMode
     UNLIMITED_MANUAL_MODE_U = 3,
 }UserOpMode;
 
-
+typedef enum _AutoMode
+{
+    AUTOMODE_NONE_U     = 0,
+    LOCAL_TRIGGER_U     = 1,
+    LAUNCH_CODE_U       = 2,
+    MACRO_TRIGGER_U     = 3,
+}AutoMode;
 
 typedef struct _StartCtrl
 {
@@ -224,6 +231,7 @@ typedef struct _InterpreterControl
     union
     {
         StartCtrl   start_ctrl;
+		AutoMode    autoMode ;
         // int         id;
 #ifdef USE_XPATH
         char           line[TP_XPATH_LEN];
@@ -302,13 +310,13 @@ typedef struct _Instruction
     union 
     {
         MotionTarget    target;
-        int             loop_cnt;
-		
-		int  current_uf ;
-		int  current_tf ;
-		int  current_ovc ;
-		int  current_oac ;
     };
+    int  loop_cnt;
+	
+	int  current_uf ;
+	int  current_tf ;
+	int  current_ovc ;
+	int  current_oac ;
     bool is_additional;
     int add_num;
 #ifdef WIN32

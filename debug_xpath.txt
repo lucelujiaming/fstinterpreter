@@ -1,0 +1,8 @@
+001:debug:/prog/prog_body/function
+002:debug:/prog/prog_body/function/body/instruction[1]
+003:debug:/prog/prog_body/function/body/instruction[2]
+004:debug:/prog/prog_body/function/body/instruction[3]
+005:debug:/prog/prog_body/function/body/instruction[4]
+006:debug:/prog/prog_body/function/body/instruction[5]
+007:debug:/prog/prog_body/function/body/instruction[6]
+008:debug:/prog/prog_body/function

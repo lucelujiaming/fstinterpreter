@@ -120,7 +120,7 @@ int generateIncludeFile(xmlNodePtr nodehead, LineInfo objLineInfo)
         if(xmlStrcasecmp(nodeInclude->name,BAD_CAST"include")==0){ 
 			value=xmlNodeGetContent(nodeInclude);
 			sprintf(objLineInfoTemp.xPath, "%s", (char *)xmlGetNodePath(nodeInclude));
-            exportBASCode(objLineInfoTemp, "EXPORT: ", "IMPORT %s\n", (char*)value);
+            exportBASCode(objLineInfoTemp, (char *)"EXPORT: ", (char *)"IMPORT %s\n", (char*)value);
         }
     }
 	return 1 ;
@@ -530,7 +530,7 @@ int generateAssignment(xmlNodePtr nodeAssignmentStatement, LineInfo objLineInfo)
     xmlChar *value;
 	
 	// sprintf(currentChildPath, "%s", currentXPath);
-	// exportBASCode(objLineInfo, "EXPORT: ", "", "");
+	// exportBASCode(objLineInfo, (char *)"EXPORT: ", (char *)"", (char *)"");
     for(nodeStatement = nodeAssignmentStatement->children; 
 			nodeStatement; nodeStatement = nodeStatement->next){
 						value = xmlNodeGetContent(nodeStatement);
@@ -723,7 +723,7 @@ int generateWaitInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLin
 	string strCommandName = (char *)name;
 	transform(strCommandName.begin(), strCommandName.end(), 
 		strCommandName.begin(), ::toupper); 
-	exportBASCode(objLineInfo, "EXPORT: ", "%s ", (char *)strCommandName.c_str());
+	exportBASCode(objLineInfo, (char *)"EXPORT: ", (char *)"%s ", (char *)strCommandName.c_str());
 	
 	// WaitType waitType = WAIT_NONE ;
     for(nodeInstructionParam = nodeInstructionStatement->children; 
@@ -767,7 +767,7 @@ int generateAbortInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLi
 	string strCommandName = (char *)name;
 	transform(strCommandName.begin(), strCommandName.end(), 
 		strCommandName.begin(), ::toupper); 
-	exportBASCode(objLineInfo, "EXPORT: ", "%s ", (char *)strCommandName.c_str());
+	exportBASCode(objLineInfo, (char *)"EXPORT: ", (char *)"%s ", (char *)strCommandName.c_str());
 
 	printBASCode(objLineInfo, "\n", "");
 	return 1 ;
@@ -781,7 +781,7 @@ int generatePauseInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLi
 	string strCommandName = (char *)name;
 	transform(strCommandName.begin(), strCommandName.end(), 
 		strCommandName.begin(), ::toupper); 
-	exportBASCode(objLineInfo, "EXPORT: ", "%s ", (char *)strCommandName.c_str());
+	exportBASCode(objLineInfo, (char *)"EXPORT: ", (char *)"%s ", (char *)strCommandName.c_str());
 	
 	printBASCode(objLineInfo, "\n", "");
 	return 1 ;
@@ -796,7 +796,7 @@ int generateUserAlarmInstruction(xmlNodePtr nodeInstructionStatement, LineInfo o
 	string strCommandName = (char *)name;
 	transform(strCommandName.begin(), strCommandName.end(), 
 		strCommandName.begin(), ::toupper); 
-	exportBASCode(objLineInfo, "EXPORT: ", "%s ", (char *)strCommandName.c_str());
+	exportBASCode(objLineInfo, (char *)"EXPORT: ", (char *)"%s ", (char *)strCommandName.c_str());
 	
     for(nodeInstructionParam = nodeInstructionStatement->children; 
 	nodeInstructionParam; nodeInstructionParam = nodeInstructionParam->next){
@@ -831,7 +831,7 @@ int generatePrintInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLi
 	string strCommandName = (char *)type;
 	transform(strCommandName.begin(), strCommandName.end(), 
 		strCommandName.begin(), ::toupper); 
-	exportBASCode(objLineInfo, "EXPORT: ", "%s ", (char *)strCommandName.c_str());
+	exportBASCode(objLineInfo, (char *)"EXPORT: ", (char *)"%s ", (char *)strCommandName.c_str());
 	
     for(nodeInstructionParam = nodeInstructionStatement->children; 
 	nodeInstructionParam; nodeInstructionParam = nodeInstructionParam->next){
@@ -872,7 +872,7 @@ int generateTimerInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLi
 	string strCommandName = (char *)name;
 	transform(strCommandName.begin(), strCommandName.end(), 
 		strCommandName.begin(), ::toupper); 
-	exportBASCode(objLineInfo, "EXPORT: ", "%s ", (char *)strCommandName.c_str());
+	exportBASCode(objLineInfo, (char *)"EXPORT: ", (char *)"%s ", (char *)strCommandName.c_str());
 	
     for(nodeInstructionParam = nodeInstructionStatement->children; 
 	nodeInstructionParam; nodeInstructionParam = nodeInstructionParam->next){
@@ -908,13 +908,13 @@ int generateMoveInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLin
 	
 	// sprintf(currentChildPath, "%s", currentXPath);
 	if(xmlStrcasecmp(name,BAD_CAST"move_line")==0){
-		exportBASCode(objLineInfo, "EXPORT: ", "%s ", "MOVEL");
+		exportBASCode(objLineInfo, (char *)"EXPORT: ", (char *)"%s ", (char *)"MOVEL");
 	}
 	else if(xmlStrcasecmp(name,BAD_CAST"move_curve")==0){
-		exportBASCode(objLineInfo, "EXPORT: ", "%s ", "MOVEC");
+		exportBASCode(objLineInfo, (char *)"EXPORT: ", (char *)"%s ", (char *)"MOVEC");
 	}
 	else if(xmlStrcasecmp(name,BAD_CAST"move_joint")==0){
-		exportBASCode(objLineInfo, "EXPORT: ", "%s ", "MOVEJ");
+		exportBASCode(objLineInfo, (char *)"EXPORT: ", (char *)"%s ", (char *)"MOVEJ");
 	}
 
     for(nodeInstructionParam = nodeInstructionStatement->children; 
@@ -1048,7 +1048,7 @@ int generateLogicalElseIF(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 	if(xmlStrcasecmp(name,BAD_CAST"elif")==0){
 	    sprintf(objLineInfoTemp.xPath, "%s", 
 		           (char *)xmlGetNodePath(nodeLogicalStatement));
-		exportBASCode(objLineInfoTemp, "EXPORT: ", "%s ", "ELSEIF");
+		exportBASCode(objLineInfoTemp, (char *)"EXPORT: ", (char *)"%s ", (char *)"ELSEIF");
 	}
 	
     for(nodeStatement = nodeLogicalStatement->children; 
@@ -1064,7 +1064,7 @@ int generateLogicalElseIF(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 					generateElement(nodeDetermine, objLineInfo);
 				}
 			}
-			printBASCode(objLineInfo, " THEN \n", "");
+			printBASCode(objLineInfo, (char *)" THEN \n", (char *)"");
         }
 		else if((xmlStrcasecmp(nodeStatement->name,BAD_CAST"logical_body")==0)
 			||(xmlStrcasecmp(nodeStatement->name,BAD_CAST"vice_logical_body")==0)) { 
@@ -1084,7 +1084,7 @@ int generateLogicalElseIF(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 		}
         // printf("%s \n", (char*)nodeStatement->name);
     }
-	// exportBASCode(objLineInfoTemp, "EXPORT: ", " ", "%s \n", "endif");
+	// exportBASCode(objLineInfoTemp, (char *)"EXPORT: ", (char *)" ", (char *)"%s \n", (char *)"endif");
 	return 1 ;
 }
 
@@ -1100,7 +1100,7 @@ int generateLogicalIF(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 	if(xmlStrcasecmp(name,BAD_CAST"if")==0){
 		sprintf(objLineInfoTemp.xPath, "%s", 
 						(char *)xmlGetNodePath(nodeLogicalStatement));
-		exportBASCode(objLineInfoTemp, "EXPORT: ", "%s ", "IF");
+		exportBASCode(objLineInfoTemp, (char *)"EXPORT: ", (char *)"%s ", (char *)"IF");
 	}
 
     for(nodeStatement = nodeLogicalStatement->children; 
@@ -1314,31 +1314,40 @@ int generateLogicalSWITCH(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 
 int generateFunctionCall(xmlNodePtr nodeFunctionCall, LineInfo objLineInfo)
 {
+    char label_instr[32];
     char label_params[1024];
     Label labelParam ;
 	vector<Label> label_vector;
 
     xmlNodePtr nodeFunctionCallParam ;
-    xmlChar *nameProp, *fileProp, *value;
+    xmlChar *nameProp, *fileProp, *typeProp, *value;
 	fileProp = xmlGetProp(nodeFunctionCall, BAD_CAST"file");
 	nameProp = xmlGetProp(nodeFunctionCall, BAD_CAST"name");
+	typeProp = xmlGetProp(nodeFunctionCall, BAD_CAST"type");
 	sprintf(objLineInfo.xPath, "%s", 
 			 (char *)xmlGetNodePath(nodeFunctionCall));
 	
+	memset(label_instr, 0x00, 32);
+	if(xmlStrcasecmp(typeProp,BAD_CAST"macro")==0){
+        sprintf(label_instr, "CALLMACRO");
+	}
+	else {
+        sprintf(label_instr, "CALL");
+	}
 	if(xmlStrlen(fileProp)==0){        // Inside function
 		memset(label_params, 0x00, 1024);
-        sprintf(label_params, "%s::%s", objLineInfo.fileName, (char*)nameProp);
-		printBASCode(objLineInfo, "CALL %s (", label_params);
+        sprintf(label_params, "%s %s::%s", label_instr, objLineInfo.fileName, (char*)nameProp);
+		printBASCode(objLineInfo, "%s (", label_params);
 	}
 	else if(xmlStrlen(nameProp)==0){   // Outside main
 		memset(label_params, 0x00, 1024);
-        sprintf(label_params, "%s::main", (char*)fileProp);
-		printBASCode(objLineInfo, "CALL %s (", label_params);
+        sprintf(label_params, "%s %s::main", label_instr, (char*)fileProp);
+		printBASCode(objLineInfo, "%s (", label_params);
 	}
 	else {                            // Outside function
 		memset(label_params, 0x00, 1024);
-        sprintf(label_params, "%s::%s", (char*)fileProp, (char*)nameProp);
-		printBASCode(objLineInfo, "CALL %s (", label_params);
+        sprintf(label_params, "%s %s::%s", label_instr, (char*)fileProp, (char*)nameProp);
+		printBASCode(objLineInfo, "%s (", label_params);
 	}
     for(nodeFunctionCallParam = nodeFunctionCall->children; 
 		nodeFunctionCallParam; nodeFunctionCallParam = nodeFunctionCallParam->next){
@@ -1376,7 +1385,7 @@ int generateLogicalLOOP(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 	if(xmlStrcasecmp(name,BAD_CAST"LOOP")==0){
 		sprintf(objLineInfoTemp.xPath, "%s", 
 			 (char *)xmlGetNodePath(nodeLogicalStatement));
-		exportBASCode(objLineInfoTemp, "EXPORT: ", "%s ", "LOOP");
+		exportBASCode(objLineInfoTemp, (char *)"EXPORT: ", (char *)"%s ", (char *)"LOOP");
 	}
 	
     for(nodeStatement = nodeLogicalStatement->children; 

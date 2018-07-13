@@ -1,0 +1,3 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(033)/prog/prog_body/function/body/nop                                                                       
+EXPORT: (003)(024)/prog/prog_body/function                                                                            END SUB 

@@ -215,6 +215,7 @@ int parsePoses(struct thread_control_block * objThreadCntrolBlock,
 		numentries++, child=child->next;
 	
 	child=jsonPose->child;
+	// include NULL check
 	while (child && !fail)
 	{
 		switch ((child->type)&255)

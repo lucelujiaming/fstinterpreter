@@ -19,7 +19,10 @@
                         <argument name="acceleration" type="num" unit="%">100</argument>
                     </instruction>
 
-                   <call name="func_test"> 
+                   <call name="func_test" type="common"> 
+                      <parameter name="param0" type="num">1</parameter>
+                   </call>
+                   <call name="func_test" type="macro"> 
                       <parameter name="param0" type="num">1</parameter>
                    </call>
                    <call name="func_noparam_test"> 

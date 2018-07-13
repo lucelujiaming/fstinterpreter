@@ -1,0 +1,134 @@
+{
+	"aio_all":	{
+		"emltFlag":	true,
+		"value":	1
+	},
+	"dio_all":	{
+		"emltFlag":	true,
+		"value":	1
+	},
+	"rio_all":	{
+		"emltFlag":	true,
+		"value":	1
+	},
+	"sio_all":	{
+		"emltFlag":	true,
+		"value":	1
+	},
+	"uio_all":	{
+		"emltFlag":	true,
+		"value":	1
+	},
+	"ui[0]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"uo[0]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"ui[1]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"uo[1]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"ui[2]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"uo[2]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"ui[3]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"uo[3]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"ui[4]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"uo[4]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"ui[5]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"uo[5]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"ui[6]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"uo[6]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"ui[7]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"uo[7]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"ui[8]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"uo[8]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"ui[9]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"uo[9]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"ui[10]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"uo[10]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"ui[11]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"uo[11]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"ui[12]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"uo[12]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"ui[13]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"uo[13]":	{
+		"emltFlag":	true,
+		"value":	0
+	}
+}

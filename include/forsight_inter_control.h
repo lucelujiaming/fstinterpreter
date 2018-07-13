@@ -55,6 +55,8 @@ void parseCtrlComand(); // (struct thread_control_block * objThdCtrlBlock);
 void initShm();
 void updateIOError();
 vector<string> split(string str,string pattern);
+void startFile(struct thread_control_block * objThdCtrlBlockPtr, 
+	char * proj_name, int idx);
 
 void waitInterpreterStateleftWaiting(
 	struct thread_control_block * objThdCtrlBlockPtr);

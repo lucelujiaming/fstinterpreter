@@ -1,0 +1,5 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main (param0, param1)
+EXPORT: (002)(015)/prog/prog_body                                                                                         SR[3] = "This program demostrates all commands."  
+EXPORT: (003)(015)/prog/prog_body                                                                                         R[3] = lower("This program demostrates all commands.")  
+EXPORT: (004)(015)/prog/prog_body                                                                                         R[3] = upper("This program demostrates all commands.")  
+EXPORT: (005)(015)/prog/prog_body                                                                                         R[3] = revert("This program demostrates all commands.")

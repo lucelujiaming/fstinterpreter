@@ -19,6 +19,7 @@
 #else
 #include "reg-shmi/forsight_registers.h"
 #endif
+#include "macro_instr_mgr.h"
 
 #ifndef WIN32
 #define TPI_SUCCESS				(0)
@@ -56,13 +57,20 @@
 #define IMPORT    27
 #define DEFAULT   28
 #define WAIT      29
+#define CALLMACRO 30
 
 enum var_inner_type { FORSIGHT_CHAR, FORSIGHT_INT, FORSIGHT_FLOAT };
 
-#define FORSIGHT_RETURN_VALUE   "forsight_return_value_"
+#define FORSIGHT_RETURN_VALUE   "forsight_return_value"
 #define FORSIGHT_CURRENT_JOINT  "j_pos"
 #define FORSIGHT_CURRENT_POS    "c_pos"
 	
+#define FORSIGHT_REGISTER_ON    "on"
+#define FORSIGHT_REGISTER_OFF   "off"
+
+// #define FORSIGHT_REGISTER_UF    "uf"
+// #define FORSIGHT_REGISTER_TF    "tf"
+
 #define FORSIGHT_TF_NO    "tf_no"
 #define FORSIGHT_UF_NO    "uf_no"
 #define FORSIGHT_OVC      "ovc"
@@ -111,6 +119,7 @@ static struct commands table[] = { /* Commands must be entered lowercase */
   "call",        CALL,
   "end",         END,
   "import",      IMPORT,
+  "callmacro",   CALLMACRO,
   "", END  /* mark end of table */
 };
 
@@ -196,6 +205,8 @@ HANDLE    g_basic_interpreter_handle[NUM_THREAD];
 pthread_t g_basic_interpreter_handle[NUM_THREAD];
 #endif
 
+extern MacroInstrMgr  *  g_macro_instr_mgr_ptr; 
+
 #ifdef WIN32
 unsigned __stdcall basic_interpreter(void* arg)
 #else
@@ -209,8 +220,16 @@ void* basic_interpreter(void* arg)
   // Set this state outside according prog_mode
   // setPrgmState(EXECUTE_R);  
   printf("Enter call_interpreter.\n");
+  if (g_macro_instr_mgr_ptr)
+  {
+	  g_macro_instr_mgr_ptr->setRunningInMacroInstrList(objThreadCntrolBlock->project_name);
+  }
   iRet = call_interpreter(objThreadCntrolBlock, 1);
   printf("Left  call_interpreter.\n");
+  if (g_macro_instr_mgr_ptr)
+  {
+	  g_macro_instr_mgr_ptr->resetRunningInMacroInstrList(objThreadCntrolBlock->project_name);
+  }
   setPrgmState(IDLE_R);
   // clear line path
   setCurLine("");
@@ -736,6 +755,31 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 		  iRet = exec_call(objThreadCntrolBlock);
 		  if(iRet == END_COMMND_RET)
 		     return END_COMMND_RET;
+		  break;
+		case CALLMACRO:
+			objThreadCntrolBlock->is_in_macro = true ;
+			if(g_macro_instr_mgr_ptr)
+			{
+				if (g_macro_instr_mgr_ptr->getRunningInMacroInstrList(
+					objThreadCntrolBlock->project_name) == true)
+				{
+					serror(objThreadCntrolBlock, 19);
+					break;
+				}
+			}
+			if(objThreadCntrolBlock->prog_mode == STEP_MODE)
+			{
+				objThreadCntrolBlock->prog_mode = FULL_MODE;
+				iRet = exec_call(objThreadCntrolBlock);
+				objThreadCntrolBlock->prog_mode = STEP_MODE;
+			}
+			else
+			{
+				iRet = exec_call(objThreadCntrolBlock);
+			}
+			objThreadCntrolBlock->is_in_macro = false ;
+			if(iRet == END_COMMND_RET)
+				return END_COMMND_RET;
 		  break;
 		case END:
 		  // exit(0);
@@ -2426,7 +2470,8 @@ void serror(struct thread_control_block * objThreadCntrolBlock, int error)
      FAIL_INTERPRETER_MOVL_WITH_JOINT          ,     "movl with joint",             // 15
      FAIL_INTERPRETER_MOVJ_WITH_POINT          ,     "movj with point",             // 16
      FAIL_INTERPRETER_ILLEGAL_LINE_NUMBER      ,     "illegal line number",         // 17
-     FAIL_INTERPRETER_FUNC_PARAMS_MISMATCH     ,     "func params mismatching"      // 18
+     FAIL_INTERPRETER_FUNC_PARAMS_MISMATCH     ,     "func params mismatching",     // 18
+     FAIL_INTERPRETER_DUPLICATE_EXEC_MACRO     ,     "exec macro duplicating"       // 19
   };
   if(error > sizeof(e)/sizeof(ErrInfo)) {
   	printf("\t NOTICE : Error out of range %d \n", error);
@@ -2891,6 +2936,7 @@ void primitive(struct thread_control_block * objThreadCntrolBlock, eval_value *r
     get_token(objThreadCntrolBlock);
     return;
   case BUILTINFUNC:
+  	// use objThreadCntrolBlock->token
   	call_inner_func(objThreadCntrolBlock, result);
     get_token(objThreadCntrolBlock);
     return;
@@ -3081,6 +3127,16 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 		value.setFloatValue(objThreadCntrolBlock->ret_value);
 		return value ;
 	}
+	else if(!strcmp(vname, FORSIGHT_REGISTER_ON))
+	{
+		value.setFloatValue(1.0);
+		return value ;
+	}
+	else if(!strcmp(vname, FORSIGHT_REGISTER_OFF))
+	{
+		value.setFloatValue(0.0);
+		return value ;
+	}
 
 	if(!strcmp(vname, FORSIGHT_CURRENT_JOINT))
 	{
@@ -3202,7 +3258,7 @@ int erase_var(struct thread_control_block * objThreadCntrolBlock, char *vname)
 }
 
 
-bool base_thread_create(int iIdx, void * args)
+bool basic_thread_create(int iIdx, void * args)
 {
 	bool ret = false;
 #ifdef WIN32
@@ -3220,14 +3276,14 @@ bool base_thread_create(int iIdx, void * args)
 	}
 	else
 	{
-      printf("start base_thread_create Failed..\n", iIdx);
+      printf("start basic_thread_create Failed..\n", iIdx);
 		g_basic_interpreter_handle[iIdx] = 0;
 	}
 #endif
 	return ret;
 }
 
-void base_thread_wait(int iIdx)
+void basic_thread_destroy(int iIdx)
 {
 #ifdef WIN32
 	WaitForSingleObject(g_basic_interpreter_handle[iIdx], INFINITE);

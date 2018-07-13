@@ -79,11 +79,14 @@ add_executable(prg_interpreter
     src/reg_manager/mr_reg.cpp
     src/reg_manager/reg_manager_interface.cpp
     src/reg_manager/reg_manager_interface_wrapper.cpp
-    src/forsight_misc_func.cpp
     src/forsight_interpreter_shm.cpp
     src/forsight_innercmd.cpp
     src/forsight_xml_reader.cpp
     src/forsight_int_main.cpp
+    src/launch_code_mgr.cpp
+    src/forsight_launch_code_startup.cpp
+    src/macro_instr_mgr.cpp
+    src/forsight_macro_instr_startup.cpp
     src/forsight_basint.cpp
     src/forsight_innerfunc.cpp
     src/base_thread.cpp
@@ -92,12 +95,12 @@ add_executable(prg_interpreter
     src/forsight_io_mapping.cpp
     src/forsight_program_property.cpp
     src/forsight_cJSON.cpp
+    src/io_interface.cpp
 )
 
 target_link_libraries(prg_interpreter
     ${catkin_LIBRARIES}
     io_manager
-    io_interface
     parameter_manager
     xml2
     motion_plan

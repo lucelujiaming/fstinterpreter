@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prog>
+    <prog_body name="test">
+        <function name="main">
+          <parameter type="num">param0</parameter>
+          <parameter type="string">param1</parameter>
+          <body>
+			    <instruction type="move_line">
+				<argument name="pose" type="num">
+				    <element type="num">400</element>
+				    <element type="num">0</element>
+				    <element type="num">460</element>
+				    <element type="num">0</element>
+				    <element type="num">0</element>
+				    <element type="num">3.1416</element>
+				</argument>
+				<argument name="velocity" type="num" unit="mm/s">1600</argument>
+                        	<argument name="smooth_velocity" type="num" unit="%">0</argument>
+				<argument name="acceleration" type="num" unit="%">100</argument>
+			    </instruction>
+
+			    <instruction type="move_line">
+				<argument name="pose" type="num">
+				    <element type="num">250</element>
+				    <element type="num">150</element>
+				    <element type="num">310</element>
+				    <element type="num">0</element>
+				    <element type="num">0</element>
+				    <element type="num">3.1416</element>
+				</argument>
+				<argument name="velocity" type="num" unit="mm/s">1600</argument>
+                        	<argument name="smooth_velocity" type="num" unit="%">0</argument>
+				<argument name="acceleration" type="num" unit="%">100</argument>
+			    </instruction>
+
+			    <instruction type="move_line">
+				<argument name="pose" type="num">
+				    <element type="num">250</element>
+				    <element type="num">-150</element>
+				    <element type="num">310</element>
+				    <element type="num">0</element>
+				    <element type="num">0</element>
+				    <element type="num">3.1416</element>
+				</argument>
+				<argument name="velocity" type="num" unit="mm/s">1600</argument>
+                        	<argument name="smooth_velocity" type="num" unit="%">0</argument>
+				<argument name="acceleration" type="num" unit="%">100</argument>
+			    </instruction>
+
+			    <instruction type="move_line">
+				<argument name="pose" type="num">
+				    <element type="num">550</element>
+				    <element type="num">-150</element>
+				    <element type="num">610</element>
+				    <element type="num">0</element>
+				    <element type="num">0</element>
+				    <element type="num">3.1416</element>
+				</argument>
+				<argument name="velocity" type="num" unit="mm/s">1600</argument>
+                        	<argument name="smooth_velocity" type="num" unit="%">0</argument>
+				<argument name="acceleration" type="num" unit="%">100</argument>
+			    </instruction>
+
+			    <instruction type="move_line">
+				<argument name="pose" type="num">
+				    <element type="num">550</element>
+				    <element type="num">150</element>
+				    <element type="num">610</element>
+				    <element type="num">0</element>
+				    <element type="num">0</element>
+				    <element type="num">3.1416</element>
+				</argument>
+				<argument name="velocity" type="num" unit="mm/s">1600</argument>
+                        	<argument name="smooth_velocity" type="num" unit="%">0</argument>
+				<argument name="acceleration" type="num" unit="%">100</argument>
+			    </instruction>
+
+			    <instruction type="move_line">
+				<argument name="pose" type="num">
+				    <element type="num">400</element>
+				    <element type="num">0</element>
+				    <element type="num">460</element>
+				    <element type="num">0</element>
+				    <element type="num">0</element>
+				    <element type="num">3.1416</element>
+				</argument>
+				<argument name="velocity" type="num" unit="mm/s">1600</argument>
+                        	<argument name="smooth_velocity" type="num" unit="%">0</argument>
+				<argument name="acceleration" type="num" unit="%">100</argument>
+			    </instruction>
+
+        </function>
+    </prog_body>
+</prog>
