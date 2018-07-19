@@ -643,14 +643,9 @@ void parseCtrlComand() // (struct thread_control_block * objThdCtrlBlockPtr)
         case JUMP:
 			if(g_iCurrentThreadSeq < 0) break ;
 		    objThdCtrlBlockPtr = &g_thread_control_block[g_iCurrentThreadSeq];
-#ifdef USE_XPATH
-            printf("jump to line:%s\n", intprt_ctrl.line);
-			iLineNum = getLineNumFromXPathVector(intprt_ctrl.line);
-#else
-            printf("jump to line:%d\n", intprt_ctrl.line);
-			iLineNum = intprt_ctrl.line;
+            printf("jump to line:%d\n", intprt_ctrl.jump_line);
+			iLineNum = intprt_ctrl.jump_line;
             setLinenum(objThdCtrlBlockPtr, iLineNum);
-#endif
             // setPrgmState(EXECUTE_R);
 			break;
         case DEBUG:

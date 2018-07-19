@@ -2926,7 +2926,7 @@ void primitive(struct thread_control_block * objThreadCntrolBlock, eval_value *r
     progFuncCall = objThreadCntrolBlock->prog ;
   	putback(objThreadCntrolBlock);
 	// exec_call(objThreadCntrolBlock);
-	iRet = exec_call(objThreadCntrolBlock);
+    iRet = exec_call(objThreadCntrolBlock);
 	if(iRet == END_COMMND_RET)
 	   result->setFloatValue(0) ;
 	else
