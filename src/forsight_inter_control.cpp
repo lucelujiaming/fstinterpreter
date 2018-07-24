@@ -405,7 +405,10 @@ bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instructio
         //    setLinenum(objThdCtrlBlockPtr, iLineNum);
 
 	        if (objThdCtrlBlockPtr->prog_mode == STEP_MODE)
-	            setPrgmState(EXECUTE_TO_PAUSE_T);   //wait until this Instruction end
+	        {
+			    printf("setInstruction::prog_mode == STEP_MODE and seem that it does not need wait\n");
+	            // setPrgmState(EXECUTE_TO_PAUSE_T);   //wait until this Instruction end
+            }
 	    }
 
 #ifdef WIN32
@@ -438,7 +441,13 @@ bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instructio
 
 bool getIntprtCtrl()
 {
-    return tryRead(SHM_CTRL_CMD, 0, (void*)&intprt_ctrl, sizeof(intprt_ctrl));
+    bool iRet = tryRead(SHM_CTRL_CMD, 0, (void*)&intprt_ctrl, sizeof(intprt_ctrl));
+	if(g_lastcmd != intprt_ctrl.cmd)
+    {
+       printf("getIntprtCtrl = %d\n", intprt_ctrl.cmd);
+	   g_lastcmd = intprt_ctrl.cmd ;
+	}
+	return iRet ;
 }
 
 void startFile(struct thread_control_block * objThdCtrlBlockPtr, 
@@ -595,6 +604,12 @@ void waitInterpreterStateToPaused(
 		if(objThdCtrlBlockPtr->is_abort == true)
 		{
 			// setPrgmState(PAUSE_TO_IDLE_T) ;
+   			printf("waitInterpreterStateToPaused abort\n");
+			break;
+		}
+		if(interpreterState == IDLE_R)
+		{
+   			printf("waitInterpreterStateToPaused = IDLE_R\n");
 			break;
 		}
 #endif

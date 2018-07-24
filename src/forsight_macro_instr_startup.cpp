@@ -42,6 +42,12 @@ void* macro_instr_thread(void* arg)
 				&&(it->second.bIsRunning == false))
 			{
 				printf("start run...\n");
+				objThdCtrlBlockPtr = &g_thread_control_block[g_iCurrentThreadSeq];
+				if(objThdCtrlBlockPtr->is_in_macro == true)
+				{
+					printf("Can not run macro again\n");
+					break;
+				}
 				g_iCurrentThreadSeq++ ;
 				if(g_iCurrentThreadSeq < 0) break ;
 				objThdCtrlBlockPtr = &g_thread_control_block[g_iCurrentThreadSeq];
