@@ -16,6 +16,7 @@
 #define TXT_SR    "sr"
 #define TXT_R     "r"
 #define TXT_MR    "mr"
+#define TXT_HR    "hr"
 
 #define TXT_UF    "uf"
 #define TXT_TF    "tf"
@@ -29,8 +30,8 @@
 #define TXT_REG_VALUE   "value"
 
 // member name of PR
-#define TXT_PR_POSE    "pose"
-#define TXT_PR_JOINT   "joint"
+// #define TXT_PR_POSE    "pose"
+// #define TXT_PR_JOINT   "joint"
 // member name of UF/TF
 #define TXT_UF_TF_COORDINATE    "coordinate"
 // member name of PL

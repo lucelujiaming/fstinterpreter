@@ -53,6 +53,9 @@ void* script_func(void* arg);
 #endif
 void parseCtrlComand(); // (struct thread_control_block * objThdCtrlBlock);
 void initShm();
+void forgesight_load_programs_path();
+char * forgesight_get_programs_path();
+
 void updateIOError();
 vector<string> split(string str,string pattern);
 void startFile(struct thread_control_block * objThdCtrlBlockPtr, 

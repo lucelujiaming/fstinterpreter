@@ -33,6 +33,7 @@ typedef enum _EvalValueType
 	TYPE_SR     = 0x80,
 	TYPE_R      = 0x100,
 	TYPE_MR     = 0x200,
+	TYPE_HR     = 0x400,
 }EvalValueType;
 
 typedef struct _AdditionalE {
@@ -316,6 +317,32 @@ public:
 		}
 	}
 	
+	// TYPE_HR
+	void setHrRegDataValue(HrRegData * hrRegDataVal){
+		evalType  |= TYPE_HR ;
+		reg_hr     = * hrRegDataVal ;
+	}
+	
+	void setHrRegDataWithJointValue(Joint * jointVal){
+		evalType  |= TYPE_HR ;
+		reg_hr.value.joint_pos[0] = jointVal->j1;
+		reg_hr.value.joint_pos[1] = jointVal->j2;
+		reg_hr.value.joint_pos[2] = jointVal->j3;
+		reg_hr.value.joint_pos[3] = jointVal->j4;
+		reg_hr.value.joint_pos[4] = jointVal->j5;
+		reg_hr.value.joint_pos[5] = jointVal->j6;
+	}
+	
+	HrRegData getHrRegDataValue(){
+		int iType = evalType & TYPE_HR ;
+		if(iType != 0) {
+			return reg_hr ;
+		}
+		else {
+			noticeErrorType(TYPE_HR) ;
+			return hrRegDataFake;
+		}
+	}
 public:
 	void calcAdd(eval_value * operand)
 	{
@@ -871,6 +898,9 @@ private:
 		
         MrRegData reg_mr ;
 		MrRegData     mrRegDataFake;
+		
+        HrRegData reg_hr ;
+		HrRegData     hrRegDataFake;
 #endif
 	// };
 };

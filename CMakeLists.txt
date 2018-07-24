@@ -77,6 +77,7 @@ add_executable(prg_interpreter
     src/reg_manager/pr_reg.cpp
     src/reg_manager/sr_reg.cpp
     src/reg_manager/mr_reg.cpp
+    src/reg_manager/hr_reg.cpp
     src/reg_manager/reg_manager_interface.cpp
     src/reg_manager/reg_manager_interface_wrapper.cpp
     src/forsight_interpreter_shm.cpp
@@ -129,6 +130,10 @@ install(FILES config/pr_reg.yaml
     DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/configuration/machine
 )
 
+install(FILES config/programs_path.yaml
+    DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/configuration/machine
+)
+
 install(FILES config/r_reg.yaml
     DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/configuration/machine
 )
@@ -136,4 +141,9 @@ install(FILES config/r_reg.yaml
 install(FILES config/sr_reg.yaml
     DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/configuration/machine
 )
+
+install(FILES config/io_emulator.json
+    DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/configuration/configurable
+)
+
 

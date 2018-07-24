@@ -184,7 +184,7 @@ bool PrReg::isOutOfPosLimit(const PrValue& data)
             }
             break;
         case POS_TYPE_JOINT:
-            for(int i = 0; i < MAX_AXIS_NUM; ++i)
+            for(int i = 0; i < MAX_PR_AXIS_NUM; ++i)
             {
                 if(data.joint_pos[i] > MAX_PR_REG_POS_VALUE
                     || data.joint_pos[i] < -MAX_PR_REG_POS_VALUE)
@@ -198,7 +198,7 @@ bool PrReg::isOutOfPosLimit(const PrValue& data)
             return true;
     }
 
-    for(int i = 0; i < MAX_EXT_AXIS_NUM; ++i)
+    for(int i = 0; i < MAX_PR_EXT_AXIS_NUM; ++i)
     {
         if(data.ext_pos[i] > MAX_PR_REG_POS_VALUE
             || data.ext_pos[i] < -MAX_PR_REG_POS_VALUE)

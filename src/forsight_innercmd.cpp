@@ -1291,9 +1291,10 @@ void mergeImportXPathToProjectXPath(
 	sprintf(xpath_import_file_name, "%s_xpath.txt", fname);
 	sprintf(xpath_main_file_name, "%s_xpath.txt", objThreadCntrolBlock->project_name);
 #else
-	sprintf(xpath_import_file_name, "%s\/programs\/%s_xpath.txt", DATA_PATH, fname);
+	sprintf(xpath_import_file_name, "%s\/programs\/%s_xpath.txt", 
+			forgesight_get_programs_path(), fname);
 	sprintf(xpath_main_file_name, "%s\/programs\/%s_xpath.txt", 
-		DATA_PATH, objThreadCntrolBlock->project_name);
+			forgesight_get_programs_path(), objThreadCntrolBlock->project_name);
 #endif
 	iMainLineCount = getXPathLinenum(xpath_main_file_name);
 	
@@ -1342,7 +1343,8 @@ void generateXPathVector(char * fname)
 #ifdef WIN32
 	sprintf(xpath_file_name, "%s_xpath.txt", fname);
 #else
-	sprintf(xpath_file_name, "%s\/programs\/%s_xpath.txt", DATA_PATH, fname);
+	sprintf(xpath_file_name, "%s\/programs\/%s_xpath.txt", 
+			forgesight_get_programs_path(), fname);
 #endif
 
 	if((xpath_file = fopen(xpath_file_name, "r"))==NULL){

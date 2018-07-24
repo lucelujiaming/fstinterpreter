@@ -314,6 +314,37 @@ int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char *
 			}
 			sprintf(label_str, "%s ", label_str);
 		}
+		else if(xmlStrcasecmp(name, BAD_CAST"home_register")==0){ 
+			int iCount = 0 ;
+			for(nodeSubValueElement = nodeValueElement->children; 
+			nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
+				if(xmlStrcasecmp(nodeSubValueElement->name,BAD_CAST"element")==0){ 
+					//	value = xmlNodeGetContent(nodeSubValueElement);
+					type = xmlGetProp(nodeSubValueElement, BAD_CAST"type");
+					if(xmlStrcasecmp(type, BAD_CAST"num")==0){
+						if(iCount == 0)
+						{
+							memset(label_output, 0x00, 1024);
+							generateElementStr(nodeSubValueElement, objLineInfoTemp, label_output);
+							sprintf(label_str, "%sHR[%s]", label_str, (char*)label_output);
+						}
+						else
+						{
+							memset(label_output, 0x00, 1024);
+							generateElementStr(nodeSubValueElement, objLineInfoTemp, label_output);
+							sprintf(label_str, "%s.HJ%s", label_str, (char*)label_output);
+						}
+						iCount++;
+					}
+					else if(xmlStrcasecmp(type, BAD_CAST"param")==0){
+						memset(label_output, 0x00, 1024);
+						generateElementStr(nodeSubValueElement, objLineInfoTemp, label_output);
+						sprintf(label_str, "%s.%s", label_str, (char*)label_output);
+					}
+				}
+			}
+			sprintf(label_str, "%s ", label_str);
+		}
 		else if(xmlStrcasecmp(name, BAD_CAST"motion_register")==0){ 
 			for(nodeSubValueElement = nodeValueElement->children; 
 			nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){

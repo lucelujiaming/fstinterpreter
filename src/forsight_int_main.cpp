@@ -16,6 +16,7 @@ Logger glog;
 int main(int  argc, char *argv[])
 {
 	initShm();
+	forgesight_load_programs_path();
 	append_io_mapping();
 	forgesight_load_io_config();
 #ifndef WIN32
@@ -31,6 +32,7 @@ int main(int  argc, char *argv[])
 		if (ret)
 		{
 			parseCtrlComand(); //  &g_thread_control_block[0]);
+			// intprt_ctrl.cmd = LOAD ;
 		}
 #ifdef WIN32
 		Sleep(100);

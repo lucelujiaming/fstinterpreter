@@ -25,6 +25,7 @@ using namespace fst_reg ;
 #define TXT_SR    "sr"
 #define TXT_R     "r"
 #define TXT_MR    "mr"
+#define TXT_HR    "hr"
 
 #define TXT_UF    "uf"
 #define TXT_TF    "tf"
@@ -38,24 +39,24 @@ using namespace fst_reg ;
 #define TXT_REG_VALUE   "value"
 
 // member name of PR
-#define TXT_PR_POSE    "pose"
-#define TXT_PR_POSE_X  "x"
-#define TXT_PR_POSE_Y  "y"
-#define TXT_PR_POSE_Z  "z"
-#define TXT_PR_POSE_A  "a"
-#define TXT_PR_POSE_B  "b"
-#define TXT_PR_POSE_C  "c"
+#define TXT_POSE    "pose"
+#define TXT_POSE_X  "x"
+#define TXT_POSE_Y  "y"
+#define TXT_POSE_Z  "z"
+#define TXT_POSE_A  "a"
+#define TXT_POSE_B  "b"
+#define TXT_POSE_C  "c"
 
-#define TXT_PR_JOINT      "joint"
-#define TXT_PR_JOINT_J1   "j1"
-#define TXT_PR_JOINT_J2   "j2"
-#define TXT_PR_JOINT_J3   "j3"
-#define TXT_PR_JOINT_J4   "j4"
-#define TXT_PR_JOINT_J5   "j5"
-#define TXT_PR_JOINT_J6   "j6"
-#define TXT_PR_JOINT_J7   "j7"
-#define TXT_PR_JOINT_J8   "j8"
-#define TXT_PR_JOINT_J9   "j9"
+#define TXT_JOINT      "joint"
+#define TXT_JOINT_J1   "j1"
+#define TXT_JOINT_J2   "j2"
+#define TXT_JOINT_J3   "j3"
+#define TXT_JOINT_J4   "j4"
+#define TXT_JOINT_J5   "j5"
+#define TXT_JOINT_J6   "j6"
+#define TXT_JOINT_J7   "j7"
+#define TXT_JOINT_J8   "j8"
+#define TXT_JOINT_J9   "j9"
 
 #define TXT_PR_POSE_JOINT_J1   "pj1"
 #define TXT_PR_POSE_JOINT_J2   "pj2"
@@ -63,6 +64,13 @@ using namespace fst_reg ;
 #define TXT_PR_POSE_JOINT_J4   "pj4"
 #define TXT_PR_POSE_JOINT_J5   "pj5"
 #define TXT_PR_POSE_JOINT_J6   "pj6"
+
+#define TXT_HR_JOINT_J1   "hj1"
+#define TXT_HR_JOINT_J2   "hj2"
+#define TXT_HR_JOINT_J3   "hj3"
+#define TXT_HR_JOINT_J4   "hj4"
+#define TXT_HR_JOINT_J5   "hj5"
+#define TXT_HR_JOINT_J6   "hj6"
 
 // member name of UF/TF
 #define TXT_UF_TF_COORDINATE    "coordinate"
@@ -119,6 +127,7 @@ int forgesight_registers_manager_get_register(
 	SrRegData objSrRegData ;
 	MrRegData objMrRegData ;
 	RRegData objRRegData ;
+	HrRegData objHrRegData ;
 
     int       iID ;
     char      cComment[MAX_REG_COMMENT_LENGTH];
@@ -178,103 +187,103 @@ int forgesight_registers_manager_get_register(
 			value->setPrRegDataValue(&objPrRegData);
 		}
 		// Implement for intergretion
-		else if (!strcmp(reg_member, TXT_PR_POSE))
+		else if (!strcmp(reg_member, TXT_POSE))
 		{
 			reg_manager_interface_getPosePr(&objPoseEuler, iRegIdx);
 			// PoseEuler * ptr = (PoseEuler *)reg_content_buffer ;
 			value->setPoseValue(&objPoseEuler);
 		}
-		else if (!strcmp(reg_member, TXT_PR_POSE_X))
+		else if (!strcmp(reg_member, TXT_POSE_X))
 		{
 			reg_manager_interface_getPosePr(&objPoseEuler, iRegIdx);
 			// PoseEuler * ptr = (PoseEuler *)reg_content_buffer ;
 			value->setFloatValue(objPoseEuler.position.x);
 		}
-		else if (!strcmp(reg_member, TXT_PR_POSE_Y))
+		else if (!strcmp(reg_member, TXT_POSE_Y))
 		{
 			reg_manager_interface_getPosePr(&objPoseEuler, iRegIdx);
 			// PoseEuler * ptr = (PoseEuler *)reg_content_buffer ;
 			value->setFloatValue(objPoseEuler.position.y);
 		}
-		else if (!strcmp(reg_member, TXT_PR_POSE_Z))
+		else if (!strcmp(reg_member, TXT_POSE_Z))
 		{
 			reg_manager_interface_getPosePr(&objPoseEuler, iRegIdx);
 			// PoseEuler * ptr = (PoseEuler *)reg_content_buffer ;
 			value->setFloatValue(objPoseEuler.position.z);
 		}
-		else if (!strcmp(reg_member, TXT_PR_POSE_A))
+		else if (!strcmp(reg_member, TXT_POSE_A))
 		{
 			reg_manager_interface_getPosePr(&objPoseEuler, iRegIdx);
 			// PoseEuler * ptr = (PoseEuler *)reg_content_buffer ;
 			value->setFloatValue(objPoseEuler.orientation.a);
 		}
-		else if (!strcmp(reg_member, TXT_PR_POSE_B))
+		else if (!strcmp(reg_member, TXT_POSE_B))
 		{
 			reg_manager_interface_getPosePr(&objPoseEuler, iRegIdx);
 			// PoseEuler * ptr = (PoseEuler *)reg_content_buffer ;
 			value->setFloatValue(objPoseEuler.orientation.b);
 		}
-		else if (!strcmp(reg_member, TXT_PR_POSE_C))
+		else if (!strcmp(reg_member, TXT_POSE_C))
 		{
 			reg_manager_interface_getPosePr(&objPoseEuler, iRegIdx);
 			// PoseEuler * ptr = (PoseEuler *)reg_content_buffer ;
 			value->setFloatValue(objPoseEuler.orientation.c);
 		}
-		else if (!strcmp(reg_member, TXT_PR_JOINT))
+		else if (!strcmp(reg_member, TXT_JOINT))
 		{
 			reg_manager_interface_getJointPr(&objJoint, iRegIdx);
 			// Joint * ptr = (Joint *)reg_content_buffer ;
 			value->setJointValue(&objJoint);
 		}
-		else if (!strcmp(reg_member, TXT_PR_JOINT_J1))
+		else if (!strcmp(reg_member, TXT_JOINT_J1))
 		{
 			reg_manager_interface_getJointPr(&objJoint, iRegIdx);
 			// Joint * ptr = (Joint *)reg_content_buffer ;
 			value->setFloatValue(objJoint.j1);
 		}
-		else if (!strcmp(reg_member, TXT_PR_JOINT_J2))
+		else if (!strcmp(reg_member, TXT_JOINT_J2))
 		{
 			reg_manager_interface_getJointPr(&objJoint, iRegIdx);
 			// Joint * ptr = (Joint *)reg_content_buffer ;
 			value->setFloatValue(objJoint.j2);
 		}
-		else if (!strcmp(reg_member, TXT_PR_JOINT_J3))
+		else if (!strcmp(reg_member, TXT_JOINT_J3))
 		{
 			reg_manager_interface_getJointPr(&objJoint, iRegIdx);
 			// Joint * ptr = (Joint *)reg_content_buffer ;
 			value->setFloatValue(objJoint.j3);
 		}
-		else if (!strcmp(reg_member, TXT_PR_JOINT_J4))
+		else if (!strcmp(reg_member, TXT_JOINT_J4))
 		{
 			reg_manager_interface_getJointPr(&objJoint, iRegIdx);
 			// Joint * ptr = (Joint *)reg_content_buffer ;
 			value->setFloatValue(objJoint.j4);
 		}
-		else if (!strcmp(reg_member, TXT_PR_JOINT_J5))
+		else if (!strcmp(reg_member, TXT_JOINT_J5))
 		{
 			reg_manager_interface_getJointPr(&objJoint, iRegIdx);
 			// Joint * ptr = (Joint *)reg_content_buffer ;
 			value->setFloatValue(objJoint.j5);
 		}
-		else if (!strcmp(reg_member, TXT_PR_JOINT_J6))
+		else if (!strcmp(reg_member, TXT_JOINT_J6))
 		{
 			reg_manager_interface_getJointPr(&objJoint, iRegIdx);
 			// Joint * ptr = (Joint *)reg_content_buffer ;
 			value->setFloatValue(objJoint.j6);
 		}
-		else if (!strcmp(reg_member, TXT_PR_JOINT_J7))
+		else if (!strcmp(reg_member, TXT_JOINT_J7))
 		{
 			reg_manager_interface_getJointPr(&objJoint, iRegIdx);
 			// Joint * ptr = (Joint *)reg_content_buffer ;
 			value->setFloatValue(objJoint.j7);
 		}
-		else if (!strcmp(reg_member, TXT_PR_JOINT_J8))
+		else if (!strcmp(reg_member, TXT_JOINT_J8))
 		{
 			reg_manager_interface_getJointPr(&objJoint, iRegIdx);
 			// Joint * ptr = (Joint *)reg_content_buffer ;
 			value->setFloatValue(objJoint.j8);
 		}
-		else if (!strcmp(reg_member, TXT_PR_JOINT_J9))
+		else if (!strcmp(reg_member, TXT_JOINT_J9))
 		{
 			reg_manager_interface_getJointPr(&objJoint, iRegIdx);
 			// Joint * ptr = (Joint *)reg_content_buffer ;
@@ -449,6 +458,118 @@ int forgesight_registers_manager_get_register(
 			value->setStringValue(strComment);
 		}
 	}
+	else if(!strcmp(reg_name, TXT_HR))
+	{
+		if(strlen(reg_member) == 0)
+		{
+			reg_manager_interface_getHr(&objHrRegData, iRegIdx);
+			// PrRegData * ptr = (PrRegData *)reg_content_buffer ;
+			value->setHrRegDataValue(&objHrRegData);
+		}
+		// Implement for intergretion
+		else if (!strcmp(reg_member, TXT_JOINT))
+		{
+			reg_manager_interface_getJointHr(&objJoint, iRegIdx);
+			// Joint * ptr = (Joint *)reg_content_buffer ;
+			value->setJointValue(&objJoint);
+		}
+		else if (!strcmp(reg_member, TXT_JOINT_J1))
+		{
+			reg_manager_interface_getJointHr(&objJoint, iRegIdx);
+			// Joint * ptr = (Joint *)reg_content_buffer ;
+			value->setFloatValue(objJoint.j1);
+		}
+		else if (!strcmp(reg_member, TXT_JOINT_J2))
+		{
+			reg_manager_interface_getJointHr(&objJoint, iRegIdx);
+			// Joint * ptr = (Joint *)reg_content_buffer ;
+			value->setFloatValue(objJoint.j2);
+		}
+		else if (!strcmp(reg_member, TXT_JOINT_J3))
+		{
+			reg_manager_interface_getJointHr(&objJoint, iRegIdx);
+			// Joint * ptr = (Joint *)reg_content_buffer ;
+			value->setFloatValue(objJoint.j3);
+		}
+		else if (!strcmp(reg_member, TXT_JOINT_J4))
+		{
+			reg_manager_interface_getJointHr(&objJoint, iRegIdx);
+			// Joint * ptr = (Joint *)reg_content_buffer ;
+			value->setFloatValue(objJoint.j4);
+		}
+		else if (!strcmp(reg_member, TXT_JOINT_J5))
+		{
+			reg_manager_interface_getJointHr(&objJoint, iRegIdx);
+			// Joint * ptr = (Joint *)reg_content_buffer ;
+			value->setFloatValue(objJoint.j5);
+		}
+		else if (!strcmp(reg_member, TXT_JOINT_J6))
+		{
+			reg_manager_interface_getJointHr(&objJoint, iRegIdx);
+			// Joint * ptr = (Joint *)reg_content_buffer ;
+			value->setFloatValue(objJoint.j6);
+		}
+		else if (!strcmp(reg_member, TXT_JOINT_J7))
+		{
+			reg_manager_interface_getJointHr(&objJoint, iRegIdx);
+			// Joint * ptr = (Joint *)reg_content_buffer ;
+			value->setFloatValue(objJoint.j7);
+		}
+		else if (!strcmp(reg_member, TXT_JOINT_J8))
+		{
+			reg_manager_interface_getJointHr(&objJoint, iRegIdx);
+			// Joint * ptr = (Joint *)reg_content_buffer ;
+			value->setFloatValue(objJoint.j8);
+		}
+		else if (!strcmp(reg_member, TXT_JOINT_J9))
+		{
+			reg_manager_interface_getJointHr(&objJoint, iRegIdx);
+			// Joint * ptr = (Joint *)reg_content_buffer ;
+			value->setFloatValue(objJoint.j9);
+		}
+		// General parameters for XML content
+		else if (!strcmp(reg_member, TXT_HR_JOINT_J1))
+		{
+			reg_manager_interface_getHr(&objHrRegData, iRegIdx);
+			value->setFloatValue(objHrRegData.value.joint_pos[0]);
+		}
+		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J2))
+		{
+			reg_manager_interface_getHr(&objHrRegData, iRegIdx);
+			value->setFloatValue(objHrRegData.value.joint_pos[1]);
+		}
+		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J3))
+		{
+			reg_manager_interface_getHr(&objHrRegData, iRegIdx);
+			value->setFloatValue(objHrRegData.value.joint_pos[2]);
+		}
+		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J4))
+		{
+			reg_manager_interface_getHr(&objHrRegData, iRegIdx);
+			value->setFloatValue(objHrRegData.value.joint_pos[3]);
+		}
+		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J5))
+		{
+			reg_manager_interface_getHr(&objHrRegData, iRegIdx);
+			value->setFloatValue(objHrRegData.value.joint_pos[4]);
+		}
+		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J6))
+		{
+			reg_manager_interface_getHr(&objHrRegData, iRegIdx);
+			value->setFloatValue(objHrRegData.value.joint_pos[5]);
+		}
+		else if (!strcmp(reg_member, TXT_REG_ID))
+		{
+			reg_manager_interface_getIdPr(&iID, iRegIdx);
+			value->setFloatValue(iID);
+		}
+		else if (!strcmp(reg_member, TXT_REG_COMMENT))
+		{
+			reg_manager_interface_getCommentPr(cComment, iRegIdx);
+			strComment = std::string(cComment);
+			value->setStringValue(strComment);
+		}
+	}
 	else if(!strcmp(reg_name, TXT_UF))
 	{
 //		if(strlen(reg_member) == 0)
@@ -561,6 +682,7 @@ int forgesight_registers_manager_set_register(
 	char *temp = NULL ;
 	
 	PrRegData objPrRegData ;
+	HrRegData objHrRegData ;
 	
 	PoseEuler pose ;
 	Joint joint ;
@@ -599,7 +721,7 @@ int forgesight_registers_manager_set_register(
 			reg_manager_interface_setPr(&(valueStart->getPrRegDataValue()), iRegIdx);
 	       	return 0 ;
 		}
-		else if (!strcmp(reg_member, TXT_PR_POSE))
+		else if (!strcmp(reg_member, TXT_POSE))
 		{
 			if (valueStart->getType() == TYPE_FLOAT)
 			{
@@ -638,7 +760,7 @@ int forgesight_registers_manager_set_register(
 	    	   	return 0 ;
 			}
 		}
-		else if (!strcmp(reg_member, TXT_PR_POSE_X))
+		else if (!strcmp(reg_member, TXT_POSE_X))
 		{
 			double fValue = valueStart->getFloatValue();
 			
@@ -661,7 +783,7 @@ int forgesight_registers_manager_set_register(
 			}
 	       	return 0 ;
 		}
-		else if (!strcmp(reg_member, TXT_PR_POSE_Y))
+		else if (!strcmp(reg_member, TXT_POSE_Y))
 		{
 			double fValue = valueStart->getFloatValue();
 			
@@ -684,7 +806,7 @@ int forgesight_registers_manager_set_register(
 			}
 	       	return 0 ;
 		}
-		else if (!strcmp(reg_member, TXT_PR_POSE_Z))
+		else if (!strcmp(reg_member, TXT_POSE_Z))
 		{
 			double fValue = valueStart->getFloatValue();
 			
@@ -707,7 +829,7 @@ int forgesight_registers_manager_set_register(
 			}
 	       	return 0 ;
 		}
-		else if (!strcmp(reg_member, TXT_PR_POSE_A))
+		else if (!strcmp(reg_member, TXT_POSE_A))
 		{
 			double fValue = valueStart->getFloatValue();
 			
@@ -730,7 +852,7 @@ int forgesight_registers_manager_set_register(
 			}
 	       	return 0 ;
 		}
-		else if (!strcmp(reg_member, TXT_PR_POSE_B))
+		else if (!strcmp(reg_member, TXT_POSE_B))
 		{
 			double fValue = valueStart->getFloatValue();
 			
@@ -753,7 +875,7 @@ int forgesight_registers_manager_set_register(
 			}
 	       	return 0 ;
 		}
-		else if (!strcmp(reg_member, TXT_PR_POSE_C))
+		else if (!strcmp(reg_member, TXT_POSE_C))
 		{
 			double fValue = valueStart->getFloatValue();
 			
@@ -776,7 +898,7 @@ int forgesight_registers_manager_set_register(
 			}
 	       	return 0 ;
 		}
-		else if (!strcmp(reg_member, TXT_PR_JOINT))
+		else if (!strcmp(reg_member, TXT_JOINT))
 		{
 			if (valueStart->getType() == TYPE_FLOAT)
 			{
@@ -814,7 +936,7 @@ int forgesight_registers_manager_set_register(
 			}
 			
 		}
-		else if (!strcmp(reg_member, TXT_PR_JOINT_J1))
+		else if (!strcmp(reg_member, TXT_JOINT_J1))
 		{
 			double fValue = valueStart->getFloatValue();
 			
@@ -837,7 +959,7 @@ int forgesight_registers_manager_set_register(
 			}
 	       	return 0 ;
 		}
-		else if (!strcmp(reg_member, TXT_PR_JOINT_J2))
+		else if (!strcmp(reg_member, TXT_JOINT_J2))
 		{
 			double fValue = valueStart->getFloatValue();
 			
@@ -860,7 +982,7 @@ int forgesight_registers_manager_set_register(
 			}
 	       	return 0 ;
 		}
-		else if (!strcmp(reg_member, TXT_PR_JOINT_J3))
+		else if (!strcmp(reg_member, TXT_JOINT_J3))
 		{
 			double fValue = valueStart->getFloatValue();
 			
@@ -883,7 +1005,7 @@ int forgesight_registers_manager_set_register(
 			}
 	       	return 0 ;
 		}
-		else if (!strcmp(reg_member, TXT_PR_JOINT_J4))
+		else if (!strcmp(reg_member, TXT_JOINT_J4))
 		{
 			double fValue = valueStart->getFloatValue();
 			
@@ -906,7 +1028,7 @@ int forgesight_registers_manager_set_register(
 			}
 	       	return 0 ;
 		}
-		else if (!strcmp(reg_member, TXT_PR_JOINT_J5))
+		else if (!strcmp(reg_member, TXT_JOINT_J5))
 		{
 			double fValue = valueStart->getFloatValue();
 			
@@ -929,7 +1051,7 @@ int forgesight_registers_manager_set_register(
 			}
 	       	return 0 ;
 		}
-		else if (!strcmp(reg_member, TXT_PR_JOINT_J6))
+		else if (!strcmp(reg_member, TXT_JOINT_J6))
 		{
 			double fValue = valueStart->getFloatValue();
 			
@@ -1314,6 +1436,249 @@ int forgesight_registers_manager_set_register(
 	       	return 0 ;
 		}
 	}
+	else if(!strcmp(reg_name, TXT_HR))
+	{
+		if(strlen(reg_member) == 0)
+		{
+			reg_manager_interface_setHr(&(valueStart->getHrRegDataValue()), iRegIdx);
+	       	return 0 ;
+		}
+		else if (!strcmp(reg_member, TXT_JOINT))
+		{
+			if (valueStart->getType() == TYPE_FLOAT)
+			{
+				joint.j1 = (double)valueStart->getFloatValue();
+				
+				get_exp(objThreadCntrolBlock, &value, &boolValue);
+				joint.j2 = (double)value.getFloatValue();
+				
+				get_exp(objThreadCntrolBlock, &value, &boolValue);
+				joint.j3 = (double)value.getFloatValue();
+				
+				get_exp(objThreadCntrolBlock, &value, &boolValue);
+				joint.j4 = (double)value.getFloatValue();
+				
+				get_exp(objThreadCntrolBlock, &value, &boolValue);
+				joint.j5 = (double)value.getFloatValue();
+				
+				get_exp(objThreadCntrolBlock, &value, &boolValue);
+				joint.j6 = (double)value.getFloatValue();
+				
+				printf("Set JOINT:(%f, %f, %f, %f, %f, %f) to PR[%s]\n", 
+					joint.j1, joint.j2, joint.j3, joint.j4, joint.j5, joint.j6, 
+					reg_idx);
+				reg_manager_interface_setJointHr(&joint, iRegIdx);
+	    	   	return 0 ;
+			}
+			else if (valueStart->getType() == TYPE_JOINT)
+			{
+				joint = valueStart->getJointValue();
+				printf("Set JOINT:(%f, %f, %f, %f, %f, %f) to PR[%s]\n", 
+					joint.j1, joint.j2, joint.j3, joint.j4, joint.j5, joint.j6, 
+					reg_idx);
+				reg_manager_interface_setJointHr(&joint, iRegIdx);
+	    	  	return 0 ;
+			}
+			
+		}
+		else if (!strcmp(reg_member, TXT_JOINT_J1))
+		{
+			double fValue = valueStart->getFloatValue();
+			
+			if(reg_manager_interface_getHr(&objHrRegData, iRegIdx))
+			{
+				objHrRegData.value.joint_pos[0] = fValue ;
+				reg_manager_interface_setHr(&objHrRegData, iRegIdx);
+			}
+			else
+			{
+				printf("Set J1:(%f) but PR[%d] not exist\n", fValue, iRegIdx);
+			}
+	       	return 0 ;
+		}
+		else if (!strcmp(reg_member, TXT_JOINT_J2))
+		{
+			double fValue = valueStart->getFloatValue();
+			
+			if(reg_manager_interface_getHr(&objHrRegData, iRegIdx))
+			{
+				objHrRegData.value.joint_pos[1] = fValue ;
+				reg_manager_interface_setHr(&objHrRegData, iRegIdx);
+			}
+			else
+			{
+				printf("Set J2:(%f) but HR[%d] not exist\n", fValue, iRegIdx);
+			}
+	       	return 0 ;
+		}
+		else if (!strcmp(reg_member, TXT_JOINT_J3))
+		{
+			double fValue = valueStart->getFloatValue();
+			
+			if(reg_manager_interface_getHr(&objHrRegData, iRegIdx))
+			{
+				objHrRegData.value.joint_pos[2] = fValue ;
+				reg_manager_interface_setHr(&objHrRegData, iRegIdx);
+			}
+			else
+			{
+				printf("Set J3:(%f) but HR[%d] not exist\n", fValue, iRegIdx);
+			}
+	       	return 0 ;
+		}
+		else if (!strcmp(reg_member, TXT_JOINT_J4))
+		{
+			double fValue = valueStart->getFloatValue();
+			
+			if(reg_manager_interface_getHr(&objHrRegData, iRegIdx))
+			{
+				objHrRegData.value.joint_pos[3] = fValue ;
+				reg_manager_interface_setHr(&objHrRegData, iRegIdx);
+			}
+			else
+			{
+				printf("Set J4:(%f) but HR[%d] not exist\n", fValue, iRegIdx);
+			}
+	       	return 0 ;
+		}
+		else if (!strcmp(reg_member, TXT_JOINT_J5))
+		{
+			double fValue = valueStart->getFloatValue();
+			
+			if(reg_manager_interface_getHr(&objHrRegData, iRegIdx))
+			{
+				objHrRegData.value.joint_pos[4] = fValue ;
+				reg_manager_interface_setHr(&objHrRegData, iRegIdx);
+			}
+			else
+			{
+				printf("Set J5:(%f) but HR[%d] not exist\n", fValue, iRegIdx);
+			}
+	       	return 0 ;
+		}
+		else if (!strcmp(reg_member, TXT_JOINT_J6))
+		{
+			double fValue = valueStart->getFloatValue();
+			
+			if(reg_manager_interface_getHr(&objHrRegData, iRegIdx))
+			{
+				objHrRegData.value.joint_pos[5] = fValue ;
+				reg_manager_interface_setHr(&objHrRegData, iRegIdx);
+			}
+			else
+			{
+				printf("Set J6:(%f) but HR[%d] not exist\n", fValue, iRegIdx);
+			}
+	       	return 0 ;
+		}
+		// General parameters for XML content
+		else if (!strcmp(reg_member, TXT_HR_JOINT_J1))
+		{
+			double fValue = valueStart->getFloatValue();
+			
+			if(reg_manager_interface_getHr(&objHrRegData, iRegIdx))
+			{
+				objHrRegData.value.joint_pos[0] = fValue ;
+				reg_manager_interface_setHr(&objHrRegData, iRegIdx);
+			}
+			else
+			{
+				printf("Set HJ1:(%f) but HR[%d] not exist\n", fValue, iRegIdx);
+			}
+	       	return 0 ;
+		}
+		else if (!strcmp(reg_member, TXT_HR_JOINT_J2))
+		{
+			double fValue = valueStart->getFloatValue();
+			
+			if(reg_manager_interface_getHr(&objHrRegData, iRegIdx))
+			{
+				objHrRegData.value.joint_pos[1] = fValue ;
+				reg_manager_interface_setHr(&objHrRegData, iRegIdx);
+			}
+			else
+			{
+				printf("Set HJ2:(%f) but HR[%d] not exist\n", fValue, iRegIdx);
+			}
+	       	return 0 ;
+		}
+		else if (!strcmp(reg_member, TXT_HR_JOINT_J3))
+		{
+			double fValue = valueStart->getFloatValue();
+			
+			if(reg_manager_interface_getHr(&objHrRegData, iRegIdx))
+			{
+				objHrRegData.value.joint_pos[2] = fValue ;
+				reg_manager_interface_setHr(&objHrRegData, iRegIdx);
+			}
+			else
+			{
+				printf("Set HJ3:(%f) but HR[%d] not exist\n", fValue, iRegIdx);
+			}
+	       	return 0 ;
+		}
+		else if (!strcmp(reg_member, TXT_HR_JOINT_J4))
+		{
+			double fValue = valueStart->getFloatValue();
+			
+			if(reg_manager_interface_getHr(&objHrRegData, iRegIdx))
+			{
+				objHrRegData.value.joint_pos[3] = fValue ;
+				reg_manager_interface_setHr(&objHrRegData, iRegIdx);
+			}
+			else
+			{
+				printf("Set HJ4:(%f) but HR[%d] not exist\n", fValue, iRegIdx);
+			}
+	       	return 0 ;
+		}
+		else if (!strcmp(reg_member, TXT_HR_JOINT_J5))
+		{
+			double fValue = valueStart->getFloatValue();
+			
+			if(reg_manager_interface_getHr(&objHrRegData, iRegIdx))
+			{
+				objHrRegData.value.joint_pos[4] = fValue ;
+				reg_manager_interface_setHr(&objHrRegData, iRegIdx);
+			}
+			else
+			{
+				printf("Set HJ5:(%f) but HR[%d] not exist\n", fValue, iRegIdx);
+			}
+	       	return 0 ;
+		}
+		else if (!strcmp(reg_member, TXT_HR_JOINT_J6))
+		{
+			double fValue = valueStart->getFloatValue();
+			
+			if(reg_manager_interface_getHr(&objHrRegData, iRegIdx))
+			{
+				objHrRegData.value.joint_pos[5] = fValue ;
+				reg_manager_interface_setHr(&objHrRegData, iRegIdx);
+			}
+			else
+			{
+				printf("Set HJ6:(%f) but HR[%d] not exist\n", fValue, iRegIdx);
+			}
+	       	return 0 ;
+		}
+		else if (!strcmp(reg_member, TXT_REG_ID))
+		{
+			int iID = (int)valueStart->getFloatValue();
+			printf("Set ID:(%d) to HR[%s]\n", iID, reg_idx);
+			reg_manager_interface_setIdHr(&iID, iRegIdx);
+	       	return 0 ;
+		}
+		else if (!strcmp(reg_member, TXT_REG_COMMENT))
+		{
+			// get_token(objThreadCntrolBlock);
+			printf("Set COMMENT:(%s) to HR[%s]\n", 
+				objThreadCntrolBlock->token, reg_idx);
+			reg_manager_interface_setCommentHr(
+				(char *)valueStart->getStringValue().c_str(), iRegIdx);
+	       	return 0 ;
+		}
+	}
 	else if(!strcmp(reg_name, TXT_UF))
 	{
 		if(strlen(reg_member) == 0)
@@ -1537,6 +1902,8 @@ int forgesight_read_reg(RegMap & reg)
 	RRegData objRRegData ;
 	RRegData * objRRegDataPtr ;
 
+	HrRegData objHrRegData ;
+	HrRegData * objHrRegDataPtr ;
 
     int       iID ;
  //   char      cComment[MAX_REG_COMMENT_LENGTH];
@@ -1647,6 +2014,27 @@ int forgesight_read_reg(RegMap & reg)
 	    reg_manager_interface_getCommentMr(reg.value, reg.index);
 		// memcpy(reg.value, cComment, sizeof(cComment));
 	 	break;
+	 // home register
+	 case HOME_REG:
+		 reg_manager_interface_getHr(&objHrRegData, reg.index);
+		 objHrRegDataPtr = (HrRegData *)reg.value;
+		 objHrRegDataPtr->id = objHrRegData.id;
+		 memcpy(objHrRegDataPtr->comment, 
+		 		objHrRegData.comment, sizeof(objHrRegData.comment));
+ 		 objHrRegDataPtr->value = objHrRegData.value;
+		 break;
+	 case HOME_REG_JOINT:
+		 reg_manager_interface_getJointHr(&objJoint, reg.index);
+		 memcpy(reg.value, &objJoint, sizeof(objJoint));
+		 break;
+	 case HOME_REG_ID:
+		 reg_manager_interface_getIdHr(&iID, reg.index);
+		 memcpy(reg.value, &iID, sizeof(iID));
+		 break;
+	 case HOME_REG_COMMENT:
+		 reg_manager_interface_getCommentHr(reg.value, reg.index);
+		 // memcpy(reg.value, cComment, sizeof(cComment));
+		 break;
 	 // register of user coordinate offset
 	 case UF_REG:
 	    reg_manager_interface_getUf(reg.value, reg.index);
@@ -1715,6 +2103,10 @@ int forgesight_mod_reg(RegMap & reg)
 	
 	RRegData objRRegData ;
 	RRegData * objRRegDataPtr ;
+
+	HrRegData objHrRegData ;
+	HrRegData * objHrRegDataPtr ;
+	
 
     int       iID ;
 //    char      cComment[MAX_REG_COMMENT_LENGTH];
@@ -1840,6 +2232,27 @@ int forgesight_mod_reg(RegMap & reg)
 		// memcpy(cComment, reg.value, sizeof(cComment));
 	    reg_manager_interface_setCommentMr(reg.value, reg.index);
 	 	break;
+	 // home register
+	 case HOME_REG:
+	 	 objHrRegDataPtr = (HrRegData *)reg.value;
+		 objHrRegData.id = objHrRegDataPtr->id;
+		 memcpy(objHrRegData.comment, objHrRegDataPtr->comment, 
+		 		sizeof(objHrRegData.comment));
+		 objHrRegData.value = objHrRegDataPtr->value;
+		 reg_manager_interface_setHr(&objHrRegData, reg.index);
+		 break;
+	 case HOME_REG_JOINT:
+		 memcpy(&objJoint, reg.value, sizeof(objJoint));
+		 reg_manager_interface_setJointHr(&objJoint, reg.index);
+		 break;
+	 case HOME_REG_ID:
+		 memcpy(&iID, reg.value, sizeof(iID));
+		 reg_manager_interface_setIdHr(&iID, reg.index);
+		 break;
+	 case HOME_REG_COMMENT:
+		 // memcpy(cComment, reg.value, sizeof(cComment));
+		 reg_manager_interface_setCommentHr(reg.value, reg.index);
+		 break;
 	 // register of user coordinate offset
 	 case UF_REG:
 	    reg_manager_interface_setUf(reg.value, reg.index);
@@ -1917,6 +2330,10 @@ int forgesight_del_reg(RegMap & reg)
 	 case MOT_REG:
 	    reg_manager_interface_delMr(reg.index);
 	 	break;
+	 // home register
+	 case HOME_REG:
+		 reg_manager_interface_delHr(reg.index);
+		 break;
  	 }
   	 printf("reg.type = %d end.\n", reg.type);
 	 return 1;
@@ -1940,5 +2357,10 @@ std::vector<BaseRegData> forgesight_read_valid_r_lst(int start_id, int size)
 std::vector<BaseRegData> forgesight_read_valid_mr_lst(int start_id, int size)
 {
 	return reg_manager_interface_read_valid_mr_lst(start_id, size);
+}
+
+std::vector<BaseRegData> forgesight_read_valid_hr_lst(int start_id, int size)
+{
+	return reg_manager_interface_read_valid_hr_lst(start_id, size);
 }
 

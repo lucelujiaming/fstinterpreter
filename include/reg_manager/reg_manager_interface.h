@@ -7,6 +7,7 @@
 #include "mr_reg.h"
 #include "sr_reg.h"
 #include "r_reg.h"
+#include "hr_reg.h"
 #include <string>
 
 namespace fst_reg
@@ -106,6 +107,63 @@ public:
     bool setRReg(RRegData* data_ptr);    
     std::vector<BaseRegData> getRRegChangedIdList(int start_id, int size);
     std::vector<BaseRegData> getRRegValidIdList(int start_id, int size);
+	
+    //------------------------------------------------------------
+    // Function:    addHrReg
+    // Summary: add a Hr Reg to the reg list
+    // In:      data_ptr: corresponding data of the reg
+    // Out:     none
+    // Return:  true: operation success
+    //          false:operation failed
+    //------------------------------------------------------------
+    bool addHrReg(HrRegData* data_ptr);
+    //------------------------------------------------------------
+    // Function:    deleteHrReg
+    // Summary: delete a Hr Reg from the reg list
+    // In:      id: index of the pr reg to be deleted
+    // Out:     none
+    // Return:  true: operation success
+    //          false:operation failed
+    //------------------------------------------------------------    
+    bool deleteHrReg(int id);
+    //------------------------------------------------------------
+    // Function:    getHrReg
+    // Summary: get a Hr Reg data from the reg list
+    // In:      id: index of the hr reg to be deleted
+    // Out:     data_ptr: data pointer of storing the data of the expected hr reg 
+    // Return:  true: operation success
+    //          false:operation failed
+    //------------------------------------------------------------   
+    bool getHrReg(int id, HrRegData* data_ptr);
+    //------------------------------------------------------------
+    // Function:    setHrReg
+    // Summary: set a Hr Reg data which has already been in the reg list
+    // In:      data_ptr: data pointer of storing the data of the expected hr reg 
+    // Out:     none
+    // Return:  true: operation success
+    //          false:operation failed
+    //------------------------------------------------------------ 
+    bool setHrReg(HrRegData* data_ptr);
+    //------------------------------------------------------------
+    // Function:    getHrRegChangedIdList
+    // Summary: list all changed indexes of hr regs in the given index range
+    // In:      start_id: start index of hr reg
+    //          size: the scope of scanning
+    // Out:     none
+    // Return:  list of changed pr regs
+    //------------------------------------------------------------
+    std::vector<BaseRegData> getHrRegChangedIdList(int start_id, int size);
+
+    //------------------------------------------------------------
+    // Function:    getHrRegValidIdList
+    // Summary: list all valid indexes of hr regs in the given index range,
+    //          calling this API will not change the corresponding is_changed flag of HrRegs
+    // In:      start_id: start index of hr reg
+    //          size: the scope of scanning
+    // Out:     none
+    // Return:  list of valid pr regs
+    //------------------------------------------------------------
+    std::vector<BaseRegData> getHrRegValidIdList(int start_id, int size);
     
 private:
     RegManagerInterface();      // default allocator is not used

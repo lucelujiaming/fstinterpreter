@@ -33,10 +33,16 @@
 
 using namespace std;
 
+#ifdef WIN32
+#define DATA_PATH        "\\root\\files_manager_python27\\data"
+#else
 #define DATA_PATH        "\/root\/files_manager_python27\/data"
+#endif
 
 #define NUM_SUBROUTINE 64
 #define NUM_THREAD     32
+
+#define PROGRAM_START_LINE_NUM     2
 
 #define LAB_LEN 128
 #define SELECT_AND_CYCLE_NEST 64
@@ -198,12 +204,13 @@ void get_exp(struct thread_control_block * objThreadCntrolBlock, eval_value * re
 void putback(struct thread_control_block * objThreadCntrolBlock);
 int calc_conditions(
 		struct thread_control_block * objThreadCntrolBlock);
-int exec_call(struct thread_control_block * objThreadCntrolBlock);
+int exec_call(struct thread_control_block * objThreadCntrolBlock, bool isMacro = false);
 
 void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname, eval_value value);
 eval_value find_var(struct thread_control_block * objThreadCntrolBlock, char *s, int raise_unkown_error = 0);
 
 void find_eol(struct thread_control_block * objThreadCntrolBlock);
+int  jump_prog_from_line(struct thread_control_block * objThreadCntrolBlock, int iNum);
 int  calc_line_from_prog(struct thread_control_block * objThreadCntrolBlock);
 void serror(struct thread_control_block * objThreadCntrolBlock, int error);
 	 

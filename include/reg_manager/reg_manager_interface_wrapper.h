@@ -11,6 +11,10 @@ using namespace fst_reg ;
 
 void load_register_data();
 
+/**********************
+ ********* PR *********
+ **********************/
+
 bool reg_manager_interface_getPr(PrRegData *ptr, uint16_t num);
 bool reg_manager_interface_setPr(PrRegData *ptr, uint16_t num);
 bool reg_manager_interface_delPr(uint16_t num);
@@ -82,6 +86,29 @@ bool reg_manager_interface_setIdMr(int *ptr, uint16_t num);
 bool reg_manager_interface_getCommentMr(char *ptr, uint16_t num);
 bool reg_manager_interface_setCommentMr(char *ptr, uint16_t num);
 
+/**********************
+ ********* HR *********
+ **********************/
+	
+bool reg_manager_interface_getHr(HrRegData *ptr, uint16_t num);
+bool reg_manager_interface_setHr(HrRegData *ptr, uint16_t num);
+bool reg_manager_interface_delHr(uint16_t num);
+
+/*
+ * The operated object is an individual member of HR.
+ */
+bool reg_manager_interface_getPoseHr(PoseEuler *ptr, uint16_t num);
+bool reg_manager_interface_setPoseHr(PoseEuler *ptr, uint16_t num);
+
+bool reg_manager_interface_getJointHr(Joint *ptr, uint16_t num);
+bool reg_manager_interface_setJointHr(Joint *ptr, uint16_t num);
+
+bool reg_manager_interface_getIdHr(int *ptr, uint16_t num);
+bool reg_manager_interface_setIdHr(int *ptr, uint16_t num);
+
+bool reg_manager_interface_getCommentHr(char *ptr, uint16_t num);
+bool reg_manager_interface_setCommentHr(char *ptr, uint16_t num);
+
 
 /**********************
  ********* UF *********
@@ -138,5 +165,6 @@ std::vector<BaseRegData> reg_manager_interface_read_valid_pr_lst(int start_id, i
 std::vector<BaseRegData> reg_manager_interface_read_valid_sr_lst(int start_id, int size);
 std::vector<BaseRegData> reg_manager_interface_read_valid_r_lst(int start_id, int size);
 std::vector<BaseRegData> reg_manager_interface_read_valid_mr_lst(int start_id, int size);
+std::vector<BaseRegData> reg_manager_interface_read_valid_hr_lst(int start_id, int size);
 
 #endif

@@ -1052,6 +1052,228 @@ bool reg_manager_interface_setCommentMr(char *ptr, uint16_t num)
 	return bRet ;
 }
 
+bool reg_manager_interface_getHr(HrRegData *ptr, uint16_t num)
+{
+	bool bRet = false ;
+#ifndef WIN32
+	if(g_objRegManagerInterface)
+	{
+		bRet = g_objRegManagerInterface->getHrReg(num, ptr);
+		HrRegData* data_ptr = ptr ;
+		
+		printf("getHr: id = %d, comment = %s\n", data_ptr->id, data_ptr->comment);
+		printf("getHr: id = (%f, %f, %f, %f, %f, %f) \n", 
+			data_ptr->value.joint_pos[0], data_ptr->value.joint_pos[1], 
+			data_ptr->value.joint_pos[2], data_ptr->value.joint_pos[3], 
+			data_ptr->value.joint_pos[4], data_ptr->value.joint_pos[5]);
+	}
+	else
+	{
+		printf("g_objRegManagerInterface is NULL\n");
+	}
+#else
+	bRet = true ;
+#endif
+	return bRet ;
+}
+
+bool reg_manager_interface_setHr(HrRegData *ptr, uint16_t num)
+{
+	bool bRet = false ;
+#ifndef WIN32
+	if(g_objRegManagerInterface)
+	{
+		HrRegData objHrRegData ;
+		memcpy(&objHrRegData, ptr, sizeof(HrRegData));
+		printf("setHr: id = %d, comment = %s\n", objHrRegData.id, objHrRegData.comment);
+		printf("setHr: id = (%f, %f, %f, %f, %f, %f) \n", 
+			objHrRegData.value.joint_pos[0], objHrRegData.value.joint_pos[1], 
+			objHrRegData.value.joint_pos[2], objHrRegData.value.joint_pos[3], 
+			objHrRegData.value.joint_pos[4], objHrRegData.value.joint_pos[5]);
+		// objHrRegData.id = num ;
+		
+		bRet = g_objRegManagerInterface->setHrReg(&objHrRegData);
+		if(bRet == false)
+		{
+			bRet = g_objRegManagerInterface->addHrReg(&objHrRegData);
+		}
+	}
+	else
+	{
+		printf("g_objRegManagerInterface is NULL\n");
+	}
+#else
+	bRet = true ;
+#endif
+	return bRet ;
+}
+
+bool reg_manager_interface_delHr(uint16_t num)
+{
+	bool bRet = false ;
+#ifndef WIN32
+	if(g_objRegManagerInterface)
+	{
+		bRet = g_objRegManagerInterface->deleteHrReg(num);
+	}
+	else
+	{
+		printf("g_objRegManagerInterface is NULL\n");
+	}
+#else
+	bRet = true ;
+#endif
+	return bRet ;
+}
+
+bool reg_manager_interface_getJointHr(Joint *ptr, uint16_t num)
+{
+	bool bRet = false ;
+#ifndef WIN32
+	if(g_objRegManagerInterface)
+	{
+		HrRegData objHrRegData ;
+		bRet = g_objRegManagerInterface->getHrReg(num, &objHrRegData);
+		if(bRet)
+		{
+		   memcpy(ptr, &(objHrRegData.value.joint_pos), 
+		   	      sizeof(objHrRegData.value.joint_pos));
+		}
+	}
+	else
+	{
+		printf("g_objRegManagerInterface is NULL\n");
+	}
+#else
+	bRet = true ;
+#endif
+	return bRet ;
+}
+
+bool reg_manager_interface_setJointHr(Joint *ptr, uint16_t num)
+{
+	bool bRet = false ;
+#ifndef WIN32
+	if(g_objRegManagerInterface)
+	{
+		HrRegData objHrRegData ;
+		bRet = g_objRegManagerInterface->getHrReg(num, &objHrRegData);
+		if(bRet)
+		{
+		    memcpy(&(objHrRegData.value.joint_pos), ptr, 
+
+
+				sizeof(objHrRegData.value.joint_pos));
+			reg_manager_interface_setHr(&objHrRegData, num);
+		}
+	}
+	else
+	{
+		printf("g_objRegManagerInterface is NULL\n");
+	}
+#else
+	bRet = true ;
+#endif
+	return bRet ;
+}
+
+bool reg_manager_interface_getIdHr(int *ptr, uint16_t num)
+{
+	bool bRet = false ;
+#ifndef WIN32
+	if(g_objRegManagerInterface)
+	{
+		HrRegData objHrRegData ;
+		bRet = g_objRegManagerInterface->getHrReg(num, &objHrRegData);
+		if(bRet)
+		{
+		   *ptr = objHrRegData.id;
+		}
+	}
+	else
+	{
+		printf("g_objRegManagerInterface is NULL\n");
+	}
+#else
+	bRet = true ;
+#endif
+	return bRet ;
+}
+
+bool reg_manager_interface_setIdHr(int *ptr, uint16_t num)
+{
+	bool bRet = false ;
+#ifndef WIN32
+	if(g_objRegManagerInterface)
+	{
+		HrRegData objHrRegData ;
+		bRet = g_objRegManagerInterface->getHrReg(num, &objHrRegData);
+		if(bRet)
+		{
+		    objHrRegData.id = *ptr;
+			reg_manager_interface_setHr(&objHrRegData, num);
+		}
+	}
+	else
+	{
+		printf("g_objRegManagerInterface is NULL\n");
+	}
+#else
+	bRet = true ;
+#endif
+	return bRet ;
+}
+
+bool reg_manager_interface_getCommentHr(char *ptr, uint16_t num)
+{
+	bool bRet = false ;
+#ifndef WIN32
+	if(g_objRegManagerInterface)
+	{
+		HrRegData objHrRegData ;
+		bRet = g_objRegManagerInterface->getHrReg(num, &objHrRegData);
+		if(bRet)
+		{
+		   memcpy(ptr, objHrRegData.comment, sizeof(objHrRegData.comment));
+		}
+	}
+	else
+	{
+		printf("g_objRegManagerInterface is NULL\n");
+	}
+#else
+	bRet = true ;
+#endif
+	return bRet ;
+}
+
+bool reg_manager_interface_setCommentHr(char *ptr, uint16_t num)
+{
+	bool bRet = false ;
+#ifndef WIN32
+	if(g_objRegManagerInterface)
+	{
+		HrRegData objHrRegData ;
+		bRet = g_objRegManagerInterface->getHrReg(num, &objHrRegData);
+		if(bRet)
+		{
+		    memcpy(objHrRegData.comment, ptr, 
+
+
+				sizeof(objHrRegData.comment));
+			reg_manager_interface_setHr(&objHrRegData, num);
+		}
+	}
+	else
+	{
+		printf("g_objRegManagerInterface is NULL\n");
+	}
+#else
+	bRet = true ;
+#endif
+	return bRet ;
+}
+
 
 /**********************
  ********* UF *********
@@ -1281,6 +1503,27 @@ std::vector<BaseRegData> reg_manager_interface_read_valid_mr_lst(int start_id, i
 #endif
 	return vecRet ;
 }
+
+std::vector<BaseRegData> reg_manager_interface_read_valid_hr_lst(int start_id, int size)
+{
+    std::vector<BaseRegData> vecRet ;
+	bool bRet = false ;
+	vecRet.clear();
+#ifndef WIN32
+	if(g_objRegManagerInterface)
+	{
+		vecRet = g_objRegManagerInterface->getHrRegValidIdList(0, 255);
+	}
+	else
+	{
+		printf("g_objRegManagerInterface is NULL\n");
+	}
+#else
+	bRet = true ;
+#endif
+	return vecRet ;
+}
+
 
 
 

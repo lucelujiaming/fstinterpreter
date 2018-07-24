@@ -13,8 +13,8 @@ namespace fst_reg
 
 enum
 {
-    MAX_AXIS_NUM = 6,
-    MAX_EXT_AXIS_NUM = 3,
+    MAX_PR_AXIS_NUM = 6,
+    MAX_PR_EXT_AXIS_NUM = 3,
 };
 
 typedef enum
@@ -26,9 +26,9 @@ typedef enum
 typedef struct
 {
     fst_controller::PoseEuler cartesian_pos;
-    double joint_pos[MAX_AXIS_NUM];
+    double joint_pos[MAX_PR_AXIS_NUM];
     int pos_type;
-    double ext_pos[MAX_EXT_AXIS_NUM];   // not used
+    double ext_pos[MAX_PR_EXT_AXIS_NUM];   // not used
     int group_id;           // not used
     bool posture[4];        // not used
     int multiturn[3];       // not used

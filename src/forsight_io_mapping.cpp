@@ -231,21 +231,32 @@ int append_io_mapping()
 	append_single_io_mapper("data\\io\\io_mapping\\ui_uo_mapping.json", varInfo);
     print_io_mapper();
 #else
+	char io_map_file_name[128];
 	// AI/AO
 	strcpy(varInfo.in , "ai") ;  strcpy(varInfo.out , "ao") ;
-	append_single_io_mapper("\/data\/io\/io_mapping\/ai_ao_mapping.json", varInfo);
+	sprintf(io_map_file_name, "%s\/data\/io\/io_mapping\/ai_ao_mapping.json", 
+		forgesight_get_programs_path());
+	append_single_io_mapper(io_map_file_name, varInfo);
 	// DI/DO
 	strcpy(varInfo.in , "di") ;  strcpy(varInfo.out , "do") ;
-	append_single_io_mapper("\/data\/io\/io_mapping\/di_do_mapping.json", varInfo);
+	sprintf(io_map_file_name, "%s\/data\/io\/io_mapping\/di_do_mapping.json", 
+		forgesight_get_programs_path());
+	append_single_io_mapper(io_map_file_name, varInfo);
 	// RI/RO
 	strcpy(varInfo.in , "ri") ;  strcpy(varInfo.out , "ro") ;
-	append_single_io_mapper("\/data\/io\/io_mapping\/ri_ro_mapping.json", varInfo);
+	sprintf(io_map_file_name, "%s\/data\/io\/io_mapping\/ri_ro_mapping.json", 
+		forgesight_get_programs_path());
+	append_single_io_mapper(io_map_file_name, varInfo);
 	// SI/SO
 	strcpy(varInfo.in , "si") ;  strcpy(varInfo.out , "so") ;
-	append_single_io_mapper("\/data\/io\/io_mapping\/si_so_mapping.json", varInfo);
+	sprintf(io_map_file_name, "%s\/data\/io\/io_mapping\/si_so_mapping.json", 
+		forgesight_get_programs_path());
+	append_single_io_mapper(io_map_file_name, varInfo);
 	// UI/UO
 	strcpy(varInfo.in , "ui") ;  strcpy(varInfo.out , "uo") ;
-	append_single_io_mapper("\/data\/io\/io_mapping\/ui_uo_mapping.json", varInfo);
+	sprintf(io_map_file_name, "%s\/data\/io\/io_mapping\/ui_uo_mapping.json", 
+		forgesight_get_programs_path());
+	append_single_io_mapper(io_map_file_name, varInfo);
 #endif
 	return 1;
 }

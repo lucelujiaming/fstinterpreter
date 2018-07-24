@@ -309,7 +309,8 @@ int append_program_prop_mapper(struct thread_control_block * objThreadCntrolBloc
 #ifdef WIN32
     sprintf(fname, "%s.json", filename);
 #else
-    sprintf(fname, "%s\/programs\/%s.json", DATA_PATH, filename);
+    sprintf(fname, "%s\/programs\/%s.json", 
+    		forgesight_get_programs_path(), filename);
 #endif
 	f=fopen(fname,"rb"); 
 	if(f)

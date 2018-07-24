@@ -100,6 +100,7 @@ typedef enum _InterpreterCommand
     READ_CHG_SR_LST   = 215,
     READ_CHG_R_LST    = 226,
     READ_CHG_MR_LST   = 227,
+    READ_CHG_HR_LST   = 228,
 
 }InterpreterCommand;
 
@@ -160,6 +161,11 @@ typedef enum _RegOperateType
     PL_REG_ID          = 705,
     PL_REG_COMMENT     = 706,
 	// 26 + 6 = 32
+    HOME_REG           = 801,
+    HOME_REG_JOINT     = 802,
+    HOME_REG_ID        = 803,
+    HOME_REG_COMMENT   = 804,
+	// 32 + 4 = 36
 }RegOperateType;
 
 #define REG_TYPE_NUM    32
@@ -233,11 +239,7 @@ typedef struct _InterpreterControl
         StartCtrl   start_ctrl;
 		AutoMode    autoMode ;
         // int         id;
-#ifdef USE_XPATH
-        char           line[TP_XPATH_LEN];
-#else
-    int             line;
-#endif
+        int            jump_line;    // Jump 
         RegMap      reg;
         // IOMapPortInfo  dio;
         IOPathInfo  dioPathInfo;

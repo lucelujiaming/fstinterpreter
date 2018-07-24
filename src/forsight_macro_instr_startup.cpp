@@ -5,7 +5,7 @@
 #include "forsight_macro_instr_startup.h"
 #include "forsight_io_controller.h"
 
-#define DATA_PATH        "\/root\/files_manager_python27\/data"
+// #define DATA_PATH        "\/root\/files_manager_python27\/data"
 
 #ifdef WIN32
 HANDLE    g_macro_instr_interpreter_handle;

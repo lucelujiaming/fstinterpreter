@@ -13,6 +13,7 @@ RegManagerInterface::RegManagerInterface(std::string file_dir):
     reg_ptr_[REG_TYPE_MR] = new MrReg(MAX_MR_REG_ID, file_dir);
     reg_ptr_[REG_TYPE_SR] = new SrReg(MAX_SR_REG_ID, file_dir);
     reg_ptr_[REG_TYPE_R] = new RReg(MAX_R_REG_ID, file_dir);
+    reg_ptr_[REG_TYPE_HR] = new HrReg(MAX_HR_REG_ID, file_dir);
 
     for(int i = 0; i < REG_TYPE_MAX; ++i)
     {
@@ -168,6 +169,36 @@ std::vector<BaseRegData> RegManagerInterface::getRRegValidIdList(int start_id, i
 RegManagerInterface::RegManagerInterface()
 {
 
+}
+
+bool RegManagerInterface::addHrReg(HrRegData* data_ptr)
+{
+    return reg_ptr_[REG_TYPE_HR]->addReg(reinterpret_cast<void*>(data_ptr));
+}
+
+bool RegManagerInterface::deleteHrReg(int id)
+{
+    return reg_ptr_[REG_TYPE_HR]->deleteReg(id);
+}
+
+bool RegManagerInterface::getHrReg(int id, HrRegData* data_ptr)
+{
+    return reg_ptr_[REG_TYPE_HR]->getReg(id, reinterpret_cast<void*>(data_ptr));
+}
+
+bool RegManagerInterface::setHrReg(HrRegData* data_ptr)
+{
+    return reg_ptr_[REG_TYPE_HR]->setReg(reinterpret_cast<void*>(data_ptr));
+}
+
+std::vector<BaseRegData> RegManagerInterface::getHrRegChangedIdList(int start_id, int size)
+{
+    return reg_ptr_[REG_TYPE_HR]->getChangedIdList(start_id, size);
+}
+
+std::vector<BaseRegData> RegManagerInterface::getHrRegValidIdList(int start_id, int size)
+{
+    return reg_ptr_[REG_TYPE_HR]->getValidIdList(start_id, size);
 }
 
 

@@ -33,7 +33,7 @@
 #define UO_SELECTION_CONFIRM_5      "uo[12]"
 #define UO_SELECTION_CONFIRM_6      "uo[13]"
 
-#define DATA_PATH        "\/root\/files_manager_python27\/data"
+// #define DATA_PATH        "\/root\/files_manager_python27\/data"
 #define USE_FAKE_PLC
 
 #ifdef WIN32

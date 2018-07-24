@@ -30,5 +30,6 @@ std::vector<BaseRegData> forgesight_read_valid_pr_lst(int start_id, int size);
 std::vector<BaseRegData> forgesight_read_valid_sr_lst(int start_id, int size);
 std::vector<BaseRegData> forgesight_read_valid_r_lst(int start_id, int size);
 std::vector<BaseRegData> forgesight_read_valid_mr_lst(int start_id, int size);
+std::vector<BaseRegData> forgesight_read_valid_hr_lst(int start_id, int size);
 
 #endif

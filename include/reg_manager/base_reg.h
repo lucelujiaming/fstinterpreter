@@ -15,6 +15,7 @@ enum
     MAX_SR_REG_ID = 10,//300,
     MAX_MR_REG_ID = 10,//1500,
     MAX_R_REG_ID = 10,//1500,
+    MAX_HR_REG_ID = 10,//1500,
 };
 
 typedef enum
@@ -23,8 +24,9 @@ typedef enum
     REG_TYPE_SR = 1,
     REG_TYPE_MR = 2,
     REG_TYPE_R = 3,
-    REG_TYPE_MAX = 4,
-    REG_TYPE_INVALID = 5,
+    REG_TYPE_HR = 4,
+    REG_TYPE_MAX = 5,
+    REG_TYPE_INVALID = 6,
 }RegType;
 
 typedef struct

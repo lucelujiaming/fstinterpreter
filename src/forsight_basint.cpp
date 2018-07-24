@@ -28,6 +28,7 @@
 // #define NUM_LAB 100
 #define LINE_CONTENT_LEN   2046
 
+#define ILLTOK     0
 #define PRINT      1
 #define INPUT      2
 #define IF         3
@@ -220,16 +221,16 @@ void* basic_interpreter(void* arg)
   // Set this state outside according prog_mode
   // setPrgmState(EXECUTE_R);  
   printf("Enter call_interpreter.\n");
-  if (g_macro_instr_mgr_ptr)
-  {
-	  g_macro_instr_mgr_ptr->setRunningInMacroInstrList(objThreadCntrolBlock->project_name);
-  }
+  //  if(objThreadCntrolBlock->is_in_macro)
+  //  {
+  //  	setRunningMacroInstr(objThreadCntrolBlock->project_name);
+  //  }
   iRet = call_interpreter(objThreadCntrolBlock, 1);
   printf("Left  call_interpreter.\n");
-  if (g_macro_instr_mgr_ptr)
-  {
-	  g_macro_instr_mgr_ptr->resetRunningInMacroInstrList(objThreadCntrolBlock->project_name);
-  }
+  //  if(objThreadCntrolBlock->is_in_macro)
+  //  {
+  //  	resetRunningMacroInstr(objThreadCntrolBlock->project_name);
+  //  }
   setPrgmState(IDLE_R);
   // clear line path
   setCurLine("");
@@ -312,6 +313,22 @@ int getLinenum(
 	return num ;  // objThreadCntrolBlock->iLineNum ;
 }
 */
+
+void setRunningMacroInstr(char* program_name)
+{
+  if (g_macro_instr_mgr_ptr)
+  {
+	  g_macro_instr_mgr_ptr->setRunningInMacroInstrList(program_name);
+  }
+}
+
+void resetRunningMacroInstr(char* program_name)
+{
+  if (g_macro_instr_mgr_ptr)
+  {
+	  g_macro_instr_mgr_ptr->resetRunningInMacroInstrList(program_name);
+  }
+}
 	
 void setLinenum(struct thread_control_block* objThreadCntrolBlock, int iLinenum)
 {
@@ -517,30 +534,15 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
             printf("call_interpreter : Enter waitInterpreterStateleftPaused %d \n", iLinenum);
 			waitInterpreterStateleftPaused(objThreadCntrolBlock);
             printf("call_interpreter : Left  waitInterpreterStateleftPaused %d \n", iLinenum);
-
-/*
-			while(interpreterState == PAUSED_R)
-			{
-#ifdef WIN32
-				Sleep(100);
-				// interpreterState = EXECUTE_R ;
-#else
-				sleep(1);
-				interpreterState = getPrgmState();
-#endif
-			}
- */
-#ifdef WIN32
-			objThreadCntrolBlock->iLineNum = calc_line_from_prog(objThreadCntrolBlock);
-#endif
+			
+			// use the iLineNum which had been set in the BACKWARD/FORWARD/JUMP
 			iLinenum = objThreadCntrolBlock->iLineNum ;
 			// 
   			printf("interpreterState : Line number(%d) with %d\n", iLinenum, iOldLinenum);
 			if(iLinenum == 0)
 			{
 				printf("illegal line number: %d.\n", iLinenum);
-				// exit(1);
-				// serror(objThreadCntrolBlock, 17);
+				// serror(objThreadCntrolBlock, 17); // exit(1);
 				continue ;
 			}
 			if(iOldLinenum != iLinenum - 1)
@@ -560,7 +562,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 			}
 			// scanf("%s", cLinenum);
 			// iLinenum = atoi(cLinenum);
-			if((iLinenum >0) && (iLinenum < 1024))
+			if(iLinenum > 0) // ((iLinenum > 0) && (iLinenum < 1024))
 			{
 				if(objThreadCntrolBlock->prog_jmp_line[iLinenum - 1].start_prog_pos!= 0)
 				{
@@ -687,6 +689,10 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
     else if(objThreadCntrolBlock->token_type==COMMAND) /* is command */
 	{
       switch(objThreadCntrolBlock->tok) {
+        case SUB:
+		  // Skip Function declaration by jiaming.lu at 180717
+		  find_eol(objThreadCntrolBlock);
+  		  break;
         case PRINT:
 		  print(objThreadCntrolBlock);
   		  break;
@@ -757,27 +763,18 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 		     return END_COMMND_RET;
 		  break;
 		case CALLMACRO:
-			objThreadCntrolBlock->is_in_macro = true ;
-			if(g_macro_instr_mgr_ptr)
-			{
-				if (g_macro_instr_mgr_ptr->getRunningInMacroInstrList(
-					objThreadCntrolBlock->project_name) == true)
-				{
-					serror(objThreadCntrolBlock, 19);
-					break;
-				}
-			}
+//			objThreadCntrolBlock->is_in_macro = true ;
 			if(objThreadCntrolBlock->prog_mode == STEP_MODE)
 			{
 				objThreadCntrolBlock->prog_mode = FULL_MODE;
-				iRet = exec_call(objThreadCntrolBlock);
+				iRet = exec_call(objThreadCntrolBlock, true);
 				objThreadCntrolBlock->prog_mode = STEP_MODE;
 			}
 			else
 			{
-				iRet = exec_call(objThreadCntrolBlock);
+				iRet = exec_call(objThreadCntrolBlock, true);
 			}
-			objThreadCntrolBlock->is_in_macro = false ;
+//			objThreadCntrolBlock->is_in_macro = false ;
 			if(iRet == END_COMMND_RET)
 				return END_COMMND_RET;
 		  break;
@@ -803,6 +800,15 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
   return 0 ; // NULL ;
 }
 
+int  jump_prog_from_line(struct thread_control_block * objThreadCntrolBlock, int iNum)
+{
+	if(iNum < objThreadCntrolBlock->prog_jmp_line.size())
+	{
+		objThreadCntrolBlock->prog = objThreadCntrolBlock->prog_jmp_line[iNum].start_prog_pos;
+		return iNum ;
+	}
+	return 0;
+}
 
 int  calc_line_from_prog(struct thread_control_block * objThreadCntrolBlock)
 {
@@ -838,9 +844,9 @@ int load_program(struct thread_control_block * objThreadCntrolBlock, char *p, ch
   parse_xml_file_wrapper(objThreadCntrolBlock->project_name, fname);
   sprintf(fname, "%s.bas", pname);
 #else
-  sprintf(fname, "%s\/programs\/%s.xml", DATA_PATH, pname);
+  sprintf(fname, "%s\/programs\/%s.xml", forgesight_get_programs_path(), pname);
   parse_xml_file_wrapper(objThreadCntrolBlock->project_name, fname);
-  sprintf(fname, "%s\/programs\/%s.bas", DATA_PATH, pname);
+  sprintf(fname, "%s\/programs\/%s.bas", forgesight_get_programs_path(), pname);
 #endif
   if(!(fp=fopen(fname, "r"))) 
   {
@@ -1915,6 +1921,11 @@ void exec_case(struct thread_control_block * objThreadCntrolBlock)
   // char op;
 
   select_stack = select_and_cycle_pop(objThreadCntrolBlock);
+  // Wait for test
+  if(select_stack.itokentype != SELECT){
+     serror(objThreadCntrolBlock, 4);
+     return;
+  }
 
   get_exp(objThreadCntrolBlock, &x, &boolValue); /* get expression */
 
@@ -2036,11 +2047,17 @@ struct select_and_cycle_stack select_and_cycle_pop(
   objThreadCntrolBlock->select_and_cycle_tos--;
   if(objThreadCntrolBlock->select_and_cycle_tos<0)
   {
+      select_and_cycle_stack fake ;
 	  serror(objThreadCntrolBlock, 11);
+      memset(&fake, 0x00, sizeof(select_and_cycle_stack));
+	  return fake ;
+  }
+  else 
+  {
+  	 return(objThreadCntrolBlock->selcyclstack[objThreadCntrolBlock->select_and_cycle_tos]);
   }
 //    printf("\t\t\t\t\t select_and_cycle_pop with %d\n", objThreadCntrolBlock->select_and_cycle_tos);
-
-  return(objThreadCntrolBlock->selcyclstack[objThreadCntrolBlock->select_and_cycle_tos]);
+  
 }
 
 /* Execute a simple form of the BASIC INPUT command */
@@ -2282,38 +2299,39 @@ void exec_import(struct thread_control_block * objThreadCntrolBlock)
  */
 }
 
-int exec_call_submain(struct thread_control_block * objThreadCntrolBlock)
-{
-	int iRet = 0 ;
-	int lvartemp;
-	char *loc;
-	
-	get_token(objThreadCntrolBlock);
-	/* find the label to call */
-	loc = find_label(objThreadCntrolBlock, objThreadCntrolBlock->token);
-	if(loc=='\0')
-	{
-		serror(objThreadCntrolBlock, 7); /* label not defined */
-		return 1;
-	}
-	// Save local var stack index.
-	lvartemp = objThreadCntrolBlock->local_var_stack.size();
-	
-	get_args(objThreadCntrolBlock); // get function arguments
-	
-	objThreadCntrolBlock->func_call_stack.push(lvartemp); // push local var index
-	
-	gosub_push(objThreadCntrolBlock, objThreadCntrolBlock->prog); /* save place to return to */
-	objThreadCntrolBlock->prog = loc;  /* start program running at that loc */
-	
-	get_params(objThreadCntrolBlock); // load the function's parameters with
-	
-	printf("Execute call_interpreter at exec_call_submain.\n");
-	return call_interpreter(objThreadCntrolBlock, 0);
-	printf("Left   call_interpreter at exec_call_submain.\n");
-}
 
-int exec_call(struct thread_control_block * objThreadCntrolBlock)
+// 	int exec_call_submain(struct thread_control_block * objThreadCntrolBlock)
+// 	{
+// 		int iRet = 0 ;
+// 		int lvartemp;
+// 		char *loc;
+// 		
+// 		get_token(objThreadCntrolBlock);
+// 		/* find the label to call */
+// 		loc = find_label(objThreadCntrolBlock, objThreadCntrolBlock->token);
+// 		if(loc=='\0')
+// 		{
+// 			serror(objThreadCntrolBlock, 7); /* label not defined */
+// 			return 1;
+// 		}
+// 		// Save local var stack index.
+// 		lvartemp = objThreadCntrolBlock->local_var_stack.size();
+// 		
+// 		get_args(objThreadCntrolBlock); // get function arguments
+// 		
+// 		objThreadCntrolBlock->func_call_stack.push(lvartemp); // push local var index
+// 		
+// 		gosub_push(objThreadCntrolBlock, objThreadCntrolBlock->prog); /* save place to return to */
+// 		objThreadCntrolBlock->prog = loc;  /* start program running at that loc */
+// 		
+// 		get_params(objThreadCntrolBlock); // load the function's parameters with
+// 		
+// 		printf("Execute call_interpreter at exec_call_submain.\n");
+// 		return call_interpreter(objThreadCntrolBlock, 0);
+// 		printf("Left   call_interpreter at exec_call_submain.\n");
+// 	}
+
+int exec_call(struct thread_control_block * objThreadCntrolBlock, bool isMacro)
 {
   char func_name[1024];
   int lvartemp;
@@ -2334,6 +2352,19 @@ int exec_call(struct thread_control_block * objThreadCntrolBlock)
 	  }
   }
   
+  if(isMacro)
+  {
+	if(g_macro_instr_mgr_ptr)
+	{
+		if (g_macro_instr_mgr_ptr->getRunningInMacroInstrList(
+			objThreadCntrolBlock->token) == true)
+		{
+			serror(objThreadCntrolBlock, 19);
+  			find_eol(objThreadCntrolBlock);
+			return 1;
+		}
+	}
+  }
   // Save local var stack index.
   lvartemp = objThreadCntrolBlock->local_var_stack.size();
 
@@ -2447,42 +2478,45 @@ void get_exp(struct thread_control_block * objThreadCntrolBlock, eval_value * re
   putback(objThreadCntrolBlock); /* return last token read to input stream */
 }
 
-
 /* display an error message */
 void serror(struct thread_control_block * objThreadCntrolBlock, int error)
 {
-  static const ErrInfo e[]= {
-     FAIL_INTERPRETER_SYNTAX_ERROR             ,     "syntax error",                // 0 
-     FAIL_INTERPRETER_UNBALANCED_PARENTHESES   ,     "unbalanced parentheses",      // 1 
-     FAIL_INTERPRETER_NO_EXPRESSION_PRESENT    ,     "no expression present",       // 2 
-     FAIL_INTERPRETER_EQUALS_SIGN_EXPECTED     ,     "equals sign expected",        // 3 
-     FAIL_INTERPRETER_NOT_A_VARIABLE           ,     "not a variable",              // 4 
-     FAIL_INTERPRETER_LABEL_TABLE_FULL         ,     "Label table full",            // 5 
-     FAIL_INTERPRETER_DUPLICATE_SUB_LABEL      ,     "duplicate sub_label",         // 6 
-     FAIL_INTERPRETER_UNDEFINED_SUB_LABEL      ,     "undefined sub_label",         // 7 
-     FAIL_INTERPRETER_THEN_EXPECTED            ,     "THEN expected",               // 8 
-     FAIL_INTERPRETER_TO_EXPECTED              ,     "TO expected",                 // 9 
-     FAIL_INTERPRETER_TOO_MANY_NESTED_FOR_LOOPS,     "too many nested FOR loops",   // 10 
-     FAIL_INTERPRETER_NEXT_WITHOUT_FOR         ,     "NEXT without FOR",            // 11
-     FAIL_INTERPRETER_TOO_MANY_NESTED_GOSUB    ,     "too many nested GOSUBs",      // 12 
-     FAIL_INTERPRETER_RETURN_WITHOUT_GOSUB     ,     "RETURN without GOSUB",        // 13 
-     FAIL_INTERPRETER_FILE_NOT_FOUND           ,     "file not found",              // 14
-     FAIL_INTERPRETER_MOVL_WITH_JOINT          ,     "movl with joint",             // 15
-     FAIL_INTERPRETER_MOVJ_WITH_POINT          ,     "movj with point",             // 16
-     FAIL_INTERPRETER_ILLEGAL_LINE_NUMBER      ,     "illegal line number",         // 17
-     FAIL_INTERPRETER_FUNC_PARAMS_MISMATCH     ,     "func params mismatching",     // 18
-     FAIL_INTERPRETER_DUPLICATE_EXEC_MACRO     ,     "exec macro duplicating"       // 19
+  static const ErrInfo errInfo[]= {
+		FAIL_INTERPRETER_SYNTAX_ERROR             ,     "syntax error",                // 0 
+		FAIL_INTERPRETER_UNBALANCED_PARENTHESES   ,     "unbalanced parentheses",      // 1 
+		FAIL_INTERPRETER_NO_EXPRESSION_PRESENT    ,     "no expression present",       // 2 
+		FAIL_INTERPRETER_EQUALS_SIGN_EXPECTED     ,     "equals sign expected",        // 3 
+		FAIL_INTERPRETER_NOT_A_VARIABLE           ,     "not a variable",              // 4 
+		FAIL_INTERPRETER_LABEL_TABLE_FULL         ,     "Label table full",            // 5 
+		FAIL_INTERPRETER_DUPLICATE_SUB_LABEL      ,     "duplicate sub_label",         // 6 
+		FAIL_INTERPRETER_UNDEFINED_SUB_LABEL      ,     "undefined sub_label",         // 7 
+		FAIL_INTERPRETER_THEN_EXPECTED            ,     "THEN expected",               // 8 
+		FAIL_INTERPRETER_TO_EXPECTED              ,     "TO expected",                 // 9 
+		FAIL_INTERPRETER_TOO_MANY_NESTED_FOR_LOOPS,     "too many nested FOR loops",   // 10 
+		FAIL_INTERPRETER_NEXT_WITHOUT_FOR         ,     "NEXT without FOR",            // 11
+		FAIL_INTERPRETER_TOO_MANY_NESTED_GOSUB    ,     "too many nested GOSUBs",      // 12 
+		FAIL_INTERPRETER_RETURN_WITHOUT_GOSUB     ,     "RETURN without GOSUB",        // 13 
+		FAIL_INTERPRETER_FILE_NOT_FOUND           ,     "file not found",              // 14
+		FAIL_INTERPRETER_MOVL_WITH_JOINT          ,     "movl with joint",             // 15
+		FAIL_INTERPRETER_MOVJ_WITH_POINT          ,     "movj with point",             // 16
+		FAIL_INTERPRETER_ILLEGAL_LINE_NUMBER      ,     "illegal line number",         // 17
+		FAIL_INTERPRETER_FUNC_PARAMS_MISMATCH     ,     "func params mismatching",     // 18
+		FAIL_INTERPRETER_DUPLICATE_EXEC_MACRO     ,     "exec macro duplicating"       // 19
   };
-  if(error > sizeof(e)/sizeof(ErrInfo)) {
+  if(error > sizeof(errInfo)/sizeof(ErrInfo)) {
   	printf("\t NOTICE : Error out of range %d \n", error);
     return;
   }
   
   printf("-----------------ERR:%d----------------------\n", error);
-  printf("\t NOTICE : %d -  %llx(%s)\n", error, e[error].warn, e[error].desc);
+#ifdef WIN32
+  printf("\t NOTICE : %d -  0x%016I64x  - (%s)\n", error, errInfo[error].warn, errInfo[error].desc);
+#else
+  printf("\t NOTICE : %d -  %llx(%s)\n", error, errInfo[error].warn, errInfo[error].desc);
+#endif
   printf("-----------------ERR:%d----------------------\n", error);
   
-  setWarning(e[error].warn) ; 
+  setWarning(errInfo[error].warn) ; 
   objThreadCntrolBlock->prog_mode = ERROR_MODE;
   
 //  longjmp(e_buf, 1); /* return to save point */
@@ -2926,7 +2960,7 @@ void primitive(struct thread_control_block * objThreadCntrolBlock, eval_value *r
     progFuncCall = objThreadCntrolBlock->prog ;
   	putback(objThreadCntrolBlock);
 	// exec_call(objThreadCntrolBlock);
-    iRet = exec_call(objThreadCntrolBlock);
+	iRet = exec_call(objThreadCntrolBlock);
 	if(iRet == END_COMMND_RET)
 	   result->setFloatValue(0) ;
 	else
