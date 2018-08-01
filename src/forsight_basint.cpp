@@ -413,6 +413,11 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	  objThreadCntrolBlock->iSubProgNum = 0 ;
 	  memset(objThreadCntrolBlock->sub_prog, 0x00, sizeof(char *) * NUM_SUBROUTINE);
 	  
+	  if(objThreadCntrolBlock->start_mov_position.size() > 0)
+	  {
+	      printf("start_mov_position = %d\n", objThreadCntrolBlock->start_mov_position.size());
+		  // objThdCtrlBlockPtr->start_mov_position.clear();
+	  }
       label_init(objThreadCntrolBlock);  /* zero all labels */
 	  /* load the program to execute */
 	  if(!load_program(objThreadCntrolBlock, objThreadCntrolBlock->p_buf,objThreadCntrolBlock->project_name)) 

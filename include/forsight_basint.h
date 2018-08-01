@@ -182,7 +182,7 @@ struct thread_control_block {
 	int               iLineNum ;
 //	LineNumState      stateLineNum ;
 //    MotionTarget      currentMotionTarget ;
-    map<string, MoveCommandDestination>  start_mov_position ;
+    map<int, MoveCommandDestination>  start_mov_position ;  // iLineNum :: movCmdDst
 } ;
 
 void setLinenum(struct thread_control_block* objThreadCntrolBlock, int iLinenum);

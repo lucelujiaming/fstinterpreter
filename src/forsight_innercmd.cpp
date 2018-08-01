@@ -14,8 +14,8 @@
 
 #ifndef WIN32
 #include "error_code.h"
+#include <execinfo.h>
 #endif
-
 
 #define FILE_PATH_LEN       1024
 #define MAX_WAIT_SECOND     30
@@ -550,13 +550,50 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 #else
 	printf("call_MoveJ XPATH at %d\n", iLineNum);
 	instr.line = iLineNum;
-	printf("call_MoveJ XPATH: %s\n", g_vecXPath[iLineNum].c_str());
 #endif
 	// Save start position
+	memset(&movCmdDst ,0x00, sizeof(MoveCommandDestination));
 	getMoveCommandDestination(movCmdDst);
-	objThreadCntrolBlock->start_mov_position.insert(
-		map<string, MoveCommandDestination>::value_type(g_vecXPath[iLineNum], 
-							movCmdDst));
+	if(iLineNum < g_vecXPath.size())
+	{
+	    printf("call_MoveJ Run XPATH: %d: %s\n", iLineNum, g_vecXPath[iLineNum].c_str());
+	    // printf("call_MoveJ Run movCmdDst: %08X with(%08X, %08X, %08X, %08X)\n", 
+		//  	movCmdDst.type, MOTION_NONE, MOTION_JOINT, MOTION_LINE, MOTION_CIRCLE);
+		if(movCmdDst.type != MOTION_NONE)
+		{
+			if(objThreadCntrolBlock->start_mov_position.find(iLineNum)
+				==objThreadCntrolBlock->start_mov_position.end())
+			{
+			//    printf("Forward move to JOINT and Insert:(%f, %f, %f, %f, %f, %f) in MovJ\n", 
+			//		movCmdDst.joint_target.j1, movCmdDst.joint_target.j2, 
+			//		movCmdDst.joint_target.j3, movCmdDst.joint_target.j4, 
+			//		movCmdDst.joint_target.j5, movCmdDst.joint_target.j6);
+				try
+				{
+					objThreadCntrolBlock->start_mov_position.insert(
+						map<int, MoveCommandDestination>::value_type(iLineNum, 
+										movCmdDst));
+				}
+				catch (std::exception& e)
+				{
+				    std::cerr << "Exception catched : " << e.what() << std::endl;
+				}
+			}
+			else
+			{
+	            printf("call_MoveJ Run XPATH: %s exists \n", g_vecXPath[iLineNum].c_str());
+			}
+		}
+		else
+		{
+			printf("call_MoveJ XPATH without movCmdDst\n");
+		}
+	}
+	else
+	{
+		printf("call_MoveJ XPATH out of range at %d\n", iLineNum);
+	}
+	// printf("call_MoveJ XPATH: %s\n", g_vecXPath[iLineNum].c_str());
 
     get_exp(objThreadCntrolBlock, &value, &boolValue);
 	if(value.getType() == TYPE_NONE)
@@ -609,8 +646,25 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	if(objThreadCntrolBlock->execute_direction == EXECUTE_BACKWARD)
 	{
 	     printf("Use start point in revert mode.\n");
-	     instr.target.joint_target = 
-		 	objThreadCntrolBlock->start_mov_position[g_vecXPath[iLineNum]].joint_target;
+		 
+		if(iLineNum < g_vecXPath.size())
+		{
+		    printf("call_MoveJ XPATH: %s\n", g_vecXPath[iLineNum].c_str());
+			if(objThreadCntrolBlock->start_mov_position.find(iLineNum)
+				!=objThreadCntrolBlock->start_mov_position.end())
+			{
+			    instr.target.joint_target
+				 	= objThreadCntrolBlock->start_mov_position[iLineNum].joint_target;
+			}
+			else
+			{
+				printf("call_MoveL XPATH without StartJoint\n");
+			}
+		}
+		else
+		{
+			printf("call_MoveJ XPATH out of range at %d\n", iLineNum);
+		}
 		 
 	    printf("Backward move to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ\n", 
 			instr.target.joint_target.j1, instr.target.joint_target.j2, 
@@ -705,13 +759,50 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 #else
 	printf("call_MoveJ XPATH at %d\n", iLineNum);
 	instr.line = iLineNum;
-	printf("call_MoveL XPATH: %s\n", g_vecXPath[iLineNum].c_str());
 #endif
 	// Save start position
+	memset(&movCmdDst ,0x00, sizeof(MoveCommandDestination));
 	getMoveCommandDestination(movCmdDst);
-	objThreadCntrolBlock->start_mov_position.insert(
-		map<string, MoveCommandDestination>::value_type(g_vecXPath[iLineNum], 
-							movCmdDst));
+	if(iLineNum < g_vecXPath.size())
+	{
+	    printf("call_MoveL Run XPATH: %d: %s\n", iLineNum, g_vecXPath[iLineNum].c_str());
+	    // printf("call_MoveL Run movCmdDst: %08X with(%08X, %08X, %08X, %08X)\n", 
+		//  	movCmdDst.type, MOTION_NONE, MOTION_JOINT, MOTION_LINE, MOTION_CIRCLE);
+		if(movCmdDst.type != MOTION_NONE)
+		{
+			if(objThreadCntrolBlock->start_mov_position.find(iLineNum)
+				==objThreadCntrolBlock->start_mov_position.end())
+			{
+			//    printf("move from POSE and insert:(%f, %f, %f, %f, %f, %f) in MovL\n", 
+			//		movCmdDst.pose_target.position.x,    movCmdDst.pose_target.position.y, 
+			//		movCmdDst.pose_target.position.z,    movCmdDst.pose_target.orientation.a, 
+			//		movCmdDst.pose_target.orientation.b, movCmdDst.pose_target.orientation.c);
+				try
+				{
+					objThreadCntrolBlock->start_mov_position.insert(
+						map<int, MoveCommandDestination>::value_type(iLineNum, 
+											movCmdDst));
+				}
+				catch (std::exception& e)
+				{
+				    std::cerr << "Exception catched : " << e.what() << std::endl;
+				}
+			}
+			else
+			{
+	            printf("call_MoveL Run XPATH: %s exists \n", g_vecXPath[iLineNum].c_str());
+			}
+		}
+		else
+		{
+			printf("call_MoveL XPATH without movCmdDst\n");
+		}
+	}
+	else
+	{
+		printf("call_MoveL XPATH out of range at %d\n", iLineNum);
+	}
+	// printf("call_MoveL Run XPATH: %s\n", g_vecXPath[iLineNum].c_str());
 	
     // result.size() == MOVJ_COMMAND_PARAM_MIN
     get_exp(objThreadCntrolBlock, &value, &boolValue);
@@ -769,8 +860,25 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	if(objThreadCntrolBlock->execute_direction == EXECUTE_BACKWARD)
 	{
 	     printf("Use start point in revert mode.\n");
-	     instr.target.pose_target
-		 	= objThreadCntrolBlock->start_mov_position[g_vecXPath[iLineNum]].pose_target;
+		 
+		if(iLineNum < g_vecXPath.size())
+		{
+		    printf("call_MoveL XPATH: %s\n", g_vecXPath[iLineNum].c_str());
+			if(objThreadCntrolBlock->start_mov_position.find(iLineNum)
+				!=objThreadCntrolBlock->start_mov_position.end())
+			{
+			    instr.target.pose_target
+				 	= objThreadCntrolBlock->start_mov_position[iLineNum].pose_target;
+			}
+			else
+			{
+				printf("call_MoveL XPATH without StartPoint\n");
+			}
+		}
+		else
+		{
+			printf("call_MoveL XPATH out of range at %d\n", iLineNum);
+		}
 		 
 	    printf("Backward move to POSE:(%f, %f, %f, %f, %f, %f) in MovL\n", 
 			instr.target.pose_target.position.x, instr.target.pose_target.position.y, 
@@ -872,13 +980,43 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 #else
 	printf("call_MoveJ XPATH at %d\n", iLineNum);
 	instr.line = iLineNum;
-	printf("call_MoveC XPATH: %s\n", g_vecXPath[iLineNum].c_str());
 #endif
 	// Save start position
+	memset(&movCmdDst ,0x00, sizeof(MoveCommandDestination));
 	getMoveCommandDestination(movCmdDst);
-	objThreadCntrolBlock->start_mov_position.insert(
-		map<string, MoveCommandDestination>::value_type(g_vecXPath[iLineNum], 
-							movCmdDst));
+	if(iLineNum < g_vecXPath.size())
+	{
+	    printf("call_MoveC Run XPATH: %d: %s\n", iLineNum, g_vecXPath[iLineNum].c_str());
+		if(movCmdDst.type != MOTION_NONE)
+		{
+			if(objThreadCntrolBlock->start_mov_position.find(iLineNum)
+				==objThreadCntrolBlock->start_mov_position.end())
+			{
+				try
+				{
+					objThreadCntrolBlock->start_mov_position.insert(
+						map<int, MoveCommandDestination>::value_type(iLineNum, 
+											movCmdDst));
+				}
+				catch (std::exception& e)
+				{
+				    std::cerr << "Exception catched : " << e.what() << std::endl;
+				}
+			}
+			else
+			{
+	            printf("call_MoveC Run XPATH: %s exists \n", g_vecXPath[iLineNum].c_str());
+			}
+		}
+		else
+		{
+			printf("call_MoveC XPATH without movCmdDst\n");
+		}
+	}
+	else
+	{
+		printf("call_MoveC XPATH out of range at %d\n", iLineNum);
+	}
 
     // result.size() == MOVJ_COMMAND_PARAM_MIN
     get_exp(objThreadCntrolBlock, &value, &boolValue);
@@ -974,7 +1112,8 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	{
 	     printf("Use start point in revert mode.\n");
 		 // Wait for revert
-	     // instr.target.circle_target.pose2 = objThreadCntrolBlock->start_mov_position[g_vecXPath[iLineNum]];
+	     // instr.target.circle_target.pose2 
+	     //    = objThreadCntrolBlock->start_mov_position[g_vecXPath[iLineNum]];
 	}
 	get_token(objThreadCntrolBlock);
 	

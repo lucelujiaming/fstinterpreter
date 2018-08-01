@@ -1,0 +1,3 @@
+file_manager:
+    data: '/root/files_manager_python27/data'
+#END

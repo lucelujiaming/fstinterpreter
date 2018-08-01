@@ -321,7 +321,11 @@ int append_program_prop_mapper(struct thread_control_block * objThreadCntrolBloc
 		parseProgramProp(objThreadCntrolBlock, data);
 		free(data);
 	}
-    print_program_prop_poses(objThreadCntrolBlock);
+	
+#ifdef WIN32
+      // NOTICE: It would sometimes Segmentation fault.
+      print_program_prop_poses(objThreadCntrolBlock);
+#endif
 	return 1;
 }
 
