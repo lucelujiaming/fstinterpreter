@@ -1609,7 +1609,7 @@ int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
             // // objLineInfoTemp.xPathIdx = iNopIdx++;
 			sprintf(objLineInfoTemp.xPath, "%s", 
 					 (char *)xmlGetNodePath(nodeStatement));
-			exportBASCode(objLineInfoTemp, "EXPORT: ", "\n", "");
+			exportBASCode(objLineInfoTemp, "EXPORT: ", "NOP\n", "");
         }
 		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"call")==0){ 
             // printf("%s, ", (char*)nodeStatement->name);
@@ -1737,7 +1737,7 @@ int generateProgBody(xmlNodePtr nodeProgBody, LineInfo objLineInfo)
             // printf("%s, ", (char*)nodeStatement->name);
 			sprintf(objLineInfoTemp.xPath, "%s", 
 					 (char *)xmlGetNodePath(nodeFunction));
-			exportBASCode(objLineInfoTemp, "EXPORT: ", "\n", "");
+			exportBASCode(objLineInfoTemp, "EXPORT: ", "NOP\n", "");
         }
 		else if(xmlStrcasecmp(nodeFunction->name,BAD_CAST"text")==0){
 			;

@@ -1,7 +1,10 @@
 SUB main (param0, param1)
     MOVEJ 0, 0, 0, 0, -1.5708, 0, 0.5 SV 100 ;ACC 100 
+    NOP
     CALL call_test::func_test (1) 
+    NOP
     CALLMACRO call_test::func_test (1) 
+    NOP
     CALL call_test::func_noparam_test () 
 END SUB 
 SUB func_noparam_test ()

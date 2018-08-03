@@ -672,7 +672,7 @@ void parseCtrlComand() // (struct thread_control_block * objThdCtrlBlockPtr)
             setPrgmState(PAUSED_R);
 			if(strlen(intprt_ctrl.start_ctrl.file_name) == 0)
 			{
-			   strcpy(intprt_ctrl.start_ctrl.file_name, "while_test");
+			   strcpy(intprt_ctrl.start_ctrl.file_name, "call_test");
 			}
             startFile(objThdCtrlBlockPtr, 
 				intprt_ctrl.start_ctrl.file_name, g_iCurrentThreadSeq);
@@ -1198,8 +1198,8 @@ void initShm()
     openShm(SHM_CTRL_CMD, 1024);
     openShm(SHM_CTRL_STATUS, 1024);
     openShm(SHM_INTPRT_DST, 1024);
-    intprt_ctrl.cmd = LOAD;
-    // intprt_ctrl.cmd = START;
+    // intprt_ctrl.cmd = LOAD;
+    intprt_ctrl.cmd = START;
 	g_privateInterpreterState = IDLE_R ;
 	
 	setPrgmState(IDLE_R);

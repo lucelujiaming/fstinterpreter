@@ -18,13 +18,15 @@
                         <argument name="smooth_velocity" type="num" unit="%">100</argument>
                         <argument name="acceleration" type="num" unit="%">100</argument>
                     </instruction>
-
+                    <nop/>
                    <call name="func_test" type="common"> 
                       <parameter name="param0" type="num">1</parameter>
                    </call>
+                    <nop/>
                    <call name="func_test" type="macro"> 
                       <parameter name="param0" type="num">1</parameter>
                    </call>
+                    <nop/>
                    <call name="func_noparam_test"> 
                    </call>
           </body>

@@ -59,6 +59,7 @@
 #define DEFAULT   28
 #define WAIT      29
 #define CALLMACRO 30
+#define NOP       31
 
 enum var_inner_type { FORSIGHT_CHAR, FORSIGHT_INT, FORSIGHT_FLOAT };
 
@@ -121,6 +122,7 @@ static struct commands table[] = { /* Commands must be entered lowercase */
   "end",         END,
   "import",      IMPORT,
   "callmacro",   CALLMACRO,
+  "nop",         NOP,
   "", END  /* mark end of table */
 };
 
@@ -696,6 +698,15 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
       switch(objThreadCntrolBlock->tok) {
         case SUB:
 		  // Skip Function declaration by jiaming.lu at 180717
+		  find_eol(objThreadCntrolBlock);
+  		  break;
+        case NOP:
+		  // Skip Function declaration by jiaming.lu at 180717
+		  if(objThreadCntrolBlock->prog_mode == STEP_MODE)
+		  {
+		     printf("Meet NOP \n");
+		     setLinenum(objThreadCntrolBlock, getLinenum(objThreadCntrolBlock) + 1);
+		  }
 		  find_eol(objThreadCntrolBlock);
   		  break;
         case PRINT:
