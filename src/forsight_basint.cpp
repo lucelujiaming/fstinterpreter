@@ -810,6 +810,19 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	else {
 		isExecuteEmptyLine = 1 ;
 	}
+    // Skip NOP and set new line number
+	char tokenType = get_token(objThreadCntrolBlock);
+	while((tokenType == DELIMITER)
+		||( (objThreadCntrolBlock->token_type==COMMAND) 
+		  &&(objThreadCntrolBlock->tok == NOP)))
+	{
+		tokenType = get_token(objThreadCntrolBlock);
+	}
+	// Get normal token
+	putback(objThreadCntrolBlock);
+	// Skip NOP over and set new line number
+	setLinenum(objThreadCntrolBlock, calc_line_from_prog(objThreadCntrolBlock));
+    // Skip NOP over and set new line number over
   } while (objThreadCntrolBlock->tok != FINISHED);
   
   printf("call_interpreter execution over\n");
