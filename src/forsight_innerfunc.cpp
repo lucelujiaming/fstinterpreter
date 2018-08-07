@@ -8,6 +8,9 @@
 #include "forsight_innerfunc.h"
 #include <algorithm> 
 
+#define RAD2DEG(x) ((x)*180./PI)  // Convert radians to angles
+#define DEG2RAD(x) ((x)*PI/180.)  // Convert angle to radians
+
 //        A Èý½Çº¯Êý
 //    01. double sin (double);
 //    02. double cos (double);
@@ -60,7 +63,11 @@ bool call_fabs (eval_value *result, char * valFirst, char * valSecond, char * va
 bool call_ldexp(eval_value *result, char * valFirst, char * valSecond, char * valThird);
 bool call_modf (eval_value *result, char * valFirst, char * valSecond, char * valThird);
 bool call_fmod (eval_value *result, char * valFirst, char * valSecond, char * valThird);
-
+bool call_hypot(eval_value *result, char * valFirst, char * valSecond, char * valThird);
+bool call_gcd  (eval_value *result, char * valFirst, char * valSecond, char * valThird);
+// Convert function
+bool call_degrees(eval_value *result, char * valFirst, char * valSecond, char * valThird);
+bool call_radians(eval_value *result, char * valFirst, char * valSecond, char * valThird);
 //        I ×Ö·û´®²Ù×÷º¯Êý
 //    23. strlen  (char *);
 //    24. findstr (char *, char *);
@@ -111,6 +118,11 @@ struct intern_func_type {
 	(char *)"ldexp",      2, call_ldexp,
 	(char *)"modf",       2, call_modf ,
 	(char *)"fmod",       2, call_fmod ,
+	(char *)"hypot",      2, call_hypot,
+	(char *)"gcd",        2, call_gcd,
+    // Convert function
+	(char *)"degrees",    1, call_degrees,
+	(char *)"radians",    1, call_radians,
 	// String function
 	(char *)"strlen",     1, call_strlen ,
 	(char *)"findstr",    2, call_findstr ,
@@ -306,6 +318,50 @@ bool call_fmod (eval_value *result, char * valFirst, char * valSecond, char * va
 	double val = atof(valFirst);
 	double valTwo = atof(valSecond);
 	result->setFloatValue(fmod(val, valTwo));
+    return true ;
+}
+
+bool call_hypot(eval_value *result, char * valFirst, char * valSecond, char * valThird)
+{
+	double val = atof(valFirst);
+	double valTwo = atof(valSecond);
+	result->setFloatValue(hypot(val, valTwo));
+    return true ;
+}
+
+int Stein_GCD(int x, int y)
+{
+    if (x == 0) return y;
+    if (y == 0) return x;
+    if (x % 2 == 0 && y % 2 == 0)
+        return 2 * Stein_GCD(x >> 1, y >> 1);
+    else if (x % 2 == 0)
+        return Stein_GCD(x >> 1, y);
+    else if (y % 2 == 0)
+        return Stein_GCD(x, y >> 1);
+    else
+        return Stein_GCD(min(x, y), fabs(x - y));
+}
+
+bool call_gcd(eval_value *result, char * valFirst, char * valSecond, char * valThird)
+{
+	double val = atof(valFirst);
+	double valTwo = atof(valSecond);
+	result->setFloatValue(Stein_GCD((int)val, (int)valTwo));
+    return true ;
+}
+
+bool call_degrees(eval_value *result, char * valFirst, char * valSecond, char * valThird)
+{
+	double val = atof(valFirst);
+	result->setFloatValue(RAD2DEG(val));
+    return true ;
+}
+
+bool call_radians(eval_value *result, char * valFirst, char * valSecond, char * valThird)
+{
+	double val = atof(valFirst);
+	result->setFloatValue(DEG2RAD(val));
     return true ;
 }
 
