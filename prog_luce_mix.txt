@@ -3,33 +3,28 @@ EXPORT: (002)(044)/prog/prog_body/function[1]/body/instruction                  
 EXPORT: (003)(043)/prog/prog_body/function[1]/body/logical[1]                                                             FOR X=1 TO 3 
 EXPORT: (004)(068)/prog/prog_body/function[1]/body/logical[1]/logical_body/instruction                                        PRINT "hello continue", "" 
 EXPORT: (005)(043)/prog/prog_body/function[1]/body/logical[1]                                                             NEXT 
-EXPORT: (006)(036)/prog/prog_body/function[1]/body/nop                                                                    
-EXPORT: (007)(043)/prog/prog_body/function[1]/body/logical[2]                                                             LOOP 4 
-EXPORT: (008)(068)/prog/prog_body/function[1]/body/logical[2]/logical_body/instruction                                        PRINT "Test LujiamingSub.", "" 
-EXPORT: (009)(043)/prog/prog_body/function[1]/body/logical[2]                                                             ENDLOOP 
-EXPORT: (010)(015)/prog/prog_body                                                                                         CALL prog_luce::LujiamingParamsSub (1, 2, 3) 
-EXPORT: (011)(039)/prog/prog_body/function[1]/body/return                                                                 RETURN 50 
-EXPORT: (012)(027)/prog/prog_body/function[1]                                                                         END SUB 
-EXPORT: (013)(022)/prog/prog_body/nop[1]                                                                              
-EXPORT: (014)(022)/prog/prog_body/nop[2]                                                                              
-EXPORT: (015)(027)/prog/prog_body/function[2]                                                                         SUB LujiamingParamsSub (X, Y, Z)
-EXPORT: (016)(040)/prog/prog_body/function[2]/body/logical                                                                LOOP 5 
-EXPORT: (017)(068)/prog/prog_body/function[2]/body/logical/logical_body/instruction[1]                                        PRINT "Test LujiamingSub.", X; Y; Z; "" 
-EXPORT: (018)(057)/prog/prog_body/function[2]/body/logical/logical_body/nop                                                   
-EXPORT: (019)(068)/prog/prog_body/function[2]/body/logical/logical_body/instruction[2]                                        MOVEL 11.1, 2.2, 3.3, 4.4, 5.5, 6.6, 5.5 CNT 35 ;ACC 40 ;OFFSET J_VEC (100, 0, 0, 45, 0, 0);TOOL_OFFSET J_VEC (100, 0, 0, 45, 0, 0);TA 100 ASSIGN R[1] = 5 + ( 6-7 ) ;TB 100 CALL prog_luce::test (1, 2)
-EXPORT: (020)(068)/prog/prog_body/function[2]/body/logical/logical_body/instruction[3]                                        MOVEL 12.1, 2.2, 3.3, 4.4, 5.5, 6.6, 5.5 SD 50 ;ACC 40 ;OFFSET C_VEC_UF (0, 0, 100, 40.5, 0, 0) UF[1];TOOL_OFFSET C_VEC_UF (0, 0, 100, 40.5, 0, 0) UF[1]
-EXPORT: (021)(068)/prog/prog_body/function[2]/body/logical/logical_body/instruction[4]                                        MOVEL 13.1, 2.2, 3.3, 4.4, 5.5, 6.6, 5.5 SV 50 ;ACC 40 ;OFFSET PR_UF PR[2] UF[1];TOOL_OFFSET PR_UF PR[2] UF[1]
-EXPORT: (022)(068)/prog/prog_body/function[2]/body/logical/logical_body/instruction[5]                                        MOVEJ 14.1, 2.2, 3.3, 4.4, 5.5, 6.6, 0.5 SV 50 
-EXPORT: (023)(068)/prog/prog_body/function[2]/body/logical/logical_body/instruction[6]                                        MOVEJ 15.1, 2.2, 3.3, 4.4, 5.5, 6.6, 0.5 CNT 20 ;ACC 40 ;EV 40 ;Ind_EV 40 
-EXPORT: (024)(068)/prog/prog_body/function[2]/body/logical/logical_body/instruction[7]                                        MOVEJ 16.1, 2.2, 3.3, 4.4, 5.5, 6.6, 0.5 SD 50 ;ACC 40 ;TA 100 ASSIGN R[1] = 5 + ( 6-7 ) ;TB 100 CALL prog_luce::test (1, 2)
-EXPORT: (025)(068)/prog/prog_body/function[2]/body/logical/logical_body/instruction[8]                                        MOVEJ 17.1, 2.2, 3.3, 4.4, 5.5, 6.6, 0.5 SV 50 ;ACC 40 ;DB 100 ASSIGN R[1] = 5 + ( 6-7 ) 
-EXPORT: (026)(068)/prog/prog_body/function[2]/body/logical/logical_body/instruction[9]                                        MOVEC 18.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9, 10.10, 11.11, 12.12, 0.5 CNT 20 ;ACC 40 
-EXPORT: (027)(069)/prog/prog_body/function[2]/body/logical/logical_body/instruction[10]                                       MOVEC 19.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9, 10.10, 11.11, 12.12, 0.5 SD 50 ;ACC 40 
-EXPORT: (028)(069)/prog/prog_body/function[2]/body/logical/logical_body/instruction[11]                                       MOVEC 10.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9, 10.10, 11.11, 12.12, 0.5 SV 50 ;ACC 40 
-EXPORT: (029)(040)/prog/prog_body/function[2]/body/logical                                                                ENDLOOP 
-EXPORT: (030)(039)/prog/prog_body/function[2]/body/return                                                                 RETURN 44.6 
-EXPORT: (031)(027)/prog/prog_body/function[2]                                                                         END SUB 
-EXPORT: (032)(022)/prog/prog_body/nop[3]                                                                              
-EXPORT: (033)(027)/prog/prog_body/function[3]                                                                         SUB test (X)
-EXPORT: (034)(044)/prog/prog_body/function[3]/body/instruction                                                            PRINT "Prog1 test.", "" 
-EXPORT: (035)(027)/prog/prog_body/function[3]                                                                         END SUB 
+EXPORT: (006)(043)/prog/prog_body/function[1]/body/logical[2]                                                             LOOP 4 
+EXPORT: (007)(068)/prog/prog_body/function[1]/body/logical[2]/logical_body/instruction                                        PRINT "Test LujiamingSub.", "" 
+EXPORT: (008)(043)/prog/prog_body/function[1]/body/logical[2]                                                             ENDLOOP 
+EXPORT: (009)(037)/prog/prog_body/function[1]/body/call                                                                   CALL prog_luce::LujiamingParamsSub (1, 2, 3) 
+EXPORT: (010)(039)/prog/prog_body/function[1]/body/return                                                                 RETURN 50 
+EXPORT: (011)(027)/prog/prog_body/function[1]                                                                         END SUB 
+EXPORT: (012)(027)/prog/prog_body/function[2]                                                                         SUB LujiamingParamsSub (X, Y, Z)
+EXPORT: (013)(040)/prog/prog_body/function[2]/body/logical                                                                LOOP 5 
+EXPORT: (014)(068)/prog/prog_body/function[2]/body/logical/logical_body/instruction[1]                                        PRINT "Test LujiamingSub.", X; Y; Z; "" 
+EXPORT: (015)(068)/prog/prog_body/function[2]/body/logical/logical_body/instruction[2]                                        MOVEL 11.1, 2.2, 3.3, 4.4, 5.5, 6.6, 5.5 CNT 35 ;ACC 40 ;OFFSET J_VEC (100, 0, 0, 45, 0, 0);TOOL_OFFSET J_VEC (100, 0, 0, 45, 0, 0);TA 100 ASSIGN R[1] = 5 + ( 6-7 ) ;TB 100 CALL prog_luce::test (1, 2)
+EXPORT: (016)(068)/prog/prog_body/function[2]/body/logical/logical_body/instruction[3]                                        MOVEL 12.1, 2.2, 3.3, 4.4, 5.5, 6.6, 5.5 SD 50 ;ACC 40 ;OFFSET C_VEC_UF (0, 0, 100, 40.5, 0, 0) UF[1];TOOL_OFFSET C_VEC_UF (0, 0, 100, 40.5, 0, 0) UF[1]
+EXPORT: (017)(068)/prog/prog_body/function[2]/body/logical/logical_body/instruction[4]                                        MOVEL 13.1, 2.2, 3.3, 4.4, 5.5, 6.6, 5.5 SV 50 ;ACC 40 ;OFFSET PR_UF PR[2] UF[1];TOOL_OFFSET PR_UF PR[2] UF[1]
+EXPORT: (018)(068)/prog/prog_body/function[2]/body/logical/logical_body/instruction[5]                                        MOVEJ 14.1, 2.2, 3.3, 4.4, 5.5, 6.6, 0.5 SV 50 
+EXPORT: (019)(068)/prog/prog_body/function[2]/body/logical/logical_body/instruction[6]                                        MOVEJ 15.1, 2.2, 3.3, 4.4, 5.5, 6.6, 0.5 CNT 20 ;ACC 40 ;EV 40 ;Ind_EV 40 
+EXPORT: (020)(068)/prog/prog_body/function[2]/body/logical/logical_body/instruction[7]                                        MOVEJ 16.1, 2.2, 3.3, 4.4, 5.5, 6.6, 0.5 SD 50 ;ACC 40 ;TA 100 ASSIGN R[1] = 5 + ( 6-7 ) ;TB 100 CALL prog_luce::test (1, 2)
+EXPORT: (021)(068)/prog/prog_body/function[2]/body/logical/logical_body/instruction[8]                                        MOVEJ 17.1, 2.2, 3.3, 4.4, 5.5, 6.6, 0.5 SV 50 ;ACC 40 ;DB 100 ASSIGN R[1] = 5 + ( 6-7 ) 
+EXPORT: (022)(068)/prog/prog_body/function[2]/body/logical/logical_body/instruction[9]                                        MOVEC 18.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9, 10.10, 11.11, 12.12, 0.5 CNT 20 ;ACC 40 
+EXPORT: (023)(069)/prog/prog_body/function[2]/body/logical/logical_body/instruction[10]                                       MOVEC 19.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9, 10.10, 11.11, 12.12, 0.5 SD 50 ;ACC 40 
+EXPORT: (024)(069)/prog/prog_body/function[2]/body/logical/logical_body/instruction[11]                                       MOVEC 10.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9, 10.10, 11.11, 12.12, 0.5 SV 50 ;ACC 40 
+EXPORT: (025)(040)/prog/prog_body/function[2]/body/logical                                                                ENDLOOP 
+EXPORT: (026)(039)/prog/prog_body/function[2]/body/return                                                                 RETURN 44.6 
+EXPORT: (027)(027)/prog/prog_body/function[2]                                                                         END SUB 
+EXPORT: (028)(027)/prog/prog_body/function[3]                                                                         SUB test (X)
+EXPORT: (029)(044)/prog/prog_body/function[3]/body/instruction                                                            PRINT "Prog1 test.", "" 
+EXPORT: (030)(027)/prog/prog_body/function[3]                                                                         END SUB 

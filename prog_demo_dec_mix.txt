@@ -1,19 +1,19 @@
 EXPORT: (001)(018)/prog/head/include                                                                                  IMPORT prog_luce
 EXPORT: (002)(027)/prog/prog_body/function[1]                                                                         SUB main (param0, param1)
-EXPORT: (003)(015)/prog/prog_body                                                                                         DI[2] = 1  
-EXPORT: (004)(015)/prog/prog_body                                                                                         DI[3] = DI[2]  
-EXPORT: (005)(015)/prog/prog_body                                                                                         PR[1].JOINT = 35.9 46.7 76.4 18.5 152.4 145.3  
-EXPORT: (006)(015)/prog/prog_body                                                                                         PR[1].ID = 123  
-EXPORT: (007)(015)/prog/prog_body                                                                                         PR[1].TYPE = 123  
-EXPORT: (008)(015)/prog/prog_body                                                                                         PR[1].COMMENT =  "lujiaming test for comment"   
-EXPORT: (009)(015)/prog/prog_body                                                                                         R[1] = 5  
-EXPORT: (010)(015)/prog/prog_body                                                                                         R[1] = R[1] + 5  
+EXPORT: (003)(046)/prog/prog_body/function[1]/body/assignment[1]                                                          DI[2] = 1  
+EXPORT: (004)(046)/prog/prog_body/function[1]/body/assignment[2]                                                          DI[3] = DI[2]  
+EXPORT: (005)(046)/prog/prog_body/function[1]/body/assignment[3]                                                          PR[1].JOINT = 35.9 46.7 76.4 18.5 152.4 145.3  
+EXPORT: (006)(046)/prog/prog_body/function[1]/body/assignment[4]                                                          PR[1].ID = 123  
+EXPORT: (007)(046)/prog/prog_body/function[1]/body/assignment[5]                                                          PR[1].TYPE = 123  
+EXPORT: (008)(046)/prog/prog_body/function[1]/body/assignment[6]                                                          PR[1].COMMENT = "lujiaming test for comment"  
+EXPORT: (009)(046)/prog/prog_body/function[1]/body/assignment[7]                                                          R[1] = 5  
+EXPORT: (010)(046)/prog/prog_body/function[1]/body/assignment[8]                                                          R[1] = R[1] + 5  
 EXPORT: (011)(043)/prog/prog_body/function[1]/body/logical[1]                                                             IF R[1]+sin(6+7) == 100 THEN 
 EXPORT: (012)(068)/prog/prog_body/function[1]/body/logical[1]/logical_body/instruction                                        MOVEL 1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 0.0 SV 50 ;ACC 40 
 EXPORT: (013)(056)/prog/prog_body/function[1]/body/logical[1]/vice_logical                                                ELSEIF R[1] == 1 THEN 
 EXPORT: (014)(086)/prog/prog_body/function[1]/body/logical[1]/vice_logical/vice_logical_body/instruction                      WAIT COND DI[0]  = ON  10 skip
 EXPORT: (015)(043)/prog/prog_body/function[1]/body/logical[1]                                                             ENDIF 
-EXPORT: (016)(015)/prog/prog_body                                                                                         RRRRR = 5  
+EXPORT: (016)(046)/prog/prog_body/function[1]/body/assignment[9]                                                          RRRRR = 5  
 EXPORT: (017)(043)/prog/prog_body/function[1]/body/logical[2]                                                             WHILE RRRRR+sin(2) <= 100 
 EXPORT: (018)(071)/prog/prog_body/function[1]/body/logical[2]/logical_body/instruction[1]                                     MOVEL 1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 0.0 SV 50 ;ACC 40 
 EXPORT: (019)(067)/prog/prog_body/function[1]/body/logical[2]/logical_body/logical[1]                                         IF R[1]+sin(2) == 2 THEN 
@@ -25,7 +25,7 @@ EXPORT: (024)(092)/prog/prog_body/function[1]/body/logical[2]/logical_body/logic
 EXPORT: (025)(089)/prog/prog_body/function[1]/body/logical[2]/logical_body/logical[2]/logical_body/continue                       CONTINUE 
 EXPORT: (026)(067)/prog/prog_body/function[1]/body/logical[2]/logical_body/logical[2]                                         ENDIF 
 EXPORT: (027)(071)/prog/prog_body/function[1]/body/logical[2]/logical_body/instruction[2]                                     PRINT "RRRRR = ", RRRRR; "" 
-EXPORT: (028)(043)/prog/prog_body/function[1]/body/logical[2]                                                                 RRRRR = RRRRR + 5  
+EXPORT: (028)(067)/prog/prog_body/function[1]/body/logical[2]/logical_body/assignment                                         RRRRR = RRRRR + 1  
 EXPORT: (029)(043)/prog/prog_body/function[1]/body/logical[2]                                                             WEND 
 EXPORT: (030)(043)/prog/prog_body/function[1]/body/logical[3]                                                             SELECT CASE  R[2+( 6-7 )]  
 EXPORT: (031)(059)/prog/prog_body/function[1]/body/logical[3]/vice-logical[1]                                                 CASE  5 
@@ -35,13 +35,11 @@ EXPORT: (034)(059)/prog/prog_body/function[1]/body/logical[3]/vice-logical[2]   
 EXPORT: (035)(089)/prog/prog_body/function[1]/body/logical[3]/vice-logical[2]/vice-logical_body/instruction                       MOVEL 1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 0.0 SV 50 ;ACC 40 
 EXPORT: (036)(043)/prog/prog_body/function[1]/body/logical[3]                                                                 BREAK 
 EXPORT: (037)(043)/prog/prog_body/function[1]/body/logical[3]                                                             END SELECT 
-EXPORT: (038)(015)/prog/prog_body                                                                                         CALL prog_1::main (1, 2) 
-EXPORT: (039)(015)/prog/prog_body                                                                                         CALL prog_1::LujiamingParamsSub (1, 2, 3) 
-EXPORT: (040)(036)/prog/prog_body/function[1]/body/nop                                                                    
-EXPORT: (041)(015)/prog/prog_body                                                                                         R[1] = 5 + ( 6-7 )  
-EXPORT: (042)(027)/prog/prog_body/function[1]                                                                         END SUB 
-EXPORT: (043)(019)/prog/prog_body/nop                                                                                 
-EXPORT: (044)(027)/prog/prog_body/function[2]                                                                         SUB func_test (param0, param1)
-EXPORT: (045)(019)/prog/prog_body/nop                                                                                     R[6] = param0 + ( 2+2 )  
-EXPORT: (046)(039)/prog/prog_body/function[2]/body/return                                                                 RETURN R[6] 
-EXPORT: (047)(027)/prog/prog_body/function[2]                                                                         END SUB 
+EXPORT: (038)(040)/prog/prog_body/function[1]/body/call[1]                                                                CALL prog_luce::main (1, 2) 
+EXPORT: (039)(040)/prog/prog_body/function[1]/body/call[2]                                                                CALL prog_luce::LujiamingParamsSub (1, 2, 3) 
+EXPORT: (040)(047)/prog/prog_body/function[1]/body/assignment[10]                                                         R[1] = 5 + ( 6-7 )  
+EXPORT: (041)(027)/prog/prog_body/function[1]                                                                         END SUB 
+EXPORT: (042)(027)/prog/prog_body/function[2]                                                                         SUB func_test (param0, param1)
+EXPORT: (043)(043)/prog/prog_body/function[2]/body/assignment                                                             R[6] = param0 + ( 2+2 )  
+EXPORT: (044)(039)/prog/prog_body/function[2]/body/return                                                                 RETURN R[6] 
+EXPORT: (045)(027)/prog/prog_body/function[2]                                                                         END SUB 

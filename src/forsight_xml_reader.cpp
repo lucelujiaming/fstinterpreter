@@ -1527,7 +1527,7 @@ int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
             // objLineInfoTemp.xPathIdx = iAssignmentIdx++;
 			sprintf(objLineInfoTemp.xPath, "%s", 
 					 (char *)xmlGetNodePath(nodeStatement));
-			exportBASCode(objLineInfo, "EXPORT: ", "", "");
+			exportBASCode(objLineInfoTemp, "EXPORT: ", "", "");
 			generateAssignment(nodeStatement, objLineInfoTemp);
 			printBASCode(objLineInfo, " \n", "");
         }
@@ -1609,14 +1609,15 @@ int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
             // // objLineInfoTemp.xPathIdx = iNopIdx++;
 			sprintf(objLineInfoTemp.xPath, "%s", 
 					 (char *)xmlGetNodePath(nodeStatement));
-			exportBASCode(objLineInfoTemp, "EXPORT: ", "NOP\n", "");
+			// exportBASCode(objLineInfoTemp, "EXPORT: ", "NOP\n", "");
+			// exportBASCode(objLineInfoTemp, "EXPORT: ", "", "");
         }
 		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"call")==0){ 
             // printf("%s, ", (char*)nodeStatement->name);
             // objLineInfoTemp.xPathIdx = iCallIdx++;
 			sprintf(objLineInfoTemp.xPath, "%s", 
 					 (char *)xmlGetNodePath(nodeStatement));
-			exportBASCode(objLineInfo, "EXPORT: ", "", "");
+			exportBASCode(objLineInfoTemp, "EXPORT: ", "", "");
 			generateFunctionCall(nodeStatement, objLineInfoTemp);
 			printBASCode(objLineInfo, " \n", "");
         }
@@ -1737,7 +1738,8 @@ int generateProgBody(xmlNodePtr nodeProgBody, LineInfo objLineInfo)
             // printf("%s, ", (char*)nodeStatement->name);
 			sprintf(objLineInfoTemp.xPath, "%s", 
 					 (char *)xmlGetNodePath(nodeFunction));
-			exportBASCode(objLineInfoTemp, "EXPORT: ", "NOP\n", "");
+		//	exportBASCode(objLineInfoTemp, "EXPORT: ", "NOP\n", "");
+		//	exportBASCode(objLineInfoTemp, "EXPORT: ", "", "");
         }
 		else if(xmlStrcasecmp(nodeFunction->name,BAD_CAST"text")==0){
 			;

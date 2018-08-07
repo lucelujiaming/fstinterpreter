@@ -294,11 +294,11 @@
             </logical>
 
             <comment type="string">comment thing</comment>
-            <call file="prog_1">
+            <call file="prog_luce">
                 <parameter name="param0" type="num">1</parameter>
                 <parameter name="param0" type="num">2</parameter>
             </call>
-            <call file="prog_1" name="LujiamingParamsSub">
+            <call file="prog_luce" name="LujiamingParamsSub">
                 <parameter name="param0" type="num">1</parameter>
                 <parameter name="param1" type="num">2</parameter>
                 <parameter name="param2" type="num">3</parameter>
@@ -346,7 +346,7 @@
 </prog>
 <!--python   
     " osnouatem lusbelpe wlos to ry sn
-    import prog_1
+    import prog_luce
     def main()
         MoveL p_1, 100, 2000m/s
         If 2 + sin(2) == 2
@@ -355,7 +355,7 @@
             Wait di_1, ON, 10
         End If
         // comment thing
-        prog_1.func_test(0)
+        prog_luce.func_test(0)
 
         R[1] = 2 + (2 + 2)
     End main

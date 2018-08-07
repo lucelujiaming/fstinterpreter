@@ -130,5 +130,13 @@
 	"uo[13]":	{
 		"emltFlag":	true,
 		"value":	0
+	},
+	"di[2]":	{
+		"emltFlag":	true,
+		"value":	1
+	},
+	"di[3]":	{
+		"emltFlag":	true,
+		"value":	1
 	}
 }

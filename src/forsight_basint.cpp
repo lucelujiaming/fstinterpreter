@@ -810,6 +810,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	else {
 		isExecuteEmptyLine = 1 ;
 	}
+#ifdef JMP_NOP
     // Skip NOP and set new line number
 	char tokenType = get_token(objThreadCntrolBlock);
 	while((tokenType == DELIMITER)
@@ -823,6 +824,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	// Skip NOP over and set new line number
 	setLinenum(objThreadCntrolBlock, calc_line_from_prog(objThreadCntrolBlock));
     // Skip NOP over and set new line number over
+#endif
   } while (objThreadCntrolBlock->tok != FINISHED);
   
   printf("call_interpreter execution over\n");

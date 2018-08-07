@@ -5,7 +5,7 @@ SUB main (param0, param1)
     PR[1].JOINT = 35.9 46.7 76.4 18.5 152.4 145.3  
     PR[1].ID = 123  
     PR[1].TYPE = 123  
-    PR[1].COMMENT =  "lujiaming test for comment"   
+    PR[1].COMMENT = "lujiaming test for comment"  
     R[1] = 5  
     R[1] = R[1] + 5  
     IF R[1]+sin(6+7) == 100 THEN 
@@ -25,7 +25,7 @@ SUB main (param0, param1)
             CONTINUE 
         ENDIF 
         PRINT "RRRRR = ", RRRRR; "" 
-        RRRRR = RRRRR + 5  
+        RRRRR = RRRRR + 1  
     WEND 
     SELECT CASE  R[2+( 6-7 )]  
         CASE  5 
@@ -35,12 +35,10 @@ SUB main (param0, param1)
             MOVEL 1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 0.0 SV 50 ;ACC 40 
         BREAK 
     END SELECT 
-    CALL prog_1::main (1, 2) 
-    CALL prog_1::LujiamingParamsSub (1, 2, 3) 
-    
+    CALL prog_luce::main (1, 2) 
+    CALL prog_luce::LujiamingParamsSub (1, 2, 3) 
     R[1] = 5 + ( 6-7 )  
 END SUB 
-
 SUB func_test (param0, param1)
     R[6] = param0 + ( 2+2 )  
     RETURN R[6] 
