@@ -1,0 +1,16 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(043)/prog/prog_body/function/body/assignment[1]                                                             R[1]  = 2 + ( 2+2 )  
+EXPORT: (003)(044)/prog/prog_body/function/body/instruction[1]                                                            WAIT  10
+EXPORT: (004)(044)/prog/prog_body/function/body/instruction[2]                                                            WAIT  10
+EXPORT: (005)(040)/prog/prog_body/function/body/logical[1]                                                                IF R[1]  == 2 THEN 
+EXPORT: (006)(065)/prog/prog_body/function/body/logical[1]/logical_body/instruction                                           WAIT COND DI[1]  = PE  3 SKIP
+EXPORT: (007)(040)/prog/prog_body/function/body/logical[1]                                                                ENDIF 
+EXPORT: (008)(040)/prog/prog_body/function/body/logical[2]                                                                IF 2+R[2]  == 2 THEN 
+EXPORT: (009)(065)/prog/prog_body/function/body/logical[2]/logical_body/instruction                                           WAIT COND R[1]  > 10 3 SKIP
+EXPORT: (010)(053)/prog/prog_body/function/body/logical[2]/vice_logical                                                   ELSEIF R[1]  == 1 THEN 
+EXPORT: (011)(079)/prog/prog_body/function/body/logical[2]/vice_logical/vice_logical_body/logical                             IF 2 == 2 THEN 
+EXPORT: (012)(104)/prog/prog_body/function/body/logical[2]/vice_logical/vice_logical_body/logical/logical_body/instruction            WAIT  3
+EXPORT: (013)(079)/prog/prog_body/function/body/logical[2]/vice_logical/vice_logical_body/logical                             ENDIF 
+EXPORT: (014)(040)/prog/prog_body/function/body/logical[2]                                                                ENDIF 
+EXPORT: (015)(043)/prog/prog_body/function/body/assignment[2]                                                             TF_NO. = 2 + ( 2+2 )  
+EXPORT: (016)(024)/prog/prog_body/function                                                                            END SUB 

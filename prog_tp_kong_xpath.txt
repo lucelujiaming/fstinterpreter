@@ -1,0 +1,16 @@
+001:prog_tp_kong:/prog/prog_body/function
+002:prog_tp_kong:/prog/prog_body/function/body/assignment[1]
+003:prog_tp_kong:/prog/prog_body/function/body/instruction[1]
+004:prog_tp_kong:/prog/prog_body/function/body/instruction[2]
+005:prog_tp_kong:/prog/prog_body/function/body/logical[1]
+006:prog_tp_kong:/prog/prog_body/function/body/logical[1]/logical_body/instruction
+007:prog_tp_kong:/prog/prog_body/function/body/logical[1]
+008:prog_tp_kong:/prog/prog_body/function/body/logical[2]
+009:prog_tp_kong:/prog/prog_body/function/body/logical[2]/logical_body/instruction
+010:prog_tp_kong:/prog/prog_body/function/body/logical[2]/vice_logical
+011:prog_tp_kong:/prog/prog_body/function/body/logical[2]/vice_logical/vice_logical_body/logical
+012:prog_tp_kong:/prog/prog_body/function/body/logical[2]/vice_logical/vice_logical_body/logical/logical_body/instruction
+013:prog_tp_kong:/prog/prog_body/function/body/logical[2]/vice_logical/vice_logical_body/logical
+014:prog_tp_kong:/prog/prog_body/function/body/logical[2]
+015:prog_tp_kong:/prog/prog_body/function/body/assignment[2]
+016:prog_tp_kong:/prog/prog_body/function

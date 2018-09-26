@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prog>
+    <prog_body name="test">
+        <function name="main">
+          <parameter type="num">param0</parameter>
+          <parameter type="string">param1</parameter>
+          <body>
+                            <assignment>
+                                <lvalue type="num">
+                                    <element type="num">R[3]</element>
+                                </lvalue>
+                                <rvalue>
+                                    <element type="num">1414</element>
+                                </rvalue>
+                            </assignment>
+
+                             <assignment>
+                                <lvalue type="num">
+                                    <element type="num">R[4]</element>
+                                </lvalue>
+                                <rvalue>
+                                    <element type="num">177</element>
+                                </rvalue>
+                            </assignment>
+           </body>
+        </function>
+    </prog_body>
+</prog>

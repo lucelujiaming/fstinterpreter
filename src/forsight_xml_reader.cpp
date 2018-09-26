@@ -192,6 +192,10 @@ int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char *
 			value = xmlNodeGetContent(nodeValueElement);
 			sprintf(label_str, "%s %s ", label_str, (char*)value);
 		}
+		else if(xmlStrcasecmp(name, BAD_CAST"system")==0){ 
+			value = xmlNodeGetContent(nodeValueElement);
+			sprintf(label_str, "%s%s", label_str, (char*)value);
+		}
 		else if(xmlStrcasecmp(name, BAD_CAST"entity")==0){ 
 			value = xmlNodeGetContent(nodeValueElement);
 			sprintf(label_str, "%s", label_str, "");

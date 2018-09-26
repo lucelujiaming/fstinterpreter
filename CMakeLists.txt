@@ -130,6 +130,10 @@ install(FILES config/pr_reg.yaml
     DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/configuration/machine
 )
 
+install(FILES config/hr_reg.yaml
+    DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/configuration/machine
+)
+
 install(FILES config/programs_path.yaml
     DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/configuration/machine
 )

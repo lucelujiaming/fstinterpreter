@@ -1,0 +1,170 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--DOCTYPE prog [
+        <!ELEMENT prog (head, prog_body)>
+        <!ELEMENT head (include*)>
+        <!ELEMENT include EMPTY>
+        <!ELEMENT prog_body (function)>
+        <!ELEMENT function (instruction, logical, comment, NOP, assignment)>
+        <!ELEMENT instruction (argument)>
+        <!ELEMENT argument ANY>
+        <!ELEMENT assignment (source, destination)>
+        <!ELEMENT source (element)>
+        <!ELEMENT destination (element)>
+        <!ELEMENT logical (determine, logical_body, vice_logical)>
+        <!ELEMENT logical_body (instruction)>
+        <!ELEMENT vice_logical (determine, vice_logical_body)>
+        <!ELEMENT vice_logical_body (instruction)>
+        <!ELEMENT determine (element)>
+        <!ELEMENT element (element)>
+        <!ELEMENT comment (#PCDATA)>
+        <!ELEMENT NOP EMPTY>
+
+        <!ATTLIST function name CDATA #IMPLIED>
+        <!ATTLIST instruction type CDATA #IMPLIED>
+        <!ATTLIST argument type CDATA #IMPLIED>
+        <!ATTLIST argument name CDATA #IMPLIED>
+        <!ATTLIST logical type CDATA #IMPLIED>
+        <!ATTLIST vice_logical type CDATA #IMPLIED>
+        <!ATTLIST element type CDATA #IMPLIED>
+        <!ATTLIST element name CDATA #IMPLIED>
+        <!ATTLIST comment type CDATA #IMPLIED>
+        <!ATTLIST destination type CDATA #IMPLIED>
+        ]--><prog>
+    <head>
+        </head>
+    <prog_body name="test">
+        <function name="main">
+            <body>
+                <assignment>
+                    <lvalue>
+                        <element type="register">
+                            <element type="num">1</element>
+                        </element>
+                    </lvalue>
+                    <rvalue>
+                        <element type="num">2</element>
+                        <element type="operation">+</element>
+                        <element type="bracket">
+                            <element type="num">2</element>
+                            <element type="operation">+</element>
+                            <element type="num">2</element>
+                        </element>
+                    </rvalue>
+                </assignment><instruction type="wait"><argument name="timeout" type="num" unit="sec">3</argument></instruction><instruction type="wait"><argument name="timeout" type="num" unit="sec">2</argument></instruction>
+                <logical type="if">
+                    <determine>
+                        <element type="register">
+                            <element type="num">1</element>
+                        </element>
+                        <element type="boolean_operation">==</element>
+                        <element type="num">2</element>
+                    </determine>
+                    <logical_body>
+                        <instruction type="wait">
+                            <argument name="condition" type="expression">
+                                <element type="di">
+                                    <element type="num">1</element>
+                                </element>
+                                <element type="boolean_operation">=</element>
+                                <element type="io_val">PE</element>
+                            </argument>
+                            <argument name="timeout" type="num" unit="sec">3</argument>
+                            <argument name="handle" type="function">SKIP</argument>
+                        </instruction>
+
+                    </logical_body>
+                </logical>
+                <logical type="if">
+                    <determine><element type="num">2</element><element type="operation">+</element><element type="register"><element type="num">2</element></element><element type="boolean_operation">==</element><element type="num">20</element></determine>
+                    <logical_body>
+                        <instruction type="wait">
+                            <argument name="condition" type="expression">
+                                <element type="register">
+                                    <element type="num">1</element>
+                                </element>
+                                <element type="boolean_operation">&gt;</element>
+                                <element type="num">10</element>
+                            </argument>
+                            <argument name="timeout" type="num" unit="sec">3</argument>
+                            <argument name="handle" type="function">SKIP</argument>
+                        </instruction>
+                    </logical_body>
+                    <vice_logical type="elif">
+                        <determine><element type="register"><element type="num">1</element></element><element type="boolean_operation">==</element><element type="num">6</element></determine>
+                        <vice_logical_body>
+                            <logical type="if">
+                                <determine>
+                                    <element type="num">2</element>
+                                    <element type="boolean_operation">==</element>
+                                    <element type="num">2</element>
+                                </determine>
+                                <logical_body>
+                                    <instruction type="wait">
+                                        <argument name="timeout" type="num" unit="sec">3</argument>
+                                    </instruction>
+                                </logical_body>
+                            </logical>
+                            <!--<comment type="string">comment thing</comment>-->
+                            <!--<call file="prog_1"/>-->
+                        </vice_logical_body>
+                    </vice_logical>
+                </logical>
+                <!--<parameter name="param0" type="num">0</parameter>-->
+                <!--</call>-->
+                <!--<call name="test_test">-->
+                <!--<parameter name="param0" type="num">0</parameter>-->
+                <!--</call>-->
+                <!--<nop/>-->
+                <assignment>
+                    <lvalue>
+                        <element type="system">TF_NO.</element>
+                    </lvalue>
+                    <rvalue>
+                        <element type="num">2</element>
+                        <element type="operation">+</element>
+                        <element type="bracket">
+                        <element type="num">2</element>
+                        <element type="operation">+</element>
+                        <element type="num">2</element>
+                        </element>
+                    </rvalue>
+                </assignment><!--</function>-->
+                <!--<nop/>-->
+                <!--<function name="func_test">-->
+                <!--<assignment>-->
+                <!--<lvalue type="num">-->
+                <!--<element type="num">r_1</element>-->
+                <!--</lvalue>-->
+                <!--<rvalue>-->
+                <!--<element type="num">2</element>-->
+                <!--<element type="operation">+</element>-->
+                <!--<element type="bracket">-->
+                <!--<element type="num">2</element>-->
+                <!--<element type="operation">+</element>-->
+                <!--<element type="num">2</element>-->
+                <!--</element>-->
+                <!--</rvalue>-->
+                <!--</assignment>-->
+            </body>
+
+        </function>
+    </prog_body>
+</prog><!--display
+                    import prog_1
+                    def main()
+                        MoveL p_1, 100, 2000m/s
+                        If 2 + sin(2) == 2
+                            MoveL p_2, 100, 2000m/s
+                        Elif r_1 == 1
+                            Wait di_1, ON, 10
+                        End If
+                        # comment thing
+                        prog_1.func_test(0)
+
+                        r_1 = 2 + (2 + 2)
+                    End main
+
+                    def func_test():
+                        r_1 = 2 + (2 + 2)
+                    End func_test
+                -->
