@@ -18,9 +18,9 @@
 #include "io_interface.h"
 #include "common.h"
 #include "error_code.h"
-#ifndef WIN32
-#include "common/error_code.h"
-#endif
+// #ifndef WIN32
+// #include "common/error_code.h"
+// #endif
 #include "error_monitor.h"
 #include <boost/algorithm/string.hpp>
 #include "forsight_inter_control.h"
@@ -36,10 +36,12 @@ IOInterface::IOInterface()
 
 IOInterface::~IOInterface()
 {
+#ifdef USE_IO_MANAGER
    if (io_manager_ != NULL)
        delete io_manager_;
    if (dev_info_ != NULL)
        delete [] dev_info_;
+#endif
 }
 
 IOInterface* IOInterface::instance()
@@ -82,6 +84,7 @@ std::string getLocalIP()
 U64 IOInterface::initial()
 {
     U64 result = 0;
+#ifdef USE_IO_MANAGER
     io_manager_ = new fst_io_manager::IOManager;
     std::string str_addr = getLocalIP();
 	if(str_addr.substr(0,3) == "192")
@@ -112,6 +115,7 @@ U64 IOInterface::initial()
         if (result != TPI_SUCCESS)
             return result;
     }
+#endif
 
     return TPI_SUCCESS;
 }
@@ -122,6 +126,7 @@ int IOInterface::getIODevNum()
     return io_num_;
 }
 
+/*
 void IOInterface::getIODevices(motion_spec_DeviceList &dev_list)
 {
     dev_list.dev_info_count = io_num_;
@@ -134,6 +139,7 @@ void IOInterface::getIODevices(motion_spec_DeviceList &dev_list)
         dev_list.dev_info[i].output = dev_info_[i].output;
     }
 }
+*/
 
 /*
 bool IOInterface::encDevList(BaseTypes_ParameterMsg *param_msg, pb_ostream_t *stream, const pb_field_t *field)
@@ -174,12 +180,16 @@ U64 IOInterface::setDO(const char *path, char value)
     }
     for (int i = 0; i < getIODevNum(); i++)
     {
+#ifdef USE_IO_MANAGER
         if ((vc_path[2] == dev_info_[i].communication_type) 
         && (stoi(vc_path[3]) == dev_info_[i].device_number))
         {
             FST_INFO("id:%d, port:%d, value:%d", dev_info_[i].id, stoi(vc_path[5]), value);
             return io_manager_->setModuleValue(dev_info_[i].id, stoi(vc_path[5]), value);
         }
+#else
+		return FST_SUCCESS;
+#endif
     }
     return PARSE_IO_PATH_FAILED;
 }
@@ -190,7 +200,11 @@ U64 IOInterface::setDO(int msg_id, unsigned char value)
     int index = msg_id % IO_MAX_NUM;
     int dev_address = msg_id - index;
     FST_INFO("dev_address:%d,index:%d, value:%d", dev_address, index, value);
+#ifdef USE_IO_MANAGER
     return io_manager_->setModuleValue(dev_address, index, value);
+#else
+    return FST_SUCCESS;
+#endif
 }
 
 U64 IOInterface::setDO(IOPortInfo *io_info, char value)
@@ -199,13 +213,18 @@ U64 IOInterface::setDO(IOPortInfo *io_info, char value)
     {
         return INVALID_PATH_FROM_TP;
     }
+#ifdef USE_IO_MANAGER
     return io_manager_->setModuleValue(io_info->dev_id, io_info->port_index, value);
+#else
+    return FST_SUCCESS;
+#endif
 }
 
 U64 IOInterface::getDIO(const char *path, unsigned char *buffer, int buf_len, int& io_bytes_len)
 {
     std::vector<std::string> vc_path;
     boost::split(vc_path, path, boost::is_any_of("/"));
+#ifdef USE_IO_MANAGER
     
 
     int size = vc_path.size();
@@ -218,7 +237,7 @@ U64 IOInterface::getDIO(const char *path, unsigned char *buffer, int buf_len, in
             {
                 int io_len;
                 U64 result = io_manager_->getModuleValues(dev_info_[i].id, buf_len, buffer, io_bytes_len);
-                io_bytes_len = ((dev_info_[i].input + 7) >> 3) + ((dev_info_[i].output + 7) >> 3);
+				io_bytes_len = ((dev_info_[i].input + 7) >> 3) + ((dev_info_[i].output + 7) >> 3);
                 /*printf("==buffer:");*/
                 //for(int j = 0; j < io_bytes_len; j++)
                     //printf("%xd ", buffer[j]);
@@ -250,6 +269,9 @@ U64 IOInterface::getDIO(const char *path, unsigned char *buffer, int buf_len, in
         }
     }
     return PARSE_IO_PATH_FAILED;
+#else
+	return FST_SUCCESS;
+#endif
 }
 
 
@@ -263,18 +285,24 @@ U64 IOInterface::getDIO(int msg_id, uint8_t *buffer, int buf_len, int& io_bytes_
     {
         return INVALID_PATH_FROM_TP;
     }
+#ifdef USE_IO_MANAGER
     fst_io_manager::IODeviceInfo dev = dev_info_[i];
+#endif
     if (index == 0)
     {
         int io_len;
+#ifdef USE_IO_MANAGER
         U64 result = io_manager_->getModuleValues(dev.id, buf_len, buffer, io_len);
         io_bytes_len = ((dev.input + 7) >> 3) + ((dev.output + 7) >> 3);
-
+#else
+		U64 result = FST_SUCCESS;
+#endif
         return result;
     }
     else
     {
         io_bytes_len = 1;
+#ifdef USE_IO_MANAGER
         if (index <= dev.input)
         {
             return io_manager_->getModuleValue(dev.id, IO_INPUT, index, buffer[0]);
@@ -284,11 +312,15 @@ U64 IOInterface::getDIO(int msg_id, uint8_t *buffer, int buf_len, int& io_bytes_
             unsigned int new_index = index - dev.input;
             return io_manager_->getModuleValue(dev.id, IO_OUTPUT, new_index, buffer[0]);
         }
+#else
+		return FST_SUCCESS;
+#endif
     }
 }
 
 U64 IOInterface::getDIO(IOPortInfo *io_info, uint8_t *buffer, int buf_len)
 {
+#ifdef USE_IO_MANAGER
     if (io_info->port_index == 0)
     {
         int io_len;
@@ -301,6 +333,9 @@ U64 IOInterface::getDIO(IOPortInfo *io_info, uint8_t *buffer, int buf_len)
 			 buffer[0], io_info->port_index, io_info->bytes_len);
         return io_manager_->getModuleValue(io_info->dev_id, io_info->port_type, io_info->port_index, buffer[0]);
      }
+#else
+			return FST_SUCCESS;
+#endif
 
 }
 
@@ -308,6 +343,7 @@ U64 IOInterface::checkIO(const char *path, IOPortInfo* io_info)
 {
     std::vector<std::string> vc_path;
     boost::split(vc_path, path, boost::is_any_of("/"));
+#ifdef USE_IO_MANAGER
     
     int size = vc_path.size();
     printf("\t Io_interface::getIODevNum: %d\n", getIODevNum());
@@ -361,12 +397,16 @@ U64 IOInterface::checkIO(const char *path, IOPortInfo* io_info)
         }
     }
     return PARSE_IO_PATH_FAILED;
+#else
+	return FST_SUCCESS;
+#endif
 }
 
 
 
 int IOInterface::getIODevIndex(int dev_address)
 {
+#ifdef USE_IO_MANAGER
     for (int i = 0; i < io_num_; i++)
     {        
         if ((int)dev_info_[i].id == dev_address)
@@ -376,12 +416,19 @@ int IOInterface::getIODevIndex(int dev_address)
    }
 
    return -1;
+#else
+	return -1;
+#endif
 }
 
 
 U64 IOInterface::updateIOError()
 {
+#ifdef USE_IO_MANAGER
     static U64 result = io_manager_->getIOError();
+#else
+	static U64 result = FST_SUCCESS;
+#endif
     if (result != TPI_SUCCESS)
     {
         setWarning(result);

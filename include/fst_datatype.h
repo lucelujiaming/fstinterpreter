@@ -103,6 +103,18 @@ struct JointAlpha {
     Alpha   j9;
 };
 
+struct JointInertia {
+    Alpha   j1;
+    Alpha   j2;
+    Alpha   j3;
+    Alpha   j4;
+    Alpha   j5;
+    Alpha   j6;
+    Alpha   j7;
+    Alpha   j8;
+    Alpha   j9;
+};
+
 struct JointState
 {
     Angle   joint[NUM_OF_JOINT];
@@ -282,6 +294,7 @@ struct ControlPoint {
     JointState  backward_point;
 
     double  coeff[AXIS_IN_ALGORITHM][6];
+    double  inertia[NUM_OF_JOINT];
 
     //bool    alpha_valid;
     //double  alpha_upper[6];
@@ -298,11 +311,13 @@ struct TrajSegment
     //bool    quintic;
     //bool    t_curve;
 
-    double      coeff[AXIS_IN_ALGORITHM][6];
+    double  coeff[AXIS_IN_ALGORITHM][6];
+    double  inertia[NUM_OF_JOINT];
 };
 
 // Define a point structure used in joint trajectory fifo
-struct JointPoint {
+struct JointPoint
+{
     // time stamp
     int stamp;
     // point level, start/middle/ending point
@@ -320,8 +335,22 @@ struct JointPoint {
 ////////////////////////////////////////////////////////////////////////////////////////////
 struct JointOutput {
     int id;
-    Joint       joint;
     PointLevel  level;
+
+    Joint           joint;
+    JointOmega      omega;
+    JointAlpha      alpha;
+    JointInertia    inertia;
+};
+
+struct JointOut {
+    int id;
+    PointLevel  level;
+
+    double joint[NUM_OF_JOINT];
+    double omega[NUM_OF_JOINT];
+    double alpha[NUM_OF_JOINT];
+    double inertia[NUM_OF_JOINT];
 };
 
 // Define a group of coordinate offset

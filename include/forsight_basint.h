@@ -47,7 +47,7 @@ using namespace std;
 #define LAB_LEN 128
 #define SELECT_AND_CYCLE_NEST 64
 #define SUB_NEST 16
-#define PROG_SIZE 4096
+#define PROG_SIZE 40960 // 102400 // 
 const int NUM_OF_PARAMS = 31;    // max number of parameters
 
 #define DELIMITER    1

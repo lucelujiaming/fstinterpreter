@@ -12,7 +12,7 @@
 #include "forsight_io_mapping.h"
 #include "forsight_io_controller.h"
 #ifndef WIN32
-#include "io_interface.h"
+// #include "io_interface.h"
 #else
 #include<string>
 #include<vector>
@@ -294,7 +294,7 @@ void generate_fake_io_config()
 
 int forgesight_load_io_config()
 {	
-	int iCode = 0;
+//	int iCode = 0;
 	FILE *f;long len;char *data;
 	
 	f=fopen(IO_EMULATOR_JSON,"rb"); 
@@ -391,60 +391,12 @@ void refresh_io_config_emulated()
 int set_io_status_to_io_mananger(
 	char *vname, eval_value& value)
 {
-#ifndef WIN32
-	IOPortInfo info;
-	memset(&info, 0x00, sizeof(IOPortInfo));
-	
-	if(g_io_mapper.find(vname) != g_io_mapper.end() )
-	{
-		U64 result = IOInterface::instance()->checkIO(
-			g_io_mapper[vname].c_str(), &info);
-		if (result != TPI_SUCCESS)
-		{
-			//    rcs::Error::instance()->add(result);
-			//    tp_interface_->setReply(BaseTypes_StatusCode_FAILED);
-			printf("IOInterface::instance()->checkIO Failed:: %s\n", 
-				g_io_mapper[vname].c_str());
-			return ;
-		}
-	}
-	else{
-        printf("MOD_IO:: not exist path : %s\n", vname); 
-		return ;
-    }
-#endif
 	char val = (char)value.getFloatValue();
-#ifndef WIN32
-	printf("\t SET:: %s \n", vname);
-    printf("\t msg_id: %d\n", info.msg_id);
-    printf("\t dev_id: %d\n", info.dev_id);
-    printf("\t port_type: %d\n", info.port_type);
-    printf("\t port_index: %d\n", info.port_index);
-    printf("\t bytes_len: %d\n", info.bytes_len);
-    printf("\t val: %d \n", val);
-	IOInterface::instance()->setDO(&info, val);
-#endif
 	return 1 ;
 }
 
 int set_io_interface_status(char *vname, char val)
 {
-#ifndef WIN32
-	IOPortInfo info;
-	memset(&info, 0x00, sizeof(IOPortInfo));
-	
-	U64 result = IOInterface::instance()->checkIO(
-		vname, &info);
-	if (result != TPI_SUCCESS)
-	{
-		//    rcs::Error::instance()->add(result);
-		//    tp_interface_->setReply(BaseTypes_StatusCode_FAILED);
-		printf("IOInterface::instance()->checkIO Failed:: %s\n", vname);
-		return ;
-	}
-	printf("\t SET:: %s : %d = %d\n", vname, info.port_index, val);
-	IOInterface::instance()->setDO(&info, val);
-#endif
 	return 1 ;
 }
 
@@ -453,37 +405,6 @@ eval_value get_io_status_from_io_mananger(
 {
 	eval_value value ;
 	int iValue = -1;
-#ifndef WIN32
-	char valueBuf[8];
-	IOPortInfo info;
-	memset(&info, 0x00, sizeof(IOPortInfo));
-	
-	if(g_io_mapper.find(vname) != g_io_mapper.end() )
-	{
-		U64 result = IOInterface::instance()->checkIO(
-			g_io_mapper[vname].c_str(), &info);
-		if (result != TPI_SUCCESS)
-		{
-			printf("IOInterface::instance()->checkIO Failed:: %s\n", 
-				g_io_mapper[vname].c_str());
-			return ;
-		}
-	}
-	else{
-        printf("MOD_IO:: not exist path : %s\n", vname); 
-		return ;
-    }
-	memset(valueBuf, 0x00, 8);
-	IOInterface::instance()->getDIO(&info, valueBuf, 8);
-	printf("\t get_io_status_from_io_mananger:: %s : (", vname);
-	for(int iRet = 0 ; iRet < 8 ; iRet++)
-	{
-		printf("%04X, ", valueBuf[iRet]);
-	}
-	printf(") \n");
-	
-	iValue = atoi(valueBuf);
-#endif
 	value.setFloatValue(iValue) ;
 	return value;
 }
@@ -491,29 +412,6 @@ eval_value get_io_status_from_io_mananger(
 int get_io_interface_status(char *vname)
 {
 	int iValue = -1;
-#ifndef WIN32
-	char valueBuf[8];
-	IOPortInfo info;
-	memset(&info, 0x00, sizeof(IOPortInfo));
-	
-	U64 result = IOInterface::instance()->checkIO(vname, &info);
-	if (result != TPI_SUCCESS)
-	{
-		printf("IOInterface::instance()->checkIO Failed:: %s\n", vname);
-		return ;
-	}
-	
-	memset(valueBuf, 0x00, 8);
-	IOInterface::instance()->getDIO(&info, valueBuf, 8);
-	printf("\t get_io_interface_status:: %s : (", vname);
-	for(int iRet = 0 ; iRet < 8 ; iRet++)
-	{
-		printf("%04X, ", valueBuf[iRet]);
-	}
-	printf(") \n");
-	
-	iValue = atoi(valueBuf);
-#endif
 	return iValue;
 }
 
@@ -525,7 +423,7 @@ eval_value forgesight_get_io_status(char *name)
 	char io_idx[16] ;
 	// char io_key_buffer[16] ;
 
-	int  iIOIdx = 0 ;
+//	int  iIOIdx = 0 ;
 	char * namePtr = name ;
 	char *temp = NULL ;
 	
@@ -544,7 +442,7 @@ eval_value forgesight_get_io_status(char *name)
 	memset(io_idx, 0x00, 16);
 	temp = io_idx ;
 	get_num_token(namePtr, temp);
-	iIOIdx = atoi(io_idx);
+//	iIOIdx = atoi(io_idx);
 	// namePtr += strlen(reg_idx) ;
 	
 	namePtr += strlen(io_idx) ;
@@ -782,7 +680,7 @@ int forgesight_read_io_emulate_status(char * name, int& value)
 	char io_idx[16] ;
 	// char io_key_buffer[32] ;
 
-	int  iIOIdx = 0 ;
+//	int  iIOIdx = 0 ;
 	char * namePtr = name ;
 	char *temp = NULL ;
 	
@@ -812,7 +710,7 @@ int forgesight_read_io_emulate_status(char * name, int& value)
 		memset(io_idx, 0x00, 16);
 		temp = io_idx ;
 		get_num_token(namePtr, temp);
-		iIOIdx = atoi(io_idx);
+//		iIOIdx = atoi(io_idx);
 		// namePtr += strlen(reg_idx) ;
 		
 		namePtr += strlen(io_idx) ;
@@ -835,7 +733,7 @@ int forgesight_mod_io_emulate_status(char * name, char value)
 	char io_idx[16] ;
 	// char io_key_buffer[32] ;
 
-	int  iIOIdx = 0 ;
+//	int  iIOIdx = 0 ;
 	char * namePtr = name ;
 	char *temp = NULL ;
 	
@@ -867,7 +765,7 @@ int forgesight_mod_io_emulate_status(char * name, char value)
 		memset(io_idx, 0x00, 16);
 		temp = io_idx ;
 		get_num_token(namePtr, temp);
-		iIOIdx = atoi(io_idx);
+//		iIOIdx = atoi(io_idx);
 		// namePtr += strlen(reg_idx) ;
 		
 		namePtr += strlen(io_idx) ;
@@ -891,7 +789,7 @@ int forgesight_mod_io_emulate_value(char * name, char value)
 	char io_idx[16] ;
 	// char io_key_buffer[32] ;
 
-	int  iIOIdx = 0 ;
+//	int  iIOIdx = 0 ;
 	char * namePtr = name ;
 	char *temp = NULL ;
 	
@@ -918,7 +816,7 @@ int forgesight_mod_io_emulate_value(char * name, char value)
 		memset(io_idx, 0x00, 16);
 		temp = io_idx ;
 		get_num_token(namePtr, temp);
-		iIOIdx = atoi(io_idx);
+//		iIOIdx = atoi(io_idx);
 		// namePtr += strlen(reg_idx) ;
 		
 		namePtr += strlen(io_idx) ;

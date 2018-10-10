@@ -18,8 +18,8 @@ int getMaxLineNum();
 
 int set_global_TF(int iLineNum, int iTFNum, struct thread_control_block* objThreadCntrolBlock);
 int set_global_UF(int iLineNum, int iUFNum, struct thread_control_block* objThreadCntrolBlock);
-int set_OVC(int iLineNum, int iUFNum, struct thread_control_block* objThreadCntrolBlock);
-int set_OAC(int iLineNum, int iUFNum, struct thread_control_block* objThreadCntrolBlock);
+int set_OVC(int iLineNum, double dUFNum, struct thread_control_block* objThreadCntrolBlock);
+int set_OAC(int iLineNum, double dUFNum, struct thread_control_block* objThreadCntrolBlock);
 
 
 #endif

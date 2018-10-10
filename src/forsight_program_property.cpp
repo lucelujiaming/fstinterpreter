@@ -22,10 +22,10 @@ using namespace std;
 int parseCart(struct thread_control_block * objThreadCntrolBlock, 
 			   cJSON *jsonCart, PoseEuler & cart)
 {
-	int numentries=0,i=0,fail=0;
+	// int numentries=0; int i=0; int fail=0;
 	cJSON *child=jsonCart->child;
 
-	while (child && !fail)
+	while (child) //  && !fail)
 	{
 	//	printf("parsePosesContent: cJSON_Array %s\n", child->string);
 		switch ((child->type)&255)
@@ -59,10 +59,10 @@ int parseCart(struct thread_control_block * objThreadCntrolBlock,
 int parseJoint(struct thread_control_block * objThreadCntrolBlock, 
 			  cJSON *jsonJoint, Joint & joint)
 {
-	int numentries=0,i=0,fail=0;
+	// int numentries=0,i=0,fail=0;
 	cJSON *child=jsonJoint->child;
 	
-	while (child && !fail)
+	while (child) //  && !fail)
 	{
 	//	printf("parsePosesContent: cJSON_Array %s\n", child->string);
 		switch ((child->type)&255)
@@ -96,10 +96,10 @@ int parseJoint(struct thread_control_block * objThreadCntrolBlock,
 int parseAdditionalE(struct thread_control_block * objThreadCntrolBlock, 
 			   cJSON *jsonAdditionalE, AdditionalE & additionalE)
 {
-	int numentries=0,i=0,fail=0;
+	// int numentries=0,i=0,fail=0;
 	cJSON *child=jsonAdditionalE->child;
 	
-	while (child && !fail)
+	while (child) //  && !fail)
 	{
 	//	printf("parsePosesContent: cJSON_Array %s\n", child->string);
 		switch ((child->type)&255)
@@ -135,13 +135,13 @@ int parsePosesContent(struct thread_control_block * objThreadCntrolBlock,
 	char var[128];
 	eval_value value ;
 
-	int numentries=0,i=0,fail=0;
+	int numentries=0; // ,i=0,fail=0;
 	cJSON *child=jsonPoseContent->child;
 	while (child) 
 		numentries++, child=child->next;
 	
 	child=jsonPoseContent->child;
-	while (child && !fail)
+	while (child) //  && !fail)
 	{
 	//	printf("parsePosesContent: cJSON_Array %s\n", child->string);
 		switch ((child->type)&255)
@@ -209,14 +209,14 @@ int parsePosesContent(struct thread_control_block * objThreadCntrolBlock,
 int parsePoses(struct thread_control_block * objThreadCntrolBlock, 
 			 cJSON *jsonPose)
 {
-	int numentries=0,i=0,fail=0;
+	int numentries=0; // ,i=0,fail=0;
 	cJSON *child=jsonPose->child;
 	while (child) 
 		numentries++, child=child->next;
 	
 	child=jsonPose->child;
 	// include NULL check
-	while (child && !fail)
+	while (child) //  && !fail)
 	{
 		switch ((child->type)&255)
 		{
@@ -309,7 +309,7 @@ int append_program_prop_mapper(struct thread_control_block * objThreadCntrolBloc
 #ifdef WIN32
     sprintf(fname, "%s.json", filename);
 #else
-    sprintf(fname, "%s\/programs\/%s.json", 
+    sprintf(fname, "%s/programs/%s.json", 
     		forgesight_get_programs_path(), filename);
 #endif
 	f=fopen(fname,"rb"); 

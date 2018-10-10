@@ -125,16 +125,15 @@ ShmData *getShm(const char* name)
 
 void readShm(const char* name, int offset,  void*buffer, int size)
 {
-    void* ptr = getShm(name)->ptr;
-
-    memcpy(buffer, (char*)ptr+offset, size);
+//    void* ptr = getShm(name)->ptr;
+//    memcpy(buffer, (char*)ptr+offset, size);
 }
 
 
 void writeShm(const char* name, int offset, void*buffer, int size)
 {
-    void* ptr = getShm(name)->ptr;
-    memcpy((char*)ptr+offset, buffer, size); 
+//    void* ptr = getShm(name)->ptr;
+//    memcpy((char*)ptr+offset, buffer, size); 
 }
 
 bool tryWrite(const char* name, int offset, void*buffer, int size)
@@ -142,7 +141,7 @@ bool tryWrite(const char* name, int offset, void*buffer, int size)
     ShmData *data = getShm(name);
     if (data == NULL)
     {
-        printf("can't find name:%s\n", name);
+        printf("tryWrite :: can't find name:%s\n", name);
         return false;
     }
     volatile unsigned int *ptr_read, *ptr_write, *ptr_turn, *ptr_latest;
@@ -264,7 +263,7 @@ bool isInstructionEmpty(const char* name)
     ShmData *data = getShm(name);
     if (data == NULL)
     {
-        printf("can't find name:%s\n", name);
+        printf("isInstructionEmpty :: can't find name:%s\n", name);
         return false;
     }
     volatile unsigned int *ptr_read, *ptr_write; // , *ptr_turn, *ptr_latest;

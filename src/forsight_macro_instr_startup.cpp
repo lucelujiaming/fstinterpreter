@@ -23,7 +23,7 @@ unsigned __stdcall macro_instr_thread(void* arg)
 void* macro_instr_thread(void* arg)
 #endif
 {
-	int iRet = 0 ; 
+//	int iRet = 0 ; 
 	eval_value value ;
 	std::map<std::string, io_macro_instr>::iterator it;
 
@@ -57,7 +57,7 @@ void* macro_instr_thread(void* arg)
 				setPrgmState(EXECUTE_R);
 				if(strlen(it->second.program_name) == 0)
 				{
-					startFile(objThdCtrlBlockPtr, "sr_test", g_iCurrentThreadSeq);
+					startFile(objThdCtrlBlockPtr, (char *)"sr_test", g_iCurrentThreadSeq);
 				}
 				else 
 				{
@@ -93,6 +93,7 @@ void* macro_instr_thread(void* arg)
 	printf("Left  pthread_join.\n");
 	fflush(stdout);
 	g_macro_instr_interpreter_handle = 0;
+	return NULL ;
 #endif // WIN32
 }
 

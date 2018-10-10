@@ -99,7 +99,7 @@ bool call_revert     (eval_value *result, char * valFirst, char * valSecond, cha
 struct intern_func_type {   
     char *f_name; // function name
     int param_num ;
-    bool (*p)(eval_value *, char* , char* = 0, char* = 0);   // pointer to the function   
+    bool (*p)(eval_value *, char* , char* = NULL, char* = NULL);   // pointer to the function   
 } intern_func[] = {   
 	(char *)"sin",        1, call_sin  ,
 	(char *)"cos",        1, call_cos  ,
@@ -158,7 +158,7 @@ int find_internal_func(char *s)
 
 int get_func_params_num(int iIdx)   
 {  
-	if(iIdx <= sizeof(intern_func)/sizeof(struct intern_func_type))
+	if(iIdx <= (int)(sizeof(intern_func)/sizeof(struct intern_func_type)))
 		return intern_func[iIdx].param_num; 
 	else
 	    return -1;
@@ -388,7 +388,7 @@ bool call_radians(eval_value *result, char * valFirst, char * valSecond, char * 
 //判断某一年份是否是闰年
 int IsLeapYear(int year)
 {
-	return (year % 400 == 0 || (year % 4 == 0) && (year % 100 != 0));
+	return (((year % 400 == 0) || (year % 4 == 0)) && (year % 100 != 0));
 }
 
 bool call_isleapyear(eval_value *result, char * valFirst, char * valSecond, char * valThird)

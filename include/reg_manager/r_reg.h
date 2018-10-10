@@ -1,5 +1,5 @@
-#ifndef R_REG_H
-#define R_REG_H
+#ifndef INTERPRETER_REG_MANAGER_R_REG_H
+#define INTERPRETER_REG_MANAGER_R_REG_H
 
 #include "base_reg.h"
 #include "parameter_manager/parameter_manager_param_group.h"

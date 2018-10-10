@@ -1,5 +1,5 @@
-#ifndef BASE_REG_H
-#define BASE_REG_H
+#ifndef INTERPRETER_REG_MANAGER_BASE_REG_H
+#define INTERPRETER_REG_MANAGER_BASE_REG_H
 
 #include <vector>
 #include <string>

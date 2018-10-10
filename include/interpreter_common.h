@@ -96,11 +96,11 @@ typedef enum _InterpreterCommand
 	MOD_SMLT_STS   = 212,
     MOD_SMLT_VAL   = 213,
     
-    READ_CHG_PR_LST   = 214,
-    READ_CHG_SR_LST   = 215,
-    READ_CHG_R_LST    = 226,
-    READ_CHG_MR_LST   = 227,
-    READ_CHG_HR_LST   = 228,
+//    READ_CHG_PR_LST   = 214,
+//    READ_CHG_SR_LST   = 215,
+//    READ_CHG_R_LST    = 226,
+//    READ_CHG_MR_LST   = 227,
+//    READ_CHG_HR_LST   = 228,
 
 }InterpreterCommand;
 
@@ -309,16 +309,14 @@ typedef struct _Instruction
     int             line;
 #endif
     InstType        type;
-    union 
-    {
-        MotionTarget    target;
-    };
+
+    MotionTarget    target;
     int  loop_cnt;
 	
 	int  current_uf ;
 	int  current_tf ;
-	int  current_ovc ;
-	int  current_oac ;
+	double  current_ovc ;
+	double  current_oac ;
     bool is_additional;
     int add_num;
 #ifdef WIN32
@@ -367,6 +365,14 @@ typedef struct _IODeviceInfoShm
     unsigned int input;
     unsigned int output;
 } IODeviceInfoShm;
+
+typedef struct
+{
+    int current_line_num;
+    InterpreterState status;
+    char program_name[256];
+    char current_line_path[256];
+}InterpreterPublish;
 
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef HR_REG_H
-#define HR_REG_H
+#ifndef INTERPRETER_REG_MANAGER_HR_REG_H
+#define INTERPRETER_REG_MANAGER_HR_REG_H
 
 #include "base_reg.h"
 #include "fst_datatype.h"

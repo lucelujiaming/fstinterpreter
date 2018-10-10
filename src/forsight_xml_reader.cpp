@@ -1000,7 +1000,10 @@ int generateMoveInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLin
 				printBASCode(objLineInfo, "%s ", (char*)value);
 			}
 			else if(xmlStrcasecmp(name, BAD_CAST"fine")==0){
-				printBASCode(objLineInfo, "CNT %s ", (char*)value);
+				if(strcmp((char*)value, "") != 0)
+					printBASCode(objLineInfo, "CNT %s ", (char*)value);
+				else
+					printBASCode(objLineInfo, "CNT %s ", (char*)"0");
 			}
 			else if(xmlStrcasecmp(name, BAD_CAST"smooth_velocity")==0){
 				printBASCode(objLineInfo, "SV %s ", (char*)value);

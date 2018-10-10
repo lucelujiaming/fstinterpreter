@@ -16,8 +16,8 @@
 #include <string>
 #include <pb_encode.h>
 #include "common.h"
-#include "common/interpreter_common.h"
-#include "common/error_code.h"
+#include "interpreter_common.h"
+#include "error_code.h"
 #endif
 
 #include <vector>

@@ -9,7 +9,6 @@
 #include "forsight_innercmd.h"
 #ifndef WIN32
 #include "motion_plan_frame_manager.h"
-#include "reg_manager_interface.h"
 #endif
 
 #include "interpreter_common.h"
@@ -533,27 +532,27 @@ int forgesight_registers_manager_get_register(
 			reg_manager_interface_getHr(&objHrRegData, iRegIdx);
 			value->setFloatValue(objHrRegData.value.joint_pos[0]);
 		}
-		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J2))
+		else if (!strcmp(reg_member, TXT_HR_JOINT_J2))
 		{
 			reg_manager_interface_getHr(&objHrRegData, iRegIdx);
 			value->setFloatValue(objHrRegData.value.joint_pos[1]);
 		}
-		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J3))
+		else if (!strcmp(reg_member, TXT_HR_JOINT_J3))
 		{
 			reg_manager_interface_getHr(&objHrRegData, iRegIdx);
 			value->setFloatValue(objHrRegData.value.joint_pos[2]);
 		}
-		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J4))
+		else if (!strcmp(reg_member, TXT_HR_JOINT_J4))
 		{
 			reg_manager_interface_getHr(&objHrRegData, iRegIdx);
 			value->setFloatValue(objHrRegData.value.joint_pos[3]);
 		}
-		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J5))
+		else if (!strcmp(reg_member, TXT_HR_JOINT_J5))
 		{
 			reg_manager_interface_getHr(&objHrRegData, iRegIdx);
 			value->setFloatValue(objHrRegData.value.joint_pos[4]);
 		}
-		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J6))
+		else if (!strcmp(reg_member, TXT_HR_JOINT_J6))
 		{
 			reg_manager_interface_getHr(&objHrRegData, iRegIdx);
 			value->setFloatValue(objHrRegData.value.joint_pos[5]);
@@ -1415,7 +1414,7 @@ int forgesight_registers_manager_set_register(
 		else if (!strcmp(reg_member, TXT_REG_VALUE))
 		{
 			int iValue = (int)valueStart->getFloatValue();
-			printf("Set VALUE:(%f) to MR[%s]\n", iValue, reg_idx);
+			printf("Set VALUE:(%d) to MR[%s]\n", iValue, reg_idx);
 			reg_manager_interface_setValueMr(&iValue, iRegIdx);
 	       	return 0 ;
 		}

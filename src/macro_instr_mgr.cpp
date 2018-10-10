@@ -35,7 +35,7 @@ MacroInstrMgr::MacroInstrMgr()
 		sprintf(objMacroInstr.macro_name  , "Macro%d",   i);
 		AddSingleJsonConfig(objMacroInstr);
 	}
-	delSingleJsonConfig("Macro3");
+	delSingleJsonConfig((char *)"Macro3");
 	i = 7 ;
 	sprintf(objMacroInstr.program_name, "FFFF%d",    i);
 	sprintf(objMacroInstr.io_name     , "DI[%d]",    i);
@@ -126,7 +126,7 @@ int MacroInstrMgr::parseAllMacroInstr(char * data)
 
 int MacroInstrMgr::parseMacroInstrFile(char *filename, char * progName)
 {
-	int iCode = 0;
+//	int iCode = 0;
 	FILE *f;long len;char *data;
 
 	f=fopen(filename,"rb"); 
@@ -135,7 +135,8 @@ int MacroInstrMgr::parseMacroInstrFile(char *filename, char * progName)
 	    fseek(f,0,SEEK_END); len=ftell(f); fseek(f,0,SEEK_SET);
 	    data=(char*)malloc(len+1); fread(data,1,len,f); 
 		fclose(f);
-		iCode = parseAllMacroInstr(data);
+		// iCode = 
+		parseAllMacroInstr(data);
 		free(data);
 	}
 	return 1;
@@ -146,7 +147,7 @@ int MacroInstrMgr::initial()
 {
     char base[1000];
 #ifndef WIN32
-	parseMacroInstrFile(base, "\/data\/programs\/filename");
+	parseMacroInstrFile(base, (char *)"/data/programs/filename");
 #else
 	parseMacroInstrFile("macro_instr_config.json", base);
 #endif

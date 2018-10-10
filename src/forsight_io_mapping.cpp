@@ -24,17 +24,17 @@ typedef struct _IOMapJsonInfo
     int         index;
     char        module[128];
     int         to;
-}IOMapJsonInfo;
+}PrgIntIOMapJsonInfo;
 
 typedef struct _IOMapVarInfo
 {
     char        in[8];
     char        out[8];
-}IOMapVarInfo;
+}PrgIntIOMapVarInfo;
 
 map<string, string> g_io_mapper;
 
-int generateIOInfo(IOMapJsonInfo &objInfo, char * strIOType)
+int generateIOInfo(PrgIntIOMapJsonInfo &objInfo, char * strIOType)
 {
 	char cTemp[128];
 	char cUpperType[16];
@@ -48,7 +48,7 @@ int generateIOInfo(IOMapJsonInfo &objInfo, char * strIOType)
 		pUpper++; 
 	}
   
-	int iDIRange = objInfo.to - objInfo.from + 1 ;
+//	int iDIRange = objInfo.to - objInfo.from + 1 ;
 	for (int i = objInfo.from ; i <= objInfo.to ; i++)
 	{
 		memset(cTemp, 0x00, 128);
@@ -72,8 +72,8 @@ int generateIOInfo(IOMapJsonInfo &objInfo, char * strIOType)
 
 int parseIOObject(cJSON *jsonIObject, char * strIOType)
 {
-	IOMapJsonInfo objInfo ;
-	int numentries=0,i=0,fail=0;
+	PrgIntIOMapJsonInfo objInfo ;
+	int numentries=0; // ,i=0,fail=0;
 	cJSON *child=jsonIObject->child;
 	
 	// printf("parseDI: cJSON_Array %s\n", jsonIObject->string);
@@ -106,13 +106,13 @@ int parseIOObject(cJSON *jsonIObject, char * strIOType)
 
 int parseIO(cJSON *jsonDI, char * strIOType)
 {
-	int numentries=0,i=0,fail=0;
+	int numentries=0; // ,i=0,fail=0;
 	cJSON *child=jsonDI->child;
 	while (child) 
 		numentries++, child=child->next;
 
 	child=jsonDI->child;
-	while (child && !fail)
+	while (child) // && !fail)
 	{
 		// printf("parseIO: cJSON_Array %s\n", child->string);
 		switch ((child->type)&255)
@@ -133,7 +133,7 @@ int parseIO(cJSON *jsonDI, char * strIOType)
 	return 1;
 }
 
-int parseIOMap(char * data, IOMapVarInfo &varInfo)
+int parseIOMap(char * data, PrgIntIOMapVarInfo &varInfo)
 {
 	cJSON *json;
 	json=cJSON_Parse(data);
@@ -193,7 +193,7 @@ int print_io_mapper()
 }
 
 int append_single_io_mapper(
-		char *filename, IOMapVarInfo &varInfo)
+		char *filename, PrgIntIOMapVarInfo &varInfo)
 {
 	FILE *f;long len;char *data;
 
@@ -211,7 +211,7 @@ int append_single_io_mapper(
 
 int append_io_mapping()
 {
-	IOMapVarInfo varInfo ;
+	PrgIntIOMapVarInfo varInfo ;
 	g_io_mapper.clear();
 #ifdef WIN32
 	// AI/AO
@@ -234,27 +234,27 @@ int append_io_mapping()
 	char io_map_file_name[128];
 	// AI/AO
 	strcpy(varInfo.in , "ai") ;  strcpy(varInfo.out , "ao") ;
-	sprintf(io_map_file_name, "%s\/data\/io\/io_mapping\/ai_ao_mapping.json", 
+	sprintf(io_map_file_name, "%s/data/io/io_mapping/ai_ao_mapping.json", 
 		forgesight_get_programs_path());
 	append_single_io_mapper(io_map_file_name, varInfo);
 	// DI/DO
 	strcpy(varInfo.in , "di") ;  strcpy(varInfo.out , "do") ;
-	sprintf(io_map_file_name, "%s\/data\/io\/io_mapping\/di_do_mapping.json", 
+	sprintf(io_map_file_name, "%s/data/io/io_mapping/di_do_mapping.json", 
 		forgesight_get_programs_path());
 	append_single_io_mapper(io_map_file_name, varInfo);
 	// RI/RO
 	strcpy(varInfo.in , "ri") ;  strcpy(varInfo.out , "ro") ;
-	sprintf(io_map_file_name, "%s\/data\/io\/io_mapping\/ri_ro_mapping.json", 
+	sprintf(io_map_file_name, "%s/data/io/io_mapping/ri_ro_mapping.json", 
 		forgesight_get_programs_path());
 	append_single_io_mapper(io_map_file_name, varInfo);
 	// SI/SO
 	strcpy(varInfo.in , "si") ;  strcpy(varInfo.out , "so") ;
-	sprintf(io_map_file_name, "%s\/data\/io\/io_mapping\/si_so_mapping.json", 
+	sprintf(io_map_file_name, "%s/data/io/io_mapping/si_so_mapping.json", 
 		forgesight_get_programs_path());
 	append_single_io_mapper(io_map_file_name, varInfo);
 	// UI/UO
 	strcpy(varInfo.in , "ui") ;  strcpy(varInfo.out , "uo") ;
-	sprintf(io_map_file_name, "%s\/data\/io\/io_mapping\/ui_uo_mapping.json", 
+	sprintf(io_map_file_name, "%s/data/io/io_mapping/ui_uo_mapping.json", 
 		forgesight_get_programs_path());
 	append_single_io_mapper(io_map_file_name, varInfo);
 #endif

@@ -7,9 +7,8 @@
 #include "forsight_io_mapping.h"
 #include "forsight_io_controller.h"
 #ifndef WIN32
-#include "io_interface.h"
+// #include "io_interface.h"
 #include "error_code.h"
-#include "parameter_manager/parameter_manager_param_group.h"
 #endif
 
 #ifdef USE_FORSIGHT_REGISTERS_MANAGER
@@ -38,10 +37,10 @@ bool is_backward= false;
 InterpreterState prgm_state = IDLE_R;
 //bool send_flag = false;
 // int target_line;
-static IntprtStatus intprt_status;
-static Instruction instruction;
+// static IntprtStatus intprt_status;
+// static Instruction instruction;
 static CtrlStatus ctrl_status;
-static InterpreterControl intprt_ctrl;
+// static InterpreterControl intprt_ctrl;
 
 InterpreterCommand g_lastcmd;
 
@@ -71,7 +70,7 @@ vector<string> split(string str,string pattern)
 	for(int i=0; i<size; i++)
 	{
 		pos=str.find(pattern,i);
-		if(pos<size)
+		if((int)pos<size)
 		{
 			string s=str.substr(i,pos-i);
 			result.push_back(s);
@@ -170,7 +169,7 @@ bool parseScript(const char* fname)
 
 void findLoopEnd(int index)
 {
-    for(int i = index; i < g_script.size(); i++)
+    for(int i = index; i < (int)g_script.size(); i++)
     {
         if (g_script[i].type == END_PROG) // END)
         {
@@ -203,7 +202,7 @@ void setIntprtDataFlag(bool flag)
 	CtrlStatus temp,  * tempPtr = &temp;
     int offset = (int)&(tempPtr->is_data_ready) - (int)tempPtr ;
 #else
-    int offset = &((CtrlStatus*)0)->is_data_ready;
+    int offset = (int)&((CtrlStatus*)0)->is_data_ready;
 #endif  
     writeShm(SHM_CTRL_STATUS, offset, (void*)&flag, sizeof(flag));
 }
@@ -215,7 +214,7 @@ bool getIntprtDataFlag()
 	CtrlStatus temp,  * tempPtr = &temp;
     int offset = (int)&(tempPtr->is_data_ready) - (int)tempPtr ;
 #else
-    int offset = &((CtrlStatus*)0)->is_data_ready;  
+    int offset = (int)&((CtrlStatus*)0)->is_data_ready;  
 #endif     
     readShm(SHM_CTRL_STATUS, offset, (void*)&is_data_ready, sizeof(is_data_ready));
     return is_data_ready;
@@ -249,6 +248,11 @@ void returnIODeviceInfo(char * info, int iNum)
 	setIntprtDataFlag(true);
 }
 
+void resetProgramNameAndLineNum()
+{
+	setCurLine((char *)"", 0);
+}
+
 InterpreterState getPrgmState()
 {
 	return g_privateInterpreterState ;
@@ -267,7 +271,7 @@ void setPrgmState(InterpreterState state)
     writeShm(SHM_INTPRT_STATUS, offset, (void*)&state, sizeof(state));
 }
 
-void setCurLine(char * line)
+void setCurLine(char * line, int lineNum)
 {
 #ifdef WIN32
 	Instruction temp,  * tempPtr = &temp;
@@ -352,7 +356,11 @@ bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instructio
     if (!ctrl_status.is_permitted)
     {
         printf("not permitted\n");
+#ifdef WIN32
+        return true;
+#else
         return false;
+#endif
     }
 	
 	setSendPermission(false);
@@ -363,11 +371,11 @@ bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instructio
     if ((objThdCtrlBlockPtr->prog_mode == STEP_MODE) 
 		&& (prgm_state == EXECUTE_TO_PAUSE_T))
     {
-        if (isInstructionEmpty(SHM_INTPRT_CMD))
-        {
-            printf("check if step is done in setInstruction\n");
-            setPrgmState(PAUSED_R);
-        }
+//        if (isInstructionEmpty(SHM_INTPRT_CMD))
+//        {
+//            printf("check if step is done in setInstruction\n");
+//            setPrgmState(INTERPRETER_PAUSED);
+//        }
 		// printf("cur state:%d in STEP_MODE \n", prgm_state);
         return false;
     }
@@ -444,7 +452,7 @@ bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instructio
     return true;
 }
 
-bool getIntprtCtrl()
+bool getIntprtCtrl(InterpreterControl& intprt_ctrl)
 {
     bool iRet = tryRead(SHM_CTRL_CMD, 0, (void*)&intprt_ctrl, sizeof(intprt_ctrl));
 	if(g_lastcmd != intprt_ctrl.cmd)
@@ -463,8 +471,11 @@ void startFile(struct thread_control_block * objThdCtrlBlockPtr,
 	objThdCtrlBlockPtr->is_in_macro    = false ;
 	objThdCtrlBlockPtr->iThreadIdx = idx ;
 	append_program_prop_mapper(objThdCtrlBlockPtr, proj_name);
+	// Refresh InterpreterPublish project_name
+	// setProgramName(proj_name); 
+	// Start thread
 	basic_thread_create(idx, objThdCtrlBlockPtr);
-	intprt_ctrl.cmd = LOAD ;
+	// intprt_ctrl.cmd = LOAD ;
 }
 
 bool deal_auto_mode(AutoMode autoMode)
@@ -621,13 +632,11 @@ void waitInterpreterStateToPaused(
 	}
 }	
 
-void parseCtrlComand() // (struct thread_control_block * objThdCtrlBlockPtr)
+void parseCtrlComand(InterpreterControl intprt_ctrl) // (struct thread_control_block * objThdCtrlBlockPtr)
 {
 	InterpreterState interpreterState  = IDLE_R;
 #ifdef WIN32
 	__int64 result = 0 ;
-#else
-	U64 result = SUCCESS ;
 #endif
 
 	RegMap reg ;
@@ -641,7 +650,7 @@ void parseCtrlComand() // (struct thread_control_block * objThdCtrlBlockPtr)
 
 #ifndef WIN32
     int iIONum = 0 ;
-	fst_io_manager::IODeviceInfo * objIODeviceInfoPtr ;
+//	fst_io_manager::IODeviceInfo * objIODeviceInfoPtr ;
 	char * objCharPtr ;
 	IODeviceInfoShm * objIODeviceInfoShmPtr ;
 	
@@ -654,7 +663,8 @@ void parseCtrlComand() // (struct thread_control_block * objThdCtrlBlockPtr)
 	std::vector<BaseRegData> vecRet ; 
     char * strChgRegLst ;
 	// if(intprt_ctrl.cmd != UPDATE_IO_DEV_ERROR)
-    printf("parseCtrlComand: %d\n", intprt_ctrl.cmd);
+	if(intprt_ctrl.cmd != LOAD)
+        printf("parseCtrlComand: %d\n", intprt_ctrl.cmd);
 #endif
     switch (intprt_ctrl.cmd)
     {
@@ -672,7 +682,7 @@ void parseCtrlComand() // (struct thread_control_block * objThdCtrlBlockPtr)
             setPrgmState(PAUSED_R);
 			if(strlen(intprt_ctrl.start_ctrl.file_name) == 0)
 			{
-			   strcpy(intprt_ctrl.start_ctrl.file_name, "call_test");
+			   strcpy(intprt_ctrl.start_ctrl.file_name, "while_test");
 			}
             startFile(objThdCtrlBlockPtr, 
 				intprt_ctrl.start_ctrl.file_name, g_iCurrentThreadSeq);
@@ -689,7 +699,7 @@ void parseCtrlComand() // (struct thread_control_block * objThdCtrlBlockPtr)
             setPrgmState(EXECUTE_R);
 			if(strlen(intprt_ctrl.start_ctrl.file_name) == 0)
 			{
-			   strcpy(intprt_ctrl.start_ctrl.file_name, "prog_demo_dec");
+			   strcpy(intprt_ctrl.start_ctrl.file_name, "testj");
 			}
 			startFile(objThdCtrlBlockPtr, 
 				intprt_ctrl.start_ctrl.file_name, g_iCurrentThreadSeq);
@@ -756,7 +766,6 @@ void parseCtrlComand() // (struct thread_control_block * objThdCtrlBlockPtr)
             // target_line++;
             iLineNum = getLinenum(objThdCtrlBlockPtr);
             printf("step forward to %d \n", iLineNum);
-			// set_prog_from_line(objThdCtrlBlockPtr, iLineNum);
             setPrgmState(EXECUTE_R);
 			
             printf("Enter waitInterpreterStateToPaused %d \n", iLineNum);
@@ -938,6 +947,7 @@ void parseCtrlComand() // (struct thread_control_block * objThdCtrlBlockPtr)
 					dioPathInfo.dio_path, dioPathInfo.value);
             break;
 #ifndef WIN32
+/*
         case READ_IO_DEV_INFO:
 			iIONum = IOInterface::instance()->getIODevNum();
 			printf("READ_IO_DEV_INFO::getIODevNum: start: %d.\n", iIONum);
@@ -982,6 +992,8 @@ void parseCtrlComand() // (struct thread_control_block * objThdCtrlBlockPtr)
 				returnIODeviceInfo(objCharPtr, iIONum);
 			}
             break;
+*/
+
 //        case UPDATE_IO_DEV_ERROR:
 //			result = IOInterface::instance()->updateIOError();
 // 			setWarning(result) ; 
@@ -1006,7 +1018,9 @@ void parseCtrlComand() // (struct thread_control_block * objThdCtrlBlockPtr)
 			objThdCtrlBlockPtr = &g_thread_control_block[g_iCurrentThreadSeq];
 			forgesight_mod_io_emulate_value(dioPathInfo.dio_path, dioPathInfo.value);
             break;
-#ifndef WIN32
+// #ifndef WIN32
+#if 0
+
         case READ_CHG_PR_LST:
 			vecRet.clear(); 
 			vecRet = forgesight_read_valid_pr_lst(0, 255);
@@ -1184,25 +1198,25 @@ char * forgesight_get_programs_path()
 
 void initShm()
 {
-    openShm(SHM_INTPRT_CMD, 1024);
-    openShm(SHM_INTPRT_STATUS, 1024);
+//    openShm(SHM_INTPRT_CMD, 1024);
+//    openShm(SHM_INTPRT_STATUS, 1024);
 	
 	// Lujiaming add at 0323
-    openShm(SHM_REG_IO_INFO, 1024);
+//    openShm(SHM_REG_IO_INFO, 1024);
 	// Lujiaming add at 0323 end
 	
 	// Lujiaming add at 0514
-    openShm(SHM_CHG_REG_LIST_INFO, 1024);
+//    openShm(SHM_CHG_REG_LIST_INFO, 1024);
 	// Lujiaming add at 0514 end
 	
-    openShm(SHM_CTRL_CMD, 1024);
-    openShm(SHM_CTRL_STATUS, 1024);
-    openShm(SHM_INTPRT_DST, 1024);
+//    openShm(SHM_CTRL_CMD, 1024);
+//    openShm(SHM_CTRL_STATUS, 1024);
+//    openShm(SHM_INTPRT_DST, 1024);
     // intprt_ctrl.cmd = LOAD;
-    intprt_ctrl.cmd = START;
+    // intprt_ctrl.cmd = START;
 	g_privateInterpreterState = IDLE_R ;
 	
-	setPrgmState(IDLE_R);
+//	setPrgmState(IDLE_R);
 #ifdef WIN32
 //	generateFakeData();
 #else
@@ -1212,18 +1226,19 @@ void initShm()
 #endif
 //	initShmi(1024);
 #endif
+	forgesight_load_programs_path();
 }
 
 
 void updateIOError()
 {
 #ifndef WIN32
-	U64 result = SUCCESS ;
-	result = IOInterface::instance()->updateIOError();
-    if (result != SUCCESS)
-    {
-		setWarning(result) ; 
-    }
+//	U64 result = SUCCESS ;
+//	result = IOInterface::instance()->updateIOError();
+//    if (result != SUCCESS)
+//    {
+//		setWarning(result) ; 
+//    }
 #endif
 }
 

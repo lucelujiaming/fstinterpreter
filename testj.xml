@@ -1,0 +1,710 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prog>
+  <prog_body name="test">
+    <function name="main">
+      <parameter type="num">param0</parameter>
+      <parameter type="string">param1</parameter>
+      <body>
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.10220735366141392</element>
+            <element name="j2" type="num">0.0021017952984216516</element>
+            <element name="j3" type="num">0.05764333827146712</element>
+            <element name="j4" type="num">0.0011480234767550581</element>
+            <element name="j5" type="num">0.9066810931185342</element>
+            <element name="j6" type="num">-0.05738433141047116</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">80</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-1.561109749446328</element>
+            <element name="j2" type="num">-0.8946802091818212</element>
+            <element name="j3" type="num">0.775001237043318</element>
+            <element name="j4" type="num">0.9123289785779879</element>
+            <element name="j5" type="num">0.22828557550235432</element>
+            <element name="j6" type="num">-0.9625421011578648</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.9884497685744686</element>
+            <element name="j2" type="num">1.058798754734604</element>
+            <element name="j3" type="num">-0.276091889043731</element>
+            <element name="j4" type="num">-1.017519972595686</element>
+            <element name="j5" type="num">-0.7891645839232521</element>
+            <element name="j6" type="num">-2.9594849994367047</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">1.157259759156612</element>
+            <element name="j2" type="num">0.7133055933145706</element>
+            <element name="j3" type="num">0.24695536251093766</element>
+            <element name="j4" type="num">-2.9033175830935575</element>
+            <element name="j5" type="num">0.40767400668083553</element>
+            <element name="j6" type="num">-1.4364251730131052</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">0.17201947654363592</element>
+            <element name="j2" type="num">-1.014149741810085</element>
+            <element name="j3" type="num">0.751936710978213</element>
+            <element name="j4" type="num">-1.4067859916557375</element>
+            <element name="j5" type="num">1.3350931019715664</element>
+            <element name="j6" type="num">1.5043411701959606</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.2239798482376843</element>
+            <element name="j2" type="num">1.2</element>
+            <element name="j3" type="num">-0.14652231056710116</element>
+            <element name="j4" type="num">-2.3337495560116976</element>
+            <element name="j5" type="num">-0.14055677518378454</element>
+            <element name="j6" type="num">3.090943198696918</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">0.6530131943044265</element>
+            <element name="j2" type="num">0.5422668172776303</element>
+            <element name="j3" type="num">-0.35655505821917355</element>
+            <element name="j4" type="num">0.5166802904433934</element>
+            <element name="j5" type="num">0.38516274998861266</element>
+            <element name="j6" type="num">3.4800643554290533</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">1.0553988533517191</element>
+            <element name="j2" type="num">-0.27303058153573295</element>
+            <element name="j3" type="num">-0.90</element>
+            <element name="j4" type="num">-1.5561530143706641</element>
+            <element name="j5" type="num">1.4286689298172424</element>
+            <element name="j6" type="num">1.0533096942370819</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.5781088987965857</element>
+            <element name="j2" type="num">1.0153138764211653</element>
+            <element name="j3" type="num">-0.5257437852489999</element>
+            <element name="j4" type="num">-0.6238068546015534</element>
+            <element name="j5" type="num">-0.9717958368519387</element>
+            <element name="j6" type="num">1.4802608625061948</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.7678157165128575</element>
+            <element name="j2" type="num">1.2</element>
+            <element name="j3" type="num">-0.6993307419938519</element>
+            <element name="j4" type="num">2.4881413816431164</element>
+            <element name="j5" type="num">-0.6708103166870126</element>
+            <element name="j6" type="num">-2.070169932375514</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">1.0143679079665844</element>
+            <element name="j2" type="num">0.017575465567582896</element>
+            <element name="j3" type="num">0.27176521782803703</element>
+            <element name="j4" type="num">-0.05239478414486977</element>
+            <element name="j5" type="num">0.20943951023931953</element>
+            <element name="j6" type="num">-1.1755839709733005</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-1.3913939329823994</element>
+            <element name="j2" type="num">1.2584172972729515</element>
+            <element name="j3" type="num">-0.90</element>
+            <element name="j4" type="num">1.1755839709733005</element>
+            <element name="j5" type="num">0.17453292519943295</element>
+            <element name="j6" type="num">-0.39837140176770575</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.08901179185171079</element>
+            <element name="j2" type="num">0.5559571799302737</element>
+            <element name="j3" type="num">-0.16036085167323902</element>
+            <element name="j4" type="num">-1.095106839163842</element>
+            <element name="j5" type="num">1.5707963267948966</element>
+            <element name="j6" type="num">1.0842508912164373</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">1.054161414912055</element>
+            <element name="j2" type="num">1.2</element>
+            <element name="j3" type="num">0.17024849095163727</element>
+            <element name="j4" type="num">-2.487286170309639</element>
+            <element name="j5" type="num">0.27675860481799286</element>
+            <element name="j6" type="num">4.098294883070485</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.7613824328900064</element>
+            <element name="j2" type="num">1.2000011272087012</element>
+            <element name="j3" type="num">0</element>
+            <element name="j4" type="num">-0.6639756073362028</element>
+            <element name="j5" type="num">0</element>
+            <element name="j6" type="num">3.141592653589793</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">0.6927735399941092</element>
+            <element name="j2" type="num">1.109610525247915</element>
+            <element name="j3" type="num">-0.16901768476313087</element>
+            <element name="j4" type="num">-1.2056734472776827</element>
+            <element name="j5" type="num">0.8138993900825158</element>
+            <element name="j6" type="num">3.141592653589793</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">1.1008332644396355</element>
+            <element name="j2" type="num">-0.77810094179486</element>
+            <element name="j3" type="num">0.34350872206051597</element>
+            <element name="j4" type="num">1.1874591912038701</element>
+            <element name="j5" type="num">0.16936762327815574</element>
+            <element name="j6" type="num">0.41537439934063447</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.1959969843404592</element>
+            <element name="j2" type="num">0.9824667798986321</element>
+            <element name="j3" type="num">-0.26422190480091756</element>
+            <element name="j4" type="num">-0.6516954707191707</element>
+            <element name="j5" type="num">-1.0017456868161614</element>
+            <element name="j6" type="num">-1.9120954620223878</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">0.5142507921246172</element>
+            <element name="j2" type="num">1.2</element>
+            <element name="j3" type="num">-0.6167086005336924</element>
+            <element name="j4" type="num">-0.11573033923879121</element>
+            <element name="j5" type="num">0.2180160581836197</element>
+            <element name="j6" type="num">-2.6539302072900575</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">1.0583327518243215</element>
+            <element name="j2" type="num">0.05341108936830607</element>
+            <element name="j3" type="num">0.2879758359205604</element>
+            <element name="j4" type="num">1.9419231389389708</element>
+            <element name="j5" type="num">0.14723388130313922</element>
+            <element name="j6" type="num">-3.1415</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.48675662041795054</element>
+            <element name="j2" type="num">1.1089019215716054</element>
+            <element name="j3" type="num">-0.8845747528127741</element>
+            <element name="j4" type="num">-0.9093322482523137</element>
+            <element name="j5" type="num">-0.943394093934235</element>
+            <element name="j6" type="num">-3.1119744161834495</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.8454217817027854</element>
+            <element name="j2" type="num">1.2</element>
+            <element name="j3" type="num">-0.36508971826142583</element>
+            <element name="j4" type="num">0.07931962944953588</element>
+            <element name="j5" type="num">1.0349331225428335</element>
+            <element name="j6" type="num">-0.5437992163608812</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">0.06404538050070752</element>
+            <element name="j2" type="num">-0.21643129922280885</element>
+            <element name="j3" type="num">-0.8333144326817006</element>
+            <element name="j4" type="num">1.1678870689720058</element>
+            <element name="j5" type="num">1.7370424287058603</element>
+            <element name="j6" type="num">-2.1935996170765533</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.33709987304719274</element>
+            <element name="j2" type="num">0.8911476627757847</element>
+            <element name="j3" type="num">0.3790506069481285</element>
+            <element name="j4" type="num">-0.7092424668159277</element>
+            <element name="j5" type="num">0.5750371193130758</element>
+            <element name="j6" type="num">0.2561445210226878</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">0.5559432172962578</element>
+            <element name="j2" type="num">-0.6037216055696025</element>
+            <element name="j3" type="num">-0.7170807404866343</element>
+            <element name="j4" type="num">0.9754906988784107</element>
+            <element name="j5" type="num">1.2615920511823293</element>
+            <element name="j6" type="num">1.8798766840305725</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.7265229717399235</element>
+            <element name="j2" type="num">1.1554620700270581</element>
+            <element name="j3" type="num">-0.90</element>
+            <element name="j4" type="num">-0.8717465828106158</element>
+            <element name="j5" type="num">1</element>
+            <element name="j6" type="num">-0.039116493728622116</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">0.4430815012160445</element>
+            <element name="j2" type="num">1.2</element>
+            <element name="j3" type="num">-0.9555270786913055</element>
+            <element name="j4" type="num">0.8975879277156438</element>
+            <element name="j5" type="num">0.48792599101678674</element>
+            <element name="j6" type="num">1.5274563108093735</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.5416629333564402</element>
+            <element name="j2" type="num">-0.33964107243809655</element>
+            <element name="j3" type="num">0.6048927214976908</element>
+            <element name="j4" type="num">-1.1846020872183551</element>
+            <element name="j5" type="num">1.135512956676763</element>
+            <element name="j6" type="num">-0.862117601327363</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">0.5195251771241441</element>
+            <element name="j2" type="num">1.0875757434414866</element>
+            <element name="j3" type="num">-0.6840940176239415</element>
+            <element name="j4" type="num">-0.5794475663328654</element>
+            <element name="j5" type="num">0.4184653774459164</element>
+            <element name="j6" type="num">1.1058388687343552</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.5578822780952235</element>
+            <element name="j2" type="num">-1.2312093595636118</element>
+            <element name="j3" type="num">0.7126214242477887</element>
+            <element name="j4" type="num">0.6088424015949538</element>
+            <element name="j5" type="num">1.2572496720033672</element>
+            <element name="j6" type="num">-0.2977566610487366</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">0.9639121846206803</element>
+            <element name="j2" type="num">1.1606264992837092</element>
+            <element name="j3" type="num">-0.4925720574855957</element>
+            <element name="j4" type="num">-1.0015798805372218</element>
+            <element name="j5" type="num">0.3819042202751392</element>
+            <element name="j6" type="num">-2.136632070291458</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.2627156856564465</element>
+            <element name="j2" type="num">0.41670783088915814</element>
+            <element name="j3" type="num">-0.95</element>
+            <element name="j4" type="num">-1.641743960888466</element>
+            <element name="j5" type="num">0.3804922489102758</element>
+            <element name="j6" type="num">-2.3175005406756304</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">0.31629903902192436</element>
+            <element name="j2" type="num">1.0958363867911758</element>
+            <element name="j3" type="num">-0.38722223850596593</element>
+            <element name="j4" type="num">0.49580091660178516</element>
+            <element name="j5" type="num">0.7649219606130508</element>
+            <element name="j6" type="num">1.02005244534033</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.6336348036195334</element>
+            <element name="j2" type="num">0.7930636494722074</element>
+            <element name="j3" type="num">-0.95</element>
+            <element name="j4" type="num">1.2869359772505389</element>
+            <element name="j5" type="num">1.2760625760106141</element>
+            <element name="j6" type="num">0.08156935885535659</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.0050345244004252835</element>
+            <element name="j2" type="num">-0.8677654867868166</element>
+            <element name="j3" type="num">0.017232037130667975</element>
+            <element name="j4" type="num">-0.8246401462992887</element>
+            <element name="j5" type="num">0.8210779292959683</element>
+            <element name="j6" type="num">0.8039806839434319</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">0.8604351039284406</element>
+            <element name="j2" type="num">0.978812060444956</element>
+            <element name="j3" type="num">-0.6681277456266973</element>
+            <element name="j4" type="num">0.8767836030318713</element>
+            <element name="j5" type="num">1.2296769604803608</element>
+            <element name="j6" type="num">-0.6536938727127042</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.19613835600987076</element>
+            <element name="j2" type="num">1.2</element>
+            <element name="j3" type="num">-0.31766388649698396</element>
+            <element name="j4" type="num">-0.5810707225372201</element>
+            <element name="j5" type="num">-0.7779072102478886</element>
+            <element name="j6" type="num">1.0145756021475716</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.7942033494737597</element>
+            <element name="j2" type="num">0.4319131393325327</element>
+            <element name="j3" type="num">-0.642658155852344</element>
+            <element name="j4" type="num">-1.6822373448639865</element>
+            <element name="j5" type="num">0.20241805065854634</element>
+            <element name="j6" type="num">0.011010130333525908</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.06543221912434222</element>
+            <element name="j2" type="num">0.9327999453746294</element>
+            <element name="j3" type="num">-0.95</element>
+            <element name="j4" type="num">0.41058347054391003</element>
+            <element name="j5" type="num">1.389632895767137</element>
+            <element name="j6" type="num">1.7757328875640708</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.10862039146494189</element>
+            <element name="j2" type="num">0.19835143350139955</element>
+            <element name="j3" type="num">0.4845470335849257</element>
+            <element name="j4" type="num">0.6941506047739328</element>
+            <element name="j5" type="num">1.1223025595684177</element>
+            <element name="j6" type="num">-1.5291981494028637</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-1.4502132741038603</element>
+            <element name="j2" type="num">1.2</element>
+            <element name="j3" type="num">-0.3537014448921628</element>
+            <element name="j4" type="num">-0.508758240968591</element>
+            <element name="j5" type="num">-1.057004556263554</element>
+            <element name="j6" type="num">-3.2299935802033057</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">0.3904004830738476</element>
+            <element name="j2" type="num">-1.0428813519564157</element>
+            <element name="j3" type="num">0.520795776819596</element>
+            <element name="j4" type="num">-0.6976656978874494</element>
+            <element name="j5" type="num">0.27430990787744475</element>
+            <element name="j6" type="num">-0.2733604487643599</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">1.1907526275023832</element>
+            <element name="j2" type="num">1.2</element>
+            <element name="j3" type="num">-0.48083646359518584</element>
+            <element name="j4" type="num">-1.6242767057345069</element>
+            <element name="j5" type="num">1.147433555467884</element>
+            <element name="j6" type="num">1.6152917507452402</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.7114625256244645</element>
+            <element name="j2" type="num">0.4129588636558743</element>
+            <element name="j3" type="num">0.5350620981253976</element>
+            <element name="j4" type="num">-1.5674505306188236</element>
+            <element name="j5" type="num">-0.770700745766404</element>
+            <element name="j6" type="num">0.3652520338818613</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">0.8099968338750564</element>
+            <element name="j2" type="num">1.2</element>
+            <element name="j3" type="num">-0.7269191614801263</element>
+            <element name="j4" type="num">-1.6793994395002436</element>
+            <element name="j5" type="num">1.1353611130318393</element>
+            <element name="j6" type="num">1.8410954680512583</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.6680701497613815</element>
+            <element name="j2" type="num">0.45982968071818203</element>
+            <element name="j3" type="num">0.05136312002401592</element>
+            <element name="j4" type="num">-2.0091183151407526</element>
+            <element name="j5" type="num">-0.44841173675163515</element>
+            <element name="j6" type="num">1.852021229168743</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">0.6402705454356159</element>
+            <element name="j2" type="num">1.2</element>
+            <element name="j3" type="num">-0.23129452313279256</element>
+            <element name="j4" type="num">-0.33558492725646166</element>
+            <element name="j5" type="num">-0.4841316452229511</element>
+            <element name="j6" type="num">0.8604124146481646</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">-0.7182867629997624</element>
+            <element name="j2" type="num">1.1125339517450055</element>
+            <element name="j3" type="num">-0.95</element>
+            <element name="j4" type="num">-1.2726382400182012</element>
+            <element name="j5" type="num">-0.45718027091365465</element>
+            <element name="j6" type="num">-1.2205157272366427</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">0.7339877449507033</element>
+            <element name="j2" type="num">1.2</element>
+            <element name="j3" type="num">-0.95</element>
+            <element name="j4" type="num">-0.6075456219607221</element>
+            <element name="j5" type="num">1.1285962168511092</element>
+            <element name="j6" type="num">0.48037395134340727</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+        
+        <instruction type="move_joint">
+          <argument name="pose" type="num">
+            <element name="j1" type="num">0.015598478763971363</element>
+            <element name="j2" type="num">0.554922199683841</element>
+            <element name="j3" type="num">-0.16488073083712873</element>
+            <element name="j4" type="num">0.18440276211946088</element>
+            <element name="j5" type="num">1.128603198168117</element>
+            <element name="j6" type="num">-0.06689881929479305</element>
+          </argument>
+          <argument name="velocity" type="num" unit="%">100</argument>
+          <argument name="fine" type="num">0</argument>
+          <argument name="acceleration" type="num" unit="%">100</argument>
+        </instruction>
+      </body>
+    </function>
+  </prog_body>
+</prog>

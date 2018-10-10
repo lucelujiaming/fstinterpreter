@@ -117,7 +117,7 @@ int LaunchCodeMgr::readFileList(char *basePath)
     if ((dir=opendir(basePath)) == NULL)
     {
         perror("Open dir error...");
-        return;
+        return -1;
     }
 
     while ((ptr=readdir(dir)) != NULL)
@@ -168,7 +168,7 @@ int LaunchCodeMgr::initial()
 #ifdef WIN32
 	int iRet = readFileList("\\data\\programs\\");
 #else
-	int iRet = readFileList("\/data\/programs\/");
+	int iRet = readFileList("/data/programs/");
 #endif
 	// printLaunchCodeList();
 	return iRet;

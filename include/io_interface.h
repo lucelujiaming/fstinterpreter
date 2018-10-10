@@ -8,14 +8,50 @@
 #ifndef TP_INTERFACE_IO_INTERFACE_H_
 #define TP_INTERFACE_IO_INTERFACE_H_
 
+// #define USE_IO_MANAGER
+
 #ifndef WIN32
 #include <atomic>
+
+#ifdef USE_IO_MANAGER
 #include "io_manager/io_manager.h"
 #endif
-#include "motionSL.pb.h"
+
+#endif
+// #include "motionSL.pb.h"
 
 #define IO_BASE_ADDRESS (100000)
 #define IO_MAX_NUM      (1000)
+
+#ifndef USE_IO_MANAGER
+#define FST_SUCCESS (unsigned long long int)0
+typedef unsigned long long int U64;
+#define PARSE_IO_PATH_FAILED                    (unsigned long long int)0x0001000400670009   /*cant use current path to set IO*/
+#define INVALID_PATH_FROM_TP                    (unsigned long long int)0x0001000200830004   /*tp sent invalid path*/
+
+// IO Macro and structure begin
+#ifndef IO_BASE_ADDRESS
+#define IO_BASE_ADDRESS (100000)
+#endif
+
+#ifndef IO_MAX_NUM
+#define IO_MAX_NUM      (1000)
+#endif
+
+#ifndef IO_INPUT
+#define IO_INPUT 0
+#endif
+
+#ifndef IO_OUTPUT
+#define IO_OUTPUT 1
+#endif
+
+#ifndef IO_DATAFRAME_MAX
+#define IO_DATAFRAME_MAX 5
+#endif
+
+
+#endif
 
 
 typedef struct _IOPortInfo
@@ -41,7 +77,7 @@ class IOInterface
      * @return: 0 if success 
      */
     U64 addIODevices();
-    void getIODevices(motion_spec_DeviceList &dev_list);
+//    void getIODevices(motion_spec_DeviceList &dev_list);
 
     //bool encDevList(BaseTypes_ParameterMsg *param_msg, pb_ostream_t *stream, const pb_field_t *field);
 
@@ -140,11 +176,13 @@ class IOInterface
      */
     U64 updateIOError();
 
-	fst_io_manager::IODeviceInfo* getDevInfoPtr(){ return dev_info_ ; }
+//	fst_io_manager::IODeviceInfo* getDevInfoPtr(){ return dev_info_ ; }
 
   private:
+#ifdef USE_IO_MANAGER
     fst_io_manager::IOManager *io_manager_;
     std::atomic<fst_io_manager::IODeviceInfo*>  dev_info_;  //
+#endif
     std::atomic_int     io_num_;    //number of IO board
 };
 

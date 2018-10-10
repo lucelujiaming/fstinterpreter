@@ -1,0 +1,2 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(041)/prog/prog_body/function/body/instruction                                                               MOVEJ PR[1], 5 CNT 0 

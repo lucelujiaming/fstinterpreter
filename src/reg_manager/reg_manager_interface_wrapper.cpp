@@ -1161,8 +1161,6 @@ bool reg_manager_interface_setJointHr(Joint *ptr, uint16_t num)
 		if(bRet)
 		{
 		    memcpy(&(objHrRegData.value.joint_pos), ptr, 
-
-
 				sizeof(objHrRegData.value.joint_pos));
 			reg_manager_interface_setHr(&objHrRegData, num);
 		}
@@ -1258,8 +1256,6 @@ bool reg_manager_interface_setCommentHr(char *ptr, uint16_t num)
 		if(bRet)
 		{
 		    memcpy(objHrRegData.comment, ptr, 
-
-
 				sizeof(objHrRegData.comment));
 			reg_manager_interface_setHr(&objHrRegData, num);
 		}
@@ -1493,6 +1489,7 @@ std::vector<BaseRegData> reg_manager_interface_read_valid_mr_lst(int start_id, i
 	if(g_objRegManagerInterface)
 	{
 		vecRet = g_objRegManagerInterface->getMrRegValidIdList(0, 255);
+	    bRet = true ;
 	}
 	else
 	{

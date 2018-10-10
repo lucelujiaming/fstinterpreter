@@ -73,10 +73,10 @@ enum var_inner_type { FORSIGHT_CHAR, FORSIGHT_INT, FORSIGHT_FLOAT };
 // #define FORSIGHT_REGISTER_UF    "uf"
 // #define FORSIGHT_REGISTER_TF    "tf"
 
-#define FORSIGHT_TF_NO    "tf_no"
-#define FORSIGHT_UF_NO    "uf_no"
-#define FORSIGHT_OVC      "ovc"
-#define FORSIGHT_OAC      "oac"
+#define FORSIGHT_TF_NO    "tf_no."
+#define FORSIGHT_UF_NO    "uf_no."
+#define FORSIGHT_OVC      "ovc."
+#define FORSIGHT_OAC      "oac."
 
 #define STR_AND   "and"
 #define STR_OR    "or"
@@ -234,8 +234,8 @@ void* basic_interpreter(void* arg)
   //  	resetRunningMacroInstr(objThreadCntrolBlock->project_name);
   //  }
   setPrgmState(IDLE_R);
-  // clear line path
-  setCurLine("");
+  // clear line path and ProgramName
+  resetProgramNameAndLineNum();
 
   // free(objThreadCntrolBlock->instrSet);
   objThreadCntrolBlock->instrSet = 0 ;
@@ -337,7 +337,7 @@ void setLinenum(struct thread_control_block* objThreadCntrolBlock, int iLinenum)
     printf("setLinenum : %d\n", iLinenum);
 	objThreadCntrolBlock->iLineNum = iLinenum;
     printf("setLinenum: setCurLine (%d) at %s\n", iLinenum, g_vecXPath[iLinenum].c_str());
-	setCurLine((char *)g_vecXPath[iLinenum].c_str());
+	setCurLine((char *)g_vecXPath[iLinenum].c_str(), iLinenum);
 }
 
 int getLinenum(
@@ -391,10 +391,10 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
   char * cLineContentPtr = 0 ;
   char * cLineContentProgPtr = 0 ;
   char cLineContent[LINE_CONTENT_LEN];
-  int iScan = 0 ;
+  // int iScan = 0 ;
   // char in[80];
   // char *p_buf;
-  char *t = 0;
+  // char *t = 0;
 
   objThreadCntrolBlock->ret_value = 0.0 ;
 //  objThreadCntrolBlock->stateLineNum = LINENUM_PRODUCED ;
@@ -468,7 +468,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 		  return 1;
 	  }
 	  // Save local var stack index.
-	  int lvartemp = objThreadCntrolBlock->local_var_stack.size();
+	  // int lvartemp = objThreadCntrolBlock->local_var_stack.size();
 	  gosub_push(objThreadCntrolBlock, objThreadCntrolBlock->prog); /* save place to return to */
 	  objThreadCntrolBlock->prog = loc;  /* start program running at that loc */
 	  
@@ -539,6 +539,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 			
 			setPrgmState(PAUSED_R) ; // WAITING_R ;
             printf("call_interpreter : Enter waitInterpreterStateleftPaused %d \n", iLinenum);
+			setLinenum(objThreadCntrolBlock, iLinenum);
 			waitInterpreterStateleftPaused(objThreadCntrolBlock);
             printf("call_interpreter : Left  waitInterpreterStateleftPaused %d \n", iLinenum);
 			
@@ -577,8 +578,8 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 						objThreadCntrolBlock->prog_jmp_line[iLinenum - 1].start_prog_pos)
 					{
 						printf("objThreadCntrolBlock->prog : (%08X) and start_prog_pos (%08X) \n",
-							objThreadCntrolBlock->prog, 
-							objThreadCntrolBlock->prog_jmp_line[iLinenum - 1].start_prog_pos);
+							(unsigned int)objThreadCntrolBlock->prog, 
+							(unsigned int)objThreadCntrolBlock->prog_jmp_line[iLinenum - 1].start_prog_pos);
 					}
 					objThreadCntrolBlock->prog =
 						objThreadCntrolBlock->prog_jmp_line[iLinenum - 1].start_prog_pos;
@@ -833,7 +834,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 
 int  jump_prog_from_line(struct thread_control_block * objThreadCntrolBlock, int iNum)
 {
-	if(iNum < objThreadCntrolBlock->prog_jmp_line.size())
+	if(iNum < (int)objThreadCntrolBlock->prog_jmp_line.size())
 	{
 		objThreadCntrolBlock->prog = objThreadCntrolBlock->prog_jmp_line[iNum].start_prog_pos;
 		return iNum ;
@@ -843,14 +844,14 @@ int  jump_prog_from_line(struct thread_control_block * objThreadCntrolBlock, int
 
 int  calc_line_from_prog(struct thread_control_block * objThreadCntrolBlock)
 {
-	for(int i = 0 ; i < objThreadCntrolBlock->prog_jmp_line.size() ; i++)
+	for(int i = 0 ; i < (int)objThreadCntrolBlock->prog_jmp_line.size() ; i++)
 	{
 		if(objThreadCntrolBlock->prog < objThreadCntrolBlock->prog_jmp_line[i].end_prog_pos)
 		{
 			prog_line_info tmpDbg = objThreadCntrolBlock->prog_jmp_line[i];
 			printf("calc_line_from_prog get %d at (%08X, %08X) \n", 
-		   	    i, tmpDbg.start_prog_pos,
-		   	    objThreadCntrolBlock->prog_jmp_line[i-1].start_prog_pos);
+		   	    i, (unsigned int)tmpDbg.start_prog_pos,
+		   	    (unsigned int)objThreadCntrolBlock->prog_jmp_line[i-1].start_prog_pos);
 		//   printf("calc_line_from_prog get %d at (%08X, %08X) \n", 
 		//   	    i, objThreadCntrolBlock->prog,
 		//   	    objThreadCntrolBlock->prog_jmp_line[i-1].start_prog_pos);
@@ -867,20 +868,32 @@ int  calc_line_from_prog(struct thread_control_block * objThreadCntrolBlock)
 /* Load a program. */
 int load_program(struct thread_control_block * objThreadCntrolBlock, char *p, char *pname)
 {
-  char fname[128];
+  char fXMLName[128];
+  char fBASName[128];
   FILE *fp = 0 ;
   int i=0;
 #ifdef WIN32
-  sprintf(fname, "%s.xml", pname);
-  parse_xml_file_wrapper(objThreadCntrolBlock->project_name, fname);
-  sprintf(fname, "%s.bas", pname);
+  sprintf(fXMLName, "%s.xml", pname);
+  sprintf(fBASName, "%s.bas", pname);
+  // use bas directly 
+  // if((access(fBASName,F_OK))==-1)
+  // use XML directly 
+  parse_xml_file_wrapper(objThreadCntrolBlock->project_name, fXMLName);
 #else
-  sprintf(fname, "%s\/programs\/%s.xml", forgesight_get_programs_path(), pname);
-  parse_xml_file_wrapper(objThreadCntrolBlock->project_name, fname);
-  sprintf(fname, "%s\/programs\/%s.bas", forgesight_get_programs_path(), pname);
+  sprintf(fXMLName, "%s/programs/%s.xml", forgesight_get_programs_path(), pname);
+  sprintf(fBASName, "%s/programs/%s.bas", forgesight_get_programs_path(), pname);
+  // use bas directly 
+  // if((access(fBASName,F_OK))==-1)
+  // use XML directly 
+  if((access(fXMLName, F_OK))==0)
+  {   
+      parse_xml_file_wrapper(objThreadCntrolBlock->project_name, fXMLName);
+  }
 #endif
-  if(!(fp=fopen(fname, "r"))) 
+  
+  if(!(fp=fopen(fBASName, "r"))) 
   {
+      printf("load_program failed : %s from %s\n", fBASName, fXMLName);
       serror(objThreadCntrolBlock, 14);
       return 0;
   }
@@ -955,9 +968,9 @@ void deal_array_element(struct thread_control_block * objThreadCntrolBlock)
     int array_value;
     char array_variable[128];
 	char * temp_prog = 0 ;
-	char * start_pos = 0 ;
+//	char * start_pos = 0 ;
 	memset(array_variable, 0x00, 128);
-    start_pos = array_variable ;
+//    start_pos = array_variable ;
 
 	temp_prog = objThreadCntrolBlock->prog;
 	get_token(objThreadCntrolBlock);
@@ -1450,9 +1463,9 @@ void exec_if(struct thread_control_block * objThreadCntrolBlock)
       serror(objThreadCntrolBlock, 8);
       return;
     }/* else program execution starts on next line */
-	else
-	{
-		find_eol(objThreadCntrolBlock);
+    else
+    {
+       find_eol(objThreadCntrolBlock);
     }
     if_stack.itokentype = IF ;
     select_and_cycle_push(objThreadCntrolBlock, if_stack);
@@ -1695,7 +1708,7 @@ void exec_next(struct thread_control_block * objThreadCntrolBlock)
 // Deal the COMMAND such like "loop 5"
 void exec_loop(struct thread_control_block * objThreadCntrolBlock)
 {
-  int iRet = JUMP_OUT_INIT ;
+  // int iRet = JUMP_OUT_INIT ;
   struct select_and_cycle_stack loop_stack;
   // int value;
   eval_value value;
@@ -2544,7 +2557,7 @@ void serror(struct thread_control_block * objThreadCntrolBlock, int error)
 		FAIL_INTERPRETER_FUNC_PARAMS_MISMATCH     ,     "func params mismatching",     // 18
 		FAIL_INTERPRETER_DUPLICATE_EXEC_MACRO     ,     "exec macro duplicating"       // 19
   };
-  if(error > sizeof(errInfo)/sizeof(ErrInfo)) {
+  if(error > (int)(sizeof(errInfo)/sizeof(ErrInfo))) {
   	printf("\t NOTICE : Error out of range %d \n", error);
     return;
   }
@@ -2925,8 +2938,8 @@ void level6(struct thread_control_block * objThreadCntrolBlock, eval_value *resu
 
   op = 0;
   if((objThreadCntrolBlock->token_type==DELIMITER) &&
-  	*(objThreadCntrolBlock->token)=='+'
-  	|| *(objThreadCntrolBlock->token)=='-') {
+  	(*(objThreadCntrolBlock->token)=='+'
+  	|| *(objThreadCntrolBlock->token)=='-')) {
     op = *(objThreadCntrolBlock->token);
     get_token(objThreadCntrolBlock);
   }
@@ -2956,7 +2969,7 @@ void primitive(struct thread_control_block * objThreadCntrolBlock, eval_value *r
   std::string strValue ;
   char var[80];
   int iRet = 0 ;
-  char *progFuncCall; 
+  // char *progFuncCall; 
   switch(objThreadCntrolBlock->token_type) {
   case VARIABLE:
 	objThreadCntrolBlock->g_variable_error = 0 ;
@@ -2998,7 +3011,7 @@ void primitive(struct thread_control_block * objThreadCntrolBlock, eval_value *r
     get_token(objThreadCntrolBlock);
     return;
   case INSIDEFUNC:
-    progFuncCall = objThreadCntrolBlock->prog ;
+    // progFuncCall = objThreadCntrolBlock->prog ;
   	putback(objThreadCntrolBlock);
 	// exec_call(objThreadCntrolBlock);
 	iRet = exec_call(objThreadCntrolBlock);
@@ -3021,6 +3034,7 @@ void primitive(struct thread_control_block * objThreadCntrolBlock, eval_value *r
     get_token(objThreadCntrolBlock);
     return;
   default:
+	printf("primitive error :: get_token =  '%s'\n", objThreadCntrolBlock->token);
     serror(objThreadCntrolBlock, 0);
   }
 }
@@ -3154,14 +3168,14 @@ void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname,
     {
         printf("set_OVC vname = %s and value = %f.\n", vname, value.getFloatValue());
 		iLineNum = calc_line_from_prog(objThreadCntrolBlock);
-		set_OVC(iLineNum, (int)value.getFloatValue(), objThreadCntrolBlock);
+		set_OVC(iLineNum, value.getFloatValue(), objThreadCntrolBlock);
 		return ;
     }
 	else if(strcmp(FORSIGHT_OAC, vname) == 0)
     {
         printf("set_OAC vname = %s and value = %f.\n", vname, value.getFloatValue());
 		iLineNum = calc_line_from_prog(objThreadCntrolBlock);
-		set_OVC(iLineNum, (int)value.getFloatValue(), objThreadCntrolBlock);
+		set_OAC(iLineNum, value.getFloatValue(), objThreadCntrolBlock);
 		return ;
     }
 
@@ -3256,7 +3270,7 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
     {
 		if(strchr(vname, '['))
 		{
-			int iValue = -1;
+			// int iValue = -1;
 			
 			if(g_io_mapper.find(vname) != g_io_mapper.end() )
 			{
@@ -3351,7 +3365,7 @@ bool basic_thread_create(int iIdx, void * args)
 	}
 	else
 	{
-      printf("start basic_thread_create Failed..\n", iIdx);
+      printf("start basic_thread_create Failed..\n");
 		g_basic_interpreter_handle[iIdx] = 0;
 	}
 #endif
