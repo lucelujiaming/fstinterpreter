@@ -306,7 +306,7 @@ void setSendPermission(bool flag)
 	CtrlStatus temp,  * tempPtr = &temp;
     int offset = (int)&(tempPtr->is_permitted) - (int)tempPtr ;
 #else
-    int offset = &((CtrlStatus*)0)->is_permitted;
+    int offset = (int)&((CtrlStatus*)0)->is_permitted;
 #endif  
     writeShm(SHM_CTRL_STATUS, offset, (void*)&flag, sizeof(flag));
 }
@@ -317,7 +317,7 @@ void getSendPermission()
 	CtrlStatus temp,  * tempPtr = &temp;
     int offset = (int)&(tempPtr->is_permitted) - (int)tempPtr ;
 #else
-    int offset = &((CtrlStatus*)0)->is_permitted;
+    int offset = (int)&((CtrlStatus*)0)->is_permitted;
 #endif  
     readShm(SHM_CTRL_STATUS, offset, (void*)&ctrl_status.is_permitted, sizeof(ctrl_status.is_permitted));
 }
@@ -328,7 +328,7 @@ UserOpMode getUserOpMode()
 	CtrlStatus temp,  * tempPtr = &temp;
     int offset = (int)&(tempPtr->user_op_mode) - (int)tempPtr ;
 #else
-    int offset = &((CtrlStatus*)0)->user_op_mode;
+    int offset = (int)&((CtrlStatus*)0)->user_op_mode;
 #endif  
     readShm(SHM_CTRL_STATUS, offset, (void*)&ctrl_status.user_op_mode, sizeof(ctrl_status.user_op_mode));
 
@@ -408,14 +408,14 @@ bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instructio
 		        //    iLineNum--;
 		        //    setCurLine(iLineNum);
 	        }
-		        //else
-		        //{
-		        //    iLineNum++;
-		        //    setCurLine(iLineNum);
-		        //}   
-		//	iLineNum = calc_line_from_prog(objThdCtrlBlockPtr);
-		//  printf("set line in setInstruction\n");
-        //    setLinenum(objThdCtrlBlockPtr, iLineNum);
+	        //else
+	        //{
+	        //    iLineNum++;
+	        //    setCurLine(iLineNum);
+	        //}   
+			//	iLineNum = calc_line_from_prog(objThdCtrlBlockPtr);
+			//  printf("set line in setInstruction\n");
+	        //    setLinenum(objThdCtrlBlockPtr, iLineNum);
 
 	        if (objThdCtrlBlockPtr->prog_mode == STEP_MODE)
 	        {
@@ -515,7 +515,7 @@ bool deal_auto_mode(AutoMode autoMode)
 		else if(autoMode == MACRO_TRIGGER_U)
 		{
 			launch_code_thread_destroy();
-			macro_instr_thread_create(NULL);
+			launch_code_thread_create(NULL);
     		return true;
 		}
 		break;
@@ -530,7 +530,7 @@ bool deal_auto_mode(AutoMode autoMode)
 		else if(autoMode == LAUNCH_CODE_U)
 		{
 			macro_instr_thread_destroy();
-			launch_code_thread_create(NULL);
+			macro_instr_thread_create(NULL);
     		return true;
 		}
 		break;

@@ -253,6 +253,7 @@ void* basic_interpreter(void* arg)
   printf("Left  pthread_join.\n");
   fflush(stdout);
   g_basic_interpreter_handle[iIdx] = 0;
+  return NULL ;
 #endif // WIN32
 }
 

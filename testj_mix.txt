@@ -49,4 +49,5 @@ EXPORT: (048)(045)/prog/prog_body/function/body/instruction[47]                 
 EXPORT: (049)(045)/prog/prog_body/function/body/instruction[48]                                                           MOVEJ -0.7182867629997624, 1.1125339517450055, -0.95, -1.2726382400182012, -0.45718027091365465, -1.2205157272366427, 100 CNT 0 ;ACC 100 
 EXPORT: (050)(045)/prog/prog_body/function/body/instruction[49]                                                           MOVEJ 0.7339877449507033, 1.2, -0.95, -0.6075456219607221, 1.1285962168511092, 0.48037395134340727, 100 CNT 0 ;ACC 100 
 EXPORT: (051)(045)/prog/prog_body/function/body/instruction[50]                                                           MOVEJ 0.015598478763971363, 0.554922199683841, -0.16488073083712873, 0.18440276211946088, 1.128603198168117, -0.06689881929479305, 100 CNT 0 ;ACC 100 
-EXPORT: (052)(024)/prog/prog_body/function                                                                            END SUB 
+EXPORT: (052)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (053)(024)/prog/prog_body/function                                                                            END SUB 

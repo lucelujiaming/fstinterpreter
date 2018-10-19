@@ -4,10 +4,10 @@ project(prg_interpreter)
 
 find_package(catkin REQUIRED COMPONENTS 
     log_manager
-    io_manager
-    motion_plan
+#    io_manager
+#    motion_plan
     parameter_manager
-    mem_share
+#    mem_share
 )
 set(VERSION_MAJOR ?)
 set(VERSION_MINOR ?)
@@ -48,6 +48,10 @@ set(catkin_INCLUDE_DIRS
     ${depend_PATH_INC}/tp_interface/include/proto
     ${depend_PATH_INC}/prg_interpreter/include/reg_manager
 #    ${depend_PATH_INC}/prg_interpreter/include/reg_shmi
+    ${depend_PATH_INC}/thread_help/include 
+    ${depend_PATH_INC}/common/
+    ${depend_PATH_INC}/reg_manager/include 
+    ${depend_PATH_INC}/process_comm/include 
 )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -fpermissive -O0")
@@ -67,19 +71,19 @@ include_directories(
 ## Build ##
 ###########
 add_executable(prg_interpreter
-#    src/reg-shmi/forsight_op_reg_shmi.cpp
-#    src/reg-shmi/forsight_registers.cpp
-#    src/reg-shmi/forsight_op_shmi.cpp
-#    src/reg-shmi/forsight_peterson.cpp
-    src/reg_manager/r_reg.cpp
-    src/reg_manager/base_reg.cpp
-    src/reg_manager/forsight_registers_manager.cpp
-    src/reg_manager/pr_reg.cpp
-    src/reg_manager/sr_reg.cpp
-    src/reg_manager/mr_reg.cpp
-    src/reg_manager/hr_reg.cpp
-    src/reg_manager/reg_manager_interface.cpp
+#     #    src/reg-shmi/forsight_op_reg_shmi.cpp
+#     #    src/reg-shmi/forsight_registers.cpp
+#     #    src/reg-shmi/forsight_op_shmi.cpp
+#     #    src/reg-shmi/forsight_peterson.cpp
+#         src/reg_manager/r_reg.cpp
+#         src/reg_manager/base_reg.cpp
+#         src/reg_manager/pr_reg.cpp
+#         src/reg_manager/sr_reg.cpp
+#         src/reg_manager/mr_reg.cpp
+#         src/reg_manager/hr_reg.cpp
+#    src/reg_manager/reg_manager_interface.cpp
     src/reg_manager/reg_manager_interface_wrapper.cpp
+    src/reg_manager/forsight_registers_manager.cpp
     src/forsight_interpreter_shm.cpp
     src/forsight_innercmd.cpp
     src/forsight_xml_reader.cpp
@@ -96,15 +100,18 @@ add_executable(prg_interpreter
     src/forsight_io_mapping.cpp
     src/forsight_program_property.cpp
     src/forsight_cJSON.cpp
-    src/io_interface.cpp
+#   src/io_interface.cpp
 )
 
 target_link_libraries(prg_interpreter
     ${catkin_LIBRARIES}
-    io_manager
+#    io_manager
     parameter_manager
     xml2
-    motion_plan
+#    motion_plan
+    process_comm 
+    thread_help
+    pthread
 )
 
 #############
@@ -149,5 +156,4 @@ install(FILES config/sr_reg.yaml
 install(FILES config/io_emulator.json
     DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/configuration/configurable
 )
-
 

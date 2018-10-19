@@ -712,7 +712,7 @@ int generateOffsetVEC(xmlNodePtr nodeInstructionParam, LineInfo objLineInfo)
 int generateOffsetCondExecute(xmlNodePtr nodeInstructionParam, LineInfo objLineInfo)
 {
     xmlNodePtr nodeElement;
-    xmlChar *name, *value;
+    xmlChar *name, *value, *type;
 	
 	name = xmlGetProp(nodeInstructionParam, BAD_CAST"name");
 	printBASCode(objLineInfo, ";%s ", (char*)name);
@@ -721,7 +721,17 @@ int generateOffsetCondExecute(xmlNodePtr nodeInstructionParam, LineInfo objLineI
 			nodeElement; nodeElement = nodeElement->next){
 		if(xmlStrcasecmp(nodeElement->name, BAD_CAST"argument")==0){
 			value = xmlNodeGetContent(nodeElement);
-			printBASCode(objLineInfo, "%s ", (char*)value);
+			type  = xmlGetProp(nodeElement, BAD_CAST"type");
+			
+			if(xmlStrcasecmp(type, BAD_CAST"register")==0){
+				printBASCode(objLineInfo, " R[%s]", (char*)value);
+			}
+			else if(xmlStrcasecmp(type, BAD_CAST"number_register")==0){
+				printBASCode(objLineInfo, " MR[%s]", (char*)value);
+			}
+			else {
+				printBASCode(objLineInfo, "%s ", (char*)value);
+			}
 		}
 		else if(xmlStrcasecmp(nodeElement->name, BAD_CAST"assignment")==0){
 			printBASCode(objLineInfo, "ASSIGN ", "");
@@ -752,7 +762,7 @@ int generateWaitInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLin
 {
 	// char waitParam[1024];
     xmlNodePtr nodeInstructionParam;
-    xmlChar *name, *value;
+    xmlChar *name, *value, *type;
 	name = xmlGetProp(nodeInstructionStatement,BAD_CAST"type");
 	
 	string strCommandName = (char *)name;
@@ -767,6 +777,7 @@ int generateWaitInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLin
 		value = xmlNodeGetContent(nodeInstructionParam);
         if(xmlStrcasecmp(nodeInstructionParam->name,BAD_CAST"argument")==0){
 			name = xmlGetProp(nodeInstructionParam, BAD_CAST"name");
+			type = xmlGetProp(nodeInstructionParam, BAD_CAST"type");
 			// All of parameters should have spaces after them . 
 			// Without the space, it would cause the expression analyzer work failed
 			if(xmlStrcasecmp(name, BAD_CAST"condition")==0){
@@ -774,7 +785,15 @@ int generateWaitInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLin
 				generateOffsetCondition(nodeInstructionParam, objLineInfo);
 			}
 			else if(xmlStrcasecmp(name, BAD_CAST"timeout")==0){
-				printBASCode(objLineInfo, " %s", (char*)value);
+				if(xmlStrcasecmp(type, BAD_CAST"register")==0){
+					printBASCode(objLineInfo, " R[%s]", (char*)value);
+				}
+				else if(xmlStrcasecmp(type, BAD_CAST"number_register")==0){
+					printBASCode(objLineInfo, " MR[%s]", (char*)value);
+				}
+				else {
+					printBASCode(objLineInfo, " %s", (char*)value);
+				}
 			}
 			else if(xmlStrcasecmp(name, BAD_CAST"call_back")==0){
 				printBASCode(objLineInfo, " %s", (char*)value);
@@ -1651,6 +1670,14 @@ int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
 			sprintf(objLineInfoTemp.xPath, "%s", 
 					 (char *)xmlGetNodePath(nodeStatement));
 			exportBASCode(objLineInfoTemp, "EXPORT: ", "CONTINUE \n", "");
+        }
+		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"end")==0){ 
+            // printf("%s, ", (char*)nodeStatement->name);
+            // objLineInfoTemp.xPathIdx = iContinueIdx++;
+			value = xmlNodeGetContent(nodeStatement);
+			sprintf(objLineInfoTemp.xPath, "%s", 
+					 (char *)xmlGetNodePath(nodeStatement));
+			exportBASCode(objLineInfoTemp, "EXPORT: ", "END \n", "");
         }
 		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"text")==0){
 			;

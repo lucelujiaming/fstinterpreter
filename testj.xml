@@ -704,6 +704,7 @@
           <argument name="fine" type="num">0</argument>
           <argument name="acceleration" type="num" unit="%">100</argument>
         </instruction>
+		<end/>
       </body>
     </function>
   </prog_body>

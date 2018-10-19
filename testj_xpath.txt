@@ -49,4 +49,5 @@
 049:testj:/prog/prog_body/function/body/instruction[48]
 050:testj:/prog/prog_body/function/body/instruction[49]
 051:testj:/prog/prog_body/function/body/instruction[50]
-052:testj:/prog/prog_body/function
+052:testj:/prog/prog_body/function/body/end
+053:testj:/prog/prog_body/function
