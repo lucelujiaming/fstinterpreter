@@ -12,8 +12,8 @@ HANDLE    g_macro_instr_interpreter_handle;
 #else
 pthread_t g_macro_instr_interpreter_handle;
 #endif
-extern int  g_iCurrentThreadSeq ;  
-extern struct thread_control_block g_thread_control_block[NUM_THREAD];
+// extern int  g_iCurrentThreadSeq ;  
+// extern struct thread_control_block g_thread_control_block[NUM_THREAD];
 
 MacroInstrMgr  *  g_macro_instr_mgr_ptr; 
 
@@ -42,26 +42,29 @@ void* macro_instr_thread(void* arg)
 				&&(it->second.bIsRunning == false))
 			{
 				printf("start run...\n");
-				objThdCtrlBlockPtr = &g_thread_control_block[g_iCurrentThreadSeq];
+				// objThdCtrlBlockPtr = &g_thread_control_block[getCurrentThreadSeq()];
+				objThdCtrlBlockPtr = getThreadControlBlock();
+				if(objThdCtrlBlockPtr == NULL) break ;
 				if(objThdCtrlBlockPtr->is_in_macro == true)
 				{
 					printf("Can not run macro again\n");
 					break;
 				}
-				g_iCurrentThreadSeq++ ;
-				if(g_iCurrentThreadSeq < 0) break ;
-				objThdCtrlBlockPtr = &g_thread_control_block[g_iCurrentThreadSeq];
+				incCurrentThreadSeq();
+				// objThdCtrlBlockPtr = &g_thread_control_block[getCurrentThreadSeq()];
+				objThdCtrlBlockPtr = getThreadControlBlock();
+				if(objThdCtrlBlockPtr == NULL) break ;
 				
 				objThdCtrlBlockPtr->prog_mode = FULL_MODE;
 				objThdCtrlBlockPtr->execute_direction = EXECUTE_FORWARD ;
 				setPrgmState(EXECUTE_R);
 				if(strlen(it->second.program_name) == 0)
 				{
-					startFile(objThdCtrlBlockPtr, (char *)"sr_test", g_iCurrentThreadSeq);
+					startFile(objThdCtrlBlockPtr, (char *)"sr_test", getCurrentThreadSeq());
 				}
 				else 
 				{
-					startFile(objThdCtrlBlockPtr, it->second.program_name, g_iCurrentThreadSeq);
+					startFile(objThdCtrlBlockPtr, it->second.program_name, getCurrentThreadSeq());
 				}
 #ifdef WIN32
 				Sleep(100);

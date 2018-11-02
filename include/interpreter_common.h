@@ -80,6 +80,7 @@ typedef enum _InterpreterCommand
     PAUSE   = 108,
     ABORT   = 109,
     SET_AUTO_MODE  = 110,
+	SWITCH_STEP    = 111,
 		
     MOD_REG  = 201,
 	READ_REG = 202,
@@ -239,7 +240,9 @@ typedef struct _InterpreterControl
         StartCtrl   start_ctrl;
 		AutoMode    autoMode ;
         // int         id;
-        int            jump_line;    // Jump 
+        // int            jump_line;    // Jump 
+        char           jump_line[256];
+        int            step_mode;       // auto or debug 
         RegMap      reg;
         // IOMapPortInfo  dio;
         IOPathInfo  dioPathInfo;

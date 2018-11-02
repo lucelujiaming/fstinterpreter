@@ -41,8 +41,8 @@ HANDLE    g_launch_code_interpreter_handle;
 #else
 pthread_t g_launch_code_interpreter_handle;
 #endif
-extern int  g_iCurrentThreadSeq ;  
-extern struct thread_control_block g_thread_control_block[NUM_THREAD];
+// extern int  g_iCurrentThreadSeq ;  
+// extern struct thread_control_block g_thread_control_block[NUM_THREAD];
 
 LaunchCodeMgr  *  g_launch_code_mgr_ptr; 
 
@@ -254,20 +254,21 @@ void* launch_code_thread(void* arg)
 			if(strRet != "")
 			{
 	            printf("start run...\n");
-				g_iCurrentThreadSeq++ ;
-				if(g_iCurrentThreadSeq < 0) break ;
-			    objThdCtrlBlockPtr = &g_thread_control_block[g_iCurrentThreadSeq];
+				incCurrentThreadSeq();
+				// objThdCtrlBlockPtr = &g_thread_control_block[getCurrentThreadSeq()];
+				objThdCtrlBlockPtr = getThreadControlBlock();
+				if(objThdCtrlBlockPtr == NULL) break ;
 				
 	            objThdCtrlBlockPtr->prog_mode = FULL_MODE;
 				objThdCtrlBlockPtr->execute_direction = EXECUTE_FORWARD ;
 	            setPrgmState(EXECUTE_R);
 				if(strlen(strRet.c_str()) == 0)
 				{
-					startFile(objThdCtrlBlockPtr, "sr_test", g_iCurrentThreadSeq);
+					startFile(objThdCtrlBlockPtr, "sr_test", getCurrentThreadSeq());
 				}
 				else 
 				{
-					startFile(objThdCtrlBlockPtr, (char *)strRet.c_str(), g_iCurrentThreadSeq);
+					startFile(objThdCtrlBlockPtr, (char *)strRet.c_str(), getCurrentThreadSeq());
 				}
 			}
 #ifdef USE_FAKE_PLC
