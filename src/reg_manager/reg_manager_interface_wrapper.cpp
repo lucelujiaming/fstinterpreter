@@ -408,6 +408,7 @@ bool reg_manager_interface_getSr(SrRegData *ptr, uint16_t num)
 		printf("g_objRegManagerInterface is NULL\n");
 	}
 #else
+    ptr->value = string("");
 	bRet = true ;
 #endif
 	return bRet ;
@@ -631,6 +632,7 @@ bool reg_manager_interface_getR(RRegData *ptr, uint16_t num)
 		printf("g_objRegManagerInterface is NULL\n");
 	}
 #else
+	ptr->value = 1 ;
 	bRet = true ;
 #endif
 	return bRet ;
@@ -848,6 +850,7 @@ bool reg_manager_interface_getMr(MrRegData *ptr, uint16_t num)
 		printf("g_objRegManagerInterface is NULL\n");
 	}
 #else
+	ptr->value = 1 ;
 	bRet = true ;
 #endif
 	return bRet ;

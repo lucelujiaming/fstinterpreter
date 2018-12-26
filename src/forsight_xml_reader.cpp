@@ -14,6 +14,7 @@
 #include <algorithm>
 using namespace std;
 
+#include "forsight_basint.h"
 #include "forsight_xml_reader.h"
 
 #define PROG_HEAD         "head"
@@ -47,16 +48,17 @@ char g_mix_file_name[FILE_PATH_LEN];
 
 int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo);
 int generateFunctionCall(xmlNodePtr nodeFunctionCall, LineInfo objLineInfo);
+int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char * label_str);
 
 int printBASCode(LineInfo objLineInfo, char *format, char * value)
 {
 	FILE * fpMix   = fopen(g_mix_file_name,"a");
-	// printf(format, value);
+	// FST_INFO(format, value);
 	fprintf(fpMix, format, value);
 	fclose(fpMix);
 	
 	FILE * fpBasic = fopen(g_basic_file_name,"a");
-	// printf(format, value);
+	// FST_INFO(format, value);
 	fprintf(fpBasic, format, value);
 	fclose(fpBasic);
 	return 1;
@@ -71,10 +73,10 @@ int exportBASCode(LineInfo objLineInfo, char *title, char *format, char * value)
 	FILE * fpXPath = fopen(g_xpath_file_name,"a");
 	FILE * fpBasic = fopen(g_basic_file_name,"a");
 
-	// printf(title);
+	// FST_INFO(title);
 	fprintf(fpMix,"%s", title);
 	
-	// printf("(%03d)", g_lineNum);
+	// FST_INFO("(%03d)", g_lineNum);
 	fprintf(fpMix,"(%03d)", g_lineNum);
 	fprintf(fpXPath,"%03d:%s:", g_lineNum, objLineInfo.fileName);
 
@@ -82,23 +84,23 @@ int exportBASCode(LineInfo objLineInfo, char *title, char *format, char * value)
 	if(strlen(title) > 0)
 	{
 		iPathLen =  strlen(objLineInfo.xPath) ;
-		// printf("(%03d)%s", iPathLen, objLineInfo.xPath);
+		// FST_INFO("(%03d)%s", iPathLen, objLineInfo.xPath);
 		fprintf(fpMix,"(%03d)%s", iPathLen, objLineInfo.xPath);
 		fprintf(fpXPath,"%s\n", objLineInfo.xPath);
 		for(int i = 100 ; i > iPathLen; i--)
 		{
-			// printf(" ");
+			// FST_INFO(" ");
 			fprintf(fpMix, " ");
 		}
 	}
 #endif
 	for(int i = 0 ; i < objLineInfo.indentValue ; i++)
 	{
-		// printf("    ");
+		// FST_INFO("    ");
 		fprintf(fpMix, "    ");
 	    fprintf(fpBasic, "    ");
 	}
-	// printf(format, value);
+	// FST_INFO(format, value);
 	fprintf(fpMix, format, value);
 	fprintf(fpBasic, format, value);
 	fclose(fpMix);
@@ -116,7 +118,7 @@ int generateIncludeFile(xmlNodePtr nodehead, LineInfo objLineInfo)
     xmlChar *value;
     for(nodeInclude = nodehead->children; 
 		nodeInclude; nodeInclude = nodeInclude->next){
-		//				printf("\t\t\t\t  --debug-- %s \n", (char*)nodeInclude->name);
+		//				FST_INFO("\t\t\t\t  --debug-- %s \n", (char*)nodeInclude->name);
         if(xmlStrcasecmp(nodeInclude->name,BAD_CAST"include")==0){ 
 			value=xmlNodeGetContent(nodeInclude);
 			sprintf(objLineInfoTemp.xPath, "%s", (char *)xmlGetNodePath(nodeInclude));
@@ -157,12 +159,12 @@ int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char *
     xmlNodePtr nodeSubValueElement ;
     xmlChar *name, *file, *type, *value;
 	value = xmlNodeGetContent(nodeValueElement);
-			// printf("\t\t\t\t  --debug-- (nodeValueElement) %s = %s\n", 
+			// FST_INFO("\t\t\t\t  --debug-- (nodeValueElement) %s = %s\n", 
 			//		(char*)nodeValueElement->name, (char *)value);
 		
 	if(xmlStrcasecmp(nodeValueElement->name, BAD_CAST"element")==0){ 
 	    name = xmlGetProp(nodeValueElement,BAD_CAST"type");
-		// printf("%s, ", (char*)nodeStatement->name);
+		// FST_INFO("%s, ", (char*)nodeStatement->name);
 		if(xmlStrcasecmp(name, BAD_CAST"num")==0){ 
 			value = xmlNodeGetContent(nodeValueElement);
 			sprintf(label_str, "%s%s", label_str, (char*)value);
@@ -251,7 +253,7 @@ int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char *
 			name = xmlGetProp(nodeValueElement, BAD_CAST"name");
 
 			value = xmlNodeGetContent(nodeValueElement);
-			// printf(label_str, "%s( ", (char*)name);
+			// FST_INFO(label_str, "%s( ", (char*)name);
 
 			if(xmlStrlen(file)==0){        // Inside function
 				memset(label_output, 0x00, 1024);
@@ -382,12 +384,26 @@ int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char *
 				}
 			}
 		}
-		else if(xmlStrcasecmp(name, BAD_CAST"di")==0){ 
+		else if(  (xmlStrcasecmp(name, BAD_CAST"ai")==0) 
+				||(xmlStrcasecmp(name, BAD_CAST"ao")==0) 
+				||(xmlStrcasecmp(name, BAD_CAST"di")==0) 
+				||(xmlStrcasecmp(name, BAD_CAST"do")==0) 
+				||(xmlStrcasecmp(name, BAD_CAST"ri")==0) 
+				||(xmlStrcasecmp(name, BAD_CAST"ro")==0) 
+				||(xmlStrcasecmp(name, BAD_CAST"si")==0) 
+				||(xmlStrcasecmp(name, BAD_CAST"so")==0) 
+				||(xmlStrcasecmp(name, BAD_CAST"ui")==0) 
+				||(xmlStrcasecmp(name, BAD_CAST"uo")==0) )  
+		{ 
 			for(nodeSubValueElement = nodeValueElement->children; 
 			nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
 				if(xmlStrcasecmp(nodeSubValueElement->name,BAD_CAST"element")==0){ 
 					value = xmlNodeGetContent(nodeSubValueElement);
-					sprintf(label_str, "%sDI[%s] ", label_str, (char*)value);
+					sprintf(label_str, "%s%s[%s] ", label_str, name, (char*)value);
+					// toupper
+					string strRet = string(label_str);
+					transform(strRet.begin(), strRet.end(), strRet.begin(), ::toupper);  
+					sprintf(label_str, "%s", strRet.c_str());
 				}
 			}
 		}
@@ -405,7 +421,7 @@ int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char *
 			printBASCode(objLineInfo, " %s ", (char*)value);
 		}
 		else { 
-			printf("Wrong Type (%s) in element. \n", (char *)name);
+			FST_ERROR("Wrong Type (%s) in element. \n", (char *)name);
 		}
 	}
 	return 1 ;
@@ -416,24 +432,76 @@ int generateElement(xmlNodePtr nodeValueElement, LineInfo objLineInfo)
     char label_params[1024];
 	memset(label_params, 0x00, 1024);
 	generateElementStr(nodeValueElement, objLineInfo, label_params);
-	printBASCode(objLineInfo, "%s", (char*)label_params);
+	if(strcmp(label_params, "Overall_Velocity_Coefficient") == 0)
+		printBASCode(objLineInfo, "%s", "OVC.");
+	else
+		printBASCode(objLineInfo, "%s", (char*)label_params);
 	return 1 ;
 }
 
-int generatePoseRegElement(xmlNodePtr nodeValueElement, LineInfo objLineInfo)
+void ltrim ( char *s )
 {
+    char *p;
+    p = s;
+    while ( *p == ' ' || *p == '\t' ) {*p++;}
+    strcpy ( s,p );
+}
+
+void rtrim ( char *s )
+{
+    int i;
+	
+    i = strlen ( s )-1;
+    while ( ( s[i] == ' ' || s[i] == '\t' ) && i >= 0 ) {i--;};
+    s[i+1] = '\0';
+}
+
+void trim ( char *s )
+{
+    ltrim ( s );
+    rtrim ( s );
+}
+
+int generatePoseRegElement(xmlNodePtr nodeInstructionParam, LineInfo objLineInfo)
+{
+    xmlNodePtr nodeElement;
     char label_params[1024];
+    char label_param[32];
 	memset(label_params, 0x00, 1024);
-	generateElementStr(nodeValueElement, objLineInfo, label_params);
+	
+	for(nodeElement = nodeInstructionParam->children; 
+			nodeElement; nodeElement = nodeElement->next){
+		if(xmlStrcasecmp(nodeElement->name, BAD_CAST"element")==0){
+			//	value = xmlNodeGetContent(nodeElement);
+			//	printBASCode(objLineInfo, "%s ", (char*)value);
+			memset(label_param, 0x00, 32);
+			generateElementStr(nodeElement, objLineInfo, label_param);
+			sprintf(label_params, "%s%s ", label_params, label_param);
+		}
+	}
+    trim(label_params);
 	printBASCode(objLineInfo, "PR[%s]", (char*)label_params);
 	return 1 ;
 }
 
-int generatePoseElement(xmlNodePtr nodeValueElement, LineInfo objLineInfo)
+int generatePoseElement(xmlNodePtr nodeInstructionParam, LineInfo objLineInfo)
 {
+    xmlNodePtr nodeElement;
     char label_params[1024];
+    char label_param[32];
 	memset(label_params, 0x00, 1024);
-	generateElementStr(nodeValueElement, objLineInfo, label_params);
+	
+	for(nodeElement = nodeInstructionParam->children; 
+		nodeElement; nodeElement = nodeElement->next){
+		if(xmlStrcasecmp(nodeElement->name, BAD_CAST"element")==0){
+			//	value = xmlNodeGetContent(nodeElement);
+			//	printBASCode(objLineInfo, "%s ", (char*)value);
+			memset(label_param, 0x00, 32);
+			generateElementStr(nodeElement, objLineInfo, label_params);
+			sprintf(label_params, "%s%s ", label_params, label_param);
+		}
+	}
+    trim(label_params);
 	printBASCode(objLineInfo, "P[%s]", (char*)label_params);
 	return 1 ;
 }
@@ -449,12 +517,12 @@ int generateElementOld(xmlNodePtr nodeValueElement, LineInfo objLineInfo)
     xmlNodePtr nodeSubValueElement ;
     xmlChar *name, *file, *value;
 	value = xmlNodeGetContent(nodeValueElement);
-			// printf("\t\t\t\t  --debug-- (nodeValueElement) %s = %s\n", 
+			// FST_INFO("\t\t\t\t  --debug-- (nodeValueElement) %s = %s\n", 
 			//		(char*)nodeValueElement->name, (char *)value);
 		
 	if(xmlStrcasecmp(nodeValueElement->name, BAD_CAST"element")==0){ 
 	    name = xmlGetProp(nodeValueElement,BAD_CAST"type");
-		// printf("%s, ", (char*)nodeStatement->name);
+		// FST_INFO("%s, ", (char*)nodeStatement->name);
 		if(xmlStrcasecmp(name, BAD_CAST"num")==0){ 
 			value = xmlNodeGetContent(nodeValueElement);
 			printBASCode(objLineInfo, "%s ", (char*)value);
@@ -550,7 +618,7 @@ int generateElementOld(xmlNodePtr nodeValueElement, LineInfo objLineInfo)
 			printBASCode(objLineInfo, "%s ", (char*)value);
 		}
 		else { 
-			printf("Wrong Type (%s) in element. \n", (char *)name);
+			FST_ERROR("Wrong Type (%s) in element. \n", (char *)name);
 		}
 	}
 	return 1 ;
@@ -569,25 +637,25 @@ int generateAssignment(xmlNodePtr nodeAssignmentStatement, LineInfo objLineInfo)
     for(nodeStatement = nodeAssignmentStatement->children; 
 			nodeStatement; nodeStatement = nodeStatement->next){
 						value = xmlNodeGetContent(nodeStatement);
-						//	printf("\t\t\t\t  --debug-- (nodeStatement) %s = %s\n", 
+						//	FST_INFO("\t\t\t\t  --debug-- (nodeStatement) %s = %s\n", 
 						//		(char*)nodeStatement->name, (char *)value);
         if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"lvalue")==0){ 
-            // printf("%s, ", (char*)nodeStatement->name);
+            // FST_INFO("%s, ", (char*)nodeStatement->name);
 			for(nodeLeftValue = nodeStatement->children; 
 				nodeLeftValue; nodeLeftValue = nodeLeftValue->next){
-						value = xmlNodeGetContent(nodeLeftValue);
-						//		printf("\t\t\t\t  --debug-- (nodeLeftValue) %s = %s\n", 
-						//		(char*)nodeLeftValue->name, (char *)value);
-				generateElement(nodeLeftValue, objLineInfo);
+					value = xmlNodeGetContent(nodeLeftValue);
+					//		FST_INFO("\t\t\t\t  --debug-- (nodeLeftValue) %s = %s\n", 
+					//		(char*)nodeLeftValue->name, (char *)value);
+					generateElement(nodeLeftValue, objLineInfo);
 			}
 			printBASCode(objLineInfo, " = ", "");
         }
 		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"rvalue")==0){ 
-            // printf("%s, ", (char*)nodeStatement->name);
+            // FST_INFO("%s, ", (char*)nodeStatement->name);
 			for(nodeRightValue = nodeStatement->children; 
 				nodeRightValue; nodeRightValue = nodeRightValue->next){
 				value = xmlNodeGetContent(nodeRightValue);
-						//		printf("\t\t\t\t  --debug-- (nodeRightValue) %s = %s\n", 
+						//		FST_INFO("\t\t\t\t  --debug-- (nodeRightValue) %s = %s\n", 
 						//			(char*)nodeRightValue->name, (char *)value);
 						
 				if(xmlStrcasecmp(nodeRightValue->name, BAD_CAST"element")==0){ 
@@ -600,7 +668,7 @@ int generateAssignment(xmlNodePtr nodeAssignmentStatement, LineInfo objLineInfo)
 			;
 		}
 		else { 
-			printf("Wrong Name (%s) in Assignment. \n", (char *)nodeStatement->name);
+			FST_ERROR("Wrong Name (%s) in Assignment. \n", (char *)nodeStatement->name);
 		}
     }
 	return 1 ;
@@ -773,7 +841,7 @@ int generateWaitInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLin
 	// WaitType waitType = WAIT_NONE ;
     for(nodeInstructionParam = nodeInstructionStatement->children; 
 	nodeInstructionParam; nodeInstructionParam = nodeInstructionParam->next){
-		//				printf("\t\t\t\t  --debug-- (nodeInstruction) %s \n", (char*)nodeInstruction->name);
+		//				FST_INFO("\t\t\t\t  --debug-- (nodeInstruction) %s \n", (char*)nodeInstruction->name);
 		value = xmlNodeGetContent(nodeInstructionParam);
         if(xmlStrcasecmp(nodeInstructionParam->name,BAD_CAST"argument")==0){
 			name = xmlGetProp(nodeInstructionParam, BAD_CAST"name");
@@ -806,7 +874,7 @@ int generateWaitInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLin
 			;
 		}
 		else { 
-			printf("Wrong Name (%s) in Instruction. \n", (char *)nodeInstructionParam->name);
+			FST_ERROR("Wrong Name (%s) in Instruction. \n", (char *)nodeInstructionParam->name);
 		}
     }
 	printBASCode(objLineInfo, "\n", "");
@@ -854,7 +922,7 @@ int generateUserAlarmInstruction(xmlNodePtr nodeInstructionStatement, LineInfo o
 	
     for(nodeInstructionParam = nodeInstructionStatement->children; 
 	nodeInstructionParam; nodeInstructionParam = nodeInstructionParam->next){
-		//				printf("\t\t\t\t  --debug-- (nodeInstruction) %s \n", (char*)nodeInstruction->name);
+		//				FST_INFO("\t\t\t\t  --debug-- (nodeInstruction) %s \n", (char*)nodeInstruction->name);
 		value = xmlNodeGetContent(nodeInstructionParam);
         if(xmlStrcasecmp(nodeInstructionParam->name,BAD_CAST"argument")==0){
 			name = xmlGetProp(nodeInstructionParam, BAD_CAST"name");
@@ -868,7 +936,7 @@ int generateUserAlarmInstruction(xmlNodePtr nodeInstructionStatement, LineInfo o
 			;
 		}
 		else { 
-			printf("Wrong Name (%s) in Instruction. \n", (char *)nodeInstructionParam->name);
+			FST_ERROR("Wrong Name (%s) in Instruction. \n", (char *)nodeInstructionParam->name);
 		}
     }
 	printBASCode(objLineInfo, "\n", "");
@@ -889,7 +957,7 @@ int generatePrintInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLi
 	
     for(nodeInstructionParam = nodeInstructionStatement->children; 
 	nodeInstructionParam; nodeInstructionParam = nodeInstructionParam->next){
-		//				printf("\t\t\t\t  --debug-- (nodeInstruction) %s \n", (char*)nodeInstruction->name);
+		//				FST_INFO("\t\t\t\t  --debug-- (nodeInstruction) %s \n", (char*)nodeInstruction->name);
 		value = xmlNodeGetContent(nodeInstructionParam);
         if(xmlStrcasecmp(nodeInstructionParam->name,BAD_CAST"argument")==0){
 			type = xmlGetProp(nodeInstructionParam, BAD_CAST"type");
@@ -909,7 +977,7 @@ int generatePrintInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLi
 			;
 		}
 		else { 
-			printf("Wrong Name (%s) in Instruction. \n", (char *)nodeInstructionParam->name);
+			FST_ERROR("Wrong Name (%s) in Instruction. \n", (char *)nodeInstructionParam->name);
 		}
     }
 	printBASCode(objLineInfo, "\"\" \n", "");
@@ -930,7 +998,7 @@ int generateTimerInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLi
 	
     for(nodeInstructionParam = nodeInstructionStatement->children; 
 	nodeInstructionParam; nodeInstructionParam = nodeInstructionParam->next){
-		//				printf("\t\t\t\t  --debug-- (nodeInstruction) %s \n", (char*)nodeInstruction->name);
+		//				FST_INFO("\t\t\t\t  --debug-- (nodeInstruction) %s \n", (char*)nodeInstruction->name);
 		value = xmlNodeGetContent(nodeInstructionParam);
         if(xmlStrcasecmp(nodeInstructionParam->name,BAD_CAST"argument")==0){
 			name = xmlGetProp(nodeInstructionParam, BAD_CAST"name");
@@ -947,7 +1015,7 @@ int generateTimerInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLi
 			;
 		}
 		else { 
-			printf("Wrong Name (%s) in Instruction. \n", (char *)nodeInstructionParam->name);
+			FST_ERROR("Wrong Name (%s) in Instruction. \n", (char *)nodeInstructionParam->name);
 		}
     }
 	printBASCode(objLineInfo, "\n", "");
@@ -973,7 +1041,7 @@ int generateMoveInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLin
 
     for(nodeInstructionParam = nodeInstructionStatement->children; 
 		nodeInstructionParam; nodeInstructionParam = nodeInstructionParam->next){
-		//				printf("\t\t\t\t  --debug-- (nodeInstruction) %s \n", (char*)nodeInstruction->name);
+		//				FST_INFO("\t\t\t\t  --debug-- (nodeInstruction) %s \n", (char*)nodeInstruction->name);
 		value = xmlNodeGetContent(nodeInstructionParam);
         if(xmlStrcasecmp(nodeInstructionParam->name,BAD_CAST"argument")==0){
 			name = xmlGetProp(nodeInstructionParam, BAD_CAST"name");
@@ -993,36 +1061,46 @@ int generateMoveInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLin
 					}
 				}
 				else if(xmlStrcasecmp(nameType, BAD_CAST"pose_register")==0){
-					for(nodeElement = nodeInstructionParam->children; 
-							nodeElement; nodeElement = nodeElement->next){
-						if(xmlStrcasecmp(nodeElement->name, BAD_CAST"element")==0){
-						//	value = xmlNodeGetContent(nodeElement);
-						//	printBASCode(objLineInfo, "%s ", (char*)value);
-							generatePoseRegElement(nodeElement, objLineInfo);
-							printBASCode(objLineInfo, ", ", "");
-						}
-					}
+					generatePoseRegElement(nodeInstructionParam, objLineInfo);
+					printBASCode(objLineInfo, ", ", "");
 				}
 				else if(xmlStrcasecmp(nameType, BAD_CAST"pose")==0){
-					for(nodeElement = nodeInstructionParam->children; 
-							nodeElement; nodeElement = nodeElement->next){
-						if(xmlStrcasecmp(nodeElement->name, BAD_CAST"element")==0){
-						//	value = xmlNodeGetContent(nodeElement);
-						//	printBASCode(objLineInfo, "%s ", (char*)value);
-							generatePoseElement(nodeElement, objLineInfo);
-							printBASCode(objLineInfo, ", ", "");
-						}
-					}
+					generatePoseElement(nodeInstructionParam, objLineInfo);
+					printBASCode(objLineInfo, ", ", "");
 				}
 			}
 			else if(xmlStrcasecmp(name, BAD_CAST"velocity")==0){
-				printBASCode(objLineInfo, "%s ", (char*)value);
+				nameType = xmlGetProp(nodeInstructionParam, BAD_CAST"type");
+				if(xmlStrcasecmp(nameType, BAD_CAST"num")==0){
+					printBASCode(objLineInfo, "%s ", (char*)value);
+				}
+				else if(xmlStrcasecmp(nameType, BAD_CAST"motion_register")==0){
+					char label_params[1024];
+					char label_param[32];
+					memset(label_params, 0x00, 1024);
+					
+					for(nodeElement = nodeInstructionParam->children; 
+								nodeElement; nodeElement = nodeElement->next){
+						if(xmlStrcasecmp(nodeElement->name, BAD_CAST"element")==0){
+							//	value = xmlNodeGetContent(nodeElement);
+							//	printBASCode(objLineInfo, "%s ", (char*)value);
+							memset(label_param, 0x00, 32);
+							generateElementStr(nodeElement, objLineInfo, label_params);
+							sprintf(label_params, "%s%s ", label_params, label_param);
+						}
+					}
+					trim(label_params);
+					printBASCode(objLineInfo, "MR[%s] ", (char*)label_params);
+				}
 			}
 			else if(xmlStrcasecmp(name, BAD_CAST"fine")==0){
 				if(strcmp((char*)value, "") != 0)
 					printBASCode(objLineInfo, "CNT %s ", (char*)value);
 				else
-					printBASCode(objLineInfo, "CNT %s ", (char*)"0");
+				{
+					// default is -1 in the FINE for safety.
+					printBASCode(objLineInfo, "CNT %s ", (char*)"-1");
+				}
 			}
 			else if(xmlStrcasecmp(name, BAD_CAST"smooth_velocity")==0){
 				printBASCode(objLineInfo, "SV %s ", (char*)value);
@@ -1085,7 +1163,7 @@ int generateMoveInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLin
 			;
 		}
 		else { 
-			printf("Wrong Name (%s) in Instruction. \n", (char *)nodeInstructionParam->name);
+			FST_ERROR("Wrong Name (%s) in Instruction. \n", (char *)nodeInstructionParam->name);
 		}
     }
 	printBASCode(objLineInfo, "\n", "");
@@ -1099,47 +1177,56 @@ int generateLogicalElseIF(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 	// char currentChildPath[LAB_LEN];
     xmlNodePtr nodeStatement ;
     xmlNodePtr nodeDetermine ;
-    xmlChar *name, *value;
+    xmlChar *value, *else_type;
 	
-	name = xmlGetProp(nodeLogicalStatement,BAD_CAST"type");
-	if(xmlStrcasecmp(name,BAD_CAST"elif")==0){
-	    sprintf(objLineInfoTemp.xPath, "%s", 
+	else_type = xmlGetProp(nodeLogicalStatement,BAD_CAST"type");
+	if(xmlStrcasecmp(else_type,BAD_CAST"elif")==0){
+		// Use the determine node
+		sprintf(objLineInfoTemp.xPath, "%s/determine", 
 		           (char *)xmlGetNodePath(nodeLogicalStatement));
 		exportBASCode(objLineInfoTemp, (char *)"EXPORT: ", (char *)"%s ", (char *)"ELSEIF");
+	}
+	else if(xmlStrcasecmp(else_type,BAD_CAST"else")==0){
+		// Use the determine node
+		sprintf(objLineInfoTemp.xPath, "%s/determine", 
+			(char *)xmlGetNodePath(nodeLogicalStatement));
+		exportBASCode(objLineInfoTemp, (char *)"EXPORT: ", (char *)"%s \n", (char *)"ELSE");
 	}
 	
     for(nodeStatement = nodeLogicalStatement->children; 
 	nodeStatement; nodeStatement = nodeStatement->next){
-		// printf("\t\t\t\t  --debug-- %s \n", (char*)nodeStatement->name);
+		// FST_INFO("\t\t\t\t  --debug-- %s \n", (char*)nodeStatement->name);
 		if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"determine")==0){ 
-			// printf("%s, ", (char*)nodeStatement->name);
+			// FST_INFO("%s, ", (char*)nodeStatement->name);
 			for(nodeDetermine = nodeStatement->children; 
 			nodeDetermine; nodeDetermine = nodeDetermine->next){
 				if(xmlStrcasecmp(nodeDetermine->name, BAD_CAST"element")==0){ 
 					value = xmlNodeGetContent(nodeDetermine);
-					//		printf("\t\t\t\t  --debug-- (nodeRightValue) %s = %s\n", (char*)nodeRightValue->name, (char *)value);
+					//		FST_INFO("\t\t\t\t  --debug-- (nodeRightValue) %s = %s\n", (char*)nodeRightValue->name, (char *)value);
 					generateElement(nodeDetermine, objLineInfo);
 				}
 			}
-			printBASCode(objLineInfo, (char *)" THEN \n", (char *)"");
+			if(xmlStrcasecmp(else_type,BAD_CAST"elif")==0){
+				printBASCode(objLineInfo, (char *)" THEN \n", (char *)"");
+			}
         }
 		else if((xmlStrcasecmp(nodeStatement->name,BAD_CAST"logical_body")==0)
 			||(xmlStrcasecmp(nodeStatement->name,BAD_CAST"vice_logical_body")==0)) { 
-			// printf("%s, ", (char*)nodeStatement->name);
+			// FST_INFO("%s, ", (char*)nodeStatement->name);
 			objLineInfoTemp.indentValue = objLineInfo.indentValue + 1;
 			generateFunctionBody(nodeStatement, objLineInfoTemp);
         }
 		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"vice_logical")==0){ 
-			// printf("%s, ", (char*)nodeStatement->name);
+			// FST_INFO("%s, ", (char*)nodeStatement->name);
 			generateLogicalElseIF(nodeStatement, objLineInfoTemp);
         }
 		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"text")==0){
 			;
 		}
 		else { 
-			printf("Wrong Name (%s) in ElseIF. \n", (char *)nodeStatement->name);
+			FST_ERROR("Wrong Name (%s) in ElseIF. \n", (char *)nodeStatement->name);
 		}
-        // printf("%s \n", (char*)nodeStatement->name);
+        // FST_INFO("%s \n", (char*)nodeStatement->name);
     }
 	// exportBASCode(objLineInfoTemp, (char *)"EXPORT: ", (char *)" ", (char *)"%s \n", (char *)"endif");
 	return 1 ;
@@ -1155,21 +1242,22 @@ int generateLogicalIF(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 	
 	name = xmlGetProp(nodeLogicalStatement,BAD_CAST"type");
 	if(xmlStrcasecmp(name,BAD_CAST"if")==0){
-		sprintf(objLineInfoTemp.xPath, "%s", 
+		// Use the determine node
+		sprintf(objLineInfoTemp.xPath, "%s/determine", 
 						(char *)xmlGetNodePath(nodeLogicalStatement));
 		exportBASCode(objLineInfoTemp, (char *)"EXPORT: ", (char *)"%s ", (char *)"IF");
 	}
 
     for(nodeStatement = nodeLogicalStatement->children; 
 		nodeStatement; nodeStatement = nodeStatement->next){
-			// printf("\t\t\t\t  --debug-- %s \n", (char*)nodeStatement->name);
+			// FST_INFO("\t\t\t\t  --debug-- %s \n", (char*)nodeStatement->name);
 		if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"determine")==0){ 
-			// printf("%s, ", (char*)nodeStatement->name);
+			// FST_INFO("%s, ", (char*)nodeStatement->name);
 			for(nodeDetermine = nodeStatement->children; 
 				nodeDetermine; nodeDetermine = nodeDetermine->next){
 				if(xmlStrcasecmp(nodeDetermine->name, BAD_CAST"element")==0){ 
 					value = xmlNodeGetContent(nodeDetermine);
-					//		printf("\t\t\t\t  --debug-- (nodeRightValue) %s = %s\n", (char*)nodeRightValue->name, (char *)value);
+					//		FST_INFO("\t\t\t\t  --debug-- (nodeRightValue) %s = %s\n", (char*)nodeRightValue->name, (char *)value);
 					generateElement(nodeDetermine, objLineInfo);
 				}
 			}
@@ -1177,12 +1265,12 @@ int generateLogicalIF(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
         }
 		else if((xmlStrcasecmp(nodeStatement->name,BAD_CAST"logical_body")==0)
 		      ||(xmlStrcasecmp(nodeStatement->name,BAD_CAST"vice_logical_body")==0)) { 
-			// printf("%s, ", (char*)nodeStatement->name);
+			// FST_INFO("%s, ", (char*)nodeStatement->name);
 			objLineInfoTemp.indentValue = objLineInfo.indentValue + 1;
 			generateFunctionBody(nodeStatement, objLineInfoTemp);
         }
 		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"vice_logical")==0){ 
-			// printf("%s, ", (char*)nodeStatement->name);
+			// FST_INFO("%s, ", (char*)nodeStatement->name);
 			objLineInfoTemp.indentValue = objLineInfo.indentValue ;
 			generateLogicalElseIF(nodeStatement, objLineInfoTemp);
         }
@@ -1190,9 +1278,9 @@ int generateLogicalIF(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 			;
 		}
 		else { 
-			printf("Wrong Name (%s) in IF. \n", (char *)nodeStatement->name);
+			FST_ERROR("Wrong Name (%s) in IF. \n", (char *)nodeStatement->name);
 		}
-        // printf("%s \n", (char*)nodeStatement->name);
+        // FST_INFO("%s \n", (char*)nodeStatement->name);
     }
     objLineInfoTemp.indentValue = objLineInfo.indentValue ;
     sprintf(objLineInfoTemp.xPath, "%s", 
@@ -1211,21 +1299,22 @@ int generateLogicalWHILE(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 	
 	name = xmlGetProp(nodeLogicalStatement,BAD_CAST"type");
 	if(xmlStrcasecmp(name,BAD_CAST"while")==0){
-		sprintf(objLineInfoTemp.xPath, "%s", 
+		// Use the determine node
+		sprintf(objLineInfoTemp.xPath, "%s/determine", 
 			 (char *)xmlGetNodePath(nodeLogicalStatement));
 		exportBASCode(objLineInfoTemp, "EXPORT: ", "%s ", "WHILE");
 	}
 	
     for(nodeStatement = nodeLogicalStatement->children; 
 	nodeStatement; nodeStatement = nodeStatement->next){
-		// printf("\t\t\t\t  --debug-- %s \n", (char*)nodeStatement->name);
+		// FST_INFO("\t\t\t\t  --debug-- %s \n", (char*)nodeStatement->name);
 		if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"determine")==0){ 
-			// printf("%s, ", (char*)nodeStatement->name);
+			// FST_INFO("%s, ", (char*)nodeStatement->name);
 			for(nodeDetermine = nodeStatement->children; 
 			nodeDetermine; nodeDetermine = nodeDetermine->next){
 				if(xmlStrcasecmp(nodeDetermine->name, BAD_CAST"element")==0){ 
 					value = xmlNodeGetContent(nodeDetermine);
-					//		printf("\t\t\t\t  --debug-- (nodeRightValue) %s = %s\n", (char*)nodeRightValue->name, (char *)value);
+					//		FST_INFO("\t\t\t\t  --debug-- (nodeRightValue) %s = %s\n", (char*)nodeRightValue->name, (char *)value);
 					generateElement(nodeDetermine, objLineInfoTemp);
 				}
 			}
@@ -1233,7 +1322,7 @@ int generateLogicalWHILE(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
         }
 		else if((xmlStrcasecmp(nodeStatement->name,BAD_CAST"logical_body")==0)
 			||(xmlStrcasecmp(nodeStatement->name,BAD_CAST"vice_logical_body")==0)) { 
-			// printf("%s, ", (char*)nodeStatement->name);
+			// FST_INFO("%s, ", (char*)nodeStatement->name);
 			objLineInfoTemp.indentValue = objLineInfo.indentValue + 1;
 			// sprintf(currentChildPath, "%s/%s", currentXPath, (char *)nodeStatement->name);
 			generateFunctionBody(nodeStatement, objLineInfoTemp);
@@ -1242,9 +1331,9 @@ int generateLogicalWHILE(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 			;
 		}
 		else { 
-			printf("Wrong Name (%s) in WHILE. \n", (char *)nodeStatement->name);
+			FST_ERROR("Wrong Name (%s) in WHILE. \n", (char *)nodeStatement->name);
 		}
-        // printf("%s \n", (char*)nodeStatement->name);
+        // FST_INFO("%s \n", (char*)nodeStatement->name);
     }
     objLineInfoTemp.indentValue = objLineInfo.indentValue ;
     sprintf(objLineInfoTemp.xPath, "%s", 
@@ -1263,39 +1352,41 @@ int generateCASEInSWITCH(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 	
 	name = xmlGetProp(nodeLogicalStatement,BAD_CAST"type");
 	if(xmlStrcasecmp(name,BAD_CAST"case")==0){
-		sprintf(objLineInfoTemp.xPath, "%s", 
+		// Use the determine node
+		sprintf(objLineInfoTemp.xPath, "%s/determine", 
 			 (char *)xmlGetNodePath(nodeLogicalStatement));
 		exportBASCode(objLineInfoTemp, "EXPORT: ", "%s ", "CASE ");
 	}
-	else if(xmlStrcasecmp(name,BAD_CAST"case_default")==0){
-		sprintf(objLineInfoTemp.xPath,  "%s", 
+	else if(xmlStrcasecmp(name,BAD_CAST"default")==0){
+		// Use the determine node
+		sprintf(objLineInfoTemp.xPath, "%s/determine", 
 			 (char *)xmlGetNodePath(nodeLogicalStatement));
 		exportBASCode(objLineInfoTemp, "EXPORT: ", "%s ", "DEFAULT ");
 	}
 	else { 
-		printf("Wrong type (%s) in CASE. \n", (char *)name);
+		FST_ERROR("Wrong type (%s) in CASE. \n", (char *)name);
 	}
 	
     for(nodeStatement = nodeLogicalStatement->children; 
 	nodeStatement; nodeStatement = nodeStatement->next){
-		// printf("\t\t\t\t  --debug-- %s \n", (char*)nodeStatement->name);
+		// FST_INFO("\t\t\t\t  --debug-- %s \n", (char*)nodeStatement->name);
 		if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"determine")==0){ 
-			// printf("%s, ", (char*)nodeStatement->name);
+			// FST_INFO("%s, ", (char*)nodeStatement->name);
 			for(nodeDetermine = nodeStatement->children; 
 			nodeDetermine; nodeDetermine = nodeDetermine->next){
 				if(xmlStrcasecmp(nodeDetermine->name, BAD_CAST"element")==0){ 
 					value = xmlNodeGetContent(nodeDetermine);
-					//		printf("\t\t\t\t  --debug-- (nodeRightValue) %s = %s\n", (char*)nodeRightValue->name, (char *)value);
+					//		FST_INFO("\t\t\t\t  --debug-- (nodeRightValue) %s = %s\n", (char*)nodeRightValue->name, (char *)value);
 					generateElement(nodeDetermine, objLineInfoTemp);
 				}
 			}
 			printBASCode(objLineInfoTemp, " \n", "");
         }
 		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"logical_body")==0) { 
-			// printf("%s, ", (char*)nodeStatement->name);
+			// FST_INFO("%s, ", (char*)nodeStatement->name);
 			// generateSwitchBody(nodeStatement);
         }
-		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"vice-logical_body")==0) { 
+		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"vice_logical_body")==0) { 
 			// printf("%s, ", (char*)nodeStatement->name);
 			objLineInfoTemp.indentValue = objLineInfo.indentValue + 1;
 			generateFunctionBody(nodeStatement, objLineInfoTemp);
@@ -1304,9 +1395,9 @@ int generateCASEInSWITCH(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 			;
 		}
 		else { 
-			printf("Wrong Name (%s) in CASE. \n", (char *)nodeStatement->name);
+			FST_ERROR("Wrong Name (%s) in CASE. \n", (char *)nodeStatement->name);
 		}
-        // printf("%s \n", (char*)nodeStatement->name);
+        // FST_INFO("%s \n", (char*)nodeStatement->name);
     }
 	exportBASCode(objLineInfo, "EXPORT: ", "%s \n", "BREAK");
 	return 1 ;
@@ -1323,33 +1414,35 @@ int generateLogicalSWITCH(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 	
 	name = xmlGetProp(nodeLogicalStatement,BAD_CAST"type");
 	if(xmlStrcasecmp(name,BAD_CAST"switch")==0){
-		sprintf(objLineInfo.xPath, "%s", 
+		// Use the determine node
+		sprintf(objLineInfo.xPath, "%s/determine", 
 			 (char *)xmlGetNodePath(nodeLogicalStatement));
 		exportBASCode(objLineInfo, "EXPORT: ", "%s ", "SELECT CASE ");
 	}
 	
     for(nodeStatement = nodeLogicalStatement->children; 
 	nodeStatement; nodeStatement = nodeStatement->next){
-		// printf("\t\t\t\t  --debug-- %s \n", (char*)nodeStatement->name);
+		// FST_INFO("\t\t\t\t  --debug-- %s \n", (char*)nodeStatement->name);
 		if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"determine")==0){ 
-			// printf("%s, ", (char*)nodeStatement->name);
+			// FST_INFO("%s, ", (char*)nodeStatement->name);
 			for(nodeDetermine = nodeStatement->children; 
 			nodeDetermine; nodeDetermine = nodeDetermine->next){
 				if(xmlStrcasecmp(nodeDetermine->name, BAD_CAST"element")==0){ 
 					value = xmlNodeGetContent(nodeDetermine);
-					//	printf("\t\t\t\t  --debug-- (nodeRightValue) %s = %s\n", 
+					//	FST_INFO("\t\t\t\t  --debug-- (nodeRightValue) %s = %s\n", 
 					//    (char*)nodeRightValue->name, (char *)value);
 					generateElement(nodeDetermine, objLineInfo);
 				}
 			}
 			printBASCode(objLineInfo, " \n", "");
         }
-		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"logical_body")==0) { 
-			// printf("%s, ", (char*)nodeStatement->name);
+		else if((xmlStrcasecmp(nodeStatement->name,BAD_CAST"logical_body")==0)
+			||(xmlStrcasecmp(nodeStatement->name,BAD_CAST"vice_logical_body")==0)) { 
+			// FST_INFO("%s, ", (char*)nodeStatement->name);
 			// generateSwitchBody(nodeStatement);
         }
-		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"vice-logical")==0) { 
-			// printf("%s, ", (char*)nodeStatement->name);
+		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"vice_logical")==0) { 
+			// FST_INFO("%s, ", (char*)nodeStatement->name);
 			// objLineInfoTemp.xPathIdx = iCaseIdx++;
 			objLineInfoTemp.indentValue = objLineInfo.indentValue + 1;
 			generateCASEInSWITCH(nodeStatement, objLineInfoTemp);
@@ -1358,9 +1451,9 @@ int generateLogicalSWITCH(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 			;
 		}
 		else { 
-			printf("Wrong Name (%s) in SWITCH\n", (char *)nodeStatement->name);
+			FST_ERROR("Wrong Name (%s) in SWITCH\n", (char *)nodeStatement->name);
 		}
-        // printf("%s \n", (char*)nodeStatement->name);
+        // FST_INFO("%s \n", (char*)nodeStatement->name);
     }
     objLineInfoTemp.indentValue = objLineInfo.indentValue ;
 	sprintf(objLineInfo.xPath, "%s", 
@@ -1408,7 +1501,7 @@ int generateFunctionCall(xmlNodePtr nodeFunctionCall, LineInfo objLineInfo)
 	}
     for(nodeFunctionCallParam = nodeFunctionCall->children; 
 		nodeFunctionCallParam; nodeFunctionCallParam = nodeFunctionCallParam->next){
-		//				printf("\t\t\t\t  --debug-- (nodeFunctionCall) %s \n", (char*)nodeInstruction->name);
+		//				FST_INFO("\t\t\t\t  --debug-- (nodeFunctionCall) %s \n", (char*)nodeInstruction->name);
 		value = xmlNodeGetContent(nodeFunctionCallParam);
         if(xmlStrcasecmp(nodeFunctionCallParam->name,BAD_CAST"parameter")==0){ 
             memset(&labelParam, 0x00, sizeof(labelParam));
@@ -1440,21 +1533,22 @@ int generateLogicalLOOP(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 	
 	name = xmlGetProp(nodeLogicalStatement,BAD_CAST"type");
 	if(xmlStrcasecmp(name,BAD_CAST"LOOP")==0){
-		sprintf(objLineInfoTemp.xPath, "%s", 
+		// Use the determine node
+		sprintf(objLineInfoTemp.xPath, "%s/determine", 
 			 (char *)xmlGetNodePath(nodeLogicalStatement));
 		exportBASCode(objLineInfoTemp, (char *)"EXPORT: ", (char *)"%s ", (char *)"LOOP");
 	}
 	
     for(nodeStatement = nodeLogicalStatement->children; 
 	nodeStatement; nodeStatement = nodeStatement->next){
-		// printf("\t\t\t\t  --debug-- %s \n", (char*)nodeStatement->name);
+		// FST_INFO("\t\t\t\t  --debug-- %s \n", (char*)nodeStatement->name);
 		if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"determine")==0){ 
-			// printf("%s, ", (char*)nodeStatement->name);
+			// FST_INFO("%s, ", (char*)nodeStatement->name);
 			for(nodeDetermine = nodeStatement->children; 
 			nodeDetermine; nodeDetermine = nodeDetermine->next){
 				if(xmlStrcasecmp(nodeDetermine->name, BAD_CAST"element")==0){ 
 					value = xmlNodeGetContent(nodeDetermine);
-					//		printf("\t\t\t\t  --debug-- (nodeRightValue) %s = %s\n", (char*)nodeRightValue->name, (char *)value);
+					//		FST_ERROR("\t\t\t\t  --debug-- (nodeRightValue) %s = %s\n", (char*)nodeRightValue->name, (char *)value);
 					generateElement(nodeDetermine, objLineInfoTemp);
 				}
 			}
@@ -1462,7 +1556,7 @@ int generateLogicalLOOP(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
         }
 		else if((xmlStrcasecmp(nodeStatement->name,BAD_CAST"logical_body")==0)
 			||(xmlStrcasecmp(nodeStatement->name,BAD_CAST"vice_logical_body")==0)) { 
-			// printf("%s, ", (char*)nodeStatement->name);
+			// FST_INFO("%s, ", (char*)nodeStatement->name);
 			objLineInfoTemp.indentValue = objLineInfo.indentValue + 1;
 			// sprintf(currentChildPath, "%s/%s", currentXPath, (char *)nodeStatement->name);
 			generateFunctionBody(nodeStatement, objLineInfoTemp);
@@ -1471,9 +1565,9 @@ int generateLogicalLOOP(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 			;
 		}
 		else { 
-			printf("Wrong Name (%s) in LOOP. \n", (char *)nodeStatement->name);
+			FST_ERROR("Wrong Name (%s) in LOOP. \n", (char *)nodeStatement->name);
 		}
-        // printf("%s \n", (char*)nodeStatement->name);
+        // FST_INFO("%s \n", (char*)nodeStatement->name);
     }
     objLineInfoTemp.indentValue = objLineInfo.indentValue ;
     sprintf(objLineInfoTemp.xPath, "%s", 
@@ -1492,21 +1586,22 @@ int generateLogicalFOR(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 	
 	name = xmlGetProp(nodeLogicalStatement,BAD_CAST"type");
 	if(xmlStrcasecmp(name,BAD_CAST"for")==0){
-		sprintf(objLineInfoTemp.xPath, "%s", 
+		// Use the determine node
+		sprintf(objLineInfoTemp.xPath, "%s/determine", 
 			 (char *)xmlGetNodePath(nodeLogicalStatement));
 		exportBASCode(objLineInfoTemp, "EXPORT: ", "%s ", "FOR");
 	}
 	
     for(nodeStatement = nodeLogicalStatement->children; 
 	nodeStatement; nodeStatement = nodeStatement->next){
-		// printf("\t\t\t\t  --debug-- %s \n", (char*)nodeStatement->name);
+		// FST_INFO("\t\t\t\t  --debug-- %s \n", (char*)nodeStatement->name);
 		if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"determine")==0){ 
-			// printf("%s, ", (char*)nodeStatement->name);
+			// FST_INFO("%s, ", (char*)nodeStatement->name);
 			for(nodeDetermine = nodeStatement->children; 
 			nodeDetermine; nodeDetermine = nodeDetermine->next){
 				if(xmlStrcasecmp(nodeDetermine->name, BAD_CAST"element")==0){ 
 					value = xmlNodeGetContent(nodeDetermine);
-					//		printf("\t\t\t\t  --debug-- (nodeRightValue) %s = %s\n", (char*)nodeRightValue->name, (char *)value);
+					//		FST_INFO("\t\t\t\t  --debug-- (nodeRightValue) %s = %s\n", (char*)nodeRightValue->name, (char *)value);
 					generateElement(nodeDetermine, objLineInfoTemp);
 				}
 			}
@@ -1514,7 +1609,7 @@ int generateLogicalFOR(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
         }
 		else if((xmlStrcasecmp(nodeStatement->name,BAD_CAST"logical_body")==0)
 			||(xmlStrcasecmp(nodeStatement->name,BAD_CAST"vice_logical_body")==0)) { 
-			// printf("%s, ", (char*)nodeStatement->name);
+			// FST_INFO("%s, ", (char*)nodeStatement->name);
 			objLineInfoTemp.indentValue = objLineInfo.indentValue + 1;
 			// sprintf(currentChildPath, "%s/%s", currentXPath, (char *)nodeStatement->name);
 			generateFunctionBody(nodeStatement, objLineInfoTemp);
@@ -1523,9 +1618,9 @@ int generateLogicalFOR(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 			;
 		}
 		else { 
-			printf("Wrong Name (%s) in WHILE. \n", (char *)nodeStatement->name);
+			FST_ERROR("Wrong Name (%s) in WHILE. \n", (char *)nodeStatement->name);
 		}
-        // printf("%s \n", (char*)nodeStatement->name);
+        // FST_INFO("%s \n", (char*)nodeStatement->name);
     }
     objLineInfoTemp.indentValue = objLineInfo.indentValue ;
     sprintf(objLineInfoTemp.xPath, "%s", 
@@ -1547,9 +1642,9 @@ int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
 	// EXPORT Subroutine Statement
     for(nodeStatement = nodeFunctionBody->children; 
        nodeStatement; nodeStatement = nodeStatement->next){
-		//				printf("\t\t\t\t  --debug-- %s \n", (char*)nodeStatement->name);
+		//				FST_INFO("\t\t\t\t  --debug-- %s \n", (char*)nodeStatement->name);
         if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"assignment")==0){ 
-            // printf("%s, ", (char*)nodeStatement->name);
+            // FST_INFO("%s, ", (char*)nodeStatement->name);
             // objLineInfoTemp.xPathIdx = iAssignmentIdx++;
 			sprintf(objLineInfoTemp.xPath, "%s", 
 					 (char *)xmlGetNodePath(nodeStatement));
@@ -1558,7 +1653,7 @@ int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
 			printBASCode(objLineInfo, " \n", "");
         }
 		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"instruction")==0){ 
-            // printf("%s, ", (char*)nodeStatement->name);
+            // FST_INFO("%s, ", (char*)nodeStatement->name);
             // objLineInfoTemp.xPathIdx = iInstructionIdx++;
 			sprintf(objLineInfoTemp.xPath, "%s", 
 					 (char *)xmlGetNodePath(nodeStatement));
@@ -1589,7 +1684,7 @@ int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
 			}
         }
 		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"logical")==0){ 
-            // printf("%s, ", (char*)nodeStatement->name);
+            // FST_INFO("%s, ", (char*)nodeStatement->name);
             // objLineInfoTemp.xPathIdx = iLogicalIdx++;
 			name = xmlGetProp(nodeStatement, BAD_CAST"type");
 			if(xmlStrcasecmp(name,BAD_CAST"if")==0){ 
@@ -1618,20 +1713,20 @@ int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
 				generateLogicalLOOP(nodeStatement, objLineInfoTemp);
 			}
 			else { 
-				printf("Wrong Command (%s) in logical Command. \n", (char *)name);
+				FST_ERROR("Wrong Command (%s) in logical Command. \n", (char *)name);
 			}
         }
 		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"comment")==0){ 
-        //    // printf("%s, ", (char*)nodeStatement->name);
+        //    // FST_INFO("%s, ", (char*)nodeStatement->name);
         //    // objLineInfoTemp.xPathIdx = iCommentIdx++;
 			value = xmlNodeGetContent(nodeStatement);
 			sprintf(objLineInfoTemp.xPath, "%s", 
 					 (char *)xmlGetNodePath(nodeStatement));
-			printf("Omit comment - %s\n", (char *)value);
+			FST_INFO("Omit comment - %s ", (char *)value);
 		//	exportBASCode(objLineInfoTemp, "EXPORT: ", "# %s \n", (char*)value);
         }
 		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"nop")==0){ 
-            // printf("%s, ", (char*)nodeStatement->name);
+            // FST_INFO("%s, ", (char*)nodeStatement->name);
             // // objLineInfoTemp.xPathIdx = iNopIdx++;
 			sprintf(objLineInfoTemp.xPath, "%s", 
 					 (char *)xmlGetNodePath(nodeStatement));
@@ -1639,7 +1734,7 @@ int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
 			// exportBASCode(objLineInfoTemp, "EXPORT: ", "", "");
         }
 		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"call")==0){ 
-            // printf("%s, ", (char*)nodeStatement->name);
+            // FST_INFO("%s, ", (char*)nodeStatement->name);
             // objLineInfoTemp.xPathIdx = iCallIdx++;
 			sprintf(objLineInfoTemp.xPath, "%s", 
 					 (char *)xmlGetNodePath(nodeStatement));
@@ -1648,7 +1743,7 @@ int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
 			printBASCode(objLineInfo, " \n", "");
         }
 		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"return")==0){ 
-            // printf("%s, ", (char*)nodeStatement->name);
+            // FST_INFO("%s, ", (char*)nodeStatement->name);
             // objLineInfoTemp.xPathIdx = iReturnIdx++;
 			value = xmlNodeGetContent(nodeStatement);
 			sprintf(objLineInfoTemp.xPath, "%s", 
@@ -1656,7 +1751,7 @@ int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
 			exportBASCode(objLineInfoTemp, "EXPORT: ", "RETURN %s \n", (char*)value);
         }
 		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"break")==0){ 
-            // printf("%s, ", (char*)nodeStatement->name);
+            // FST_INFO("%s, ", (char*)nodeStatement->name);
             // objLineInfoTemp.xPathIdx = iBreakIdx++;
 			value = xmlNodeGetContent(nodeStatement);
 			sprintf(objLineInfoTemp.xPath, "%s", 
@@ -1664,7 +1759,7 @@ int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
 			exportBASCode(objLineInfoTemp, "EXPORT: ", "BREAK \n", "");
         }
 		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"continue")==0){ 
-            // printf("%s, ", (char*)nodeStatement->name);
+            // FST_INFO("%s, ", (char*)nodeStatement->name);
             // objLineInfoTemp.xPathIdx = iContinueIdx++;
 			value = xmlNodeGetContent(nodeStatement);
 			sprintf(objLineInfoTemp.xPath, "%s", 
@@ -1672,7 +1767,7 @@ int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
 			exportBASCode(objLineInfoTemp, "EXPORT: ", "CONTINUE \n", "");
         }
 		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"end")==0){ 
-            // printf("%s, ", (char*)nodeStatement->name);
+            // FST_INFO("%s, ", (char*)nodeStatement->name);
             // objLineInfoTemp.xPathIdx = iContinueIdx++;
 			value = xmlNodeGetContent(nodeStatement);
 			sprintf(objLineInfoTemp.xPath, "%s", 
@@ -1683,7 +1778,7 @@ int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
 			;
 		}
 		else { 
-			printf("Wrong Command (%s) in FunctionBody. \n", (char *)nodeStatement->name);
+			FST_ERROR("Wrong Command (%s) in FunctionBody. \n", (char *)nodeStatement->name);
 		}
 	}
 	return 1 ;
@@ -1709,9 +1804,9 @@ int generateFunction(xmlNodePtr nodeFunction, LineInfo objLineInfo)
 
     for(nodeFunctionParam = nodeFunction->children; 
 		nodeFunctionParam; nodeFunctionParam = nodeFunctionParam->next){
-		//				printf("\t\t\t\t  --debug-- %s \n", (char*)nodeFunctionParam->name);
+		//				FST_INFO("\t\t\t\t  --debug-- %s \n", (char*)nodeFunctionParam->name);
         if(xmlStrcasecmp(nodeFunctionParam->name,BAD_CAST"parameter")==0){ 
-            // printf("%s, ", (char*)nodeFunctionParam->name);
+            // FST_INFO("%s, ", (char*)nodeFunctionParam->name);
             memset(&labelParam, 0x00, sizeof(labelParam));
 			value = xmlNodeGetContent(nodeFunctionParam);
             strcpy(labelParam.name, (char*)value);
@@ -1733,7 +1828,7 @@ int generateFunction(xmlNodePtr nodeFunction, LineInfo objLineInfo)
 	// EXPORT Subroutine Body
     for(nodeFunctionBody = nodeFunction->children; 
 	nodeFunctionBody; nodeFunctionBody = nodeFunctionBody->next){
-		//				printf("\t\t\t\t  --debug-- %s \n", (char*)nodeFunctionBody->name);
+		//				FST_INFO("\t\t\t\t  --debug-- %s \n", (char*)nodeFunctionBody->name);
         if(xmlStrcasecmp(nodeFunctionBody->name,BAD_CAST"body")==0){ 
 			isNodeExist = 1;
 			objLineInfoTemp.indentValue = objLineInfo.indentValue + 1;
@@ -1744,7 +1839,7 @@ int generateFunction(xmlNodePtr nodeFunction, LineInfo objLineInfo)
 			 (char *)xmlGetNodePath(nodeFunction));
     exportBASCode(objLineInfo, "EXPORT: ", "END SUB \n", "");
 	if(isNodeExist == 0)   {
-        printf("\t\t\t\t ERROR: no function body\n");
+        FST_ERROR("\t\t\t\t ERROR: no function body\n");
     }
 	return 1 ;
 }
@@ -1758,7 +1853,7 @@ int generateProgBody(xmlNodePtr nodeProgBody, LineInfo objLineInfo)
     xmlChar *name; // , * xCurrentPath ;
     for(nodeFunction = nodeProgBody->children; 
 		nodeFunction; nodeFunction = nodeFunction->next){
-		//				printf("\t\t\t\t  --debug-- %s \n", (char*)nodeFunction->name);
+		//				FST_INFO("\t\t\t\t  --debug-- %s \n", (char*)nodeFunction->name);
         if(xmlStrcasecmp(nodeFunction->name,BAD_CAST"function")==0){ 
 			name = xmlGetProp(nodeFunction,BAD_CAST"name");
 			if(!strcmp((char *)name, "main"))
@@ -1769,7 +1864,7 @@ int generateProgBody(xmlNodePtr nodeProgBody, LineInfo objLineInfo)
             generateFunction(nodeFunction, objLineInfoTemp);
         }
 		else if(xmlStrcasecmp(nodeFunction->name,BAD_CAST"nop")==0){ 
-            // printf("%s, ", (char*)nodeStatement->name);
+            // FST_INFO("%s, ", (char*)nodeStatement->name);
 			sprintf(objLineInfoTemp.xPath, "%s", 
 					 (char *)xmlGetNodePath(nodeFunction));
 		//	exportBASCode(objLineInfoTemp, "EXPORT: ", "NOP\n", "");
@@ -1779,11 +1874,11 @@ int generateProgBody(xmlNodePtr nodeProgBody, LineInfo objLineInfo)
 			;
 		}
 		else { 
-			printf("Wrong name (%s) in ProgBody. \n", (char *)nodeFunction->name);
+			FST_ERROR("Wrong name (%s) in ProgBody. \n", (char *)nodeFunction->name);
 		}
     }
 	if(isNodeExist == 0)   {
-        printf("\t\t\t\t ERROR: no function = main\n");
+        FST_ERROR("\t\t\t\t ERROR: no function = main\n");
     }
 	return 1 ;
 }
@@ -1798,7 +1893,7 @@ int parse_xml_file(char * file_name){
     // doc=xmlParseMemory(buf,len);    //parse xml in memory
     doc = xmlReadFile(file_name,"UTF-8",XML_PARSE_RECOVER);
     if(doc == NULL){
-        printf("\t\t\t\t ERROR: doc == null\n");
+        FST_ERROR("\t\t\t\t ERROR: doc == null\n");
         return -1;
     }
     rootProg = xmlDocGetRootElement(doc);
@@ -1840,14 +1935,14 @@ int parse_xml_file(char * file_name){
     }
     // if(nodeHead == NULL){
 	if(isNodeExist == 0)   {
-        printf("\t\t\t\t ERROR: no node = head\n");
+        FST_ERROR("\t\t\t\t ERROR: no node = head\n");
     }
 
 	// generate prog_body 
 	isNodeExist = 0 ;
     for(nodeProgBody = rootProg->children; 
 		nodeProgBody; nodeProgBody = nodeProgBody->next){
-		//				printf("\t\t\t\t  --debug-- %s \n", (char*)nodeProgBody->name);
+		//				FST_INFO("\t\t\t\t  --debug-- %s \n", (char*)nodeProgBody->name);
         if(xmlStrcasecmp(nodeProgBody->name,BAD_CAST"prog_body")==0)
         {
 			isNodeExist = 1 ;
@@ -1859,7 +1954,7 @@ int parse_xml_file(char * file_name){
     }
     // if(nodeProgBody == NULL){
 	if(isNodeExist == 0)   {
-        printf("\t\t\t\t ERROR: no node = ProgBody\n");
+        FST_ERROR("\t\t\t\t ERROR: no node = ProgBody\n");
         return -1;
     }
     xmlFreeDoc(doc);
@@ -1961,12 +2056,12 @@ static int iswhite(char c)
 // 			else {
 // 				fputs(contentLine, file_xml_addline);
 // 			}
-// 			// printf("%s", contentLine);  
+// 			// FST_INFO("%s", contentLine);  
 // 			iLineNum++ ;
 // 		}
 // 		fclose(file_xml_addline);
 // 		fclose(file_xml);
-// 		// printf("content:\n%s\n",content);	
+// 		// FST_INFO("content:\n%s\n",content);	
 // 	}
 
 void outputXPathVector(char * xpath_file_name)
@@ -1981,7 +2076,8 @@ void outputXPathVector(char * xpath_file_name)
 	FILE *xpath_file ;
 
 	if((xpath_file = fopen(xpath_file_name, "r"))==NULL){
-		perror("open file failed\n");  
+		perror("open xpath_file_name file failed\n");  
+		return ;
 	}
 	
 	// Pre-arrange
@@ -2007,7 +2103,7 @@ void outputXPathVector(char * xpath_file_name)
 	
 	for(int i =1 ; i < vecXPath.size() ; i++)
 	{
-		printf("%d - %s" , i, vecXPath[i].c_str());
+		FST_INFO("%d - %s" , i, vecXPath[i].c_str());
 	}
 }
 
@@ -2015,13 +2111,13 @@ int parse_xml_file_wrapper(char * project_name, char * xml_file_name){
     xmlDocPtr doc;
 	char   xmlFileName[FILE_PATH_LEN];
 	if(xml_file_name == 0) {
-		printf("usage: run <filename>\n");
+		FST_ERROR("usage: run <filename>\n");
 		return 0 ;
 	}
 	// Not translate unexist xml.
 	doc = xmlReadFile(xml_file_name,"UTF-8",XML_PARSE_RECOVER);
     if(doc == NULL){
-        printf("\t\t\t\t ERROR: doc == null\n");
+        FST_ERROR("\t\t\t\t ERROR: doc == null\n");
         return -1;
     }
 	xmlFreeDoc(doc);

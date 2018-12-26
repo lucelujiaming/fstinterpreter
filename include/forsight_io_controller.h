@@ -5,7 +5,7 @@
 
 
 #define UI_UO_NUM                   13
-
+#define IO_NAMES   "ai;ao;di;do;ri;ro;si;so;ui;uo"
 int forgesight_load_io_config();
 
 eval_value forgesight_get_io_status(char *name);

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<prog>
+  <head>
+    <include>MarcuscTest</include>
+  </head>
+  <prog_body>
+    <function name="main">
+      <body>
+        <comment>测试IO</comment>
+        <assignment type="assignment">
+          <lvalue>
+            <element type="di">
+              <element type="num">1</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="io_val">OFF</element>
+          </rvalue>
+        </assignment>
+		<instruction type="wait">
+			   <argument name="timeout" type="num" unit="sec">1</argument>
+		</instruction>
+        <comment>测试结束</comment>
+        <end name="prog"/>
+      </body>
+    </function>
+  </prog_body>
+</prog>

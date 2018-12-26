@@ -1,0 +1,11 @@
+001:REG_TEST:/prog/head/include
+002:REG_TEST:/prog/prog_body/function
+003:REG_TEST:/prog/prog_body/function/body/assignment
+004:REG_TEST:/prog/prog_body/function/body/logical
+005:REG_TEST:/prog/prog_body/function/body/logical/logical_body/instruction
+006:REG_TEST:/prog/prog_body/function/body/logical/logical_body/assignment
+007:REG_TEST:/prog/prog_body/function/body/logical
+008:REG_TEST:/prog/prog_body/function
+009:MarcuscTest:/prog/prog_body/function
+010:MarcuscTest:/prog/prog_body/function/body/end
+011:MarcuscTest:/prog/prog_body/function

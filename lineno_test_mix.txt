@@ -1,0 +1,12 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(047)/prog/prog_body/function/body/logical/determine                                                         WHILE 1 
+EXPORT: (003)(065)/prog/prog_body/function/body/logical/logical_body/instruction[1]                                           WAIT  2
+EXPORT: (004)(065)/prog/prog_body/function/body/logical/logical_body/instruction[2]                                           WAIT  2
+EXPORT: (005)(068)/prog/prog_body/function/body/logical/logical_body/logical/determine                                        IF 3 > 1 THEN 
+EXPORT: (006)(083)/prog/prog_body/function/body/logical/logical_body/logical/logical_body/instruction                             WAIT  2
+EXPORT: (007)(058)/prog/prog_body/function/body/logical/logical_body/logical                                                  ENDIF 
+EXPORT: (008)(065)/prog/prog_body/function/body/logical/logical_body/instruction[3]                                           WAIT  2
+EXPORT: (009)(065)/prog/prog_body/function/body/logical/logical_body/instruction[4]                                           WAIT  2
+EXPORT: (010)(037)/prog/prog_body/function/body/logical                                                                   WEND 
+EXPORT: (011)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (012)(024)/prog/prog_body/function                                                                            END SUB 

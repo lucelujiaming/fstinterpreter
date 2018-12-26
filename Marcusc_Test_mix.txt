@@ -1,0 +1,4 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(041)/prog/prog_body/function/body/instruction                                                               WAIT  2
+EXPORT: (003)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (004)(024)/prog/prog_body/function                                                                            END SUB 

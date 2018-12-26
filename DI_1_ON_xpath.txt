@@ -1,0 +1,9 @@
+001:DI_1_ON:/prog/head/include
+002:DI_1_ON:/prog/prog_body/function
+003:DI_1_ON:/prog/prog_body/function/body/assignment
+004:DI_1_ON:/prog/prog_body/function/body/instruction
+005:DI_1_ON:/prog/prog_body/function/body/end
+006:DI_1_ON:/prog/prog_body/function
+007:MarcuscTest:/prog/prog_body/function
+008:MarcuscTest:/prog/prog_body/function/body/end
+009:MarcuscTest:/prog/prog_body/function

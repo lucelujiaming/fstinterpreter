@@ -1,0 +1,14 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(047)/prog/prog_body/function/body/logical/determine                                                         WHILE 2 = 2 
+EXPORT: (003)(071)/prog/prog_body/function/body/logical/logical_body/logical[1]/determine                                     FOR X=1 TO 25 
+EXPORT: (004)(085)/prog/prog_body/function/body/logical/logical_body/logical[1]/logical_body/assignment                           DI[X]  = ON   
+EXPORT: (005)(086)/prog/prog_body/function/body/logical/logical_body/logical[1]/logical_body/instruction                          WAIT  1
+EXPORT: (006)(061)/prog/prog_body/function/body/logical/logical_body/logical[1]                                               NEXT 
+EXPORT: (007)(065)/prog/prog_body/function/body/logical/logical_body/instruction[1]                                           WAIT  5
+EXPORT: (008)(071)/prog/prog_body/function/body/logical/logical_body/logical[2]/determine                                     FOR X=1 TO 25 
+EXPORT: (009)(085)/prog/prog_body/function/body/logical/logical_body/logical[2]/logical_body/assignment                           DI[X]  = OFF   
+EXPORT: (010)(086)/prog/prog_body/function/body/logical/logical_body/logical[2]/logical_body/instruction                          WAIT  1
+EXPORT: (011)(061)/prog/prog_body/function/body/logical/logical_body/logical[2]                                               NEXT 
+EXPORT: (012)(065)/prog/prog_body/function/body/logical/logical_body/instruction[2]                                           WAIT  5
+EXPORT: (013)(037)/prog/prog_body/function/body/logical                                                                   WEND 
+EXPORT: (014)(024)/prog/prog_body/function                                                                            END SUB 

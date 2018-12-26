@@ -18,32 +18,30 @@
 
 #ifndef WIN32
 #include <unistd.h>
+#else
+#include "forsight_interpreter_shm.h"
 #endif
 #include "interpreter_common.h"
 
-#include "forsight_interpreter_shm.h"
 #include "forsight_basint.h"
 
 // #define USE_WAITING_R
 
-bool parseScript(const char* fname);
-// void findLoopEnd(int index);
-void resetProgramNameAndLineNum();
+void resetProgramNameAndLineNum(struct thread_control_block * objThdCtrlBlockPtr);
 
+char * getProgramName();
+void setProgramName(struct thread_control_block * objThdCtrlBlockPtr, char * program_name);
 InterpreterState getPrgmState();
-void setPrgmState(InterpreterState state);
-void setCurLine(char * line, int lineNum);
+void setPrgmState(struct thread_control_block * objThdCtrlBlockPtr, InterpreterState state);
+void setCurLine(struct thread_control_block * objThdCtrlBlockPtr, char * line, int lineNum);
 #ifdef WIN32
 void setWarning(__int64 warn);
 #else
 void setWarning(long long int warn);
 #endif 
-void setSendPermission(bool flag);
-void getSendPermission();
-void returnRegInfo(RegMap info);
-void returnDIOInfo(IOPathInfo& info);
+void setMessage(int warn);
 bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instruction * instruction);
-bool getIntprtCtrl(InterpreterControl& intprt_ctrl);
+// bool getIntprtCtrl(InterpreterControl& intprt_ctrl);
 void executeBlock();
 void executeLoop(int loop_cnt);
 void executeScript();
@@ -52,7 +50,8 @@ unsigned __stdcall script_func(void* arg);
 #else
 void* script_func(void* arg);
 #endif
-void parseCtrlComand(InterpreterControl intprt_ctrl); // (struct thread_control_block * objThdCtrlBlock);
+void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr); 
+							// (struct thread_control_block * objThdCtrlBlock);
 void initShm();
 void forgesight_load_programs_path();
 char * forgesight_get_programs_path();

@@ -1,0 +1,12 @@
+001:lineno_test:/prog/prog_body/function
+002:lineno_test:/prog/prog_body/function/body/logical/determine
+003:lineno_test:/prog/prog_body/function/body/logical/logical_body/instruction[1]
+004:lineno_test:/prog/prog_body/function/body/logical/logical_body/instruction[2]
+005:lineno_test:/prog/prog_body/function/body/logical/logical_body/logical/determine
+006:lineno_test:/prog/prog_body/function/body/logical/logical_body/logical/logical_body/instruction
+007:lineno_test:/prog/prog_body/function/body/logical/logical_body/logical
+008:lineno_test:/prog/prog_body/function/body/logical/logical_body/instruction[3]
+009:lineno_test:/prog/prog_body/function/body/logical/logical_body/instruction[4]
+010:lineno_test:/prog/prog_body/function/body/logical
+011:lineno_test:/prog/prog_body/function/body/end
+012:lineno_test:/prog/prog_body/function

@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<prog>
+  <head>
+    <include>MarcuscTest</include>
+  </head>
+  <prog_body>
+    <function name="main">
+      <body>
+        <comment>测试开始</comment>
+        <instruction type="move_line">
+          <argument name="pose" type="pose">
+            <element type="num">1</element>
+          </argument>
+          <argument name="velocity" unit="mm/s" type="num">250</argument>
+          <argument name="fine" type="num">-1</argument>
+        </instruction>
+        <instruction type="move_joint">
+          <argument name="pose" type="pose_register">
+            <element type="num">2</element>
+          </argument>
+          <argument name="velocity" unit="%" type="num">6.25</argument>
+          <argument name="smooth_velocity" type="num">50</argument>
+        </instruction>
+        <instruction type="move_line">
+          <argument name="pose" type="pose_register">
+            <element type="num">3</element>
+          </argument>
+          <argument name="velocity" unit="mm/s" type="num">250</argument>
+          <argument name="fine" type="num"/>
+        </instruction>
+        <instruction type="move_line">
+          <argument name="pose" type="pose_register">
+            <element type="motion_register">
+              <element type="num">1</element>
+            </element>
+            <element type="operation">+</element>
+            <element type="num">1</element>
+          </argument>
+          <argument name="velocity" unit="mm/s" type="motion_register">
+            <element type="num">2</element>
+          </argument>
+          <argument name="fine" type="num"/>
+        </instruction>
+        <assignment type="assignment">
+          <lvalue>
+            <element type="register">
+              <element type="num">1</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="num">10</element>
+          </rvalue>
+        </assignment>
+        <assignment type="assignment">
+          <lvalue>
+            <element type="register">
+              <element type="num">2</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="num">8</element>
+          </rvalue>
+        </assignment>
+        <logical type="if">
+          <determine>
+            <element type="register">
+              <element type="num">1</element>
+            </element>
+            <element type="boolean_operation">=</element>
+            <element type="bracket">
+              <element type="num">2</element>
+              <element type="operation">+</element>
+              <element type="register">
+                <element type="num">2</element>
+              </element>
+            </element>
+          </determine>
+          <logical_body>
+            <nop/>
+            <skip>
+              <assignment type="reg_assignment">
+                <lvalue>
+                  <element type="register">
+                    <element type="motion_register">
+                      <element type="num">1</element>
+                    </element>
+                  </element>
+                </lvalue>
+                <rvalue>
+                  <element type="num">4</element>
+                </rvalue>
+              </assignment>
+            </skip>
+            <instruction type="wait">
+              <argument name="condition" type="expression">
+                <element type="register">
+                  <element type="num">1</element>
+                </element>
+                <element type="boolean_operation">=</element>
+                <element type="num">3</element>
+              </argument>
+              <argument name="timeout" type="num" unit="sec">40</argument>
+              <argument name="handle" type="function">SKIP</argument>
+            </instruction>
+          </logical_body>
+        </logical>
+        <comment>测试IO</comment>
+        <assignment type="assignment">
+          <lvalue>
+            <element type="di">
+              <element type="num">1</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="io_val">OFF</element>
+          </rvalue>
+        </assignment>
+        <logical type="if">
+          <determine>
+            <element type="di">
+              <element type="num">1</element>
+            </element>
+            <element type="boolean_operation">=</element>
+            <element type="io_val">OFF</element>&gt;
+          </determine>
+          <logical_body>
+            <assignment type="assignment">
+              <lvalue>
+                <element type="di">
+                  <element type="num">1</element>
+                </element>
+              </lvalue>
+              <rvalue>
+                <element type="io_val">PULSE</element>
+                <element type="num">10</element>
+              </rvalue>
+            </assignment>
+          </logical_body>
+          <vice_logical type="else">
+            <determine/>
+            <vice_logical_body>
+              <assignment type="assignment">
+                <lvalue>
+                  <element type="di">
+                    <element type="num">1</element>
+                  </element>
+                </lvalue>
+                <rvalue>
+                  <element type="io_val">OFF</element>
+                </rvalue>
+              </assignment>
+              <assignment type="assignment">
+                <lvalue>
+                  <element type="do">
+                    <element type="num">1</element>
+                  </element>
+                </lvalue>
+                <rvalue>
+                  <element type="io_val">OFF</element>
+                </rvalue>
+              </assignment>
+              <assignment type="assignment">
+                <lvalue>
+                  <element type="ri">
+                    <element type="num">1</element>
+                  </element>
+                </lvalue>
+                <rvalue>
+                  <element type="io_val">OFF</element>
+                </rvalue>
+              </assignment>
+              <assignment type="assignment">
+                <lvalue>
+                  <element type="ro">
+                    <element type="num">1</element>
+                  </element>
+                </lvalue>
+                <rvalue>
+                  <element type="io_val">OFF</element>
+                </rvalue>
+              </assignment>
+            </vice_logical_body>
+          </vice_logical>
+        </logical>
+        <instruction type="wait">
+          <argument name="condition" type="expression">
+            <element type="di">
+              <element type="num">1</element>
+            </element>
+            <element type="boolean_operation">=</element>
+            <element type="io_val">ON</element>
+          </argument>
+          <argument name="timeout" type="num" unit="sec">15</argument>
+          <argument name="handle" type="function">Warning</argument>
+        </instruction>
+        <assignment type="reg_assignment">
+          <lvalue>
+            <element type="motion_register">
+              <element type="num">2</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="num">2000</element>
+          </rvalue>
+        </assignment>
+        <logical type="while">
+          <determine>
+            <element type="register">
+              <element type="num">3</element>
+            </element>
+            <element type="boolean_operation">=</element>
+            <element type="num">2</element>
+          </determine>
+          <logical_body>
+            <comment>测试寄存器赋值</comment>
+            <assignment type="assignment">
+              <lvalue>
+                <element type="register">
+                  <element type="num">1</element>
+                </element>
+              </lvalue>
+              <rvalue>
+                <element type="num">2</element>
+                <element type="operation">+</element>
+                <element type="pose_register">
+                  <element type="num">2</element>
+                  <element type="num">1</element>
+                </element>
+              </rvalue>
+            </assignment>
+            <assignment type="reg_assignment">
+              <lvalue>
+                <element type="register">
+                  <element type="num">3</element>
+                </element>
+              </lvalue>
+              <rvalue>
+                <element type="register">
+                  <element type="num">3</element>
+                </element>
+                <element type="operation">+</element>
+                <element type="num">1</element>
+              </rvalue>
+            </assignment>
+          </logical_body>
+        </logical>
+        <instruction type="wait">
+          <argument name="timeout" type="register" unit="sec">4</argument>
+        </instruction>
+        <comment>测试Switch</comment>
+        <logical type="while">
+          <determine>
+            <element type="motion_register">
+              <element type="num">3</element>
+            </element>
+            <element type="boolean_operation">=</element>
+            <element type="num">4</element>
+          </determine>
+          <logical_body>
+            <assignment type="assignment">
+              <lvalue>
+                <element type="motion_register">
+                  <element type="num">3</element>
+                </element>
+              </lvalue>
+              <rvalue>
+                <element type="num">1</element>
+              </rvalue>
+            </assignment>
+            <nop/>
+            <logical type="switch">
+              <determine>
+                <element type="motion_register">
+                  <element type="num">1</element>
+                </element>
+              </determine>
+              <logical_body/>
+              <vice_logical type="case">
+                <determine>
+                  <element type="num">2</element>
+                </determine>
+                <vice_logical_body>
+                  <assignment type="reg_assignment">
+                    <lvalue>
+                      <element type="motion_register">
+                        <element type="num">3</element>
+                      </element>
+                    </lvalue>
+                    <rvalue>
+                      <element type="motion_register">
+                        <element type="num">3</element>
+                      </element>
+                      <element type="operation">+</element>
+                      <element type="num">1</element>
+                    </rvalue>
+                  </assignment>
+                </vice_logical_body>
+              </vice_logical>
+              <vice_logical type="case">
+                <determine>
+                  <element type="num">3</element>
+                </determine>
+                <vice_logical_body>
+                  <assignment type="reg_assignment">
+                    <lvalue>
+                      <element type="motion_register">
+                        <element type="num">3</element>
+                      </element>
+                    </lvalue>
+                    <rvalue>
+                      <element type="motion_register">
+                        <element type="num">3</element>
+                      </element>
+                      <element type="operation">+</element>
+                      <element type="num">1</element>
+                    </rvalue>
+                  </assignment>
+                </vice_logical_body>
+              </vice_logical>
+              <vice_logical type="default">
+                <determine/>
+                <vice_logical_body>
+                  <instruction type="message">Switch Default</instruction>
+                  <assignment type="reg_assignment">
+                    <lvalue>
+                      <element type="motion_register">
+                        <element type="num">3</element>
+                      </element>
+                    </lvalue>
+                    <rvalue>
+                      <element type="motion_register">
+                        <element type="num">3</element>
+                      </element>
+                      <element type="operation">+</element>
+                      <element type="num">1</element>
+                    </rvalue>
+                  </assignment>
+                </vice_logical_body>
+              </vice_logical>
+            </logical>
+          </logical_body>
+        </logical>
+        <instruction type="pause">PAUSE</instruction>
+        <call file="MarcuscTest"/>
+        <assignment type="tf_no">
+          <lvalue>
+            <element type="system">TF_NO.</element>
+          </lvalue>
+          <rvalue>
+            <element type="num">3</element>
+          </rvalue>
+        </assignment>
+        <assignment type="uf_no">
+          <lvalue>
+            <element type="system">UF_NO.</element>
+          </lvalue>
+          <rvalue>
+            <element type="num">3</element>
+          </rvalue>
+        </assignment>
+        <assignment type="tf_no">
+          <lvalue>
+            <element type="system">TF_NO.</element>
+          </lvalue>
+          <rvalue>
+            <element type="num">0</element>
+          </rvalue>
+        </assignment>
+        <assignment type="uf_no">
+          <lvalue>
+            <element type="system">UF_NO.</element>
+          </lvalue>
+          <rvalue>
+            <element type="num">0</element>
+          </rvalue>
+        </assignment>
+        <assignment type="ovc">
+          <lvalue>
+            <element type="system">Overall_Velocity_Coefficient</element>
+          </lvalue>
+          <rvalue>
+            <element type="num">40</element>
+          </rvalue>
+        </assignment>
+        <comment>测试结束</comment>
+        <instruction type="abort">ABORT</instruction>
+        <end name="prog"/>
+      </body>
+    </function>
+  </prog_body>
+</prog>

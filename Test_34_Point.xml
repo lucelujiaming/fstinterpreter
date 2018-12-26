@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<prog> 
+  <head/>  
+  <prog_body> 
+    <function name="main"> 
+      <body> 
+        <nop/>  
+        <logical type="while"> 
+          <determine> 
+            <element type="num">2</element>  
+            <element type="boolean_operation">=</element>  
+            <element type="num">2</element> 
+          </determine>  
+          <logical_body> 
+		    <!--P1	400	0	460-->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">400</element>
+					<element name="2" type="num">0</element>
+					<element name="3" type="num">460</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!--P2	250	150	310-->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">250</element>
+					<element name="2" type="num">150</element>
+					<element name="3" type="num">310</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!--P3	250	-150	310-->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">250</element>
+					<element name="2" type="num">-150</element>
+					<element name="3" type="num">310</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!--P4	550	-150	610-->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">550</element>
+					<element name="2" type="num">-150</element>
+					<element name="3" type="num">610</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!--P5	550	150	610-->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">550</element>
+					<element name="2" type="num">150</element>
+					<element name="3" type="num">610</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!--P11	300	0	460-->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">330</element>
+					<element name="2" type="num">0</element>
+					<element name="3" type="num">460</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction> 
+		    <!-- P12	400	-100	460   -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">400</element>
+					<element name="2" type="num">-100</element>
+					<element name="3" type="num">460</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- P13	400	0	360                 -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">400</element>
+					<element name="2" type="num">0</element>
+					<element name="3" type="num">360</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- P21	350	150	310                 -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">350</element>
+					<element name="2" type="num">150</element>
+					<element name="3" type="num">310</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- P22	250	50	310                 -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">250</element>
+					<element name="2" type="num">50</element>
+					<element name="3" type="num">310</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- P23	250	150	410                 -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">250</element>
+					<element name="2" type="num">150</element>
+					<element name="3" type="num">410</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- P41	450	-150	610             -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">450</element>
+					<element name="2" type="num">-150</element>
+					<element name="3" type="num">610</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction> 
+		    <!-- P42	550	-50	610                 -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">550</element>
+					<element name="2" type="num">-50</element>
+					<element name="3" type="num">610</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- P43	550	-150	510             -->
+		    <!-- 小圆			                    -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">550</element>
+					<element name="2" type="num">-150</element>
+					<element name="3" type="num">510</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- p62	400	-15	460                 -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">400</element>
+					<element name="2" type="num">-15</element>
+					<element name="3" type="num">460</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- p92	400	15	460                 -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">400</element>
+					<element name="2" type="num">15</element>
+					<element name="3" type="num">460</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- p612	389.394	0	470.606         -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">389.394</element>
+					<element name="2" type="num">0</element>
+					<element name="3" type="num">470.606</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- P912	410.606	0	449.394         -->
+		    <!-- 大圆			                    -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">410.606</element>
+					<element name="2" type="num">0</element>
+					<element name="3" type="num">449.394</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- P6	400	-150	460                 -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">400</element>
+					<element name="2" type="num">-150</element>
+					<element name="3" type="num">460</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- P9	400	150	460                     -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">400</element>
+					<element name="2" type="num">150</element>
+					<element name="3" type="num">460</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- P61	506.06	0	353.94          -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">506.06</element>
+					<element name="2" type="num">0</element>
+					<element name="3" type="num">353.94</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- P91	293.94	0	566.06          -->
+		    <!-- 			                        -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">293.94</element>
+					<element name="2" type="num">0</element>
+					<element name="3" type="num">566.06</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- p606	480	-150	270             -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">480</element>
+					<element name="2" type="num">-150</element>
+					<element name="3" type="num">270</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- P1006	480	0	270                 -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">480</element>
+					<element name="2" type="num">0</element>
+					<element name="3" type="num">270</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- p906	480	150	270                 -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">480</element>
+					<element name="2" type="num">150</element>
+					<element name="3" type="num">270</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- P111	405.773	5.773	465.773     -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">405.773</element>
+					<element name="2" type="num">5.773</element>
+					<element name="3" type="num">465.773</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- P112	388.453	-11.547	448.453     -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">388.453</element>
+					<element name="2" type="num">-11.547</element>
+					<element name="3" type="num">448.453</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- P113	428.868	28.868	488.868     -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">428.868</element>
+					<element name="2" type="num">28.868</element>
+					<element name="3" type="num">488.868</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- P114	342.265	-57.735	402.265     -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">342.265</element>
+					<element name="2" type="num">-57.735</element>
+					<element name="3" type="num">402.265</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- P115	515.47	115.47	575.47      -->
+		    <!-- 			                        -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">515.47</element>
+					<element name="2" type="num">115.47</element>
+					<element name="3" type="num">575.47</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- P7	400	-75	460                     -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">400</element>
+					<element name="2" type="num">-75</element>
+					<element name="3" type="num">460</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- P8	400	75	460                     -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">400</element>
+					<element name="2" type="num">75</element>
+					<element name="3" type="num">460</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- P706	480	-75	270                 -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">480</element>
+					<element name="2" type="num">-75</element>
+					<element name="3" type="num">270</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+		    <!-- P806	480	75	270                 -->
+            <instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">480</element>
+					<element name="2" type="num">75</element>
+					<element name="3" type="num">270</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+            </instruction>  
+          </logical_body> 
+        </logical> 
+      </body> 
+    </function> 
+  </prog_body> 
+</prog>

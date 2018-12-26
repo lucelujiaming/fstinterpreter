@@ -1,0 +1,4 @@
+001:Marcusc_Test:/prog/prog_body/function
+002:Marcusc_Test:/prog/prog_body/function/body/instruction
+003:Marcusc_Test:/prog/prog_body/function/body/end
+004:Marcusc_Test:/prog/prog_body/function

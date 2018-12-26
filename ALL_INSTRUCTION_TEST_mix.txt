@@ -1,0 +1,51 @@
+EXPORT: (001)(018)/prog/head/include                                                                                  IMPORT MarcuscTest
+EXPORT: (002)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (003)(044)/prog/prog_body/function/body/instruction[1]                                                            MOVEL P[1], 250 CNT -1 
+EXPORT: (004)(044)/prog/prog_body/function/body/instruction[2]                                                            MOVEJ PR[2], 6.25 SV 50 
+EXPORT: (005)(044)/prog/prog_body/function/body/instruction[3]                                                            MOVEL PR[3], 250 CNT -1 
+EXPORT: (006)(044)/prog/prog_body/function/body/instruction[4]                                                            MOVEL PR[MR[1] + 1], MR[2] CNT -1 
+EXPORT: (007)(043)/prog/prog_body/function/body/assignment[1]                                                             R[1]  = 10  
+EXPORT: (008)(043)/prog/prog_body/function/body/assignment[2]                                                             R[2]  = 8  
+EXPORT: (009)(040)/prog/prog_body/function/body/logical[1]                                                                IF R[1]  = ( 2+R[2]  ) THEN 
+EXPORT: (010)(065)/prog/prog_body/function/body/logical[1]/logical_body/instruction                                           WAIT COND R[1]  = 3 40 SKIP
+EXPORT: (011)(040)/prog/prog_body/function/body/logical[1]                                                                ENDIF 
+EXPORT: (012)(043)/prog/prog_body/function/body/assignment[3]                                                             DI[1]  = OFF   
+EXPORT: (013)(040)/prog/prog_body/function/body/logical[2]                                                                IF DI[1]  = OFF  THEN 
+EXPORT: (014)(064)/prog/prog_body/function/body/logical[2]/logical_body/assignment                                            DI[1]  = PULSE  10  
+EXPORT: (015)(053)/prog/prog_body/function/body/logical[2]/vice_logical                                                   ELSE 
+EXPORT: (016)(085)/prog/prog_body/function/body/logical[2]/vice_logical/vice_logical_body/assignment[1]                       DI[1]  = OFF   
+EXPORT: (017)(085)/prog/prog_body/function/body/logical[2]/vice_logical/vice_logical_body/assignment[2]                       DO[1]  = OFF   
+EXPORT: (018)(085)/prog/prog_body/function/body/logical[2]/vice_logical/vice_logical_body/assignment[3]                       RI[1]  = OFF   
+EXPORT: (019)(085)/prog/prog_body/function/body/logical[2]/vice_logical/vice_logical_body/assignment[4]                       RO[1]  = OFF   
+EXPORT: (020)(040)/prog/prog_body/function/body/logical[2]                                                                ENDIF 
+EXPORT: (021)(044)/prog/prog_body/function/body/instruction[5]                                                            WAIT COND DI[1]  = ON  15 Warning
+EXPORT: (022)(043)/prog/prog_body/function/body/assignment[4]                                                             MR[2] = 2000  
+EXPORT: (023)(040)/prog/prog_body/function/body/logical[3]                                                                WHILE R[3]  = 2 
+EXPORT: (024)(067)/prog/prog_body/function/body/logical[3]/logical_body/assignment[1]                                         R[1]  = 2 + PR[2].PJ1   
+EXPORT: (025)(067)/prog/prog_body/function/body/logical[3]/logical_body/assignment[2]                                         R[3]  = R[3]  + 1  
+EXPORT: (026)(040)/prog/prog_body/function/body/logical[3]                                                                WEND 
+EXPORT: (027)(044)/prog/prog_body/function/body/instruction[6]                                                            WAIT  R[4]
+EXPORT: (028)(040)/prog/prog_body/function/body/logical[4]                                                                WHILE MR[3] = 4 
+EXPORT: (029)(064)/prog/prog_body/function/body/logical[4]/logical_body/assignment                                            MR[3] = 1  
+EXPORT: (030)(061)/prog/prog_body/function/body/logical[4]/logical_body/logical                                               SELECT CASE  MR[1] 
+EXPORT: (031)(077)/prog/prog_body/function/body/logical[4]/logical_body/logical/vice_logical[1]                                   CASE  2 
+EXPORT: (032)(106)/prog/prog_body/function/body/logical[4]/logical_body/logical/vice_logical[1]/vice_logical_body/assignment                MR[3] = MR[3] + 1  
+EXPORT: (033)(061)/prog/prog_body/function/body/logical[4]/logical_body/logical                                                   BREAK 
+EXPORT: (034)(077)/prog/prog_body/function/body/logical[4]/logical_body/logical/vice_logical[2]                                   CASE  3 
+EXPORT: (035)(106)/prog/prog_body/function/body/logical[4]/logical_body/logical/vice_logical[2]/vice_logical_body/assignment                MR[3] = MR[3] + 1  
+EXPORT: (036)(061)/prog/prog_body/function/body/logical[4]/logical_body/logical                                                   BREAK 
+EXPORT: (037)(077)/prog/prog_body/function/body/logical[4]/logical_body/logical/vice_logical[3]                                   DEFAULT   
+EXPORT: (038)(106)/prog/prog_body/function/body/logical[4]/logical_body/logical/vice_logical[3]/vice_logical_body/assignment                MR[3] = MR[3] + 1  
+EXPORT: (039)(061)/prog/prog_body/function/body/logical[4]/logical_body/logical                                                   BREAK 
+EXPORT: (040)(061)/prog/prog_body/function/body/logical[4]/logical_body/logical                                               END SELECT 
+EXPORT: (041)(040)/prog/prog_body/function/body/logical[4]                                                                WEND 
+EXPORT: (042)(044)/prog/prog_body/function/body/instruction[7]                                                            PAUSE 
+EXPORT: (043)(034)/prog/prog_body/function/body/call                                                                      CALL MarcuscTest::main () 
+EXPORT: (044)(043)/prog/prog_body/function/body/assignment[5]                                                             TF_NO. = 3  
+EXPORT: (045)(043)/prog/prog_body/function/body/assignment[6]                                                             UF_NO. = 3  
+EXPORT: (046)(043)/prog/prog_body/function/body/assignment[7]                                                             TF_NO. = 0  
+EXPORT: (047)(043)/prog/prog_body/function/body/assignment[8]                                                             UF_NO. = 0  
+EXPORT: (048)(043)/prog/prog_body/function/body/assignment[9]                                                             OVC. = 40  
+EXPORT: (049)(044)/prog/prog_body/function/body/instruction[8]                                                            ABORT 
+EXPORT: (050)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (051)(024)/prog/prog_body/function                                                                            END SUB 

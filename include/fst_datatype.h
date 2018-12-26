@@ -32,6 +32,7 @@
 #define FAIL_INTERPRETER_ILLEGAL_LINE_NUMBER        (__int64)0x0001000900B50012 
 #define FAIL_INTERPRETER_FUNC_PARAMS_MISMATCH       (__int64)0x0001000900B50013 
 #define FAIL_INTERPRETER_DUPLICATE_EXEC_MACRO       (__int64)0x0001000900B50014 
+#define INFO_INTERPRETER_THREAD_NOT_EXIST           (__int64)0x0001000900B50015 
 
 #define INFO_INTERPRETER_BACK_TO_BEGIN              (__int64)0x0001000200B50015
 #define FAIL_INTERPRETER_ALARM_EXEC_BASE            (__int64)0x0001000900B50100 
@@ -394,6 +395,9 @@ struct MotionTarget {
     // accleration < 0 means using default accleration
     double acc;
 
+	int user_frame_id;
+    int tool_frame_id;
+
     union {
         PoseEuler       pose_target;
         Joint           joint_target;
@@ -537,6 +541,29 @@ struct ManualCoeff
 
 }   // namespace fst_controller
 
+
+namespace fst_base
+{
+enum {PROCESS_COMM_CMD_ID_SIZE = 4,};
+typedef enum
+{
+    // used by interpretor
+    INTERPRETER_SERVER_CMD_LOAD = 255,
+    // used by controller
+    INTERPRETER_SERVER_CMD_START = 0,
+    INTERPRETER_SERVER_CMD_DEBUG = 1,
+    INTERPRETER_SERVER_CMD_FORWARD = 2,
+    INTERPRETER_SERVER_CMD_BACKWARD = 3,
+    INTERPRETER_SERVER_CMD_JUMP = 4,
+    INTERPRETER_SERVER_CMD_PAUSE = 5,
+    INTERPRETER_SERVER_CMD_RESUME = 6,
+    INTERPRETER_SERVER_CMD_ABORT = 7,
+    INTERPRETER_SERVER_CMD_GET_NEXT_INSTRUCTION = 8,
+    INTERPRETER_SERVER_CMD_SET_AUTO_START_MODE = 9,
+    INTERPRETER_SERVER_CMD_SWITCH_STEP = 10,
+}InterpreterServerCmd;
+
+}   // namespace fst_base
 
 
 #endif  // #ifndef FST_DATATYPE_H

@@ -7,6 +7,7 @@
 #include "math.h"
 #include "ctype.h"
 #include "stdlib.h"
+#include "common.h"
 
 // #ifndef WIN32
 #define USE_FORSIGHT_REGISTERS_MANAGER
@@ -27,7 +28,7 @@
 #include <process.h>
 #else
 #include <pthread.h>
-#include "motion_plan_arm_group.h"
+// #include "motion_plan_arm_group.h"
 #endif
 
 
@@ -47,7 +48,7 @@ using namespace std;
 #define LAB_LEN 128
 #define SELECT_AND_CYCLE_NEST 64
 #define SUB_NEST 16
-#define PROG_SIZE 40960 // 102400 // 
+#define PROG_SIZE 40960   // 4096
 const int NUM_OF_PARAMS = 31;    // max number of parameters
 
 #define DELIMITER    1
@@ -184,7 +185,9 @@ struct thread_control_block {
 //    MotionTarget      currentMotionTarget ;
     map<int, MoveCommandDestination>  start_mov_position ;  // iLineNum :: movCmdDst
 } ;
-
+#ifndef WIN32
+extern fst_log::Logger* log_ptr_;
+#endif
 void setLinenum(struct thread_control_block* objThreadCntrolBlock, int iLinenum);
 // LineNumState getLinenum(struct thread_control_block* objThreadCntrolBlock, int & num);
 int getLinenum(struct thread_control_block* objThreadCntrolBlock) ;

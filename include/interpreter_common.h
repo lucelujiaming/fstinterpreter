@@ -7,9 +7,18 @@ using namespace fst_controller;
 
 #define ADD_INFO_NUM    10
 
-#define TP_XPATH_LEN     1024
+#define TP_XPATH_LEN     512
 
 #define USE_XPATH
+
+
+typedef enum _InterpreterEventType
+{
+    INTERPRETER_EVENT_TYPE_WARING = 1,
+    INTERPRETER_EVENT_TYPE_ERROR,
+    INTERPRETER_EVENT_TYPE_MESSAGE,
+}InterpreterEventType;
+
 
 typedef enum _AdditionalInfomationType
 {
@@ -54,56 +63,16 @@ typedef enum _InstType
     END_PROG,
 }InstType;
 
-typedef enum _InterpreterState
+typedef enum
 {
-    IDLE_R      = 0,    
-    EXECUTE_R   = 1,
-    PAUSED_R    = 2,
-//    WAITING_R   = 3,
-
-    IDLE_TO_EXECUTE_T   = 101,
-    EXECUTE_TO_PAUSE_T  = 102,
-    PAUSE_TO_IDLE_T     = 103,
-    PAUSE_TO_EXECUTE_T  = 104
-    
+    INTERPRETER_IDLE      = 0,    
+    INTERPRETER_EXECUTE   = 1,
+    INTERPRETER_PAUSED    = 2,
+    INTERPRETER_IDLE_TO_EXECUTE   = 101,
+    INTERPRETER_EXECUTE_TO_PAUSE  = 102,
+    INTERPRETER_PAUSE_TO_IDLE     = 103,
+    INTERPRETER_PAUSE_TO_EXECUTE  = 104    
 }InterpreterState;
-
-typedef enum _InterpreterCommand
-{
-    LOAD    = 101,
-    JUMP    = 102,
-    START   = 103,
-    DEBUG   = 104,
-    FORWARD  = 105,
-    BACKWARD = 106,
-    CONTINUE = 107,
-    PAUSE   = 108,
-    ABORT   = 109,
-    SET_AUTO_MODE  = 110,
-	SWITCH_STEP    = 111,
-		
-    MOD_REG  = 201,
-	READ_REG = 202,
-    DEL_REG  = 203,
-    
-    MOD_IO   = 204,
-    READ_IO  = 205,
-    
-    READ_IO_DEV_INFO  = 206,
-//    UPDATE_IO_DEV_ERROR  = 207,
-    
-    // Jump to 210 for adding IO feature
-    READ_SMLT_STS  = 211,
-	MOD_SMLT_STS   = 212,
-    MOD_SMLT_VAL   = 213,
-    
-//    READ_CHG_PR_LST   = 214,
-//    READ_CHG_SR_LST   = 215,
-//    READ_CHG_R_LST    = 226,
-//    READ_CHG_MR_LST   = 227,
-//    READ_CHG_HR_LST   = 228,
-
-}InterpreterCommand;
 
 
 typedef enum _RegDIOType
@@ -227,25 +196,18 @@ typedef enum _AutoMode
     MACRO_TRIGGER_U     = 3,
 }AutoMode;
 
-typedef struct _StartCtrl
-{
-    char        file_name[128];
-}StartCtrl;
-
 typedef struct _InterpreterControl
 {
-    InterpreterCommand cmd;
+    int cmd;
+    // void* request_data_ptr;
     union
     {
-        StartCtrl   start_ctrl;
+        char      start_ctrl[256];
 		AutoMode    autoMode ;
         // int         id;
         // int            jump_line;    // Jump 
         char           jump_line[256];
         int            step_mode;       // auto or debug 
-        RegMap      reg;
-        // IOMapPortInfo  dio;
-        IOPathInfo  dioPathInfo;
     };
 }InterpreterControl;
 
@@ -342,7 +304,7 @@ typedef struct _MoveCommandDestination
 
 typedef struct _RegChgList
 {
-    InterpreterCommand  command;
+    int  command;
     int             count;
 #ifdef WIN32
     char additional; //malloc other memory

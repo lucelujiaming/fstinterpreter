@@ -138,5 +138,9 @@
 	"di[3]":	{
 		"emltFlag":	true,
 		"value":	1
+	},
+	"di[1]":	{
+		"emltFlag":	true,
+		"value":	0
 	}
 }

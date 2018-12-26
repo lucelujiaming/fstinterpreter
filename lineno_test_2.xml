@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<prog>
+  <head>
+    <include>Marcusc_Test</include>
+  </head>
+  <prog_body>
+    <function name="main">
+      <body>
+        <logical type="while">
+          <determine>
+            <element type="num">0</element>
+            <element type="boolean_operation">&lt;</element>
+            <element type="num">0</element>
+          </determine>
+          <logical_body>
+            <instruction type="wait">
+              <argument name="timeout" type="num" unit="sec">2</argument>
+            </instruction>
+            <instruction type="wait">
+              <argument name="timeout" type="num" unit="sec">2</argument>
+            </instruction>
+            <instruction type="wait">
+              <argument name="timeout" type="num" unit="sec">2</argument>
+            </instruction>
+            <instruction type="wait">
+              <argument name="timeout" type="num" unit="sec">2</argument>
+            </instruction>
+            <logical type="if">
+              <determine>
+                <element type="num">3</element>
+                <element type="boolean_operation">&gt;</element>
+                <element type="num">1</element>
+              </determine>
+              <logical_body/>
+            </logical>
+          </logical_body>
+        </logical>
+        <instruction type="wait">
+          <argument name="timeout" type="num" unit="sec">5</argument>
+        </instruction>
+        <call file="Marcusc_Test"/>
+        <instruction type="wait">
+          <argument name="timeout" type="num" unit="sec">3</argument>
+        </instruction>
+        <end name="prog"/>
+      </body>
+    </function>
+  </prog_body>
+</prog>

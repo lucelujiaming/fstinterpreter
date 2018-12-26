@@ -1,0 +1,6 @@
+EXPORT: (001)(018)/prog/head/include                                                                                  IMPORT MarcuscTest
+EXPORT: (002)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (003)(040)/prog/prog_body/function/body/assignment                                                                DI[1]  = OFF   
+EXPORT: (004)(041)/prog/prog_body/function/body/instruction                                                               WAIT  1
+EXPORT: (005)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (006)(024)/prog/prog_body/function                                                                            END SUB 

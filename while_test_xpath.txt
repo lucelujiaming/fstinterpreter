@@ -1,7 +1,7 @@
 001:while_test:/prog/prog_body/function
-002:while_test:/prog/prog_body/function/body/logical
+002:while_test:/prog/prog_body/function/body/logical/determine
 003:while_test:/prog/prog_body/function/body/logical/logical_body/instruction[1]
 004:while_test:/prog/prog_body/function/body/logical/logical_body/instruction[2]
-005:while_test:/prog/prog_body/function/body/logical
+005:while_test:/prog/prog_body/function/body/logical/logical_body/assignment
 006:while_test:/prog/prog_body/function/body/logical
 007:while_test:/prog/prog_body/function

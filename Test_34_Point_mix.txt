@@ -1,0 +1,38 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(047)/prog/prog_body/function/body/logical/determine                                                         WHILE 2 = 2 
+EXPORT: (003)(065)/prog/prog_body/function/body/logical/logical_body/instruction[1]                                           MOVEL 400, 0, 460, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (004)(065)/prog/prog_body/function/body/logical/logical_body/instruction[2]                                           MOVEL 250, 150, 310, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (005)(065)/prog/prog_body/function/body/logical/logical_body/instruction[3]                                           MOVEL 250, -150, 310, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (006)(065)/prog/prog_body/function/body/logical/logical_body/instruction[4]                                           MOVEL 550, -150, 610, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (007)(065)/prog/prog_body/function/body/logical/logical_body/instruction[5]                                           MOVEL 550, 150, 610, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (008)(065)/prog/prog_body/function/body/logical/logical_body/instruction[6]                                           MOVEL 330, 0, 460, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (009)(065)/prog/prog_body/function/body/logical/logical_body/instruction[7]                                           MOVEL 400, -100, 460, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (010)(065)/prog/prog_body/function/body/logical/logical_body/instruction[8]                                           MOVEL 400, 0, 360, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (011)(065)/prog/prog_body/function/body/logical/logical_body/instruction[9]                                           MOVEL 350, 150, 310, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (012)(066)/prog/prog_body/function/body/logical/logical_body/instruction[10]                                          MOVEL 250, 50, 310, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (013)(066)/prog/prog_body/function/body/logical/logical_body/instruction[11]                                          MOVEL 250, 150, 410, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (014)(066)/prog/prog_body/function/body/logical/logical_body/instruction[12]                                          MOVEL 450, -150, 610, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (015)(066)/prog/prog_body/function/body/logical/logical_body/instruction[13]                                          MOVEL 550, -50, 610, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (016)(066)/prog/prog_body/function/body/logical/logical_body/instruction[14]                                          MOVEL 550, -150, 510, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (017)(066)/prog/prog_body/function/body/logical/logical_body/instruction[15]                                          MOVEL 400, -15, 460, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (018)(066)/prog/prog_body/function/body/logical/logical_body/instruction[16]                                          MOVEL 400, 15, 460, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (019)(066)/prog/prog_body/function/body/logical/logical_body/instruction[17]                                          MOVEL 389.394, 0, 470.606, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (020)(066)/prog/prog_body/function/body/logical/logical_body/instruction[18]                                          MOVEL 410.606, 0, 449.394, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (021)(066)/prog/prog_body/function/body/logical/logical_body/instruction[19]                                          MOVEL 400, -150, 460, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (022)(066)/prog/prog_body/function/body/logical/logical_body/instruction[20]                                          MOVEL 400, 150, 460, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (023)(066)/prog/prog_body/function/body/logical/logical_body/instruction[21]                                          MOVEL 506.06, 0, 353.94, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (024)(066)/prog/prog_body/function/body/logical/logical_body/instruction[22]                                          MOVEL 293.94, 0, 566.06, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (025)(066)/prog/prog_body/function/body/logical/logical_body/instruction[23]                                          MOVEL 480, -150, 270, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (026)(066)/prog/prog_body/function/body/logical/logical_body/instruction[24]                                          MOVEL 480, 0, 270, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (027)(066)/prog/prog_body/function/body/logical/logical_body/instruction[25]                                          MOVEL 480, 150, 270, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (028)(066)/prog/prog_body/function/body/logical/logical_body/instruction[26]                                          MOVEL 405.773, 5.773, 465.773, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (029)(066)/prog/prog_body/function/body/logical/logical_body/instruction[27]                                          MOVEL 388.453, -11.547, 448.453, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (030)(066)/prog/prog_body/function/body/logical/logical_body/instruction[28]                                          MOVEL 428.868, 28.868, 488.868, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (031)(066)/prog/prog_body/function/body/logical/logical_body/instruction[29]                                          MOVEL 342.265, -57.735, 402.265, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (032)(066)/prog/prog_body/function/body/logical/logical_body/instruction[30]                                          MOVEL 515.47, 115.47, 575.47, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (033)(066)/prog/prog_body/function/body/logical/logical_body/instruction[31]                                          MOVEL 400, -75, 460, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (034)(066)/prog/prog_body/function/body/logical/logical_body/instruction[32]                                          MOVEL 400, 75, 460, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (035)(066)/prog/prog_body/function/body/logical/logical_body/instruction[33]                                          MOVEL 480, -75, 270, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (036)(066)/prog/prog_body/function/body/logical/logical_body/instruction[34]                                          MOVEL 480, 75, 270, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (037)(037)/prog/prog_body/function/body/logical                                                                   WEND 
+EXPORT: (038)(024)/prog/prog_body/function                                                                            END SUB 

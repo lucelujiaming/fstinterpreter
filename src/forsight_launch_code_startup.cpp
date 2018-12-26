@@ -261,7 +261,7 @@ void* launch_code_thread(void* arg)
 				
 	            objThdCtrlBlockPtr->prog_mode = FULL_MODE;
 				objThdCtrlBlockPtr->execute_direction = EXECUTE_FORWARD ;
-	            setPrgmState(EXECUTE_R);
+	            setPrgmState(objThdCtrlBlockPtr, INTERPRETER_EXECUTE);
 				if(strlen(strRet.c_str()) == 0)
 				{
 					startFile(objThdCtrlBlockPtr, "sr_test", getCurrentThreadSeq());

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<prog> 
+  <head/>  
+  <prog_body> 
+    <function name="main"> 
+      <body> 
+        <nop/>  
+        <logical type="while"> 
+          <determine> 
+            <element type="num">2</element>  
+            <element type="boolean_operation">=</element>  
+            <element type="num">2</element> 
+          </determine>  
+          <logical_body> 
+            <logical type="for">
+                <determine>
+                    <element type="num">X</element>
+                    <element type="operation">=</element>
+                    <element type="num">1</element>
+                    <element type="command">TO</element>
+                    <element type="num">25</element>
+                </determine>
+                <logical_body>
+				<!-- DI[1]  = ON -->
+				<assignment type="assignment">
+				  <lvalue>
+					<element type="di">
+					  <element type="num">X</element>
+					</element>
+				  </lvalue>
+				  <rvalue>
+					<element type="io_val">ON</element>
+				  </rvalue>
+				</assignment>
+				<instruction type="wait">
+					   <argument name="timeout" type="num" unit="sec">1</argument>
+				</instruction>
+                </logical_body>
+            </logical>
+			<instruction type="wait">
+				   <argument name="timeout" type="num" unit="sec">5</argument>
+			</instruction>
+            <logical type="for">
+                <determine>
+                    <element type="num">X</element>
+                    <element type="operation">=</element>
+                    <element type="num">1</element>
+                    <element type="command">TO</element>
+                    <element type="num">25</element>
+                </determine>
+                <logical_body>
+				<!-- DI[1]  = ON -->
+				<assignment type="assignment">
+				  <lvalue>
+					<element type="di">
+					  <element type="num">X</element>
+					</element>
+				  </lvalue>
+				  <rvalue>
+					<element type="io_val">OFF</element>
+				  </rvalue>
+				</assignment>
+				<instruction type="wait">
+					   <argument name="timeout" type="num" unit="sec">1</argument>
+				</instruction>
+                </logical_body>
+            </logical>
+			<instruction type="wait">
+				   <argument name="timeout" type="num" unit="sec">5</argument>
+			</instruction>
+          </logical_body> 
+        </logical> 
+      </body> 
+    </function> 
+  </prog_body> 
+</prog>

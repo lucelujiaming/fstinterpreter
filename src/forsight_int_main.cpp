@@ -2,9 +2,10 @@
 #include <unistd.h>
 #include "common.h"
 using namespace fst_log;
+#else
+#include "forsight_io_mapping.h"
 #endif
 #include "forsight_inter_control.h"
-#include "forsight_io_mapping.h"
 #include "forsight_io_controller.h"
 
 #include "reg_manager/reg_manager_interface_wrapper.h"
@@ -17,17 +18,24 @@ using namespace fst_log;
 
 int main(int  argc, char *argv[])
 {
-	InterpreterControl intprt_ctrl;
+	InterpreterControl intprt_ctrl; 
+#ifndef WIN32
+	if(log_ptr_ == NULL)
+	{
+		log_ptr_ = new fst_log::Logger();
+    	FST_LOG_INIT("Interpreter");
+	}
+#endif
 	initShm();
 	memset(&intprt_ctrl, 0x00, sizeof(intprt_ctrl));
-	intprt_ctrl.cmd = START ;
+#ifndef WIN32
+	intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_START ;
+#else
+	intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_DEBUG ;
 	append_io_mapping();
 	forgesight_load_io_config();
-	load_register_data();
-#ifndef WIN32
-    glog.initLogger("interpreter");\
-    glog.setDisplayLevel(fst_log::MSG_LEVEL_INFO);
 #endif
+	load_register_data();
 	while(1)
 	{
 #ifndef WIN32
@@ -40,10 +48,10 @@ int main(int  argc, char *argv[])
 			{
 				memset(&intprt_ctrl, 0x00, sizeof(intprt_ctrl));
 				intprt_ctrl.cmd = it->cmd_id ;
-	            printf("parseCtrlComand at %d \n", intprt_ctrl.cmd);
-				memcpy(&intprt_ctrl + sizeof(InterpreterCommand), it->request_data_ptr, 
-					sizeof(InterpreterControl) - sizeof(InterpreterCommand));
-				parseCtrlComand(intprt_ctrl);
+	            FST_INFO("parseCtrlComand at %d ", intprt_ctrl.cmd);
+				parseCtrlComand(intprt_ctrl, it->request_data_ptr);
+				bool * bRsp = it->response_data_ptr;
+				*bRsp = true;
 				g_objInterpreterServer->pushTaskToResponseList(*it);
 			}
 			usleep(1000);
@@ -56,18 +64,13 @@ int main(int  argc, char *argv[])
 		}
 		else
 		{
-			
-			parseCtrlComand(intprt_ctrl);
-			intprt_ctrl.cmd = LOAD ;
+			intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_LOAD ;
+			usleep(1000);
 		}
 #else
-		parseCtrlComand(intprt_ctrl);
-		intprt_ctrl.cmd = LOAD ;
-#ifdef WIN32
-			Sleep(100);
-#else
-			usleep(1000);
-#endif
+		parseCtrlComand(intprt_ctrl, "lineno_test_2");
+		intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_LOAD ;
+		Sleep(100);
 #endif
 	}
 	return 1;

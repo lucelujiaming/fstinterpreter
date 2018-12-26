@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<prog>
+    <head>
+        <include>MarcuscTest</include>
+    </head>
+    <prog_body>
+        <function name="main">
+            <body>
+                <assignment type="assignment">
+                    <lvalue>
+                        <element type="register">
+                            <element type="num">1</element>
+                        </element>
+                    </lvalue>
+                    <rvalue>
+                        <element type="num">10</element>
+                    </rvalue>
+                </assignment>
+                <logical type="while">
+                    <determine>
+                        <element type="register">
+                            <element type="num">1</element>
+                        </element>
+                        <element type="boolean_operation">=</element>
+                        <element type="num">2</element>
+                    </determine>
+                    <logical_body>
+                        <comment>测试寄存器赋值</comment>
+						
+						<instruction type="wait">
+							<argument name="timeout" type="register" unit="sec">3</argument>
+						</instruction>
+                        <assignment type="reg_assignment">
+                            <lvalue>
+                                <element type="register">
+                                    <element type="num">2</element>
+                                </element>
+                            </lvalue>
+                            <rvalue>
+                                <element type="register">
+                                    <element type="num">2</element>
+                                </element>
+                                <element type="operation">+</element>
+                                <element type="num">1</element>
+                            </rvalue>
+                        </assignment>
+                    </logical_body>
+                </logical>
+            </body>
+        </function>
+    </prog_body>
+</prog>

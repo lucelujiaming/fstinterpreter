@@ -1,0 +1,8 @@
+EXPORT: (001)(018)/prog/head/include                                                                                  IMPORT MarcuscTest
+EXPORT: (002)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (003)(040)/prog/prog_body/function/body/assignment                                                                R[1]  = 10  
+EXPORT: (004)(037)/prog/prog_body/function/body/logical                                                                   WHILE R[1]  = 2 
+EXPORT: (005)(062)/prog/prog_body/function/body/logical/logical_body/instruction                                              WAIT  R[3]
+EXPORT: (006)(061)/prog/prog_body/function/body/logical/logical_body/assignment                                               R[2]  = R[2]  + 1  
+EXPORT: (007)(037)/prog/prog_body/function/body/logical                                                                   WEND 
+EXPORT: (008)(024)/prog/prog_body/function                                                                            END SUB 
