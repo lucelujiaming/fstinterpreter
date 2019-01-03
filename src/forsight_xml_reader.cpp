@@ -384,6 +384,21 @@ int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char *
 				}
 			}
 		}
+		else if(xmlStrcasecmp(name, BAD_CAST"timer")==0){  
+			for(nodeSubValueElement = nodeValueElement->children; 
+			nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
+				if(xmlStrcasecmp(nodeSubValueElement->name,BAD_CAST"element")==0){ 
+					//	value = xmlNodeGetContent(nodeSubValueElement);
+					memset(label_output, 0x00, 1024);
+					generateElementStr(nodeSubValueElement, objLineInfoTemp, label_output);
+					sprintf(label_str, "%sTIMER[%s] ", label_str, (char*)label_output);
+				}
+			}
+		}
+		else if(xmlStrcasecmp(name, BAD_CAST"timer_status")==0){ 
+			value = xmlNodeGetContent(nodeValueElement);
+			sprintf(label_str, "%s%s", label_str, (char*)value);
+		}
 		else if(  (xmlStrcasecmp(name, BAD_CAST"ai")==0) 
 				||(xmlStrcasecmp(name, BAD_CAST"ao")==0) 
 				||(xmlStrcasecmp(name, BAD_CAST"di")==0) 

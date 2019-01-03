@@ -8,6 +8,16 @@
     <function name="main">
       <body>
         <comment>测试开始</comment>
+        <assignment type="timer">
+          <lvalue>
+            <element type="timer">
+              <element type="num">1</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="timer_status">START</element>
+          </rvalue>
+        </assignment>
         <instruction type="move_line">
           <argument name="pose" type="pose">
             <element type="num">1</element>
@@ -60,6 +70,18 @@
           </lvalue>
           <rvalue>
             <element type="num">8</element>
+          </rvalue>
+        </assignment>
+        <assignment type="reg_assignment">
+          <lvalue>
+            <element type="register">
+              <element type="num">3</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="timer">
+              <element type="num">1</element>
+            </element>
           </rvalue>
         </assignment>
         <logical type="if">
@@ -381,6 +403,38 @@
           </lvalue>
           <rvalue>
             <element type="num">40</element>
+          </rvalue>
+        </assignment>
+        <assignment type="timer">
+          <lvalue>
+            <element type="timer">
+              <element type="num">1</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="timer_status">STOP</element>
+          </rvalue>
+        </assignment>
+        <assignment type="reg_assignment">
+          <lvalue>
+            <element type="register">
+              <element type="num">3</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="timer">
+              <element type="num">1</element>
+            </element>
+          </rvalue>
+        </assignment>
+        <assignment type="timer">
+          <lvalue>
+            <element type="timer">
+              <element type="num">1</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="timer_status">RESET</element>
           </rvalue>
         </assignment>
         <comment>测试结束</comment>

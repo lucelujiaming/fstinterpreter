@@ -31,7 +31,7 @@ int main(int  argc, char *argv[])
 #ifndef WIN32
 	intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_START ;
 #else
-	intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_DEBUG ;
+	intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_START ;
 	append_io_mapping();
 	forgesight_load_io_config();
 #endif
@@ -68,7 +68,7 @@ int main(int  argc, char *argv[])
 			usleep(1000);
 		}
 #else
-		parseCtrlComand(intprt_ctrl, "lineno_test_2");
+		parseCtrlComand(intprt_ctrl, "ALL_INSTRUCTION_TEST");
 		intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_LOAD ;
 		Sleep(100);
 #endif

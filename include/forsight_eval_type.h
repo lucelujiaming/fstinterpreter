@@ -84,9 +84,25 @@ public:
 	void resetNoneValue(){
 		evalType = TYPE_NONE ;
 		fValue = -1 ;
+		strContent = "";
 		
+		pose.position.x	  = 0.0;
+		pose.position.y	  = 0.0;
+		pose.position.z	  = 0.0;
+		pose.orientation.a = 0.0;
+		pose.orientation.b = 0.0;
+		pose.orientation.c = 0.0;
+	   
+		joint.j1 = 0.0;
+		joint.j2 = 0.0;
+		joint.j3 = 0.0;
+		joint.j4 = 0.0;
+		joint.j5 = 0.0;
+		joint.j6 = 0.0;
+	   
 		tfIndex = -1 ;
 		ufIndex = -1 ;
+		isPulse = false ;
 	}
 	// TYPE_FLOAT
 	void setFloatValue(float fVal){
@@ -199,6 +215,14 @@ public:
 			noticeErrorType(TYPE_JOINT | TYPE_POSE) ;
 			return -1;
 		}
+	}
+	
+	void setPulse(bool bValue){
+		isPulse = bValue;
+	}
+	
+	bool getPulse(){
+		return isPulse ;
 	}
 	
 	void updateAdditionalE(AdditionalE additionParam){
@@ -406,8 +430,8 @@ public:
 				reg_r.value = reg_r.value + operand->getFloatValue();
 				fValue = fValue + operand->getFloatValue();
 				
-				printf("RRegData: id = %d, comment = %s\n", reg_r.id, reg_r.comment);
-	        	printf("reg_r.value = %f and operand = %f\n", reg_r.value, operand->getFloatValue());
+			//	printf("RRegData: id = %d, comment = %s\n", reg_r.id, reg_r.comment.c_str());
+	        //	printf("reg_r.value = %f and operand = %f\n", reg_r.value, operand->getFloatValue());
 		    }
 			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
 		    {
@@ -425,8 +449,8 @@ public:
 				reg_mr.value = reg_mr.value + operand->getFloatValue();
 				fValue = fValue + operand->getFloatValue();
 				
-				printf("RRegData: id = %d, comment = %s\n", reg_r.id, reg_r.comment);
-	        	printf("reg_r.value = %f and operand = %f\n", reg_r.value, operand->getFloatValue());
+			//	printf("RRegData: id = %d, comment = %s\n", reg_r.id, reg_r.comment.c_str());
+	        //	printf("reg_r.value = %f and operand = %f\n", reg_r.value, operand->getFloatValue());
 		    }
 			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
 		    {
@@ -877,6 +901,8 @@ private:
 		// tf Index & uf Index
 		int tfIndex ;
 		int ufIndex ;
+		
+		bool isPulse ;
 #if 0
 		// All of register
 		pr_shmi_t reg_pr ;

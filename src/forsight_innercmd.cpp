@@ -64,7 +64,12 @@ struct intern_cmd_type {
 
 vector<string> g_vecXPath ;
 
-/* Return true if c is a delimiter. */
+/************************************************* 
+	Function:		isdelim
+	Description:	Return true if c is a delimiter.
+	Input:			c           
+	Return: 		1 - true ; 0 - false
+*************************************************/ 
 static int isdelim(char c)
 {
   if(strchr(" ;,+-<>/*%^=()[]", c) || c==9 || c=='\r' || c=='\n' || c==0) 
@@ -72,14 +77,25 @@ static int isdelim(char c)
   return 0;
 }
 
-/* Return 1 if c is space or tab. */
+/************************************************* 
+	Function:		iswhite
+	Description:	Return 1 if c is space or tab.
+	Input:			c           
+	Return: 		1 - true ; 0 - false
+*************************************************/ 
 static int iswhite(char c)
 {
   if(c==' ' || c=='\t') return 1;
   else return 0;
 }
 
-/* Find the start of the next line. */
+/************************************************* 
+	Function:		find_copy_eol
+	Description:	Find the start of the next line and copy left part into temp.
+	Input:			prog         -    program pointer
+	Input:			temp         -    current line buffer
+	Return: 		1 - true ; 0 - false
+*************************************************/ 
 static char * find_copy_eol(char * prog, char* temp)
 {
   while(*prog!='\n'  && *prog!='\0') 
@@ -88,6 +104,13 @@ static char * find_copy_eol(char * prog, char* temp)
   return prog;
 }
 
+/************************************************* 
+	Function:		get_cmd_param
+	Description:	get command parameter.
+	Input:			prog         -    program pointer
+	Input:			temp         -    current line buffer
+	Return: 		1 - true ; 0 - false
+*************************************************/ 
 static char * get_cmd_param(char * prog, char* temp)
 {
   while(iswhite(*prog)) ++prog;  /* skip over white space */
@@ -97,6 +120,12 @@ static char * get_cmd_param(char * prog, char* temp)
   return prog;
 }
 
+/************************************************* 
+	Function:		find_internal_cmd
+	Description:	find internal cmd in the intern_cmd.
+	Input:			s         -    cmd name
+	Return: 		-1 - not found ; i - index of intern_cmd
+*************************************************/ 
 int find_internal_cmd(char *s)   
 {   
     int i;
@@ -106,6 +135,13 @@ int find_internal_cmd(char *s)
     return -1;   
 }   
 
+/************************************************* 
+	Function:		call_internal_cmd_exec_sub_thread
+	Description:	Whether it is moving command and 
+	                can be executed in the multipled thread.
+	Input:			s         -    cmd name
+	Return: 		-1 - not found ; i - index of intern_cmd
+*************************************************/ 
 int call_internal_cmd_exec_sub_thread(int index)   
 {   
     // int i; 
@@ -115,6 +151,15 @@ int call_internal_cmd_exec_sub_thread(int index)
 	   return -1 ;
 }
 
+/************************************************* 
+	Function:		call_internal_cmd
+	Description:	Call the function in intern_cmd by index.
+	Input:			index                  -    index of intern_cmd
+	Input:			iLineNum               -    Line Number
+	Input:			thread_control_block   - interpreter info
+	Return: 		-1        -    index out of range ;
+	                Other     -    function ret.
+*************************************************/ 
 int call_internal_cmd(int index, int iLineNum, 
 					 struct thread_control_block* objThreadCntrolBlock)   
 {   
@@ -125,6 +170,15 @@ int call_internal_cmd(int index, int iLineNum,
 	   return -1 ;
 }
 
+/************************************************* 
+	Function:		getAditionalInfomation
+	Description:	get aditional parameter infomation
+	Input:			thread_control_block   - interpreter info
+	Input:			instrSetPtr            - AdditionalInfomation buffer 
+	                                         in the objThreadCntrolBlock->instrSet
+	Return: 		0        -    Failed ;
+	                Other    -    Count of aditional parameter infomation.
+*************************************************/ 
 int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock, 
 						   char * instrSetPtr)
 {
@@ -429,6 +483,14 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 }
 
 
+/************************************************* 
+	Function:		set_global_TF
+	Description:	set global TF
+	Input:			iLineNum               -    Line Number
+	Input:			iTFNum                 -    index of TF
+	Input:			thread_control_block   - interpreter info
+	Return: 		1        -    Success ;
+*************************************************/ 
 int set_global_TF(int iLineNum, int iTFNum, struct thread_control_block* objThreadCntrolBlock)
 {
     Instruction instr;
@@ -454,6 +516,14 @@ int set_global_TF(int iLineNum, int iTFNum, struct thread_control_block* objThre
     return 1;
 }
 
+/************************************************* 
+	Function:		set_global_UF
+	Description:	set global UF
+	Input:			iLineNum               -    Line Number
+	Input:			iUFNum                 -    index of UF
+	Input:			thread_control_block   - interpreter info
+	Return: 		1        -    Success ;
+*************************************************/ 
 int set_global_UF(int iLineNum, int iUFNum, struct thread_control_block* objThreadCntrolBlock)
 {
     Instruction instr;
@@ -1212,39 +1282,47 @@ int call_Timer(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
     int timerNumber;
     char var[80];
 	
-    get_exp(objThreadCntrolBlock, &value, &boolValue);
-	timerNumber = (int)value.getFloatValue() ;
+	// TIMER[1]  = START
+	if(objThreadCntrolBlock->prog[0] == '['){
+		putback(objThreadCntrolBlock);
+		assignment(objThreadCntrolBlock);
+	}
+	// TIMER 1 start 
+    else {
+		get_exp(objThreadCntrolBlock, &value, &boolValue);
+		timerNumber = (int)value.getFloatValue() ;
         FST_INFO("%d: call_Timer  enter %d ", __LINE__, timerNumber);
-	if(timerNumber >= MAX_STOPWATCH_NUM)
-    	return 0;
-	
-	sprintf(var, "Timer[%d]", timerNumber);
-	get_token(objThreadCntrolBlock);
-        FST_INFO("%d: call_Timer  enter %s ", __LINE__, objThreadCntrolBlock->token);
-	if(strcmp(objThreadCntrolBlock->token, "start") == 0)
-    {
-        FST_INFO("%d: call_Timer  start", __LINE__);
-		g_structStopWatch[timerNumber].start_time = time(0);
-		value.setFloatValue(0); // 0.0; 
-		assign_var(objThreadCntrolBlock, var, value); // 0.0);
-	}
-	else if(strcmp(objThreadCntrolBlock->token, "stop") == 0)
-    {
-        FST_INFO("%d: call_Timer  stop", __LINE__);
-		g_structStopWatch[timerNumber].diff_time = time(0) - 
-			g_structStopWatch[timerNumber].start_time ;
+		if(timerNumber >= MAX_STOPWATCH_NUM)
+			return 0;
 		
-    	eval_value value;
-		value.setFloatValue(g_structStopWatch[timerNumber].diff_time)  ;
-		assign_var(objThreadCntrolBlock, var, value);
-	    FST_INFO("Time elapse : %d .", g_structStopWatch[timerNumber].diff_time);
+		sprintf(var, "timer[%d]", timerNumber);
+		get_token(objThreadCntrolBlock);
+        FST_INFO("%d: call_Timer  enter %s ", __LINE__, objThreadCntrolBlock->token);
+		if(strcmp(objThreadCntrolBlock->token, "start") == 0)
+		{
+			FST_INFO("%d: call_Timer  start", __LINE__);
+			g_structStopWatch[timerNumber].start_time = time(0);
+			value.setFloatValue(0); // 0.0; 
+			assign_var(objThreadCntrolBlock, var, value); // 0.0);
+		}
+		else if(strcmp(objThreadCntrolBlock->token, "stop") == 0)
+		{
+			FST_INFO("%d: call_Timer  stop", __LINE__);
+			g_structStopWatch[timerNumber].diff_time = time(0) - 
+				g_structStopWatch[timerNumber].start_time ;
+			
+			eval_value value;
+			value.setFloatValue(g_structStopWatch[timerNumber].diff_time)  ;
+			assign_var(objThreadCntrolBlock, var, value);
+			FST_INFO("Time elapse : %d .", g_structStopWatch[timerNumber].diff_time);
+		}
+		else 
+		{
+			find_eol(objThreadCntrolBlock);
+			return 0;
+		}
+		find_eol(objThreadCntrolBlock);
 	}
-	else 
-    {
-        find_eol(objThreadCntrolBlock);
-    	return 0;
-	}
-    find_eol(objThreadCntrolBlock);
     return 1;   
 }
 
