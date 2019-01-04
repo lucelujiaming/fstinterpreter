@@ -1,9 +1,15 @@
 #ifndef REG_MANAGER_INTERFACE_WRAPPER_H
 #define REG_MANAGER_INTERFACE_WRAPPER_H
 
+// #define USE_LOCAL_REG_MANAGER_INTERFACE
+
 #ifndef WIN32
-#include "reg_manager/reg_manager_interface.h"
-using namespace fst_reg ;
+
+#include "process_comm.h"
+using namespace fst_ctrl ;
+extern fst_base::InterpreterClient* g_objRegManagerInterface;
+extern fst_base::InterpreterServer* g_objInterpreterServer ;
+
 #endif
 #include "reg_manager/forsight_registers_manager.h"
 

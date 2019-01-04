@@ -179,7 +179,7 @@ bool reg_manager_interface_setPosePr(PoseEuler *ptr, uint16_t num)
 		bRet = g_objRegManagerInterface->getPrReg(num, &objPrRegData);
 		if(bRet)
 		{
-		    memcpy(&(objPrRegData.value.cartesian_pos), ptr, 
+		    memcpy(&(objPrRegData.value.cartesian_pos), ptr, 
 
 				sizeof(objPrRegData.value.cartesian_pos));
 			reg_manager_interface_setPr(&objPrRegData, num);
@@ -229,7 +229,7 @@ bool reg_manager_interface_setJointPr(Joint *ptr, uint16_t num)
 		bRet = g_objRegManagerInterface->getPrReg(num, &objPrRegData);
 		if(bRet)
 		{
-		    memcpy(&(objPrRegData.value.joint_pos), ptr, 
+		    memcpy(&(objPrRegData.value.joint_pos), ptr, 
 
 				sizeof(objPrRegData.value.joint_pos));
 			reg_manager_interface_setPr(&objPrRegData, num);
@@ -260,7 +260,7 @@ bool reg_manager_interface_getTypePr(int *ptr, uint16_t num)
 	}
 	else
 	{
-		printf("g_objRegManagerInterface is NULL\n");
+		FST_ERROR("g_objRegManagerInterface is NULL");
 	}
 #else
 	bRet = true ;
@@ -278,14 +278,14 @@ bool reg_manager_interface_setTypePr(int *ptr, uint16_t num)
 		bRet = g_objRegManagerInterface->getPrReg(num, &objPrRegData);
 		if(bRet)
 		{
-		    objPrRegData.value.pos_type = *ptr;
+		    objPrRegData.value.pos_type = *ptr;
 
 			reg_manager_interface_setPr(&objPrRegData, num);
 		}
 	}
 	else
 	{
-		printf("g_objRegManagerInterface is NULL\n");
+		FST_ERROR("g_objRegManagerInterface is NULL");
 	}
 #else
 	bRet = true ;
@@ -308,7 +308,7 @@ bool reg_manager_interface_getIdPr(int *ptr, uint16_t num)
 	}
 	else
 	{
-		printf("g_objRegManagerInterface is NULL\n");
+		FST_ERROR("g_objRegManagerInterface is NULL");
 	}
 #else
 	bRet = true ;
@@ -332,7 +332,7 @@ bool reg_manager_interface_setIdPr(int *ptr, uint16_t num)
 	}
 	else
 	{
-		printf("g_objRegManagerInterface is NULL\n");
+		FST_ERROR("g_objRegManagerInterface is NULL");
 	}
 #else
 	bRet = true ;
@@ -373,7 +373,7 @@ bool reg_manager_interface_setCommentPr(char *ptr, uint16_t num)
 		bRet = g_objRegManagerInterface->getPrReg(num, &objPrRegData);
 		if(bRet)
 		{
-		    memcpy(objPrRegData.comment, ptr, 
+		    memcpy(objPrRegData.comment, ptr, 
 
 				sizeof(objPrRegData.comment));
 			reg_manager_interface_setPr(&objPrRegData, num);

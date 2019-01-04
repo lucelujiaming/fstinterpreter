@@ -1,15 +1,17 @@
 #ifndef FORSIGHT_EVAL_TYPE_H
 #define FORSIGHT_EVAL_TYPE_H
 #include <stdlib.h>
-#include "fst_datatype.h" 
-using namespace fst_controller;
 
 #ifdef WIN32
+#include "fst_datatype.h" 
+using namespace fst_controller;
 #include "tp_reg_manager_interface.h"
 // #include "reg-shmi/forsight_regs_shmi.h"
 #else
-#include "reg_manager/reg_manager_interface.h"
-using namespace fst_reg;
+#include "base_datatype.h" 
+using namespace fst_mc;
+#include "process_comm.h"
+using namespace fst_ctrl ;
 #endif
 
 typedef struct
@@ -260,6 +262,7 @@ public:
 	
 	void setPrRegDataWithJointValue(Joint * jointVal){
 		evalType  |= TYPE_PR ;
+#ifdef WIN32
 		reg_pr.value.pos_type     = POS_TYPE_JOINT ;
 		reg_pr.value.joint_pos[0] = jointVal->j1;
 		reg_pr.value.joint_pos[1] = jointVal->j2;
@@ -267,13 +270,38 @@ public:
 		reg_pr.value.joint_pos[3] = jointVal->j4;
 		reg_pr.value.joint_pos[4] = jointVal->j5;
 		reg_pr.value.joint_pos[5] = jointVal->j6;
+#else
+		reg_pr.value.pos_type     = PR_REG_POS_TYPE_JOINT ;
+		reg_pr.value.pos[0] = jointVal->j1;
+		reg_pr.value.pos[1] = jointVal->j2;
+		reg_pr.value.pos[2] = jointVal->j3;
+		reg_pr.value.pos[3] = jointVal->j4;
+		reg_pr.value.pos[4] = jointVal->j5;
+		reg_pr.value.pos[5] = jointVal->j6;
+		reg_pr.value.pos[6] = 0.0;
+		reg_pr.value.pos[7] = 0.0;
+		reg_pr.value.pos[8] = 0.0;
+#endif
 	}
 	
 	void setPrRegDataWithPoseEulerValue(PoseEuler * pointEulerVal){
 		evalType  |= TYPE_PR ;
+#ifdef WIN32
 		reg_pr.value.pos_type      = POS_TYPE_CARTESIAN ;
 		reg_pr.value.cartesian_pos.position    = pointEulerVal->position;
 		reg_pr.value.cartesian_pos.orientation = pointEulerVal->orientation;
+#else
+		reg_pr.value.pos_type      = PR_REG_POS_TYPE_CARTESIAN ;
+		reg_pr.value.pos[0]        = pointEulerVal->position.x;
+		reg_pr.value.pos[1]        = pointEulerVal->position.y;
+		reg_pr.value.pos[2]        = pointEulerVal->position.z;
+		reg_pr.value.pos[3]        = pointEulerVal->orientation.a;
+		reg_pr.value.pos[4]        = pointEulerVal->orientation.b;
+		reg_pr.value.pos[5]        = pointEulerVal->orientation.c;
+		reg_pr.value.pos[6] = 0.0;
+		reg_pr.value.pos[7] = 0.0;
+		reg_pr.value.pos[8] = 0.0;
+#endif
 	}
 	
 	PrRegData getPrRegDataValue(){
@@ -385,12 +413,24 @@ public:
 				joint.j5 += jointOperand.j5;
 				joint.j6 += jointOperand.j6;
 				
+#ifdef WIN32
 				reg_pr.value.joint_pos[0] += jointOperand.j1;
 				reg_pr.value.joint_pos[1] += jointOperand.j2;
 				reg_pr.value.joint_pos[2] += jointOperand.j3;
 				reg_pr.value.joint_pos[3] += jointOperand.j4;
 				reg_pr.value.joint_pos[4] += jointOperand.j5;
 				reg_pr.value.joint_pos[5] += jointOperand.j6;
+#else
+				reg_pr.value.pos[0] += jointOperand.j1;
+				reg_pr.value.pos[1] += jointOperand.j2;
+				reg_pr.value.pos[2] += jointOperand.j3;
+				reg_pr.value.pos[3] += jointOperand.j4;
+				reg_pr.value.pos[4] += jointOperand.j5;
+				reg_pr.value.pos[5] += jointOperand.j6;
+				reg_pr.value.pos[6] = 0.0;
+				reg_pr.value.pos[7] = 0.0;
+				reg_pr.value.pos[8] = 0.0;
+#endif
 		    }
 			else if(operand->getType() == (int)(TYPE_PR | TYPE_JOINT))
 		    {
@@ -402,27 +442,63 @@ public:
 				joint.j5 += jointOperand.j5;
 				joint.j6 += jointOperand.j6;
 				
+#ifdef WIN32
 				reg_pr.value.joint_pos[0] += jointOperand.j1;
 				reg_pr.value.joint_pos[1] += jointOperand.j2;
 				reg_pr.value.joint_pos[2] += jointOperand.j3;
 				reg_pr.value.joint_pos[3] += jointOperand.j4;
 				reg_pr.value.joint_pos[4] += jointOperand.j5;
 				reg_pr.value.joint_pos[5] += jointOperand.j6;
+#else
+				reg_pr.value.pos[0] += jointOperand.j1;
+				reg_pr.value.pos[1] += jointOperand.j2;
+				reg_pr.value.pos[2] += jointOperand.j3;
+				reg_pr.value.pos[3] += jointOperand.j4;
+				reg_pr.value.pos[4] += jointOperand.j5;
+				reg_pr.value.pos[5] += jointOperand.j6;
+				reg_pr.value.pos[6] = 0.0;
+				reg_pr.value.pos[7] = 0.0;
+				reg_pr.value.pos[8] = 0.0;
+#endif
 		    }
 		}else if(evalType == (int)(TYPE_PR | TYPE_POSE)){
 		    if(operand->getType() == TYPE_POSE)
 		    {
 		    	PoseEuler poseOperand = operand->getPoseValue();
 		    	pose = calcCartesianPosAdd(pose, poseOperand);
+#ifdef WIN32
 				reg_pr.value.cartesian_pos.position    = pose.position;
 				reg_pr.value.cartesian_pos.orientation = pose.orientation;
+#else
+				reg_pr.value.pos[0] = pose.position.x;
+				reg_pr.value.pos[1] = pose.position.y;
+				reg_pr.value.pos[2] = pose.position.z;
+				reg_pr.value.pos[3] = pose.orientation.a;
+				reg_pr.value.pos[4] = pose.orientation.b;
+				reg_pr.value.pos[5] = pose.orientation.c;
+				reg_pr.value.pos[6] = 0.0;
+				reg_pr.value.pos[7] = 0.0;
+				reg_pr.value.pos[8] = 0.0;
+#endif
 		    }
 			else if(operand->getType() == (int)(TYPE_PR | TYPE_POSE))
 		    {
 		    	PoseEuler poseOperand = operand->getPoseValue();
 		    	pose = calcCartesianPosAdd(pose, poseOperand);
+#ifdef WIN32
 				reg_pr.value.cartesian_pos.position    = pose.position;
 				reg_pr.value.cartesian_pos.orientation = pose.orientation;
+#else
+				reg_pr.value.pos[0] = pose.position.x;
+				reg_pr.value.pos[1] = pose.position.y;
+				reg_pr.value.pos[2] = pose.position.z;
+				reg_pr.value.pos[3] = pose.orientation.a;
+				reg_pr.value.pos[4] = pose.orientation.b;
+				reg_pr.value.pos[5] = pose.orientation.c;
+				reg_pr.value.pos[6] = 0.0;
+				reg_pr.value.pos[7] = 0.0;
+				reg_pr.value.pos[8] = 0.0;
+#endif
 		    }
 		}else if(evalType == (int)(TYPE_R | TYPE_FLOAT)){
 		    if(operand->getType() == TYPE_FLOAT)
@@ -501,13 +577,24 @@ public:
 				joint.j4 -= jointOperand.j4;
 				joint.j5 -= jointOperand.j5;
 				joint.j6 -= jointOperand.j6;
-				
+#ifdef WIN32
 				reg_pr.value.joint_pos[0] -= jointOperand.j1;
 				reg_pr.value.joint_pos[1] -= jointOperand.j2;
 				reg_pr.value.joint_pos[2] -= jointOperand.j3;
 				reg_pr.value.joint_pos[3] -= jointOperand.j4;
 				reg_pr.value.joint_pos[4] -= jointOperand.j5;
 				reg_pr.value.joint_pos[5] -= jointOperand.j6;
+#else
+				reg_pr.value.pos[0] -= jointOperand.j1;
+				reg_pr.value.pos[1] -= jointOperand.j2;
+				reg_pr.value.pos[2] -= jointOperand.j3;
+				reg_pr.value.pos[3] -= jointOperand.j4;
+				reg_pr.value.pos[4] -= jointOperand.j5;
+				reg_pr.value.pos[5] -= jointOperand.j6;
+				reg_pr.value.pos[6] = 0.0;
+				reg_pr.value.pos[7] = 0.0;
+				reg_pr.value.pos[8] = 0.0;
+#endif
 		    }
 			else if(operand->getType() == (int)(TYPE_PR | TYPE_JOINT))
 		    {
@@ -518,28 +605,63 @@ public:
 				joint.j4 -= jointOperand.j4;
 				joint.j5 -= jointOperand.j5;
 				joint.j6 -= jointOperand.j6;
-				
+#ifdef WIN32
 				reg_pr.value.joint_pos[0] -= jointOperand.j1;
 				reg_pr.value.joint_pos[1] -= jointOperand.j2;
 				reg_pr.value.joint_pos[2] -= jointOperand.j3;
 				reg_pr.value.joint_pos[3] -= jointOperand.j4;
 				reg_pr.value.joint_pos[4] -= jointOperand.j5;
 				reg_pr.value.joint_pos[5] -= jointOperand.j6;
+#else
+				reg_pr.value.pos[0] -= jointOperand.j1;
+				reg_pr.value.pos[1] -= jointOperand.j2;
+				reg_pr.value.pos[2] -= jointOperand.j3;
+				reg_pr.value.pos[3] -= jointOperand.j4;
+				reg_pr.value.pos[4] -= jointOperand.j5;
+				reg_pr.value.pos[5] -= jointOperand.j6;
+				reg_pr.value.pos[6] = 0.0;
+				reg_pr.value.pos[7] = 0.0;
+				reg_pr.value.pos[8] = 0.0;
+#endif
 		    }
 		}else if(evalType == (int)(TYPE_PR | TYPE_POSE)){
 		    if(operand->getType() == TYPE_POSE)
 		    {
 		    	PoseEuler poseOperand = operand->getPoseValue();
 		    	pose = calcCartesianPosSubtract(pose, poseOperand);
+#ifdef WIN32
 				reg_pr.value.cartesian_pos.position    = pose.position;
 				reg_pr.value.cartesian_pos.orientation = pose.orientation;
+#else
+				reg_pr.value.pos[0] = pose.position.x;
+				reg_pr.value.pos[1] = pose.position.y;
+				reg_pr.value.pos[2] = pose.position.z;
+				reg_pr.value.pos[3] = pose.orientation.a;
+				reg_pr.value.pos[4] = pose.orientation.b;
+				reg_pr.value.pos[5] = pose.orientation.c;
+				reg_pr.value.pos[6] = 0.0;
+				reg_pr.value.pos[7] = 0.0;
+				reg_pr.value.pos[8] = 0.0;
+#endif
 		    }
 			else if(operand->getType() == (int)(TYPE_PR | TYPE_POSE))
 		    {
 		    	PoseEuler poseOperand = operand->getPoseValue();
 		    	pose = calcCartesianPosSubtract(pose, poseOperand);
+#ifdef WIN32
 				reg_pr.value.cartesian_pos.position    = pose.position;
 				reg_pr.value.cartesian_pos.orientation = pose.orientation;
+#else
+				reg_pr.value.pos[0] = pose.position.x;
+				reg_pr.value.pos[1] = pose.position.y;
+				reg_pr.value.pos[2] = pose.position.z;
+				reg_pr.value.pos[3] = pose.orientation.a;
+				reg_pr.value.pos[4] = pose.orientation.b;
+				reg_pr.value.pos[5] = pose.orientation.c;
+				reg_pr.value.pos[6] = 0.0;
+				reg_pr.value.pos[7] = 0.0;
+				reg_pr.value.pos[8] = 0.0;
+#endif
 		    }
 		}else if(evalType == (int)(TYPE_R | TYPE_FLOAT)){
 		    if(operand->getType() == TYPE_FLOAT)

@@ -285,7 +285,8 @@ int MacroInstrMgr::updateSingleMacroInstr(cJSON * item, macro_instr macroInstr)
 		switch ((child->type)&255)
 		{
 		case cJSON_True:	
-			printf("cJSON_True"); break;
+			// printf("cJSON_True"); 
+			break;
 		case cJSON_Number:
 			break;
 		case cJSON_String:
@@ -309,7 +310,7 @@ int MacroInstrMgr::updateSingleMacroInstr(cJSON * item, macro_instr macroInstr)
 		case cJSON_Array:
 			break;
 		case cJSON_Object:	
-			printf("cJSON_Object\n");
+			// printf("cJSON_Object\n");
 			break;
 		}
 		child = child->next ;

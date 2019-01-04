@@ -58,6 +58,13 @@ std::string g_files_manager_data_path = "";
 
 InterpreterPublish  g_interpreter_publish; 
 
+/************************************************* 
+	Function:		split
+	Description:	split string to vector
+	Input:			str               - soruce string
+	Input:			pattern           - seperator
+	Return: 		vector<string>
+*************************************************/ 
 vector<string> split(string str,string pattern)
 {
 	string::size_type pos;
@@ -78,33 +85,69 @@ vector<string> split(string str,string pattern)
 	return result;
 }
 
+/************************************************* 
+	Function:		setMoveCommandDestination
+	Description:	save start position of MOV* (Used in the BACKWARD)
+	Input:			movCmdDst        - start position of MOV*
+	Return: 		NULL
+*************************************************/ 
 void setMoveCommandDestination(MoveCommandDestination movCmdDst)
 { 
 //    writeShm(SHM_INTPRT_DST, 0, (void*)&movCmdDst, sizeof(movCmdDst));
 }
 
+/************************************************* 
+	Function:		getMoveCommandDestination
+	Description:	get start position of MOV* (Used in the BACKWARD)
+	Input:			movCmdDst        - start position of MOV*
+	Return: 		NULL
+*************************************************/ 
 void getMoveCommandDestination(MoveCommandDestination& movCmdDst)
 {
 //    readShm(SHM_INTPRT_DST, 0, (void*)&movCmdDst, sizeof(movCmdDst));
 }
 
+/************************************************* 
+	Function:		copyMoveCommandDestination
+	Description:	copy start position of MOV* (Used in the BACKWARD)
+	Input:			movCmdDst        - start position of MOV*
+	Return: 		NULL
+*************************************************/ 
 void copyMoveCommandDestination(MoveCommandDestination& movCmdDst)
 {
     getMoveCommandDestination(movCmdDst);
     setMoveCommandDestination(movCmdDst);
 }
 
+/************************************************* 
+	Function:		resetProgramNameAndLineNum
+	Description:	clear Line number and ProgramName
+	Input:			thread_control_block   - interpreter info
+	Return: 		NULL
+*************************************************/ 
 void resetProgramNameAndLineNum(struct thread_control_block * objThdCtrlBlockPtr)
 {
 	setCurLine(objThdCtrlBlockPtr, (char *)"", 0);
 	setProgramName(objThdCtrlBlockPtr, (char *)""); 
 }
 
+/************************************************* 
+	Function:		getProgramName
+	Description:	get running Program Name
+	Return: 		Running Program Name
+*************************************************/ 
 char * getProgramName()
 {
 	return g_interpreter_publish.program_name; 
 }
 
+/************************************************* 
+	Function:		setProgramName
+	Description:	set running Program Name
+	Input:			thread_control_block   - interpreter info
+	Input:			program_name           - Running Program Name
+	Return: 		NULL
+*************************************************/ 
 void setProgramName(struct thread_control_block * objThdCtrlBlockPtr, char * program_name)
 {
     FST_INFO("setProgramName to %s at %d", program_name, objThdCtrlBlockPtr->is_main_thread);
@@ -118,6 +161,12 @@ void setProgramName(struct thread_control_block * objThdCtrlBlockPtr, char * pro
 	}
 }
 
+/************************************************* 
+	Function:		getThreadControlBlock
+	Description:	Find a free thread_control_block object in the g_thread_control_block
+	Input:			NULL
+	Return: 		a free thread_control_block object 
+*************************************************/ 
 struct thread_control_block *  getThreadControlBlock()
 {
 	if(getCurrentThreadSeq() < 0)
@@ -133,6 +182,12 @@ struct thread_control_block *  getThreadControlBlock()
 	}
 }
 
+/************************************************* 
+	Function:		getCurrentThreadSeq
+	Description:	get current running thread_control_block index
+	Input:			NULL
+	Return: 		a free thread_control_block object index
+*************************************************/ 
 int getCurrentThreadSeq()
 {
 	if(g_iCurrentThreadSeq < 0)
@@ -140,6 +195,12 @@ int getCurrentThreadSeq()
 	return g_iCurrentThreadSeq ;
 }
 
+/************************************************* 
+	Function:		incCurrentThreadSeq
+	Description:	increment current running thread_control_block index
+	Input:			NULL
+	Return: 		NULL
+*************************************************/ 
 void incCurrentThreadSeq()
 {
 	if(g_iCurrentThreadSeq < NUM_THREAD)
@@ -148,6 +209,12 @@ void incCurrentThreadSeq()
 		g_iCurrentThreadSeq = 0 ;
 }
 
+/************************************************* 
+	Function:		decCurrentThreadSeq
+	Description:	decrement current running thread_control_block index
+	Input:			NULL
+	Return: 		NULL
+*************************************************/ 
 void decCurrentThreadSeq()
 {
 	if(g_iCurrentThreadSeq == 0)
@@ -155,11 +222,24 @@ void decCurrentThreadSeq()
 	g_iCurrentThreadSeq-- ;
 }
 
+/************************************************* 
+	Function:		getPrgmState
+	Description:	get current Program State
+	Input:			NULL
+	Return: 		current Program State
+*************************************************/ 
 InterpreterState getPrgmState()
 {
 	return g_privateInterpreterState ;
 }
 
+/************************************************* 
+	Function:		setPrgmState
+	Description:	set current Program State
+	Input:			thread_control_block   - interpreter info
+	Input:			state                  - Program State
+	Return: 		NULL
+*************************************************/ 
 void setPrgmState(struct thread_control_block * objThdCtrlBlockPtr, InterpreterState state)
 {
     FST_INFO("setPrgmState to %d at %d", (int)state, objThdCtrlBlockPtr->is_main_thread);
@@ -174,6 +254,14 @@ void setPrgmState(struct thread_control_block * objThdCtrlBlockPtr, InterpreterS
 	}
 }
 
+/************************************************* 
+	Function:		setCurLine
+	Description:	set current Line info
+	Input:			thread_control_block   - interpreter info
+	Input:			line                   - Line XPath
+	Input:			lineNum                - Line number
+	Return: 		NULL
+*************************************************/ 
 void setCurLine(struct thread_control_block * objThdCtrlBlockPtr, char * line, int lineNum)
 {
 // #ifdef WIN32
@@ -198,6 +286,12 @@ void setCurLine(struct thread_control_block * objThdCtrlBlockPtr, char * line, i
 	}
 }
 
+/************************************************* 
+	Function:		setWarning
+	Description:	upload Error code
+	Input:			warn                   - Error code
+	Return: 		NULL
+*************************************************/ 
 #ifdef WIN32
 void setWarning(__int64 warn)
 #else
@@ -213,6 +307,12 @@ void setWarning(long long int warn)
 #endif  
 }
 
+/************************************************* 
+	Function:		setMessage
+	Description:	upload Message code
+	Input:			warn                   - Message code
+	Return: 		NULL
+*************************************************/ 
 void setMessage(int warn)
 {
 #ifdef WIN32
@@ -224,19 +324,31 @@ void setMessage(int warn)
 #endif  
 }
 
-UserOpMode getUserOpMode()
-{
-#ifdef WIN32
-	CtrlStatus temp,  * tempPtr = &temp;
-    int offset = (int)&(tempPtr->user_op_mode) - (int)tempPtr ;
-    readShm(SHM_CTRL_STATUS, offset, (void*)&ctrl_status.user_op_mode, sizeof(ctrl_status.user_op_mode));
-#else
-    int offset = (int)&((CtrlStatus*)0)->user_op_mode;
-#endif  
+/************************************************* 
+	Function:		getUserOpMode (Legacy)
+	Description:	get User Opration Mode
+	Input:			NULL
+	Return: 		User Opration Mode
+*************************************************/ 
+// 	UserOpMode getUserOpMode()
+// 	{
+// 	#ifdef WIN32
+// 		CtrlStatus temp,  * tempPtr = &temp;
+// 		int offset = (int)&(tempPtr->user_op_mode) - (int)tempPtr ;
+// 		readShm(SHM_CTRL_STATUS, offset, (void*)&ctrl_status.user_op_mode, sizeof(ctrl_status.user_op_mode));
+// 	#else
+// 		int offset = (int)&((CtrlStatus*)0)->user_op_mode;
+// 	#endif  
+// 
+// 		return ctrl_status.user_op_mode;
 
-    return ctrl_status.user_op_mode;
-}
-
+/************************************************* 
+	Function:		setInstruction
+	Description:	Send MOV* Instruction to controller
+	Input:			thread_control_block   - interpreter info
+	Input:			instruction            - Instruction Object
+	Return: 		true - success ; false - failed
+*************************************************/ 
 bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instruction * instruction)
 {
     bool ret = true;
@@ -353,6 +465,15 @@ bool getIntprtCtrl(InterpreterControl& intprt_ctrl)
 	return iRet ;
 }
 */
+
+/************************************************* 
+	Function:		startFile
+	Description:	start running Program File
+	Input:			thread_control_block   - interpreter info
+	Input:			proj_name              - Program File name
+	Input:			idx                    - Thread Index
+	Return: 		NULL
+*************************************************/ 
 void startFile(struct thread_control_block * objThdCtrlBlockPtr, 
 	char * proj_name, int idx)
 {
@@ -414,6 +535,12 @@ void waitInterpreterStateToWaiting(
 }	
 */
 
+/************************************************* 
+	Function:		waitInterpreterStateleftPaused
+	Description:	wait Interpreter State left Paused
+	Input:			thread_control_block   - interpreter info
+	Return: 		NULL
+*************************************************/ 
 void waitInterpreterStateleftPaused(
 	struct thread_control_block * objThdCtrlBlockPtr)
 {
@@ -435,6 +562,12 @@ void waitInterpreterStateleftPaused(
 	}
 }
 
+/************************************************* 
+	Function:		waitInterpreterStateleftPaused
+	Description:	wait Interpreter State enter Paused
+	Input:			thread_control_block   - interpreter info
+	Return: 		NULL
+*************************************************/ 
 void waitInterpreterStateToPaused(
 	struct thread_control_block * objThdCtrlBlockPtr)
 {
@@ -462,6 +595,13 @@ void waitInterpreterStateToPaused(
 	}
 }	
 
+/************************************************* 
+	Function:		parseCtrlComand
+	Description:	parse Controller Command
+	Input:			intprt_ctrl            - Command
+	Input:			requestDataPtr         - Command parameters
+	Return: 		NULL
+*************************************************/ 
 void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr) 
 	// (struct thread_control_block * objThdCtrlBlockPtr)
 {
@@ -473,7 +613,7 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 #else
 	static fst_base::InterpreterServerCmd lastCmd ;
 #endif
-	UserOpMode userOpMode ;
+//	UserOpMode userOpMode ;
 	AutoMode   autoMode ;
     thread_control_block * objThdCtrlBlockPtr = NULL;
 
@@ -759,12 +899,12 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
            		break;
 			}
 			
-            userOpMode = getUserOpMode();
-            if ((userOpMode == SLOWLY_MANUAL_MODE_U)
-            || (userOpMode == UNLIMITED_MANUAL_MODE_U))
-            {
-                objThdCtrlBlockPtr->prog_mode = STEP_MODE ;
-            }
+//            userOpMode = getUserOpMode();
+//            if ((userOpMode == SLOWLY_MANUAL_MODE_U)
+//            || (userOpMode == UNLIMITED_MANUAL_MODE_U))
+//            {
+//                objThdCtrlBlockPtr->prog_mode = STEP_MODE ;
+//            }
             setPrgmState(objThdCtrlBlockPtr, INTERPRETER_PAUSED); 
             break;
         case fst_base::INTERPRETER_SERVER_CMD_ABORT:
@@ -810,6 +950,12 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
   	//		FST_INFO("left parseCtrlComand.");
 }
 
+/************************************************* 
+	Function:		forgesight_load_programs_path
+	Description:	load programs path
+	Input:			NULL
+	Return: 		NULL
+*************************************************/ 
 void forgesight_load_programs_path()
 {
 	std::string data_path = "";
@@ -838,11 +984,23 @@ void forgesight_load_programs_path()
 	
 }
 
+/************************************************* 
+	Function:		forgesight_get_programs_path
+	Description:	get programs path
+	Input:			NULL
+	Return: 		programs path
+*************************************************/ 
 char * forgesight_get_programs_path()
 {
 	return (char *)g_files_manager_data_path.c_str();
 }
 
+/************************************************* 
+	Function:		initShm
+	Description:	init interpretor
+	Input:			NULL
+	Return: 		programs path
+*************************************************/ 
 void initShm()
 {
 //    openShm(SHM_INTPRT_CMD, 1024);
@@ -877,6 +1035,12 @@ void initShm()
 }
 
 
+/************************************************* 
+	Function:		updateIOError (Legacy)
+	Description:	update IO Error
+	Input:			NULL
+	Return: 		NULL
+*************************************************/ 
 void updateIOError()
 {
 #ifndef WIN32

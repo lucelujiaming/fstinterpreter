@@ -1,9 +1,15 @@
 #ifndef PRG_INTERPRETER_COMMON_H_
 #define PRG_INTERPRETER_COMMON_H_
 
+#ifdef WIN32
 #include "fst_datatype.h"
 #include "stdint.h"
 using namespace fst_controller;
+#else
+#include "motion_control_datatype.h"
+#include "stdint.h"
+using namespace fst_mc;
+#endif
 
 #define ADD_INFO_NUM    10
 

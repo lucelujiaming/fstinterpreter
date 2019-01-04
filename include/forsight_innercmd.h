@@ -3,6 +3,10 @@
 #include "forsight_inter_control.h"
 #include "forsight_basint.h"
 
+#define   TIMER_START_VALUE      0.0
+#define   TIMER_STOP_VALUE       1.0
+#define   TIMER_RESET_VALUE      2.0
+
 #define   END_COMMND_RET      0x400    // 1024
 extern vector<string> g_vecXPath ;
 
@@ -21,5 +25,6 @@ int set_global_UF(int iLineNum, int iUFNum, struct thread_control_block* objThre
 int set_OVC(int iLineNum, double dUFNum, struct thread_control_block* objThreadCntrolBlock);
 int set_OAC(int iLineNum, double dUFNum, struct thread_control_block* objThreadCntrolBlock);
 
+int execute_Timer(struct thread_control_block* objThreadCntrolBlock, char *vname, eval_value& value);
 
 #endif

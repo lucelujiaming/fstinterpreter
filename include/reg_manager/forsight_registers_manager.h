@@ -5,8 +5,8 @@
 
 #ifdef USE_FORSIGHT_REGISTERS_MANAGER
 #ifndef WIN32
-#include "reg_manager/reg_manager_interface.h"
-using namespace fst_reg ;
+#include "reg_manager_interface_wrapper.h"
+using namespace fst_ctrl ;
 #endif
 #include "reg_manager/forsight_registers_manager.h"
 

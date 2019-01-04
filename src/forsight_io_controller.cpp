@@ -101,7 +101,7 @@ int getSingleConfig(cJSON * item, string key, int& value)
 		switch ((child->type)&255)
 		{
 		case cJSON_True:	
-			printf("cJSON_True"); 
+			// printf("cJSON_True"); 
 			if(strcmp(child->string, key.c_str()) == 0)
 			{
 				if(strcmp(child->string, "emltFlag") == 0)
@@ -126,7 +126,7 @@ int getSingleConfig(cJSON * item, string key, int& value)
 		case cJSON_Array:
 			break;
 		case cJSON_Object:	
-			printf("cJSON_Object\n");
+			// printf("cJSON_Object\n");
 			break;
 		}
 		child = child->next ;
@@ -142,7 +142,7 @@ int setSingleConfig(cJSON * item, string key, int& value)
 		switch ((child->type)&255)
 		{
 		case cJSON_True:	
-			printf("cJSON_True"); 
+			// printf("cJSON_True"); 
 			if(strcmp(child->string, key.c_str()) == 0)
 			{
 				if(strcmp(child->string, "emltFlag") == 0)
@@ -188,7 +188,8 @@ int forgesight_io_config_get_value(string name, string key, int& value)
 			switch ((child->type)&255)
 			{
 			case cJSON_True:	
-				printf("cJSON_True"); break;
+				// printf("cJSON_True"); 
+				break;
 			case cJSON_Number:
 				break;
 			case cJSON_String:
@@ -198,7 +199,7 @@ int forgesight_io_config_get_value(string name, string key, int& value)
 			case cJSON_Array:
 				break;
 			case cJSON_Object:	
-				printf("cJSON_Object\n");
+				// printf("cJSON_Object\n");
 				if(strcmp(child->string, name.c_str()) == 0)
 				{
 					getSingleConfig(child, key, value);
@@ -226,13 +227,13 @@ int forgesight_io_config_set_value(string name, string key, eval_value& value)
 		case cJSON_Number:
 			break;
 		case cJSON_String:
-			printf("cJSON_String"); break;
+			// printf("cJSON_String"); 
 			break;
 		case cJSON_Array:
-			printf("cJSON_Array"); break;
+			// printf("cJSON_Array"); 
 			break;
 		case cJSON_Object:	
-			printf("cJSON_Object\n");
+			// printf("cJSON_Object\n");
 			if(strcmp(child->string, name.c_str()) == 0)
 			{
 				iVal = (int)value.getFloatValue();

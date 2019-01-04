@@ -549,6 +549,14 @@ int set_global_UF(int iLineNum, int iUFNum, struct thread_control_block* objThre
     return 1;
 }
 
+/************************************************* 
+	Function:		set_OVC
+	Description:	set OVC(Overall Velocity Coefficient).
+	Input:			iLineNum               - Line Number
+	Input:			dOVCNum                - value of OVC
+	Input:			thread_control_block   - interpreter info
+	Return: 		1        -    Success ;
+*************************************************/ 
 int set_OVC(int iLineNum, double dOVCNum, struct thread_control_block* objThreadCntrolBlock)
 {
     Instruction instr;
@@ -574,6 +582,14 @@ int set_OVC(int iLineNum, double dOVCNum, struct thread_control_block* objThread
     return 1;
 }
 
+/************************************************* 
+	Function:		set_OAC
+	Description:	set OAC(Overall Acceleration Coefficient).
+	Input:			iLineNum               - Line Number
+	Input:			dOACNum                - value of OAC
+	Input:			thread_control_block   - interpreter info
+	Return: 		1        -    Success ;
+*************************************************/ 
 int set_OAC(int iLineNum, double dOACNum, struct thread_control_block* objThreadCntrolBlock)
 {
     Instruction instr;
@@ -600,7 +616,14 @@ int set_OAC(int iLineNum, double dOACNum, struct thread_control_block* objThread
 }
 
 
-// MovJ P[1] P[1] 30% Fine +附加参数
+/************************************************* 
+	Function:		call_MoveJ
+	Description:	Execute MOVEJ
+	                FORMAT: MOVEJ P[1], 250 CNT -1  +附加参数
+	Input:			iLineNum               - Line Number
+	Input:			thread_control_block   - interpreter info
+	Return: 		1        -    Success ;
+*************************************************/ 
 int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 {  
     MoveCommandDestination movCmdDst ;
@@ -817,6 +840,14 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
     return 1;   
 }
 
+/************************************************* 
+	Function:		call_MoveL
+	Description:	Execute MOVEL
+	                FORMAT: MOVEL P[1], 250 CNT -1  +附加参数
+	Input:			iLineNum               - Line Number
+	Input:			thread_control_block   - interpreter info
+	Return: 		1        -    Success ;
+*************************************************/ 
 int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 {  
     MoveCommandDestination movCmdDst ;
@@ -1043,6 +1074,14 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
     return 1;   
 }
 
+/************************************************* 
+	Function:		call_MoveC
+	Description:	Execute MOVEC
+	                FORMAT: MOVEC P[1] P[1]  250 CNT -1 +附加参数
+	Input:			iLineNum               - Line Number
+	Input:			thread_control_block   - interpreter info
+	Return: 		1        -    Success ;
+*************************************************/ 
 int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 {  
     MoveCommandDestination movCmdDst ;
@@ -1262,6 +1301,14 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
     return 1;     
 }
 
+/************************************************* 
+	Function:		call_UserAlarm
+	Description:	Execute UserAlarm
+	                FORMAT: UserAlarm 1
+	Input:			iLineNum               - Line Number
+	Input:			thread_control_block   - interpreter info
+	Return: 		1        -    Success ;
+*************************************************/ 
 int call_UserAlarm(int iLineNum, struct thread_control_block* objThreadCntrolBlock) 
 {  
 	eval_value value;
@@ -1275,6 +1322,97 @@ int call_UserAlarm(int iLineNum, struct thread_control_block* objThreadCntrolBlo
     return 1;
 }
 
+static int get_char_token(char * src, char * dst)
+{
+	char * tmp = src ;
+	if(isalpha(*src)) { /* var or command */
+		while(!isdelim(*(src))) 
+			*dst++=*(src)++;
+	}
+	return src - tmp ;
+}
+
+static int get_num_token(char * src, char * dst)
+{
+	char * tmp = src ;
+	if(isdigit(*src)) { /* var or command */
+		while(!isdelim(*(src))) 
+			*dst++=*(src)++;
+	}
+	return src - tmp ;
+}
+
+int execute_Timer(struct thread_control_block* objThreadCntrolBlock, char *vname, eval_value& value)
+{
+	bool bRet = false ;
+	char timer_name[16] ;
+	char timer_idx[16] ;
+	// char io_key_buffer[16] ;
+
+	int  iTimerIdx = 0 ;
+	char * namePtr = vname ;
+	char *temp = NULL ;
+	
+	memset(timer_name, 0x00, 16);
+	memset(timer_idx, 0x00, 16);
+	
+	temp = timer_name ;
+	get_char_token(namePtr, temp);
+	
+	namePtr += strlen(timer_name) ;
+	if(namePtr[0] != '['){
+		return -1 ;
+	}
+	namePtr++ ;
+	
+	memset(timer_idx, 0x00, 16);
+	temp = timer_idx ;
+	get_num_token(namePtr, temp);
+	iTimerIdx = atoi(timer_idx);
+	// namePtr += strlen(reg_idx) ;
+	
+	namePtr += strlen(timer_idx) ;
+	if(namePtr[0] != ']'){
+		return -1 ;
+	}
+	namePtr++ ;
+
+	if(value.getFloatValue() == TIMER_START_VALUE)
+	{
+		FST_INFO("%d: call_Timer  start", __LINE__);
+		g_structStopWatch[iTimerIdx].start_time = time(0);
+		value.setFloatValue(0); // 0.0; 
+	//	assign_var(objThreadCntrolBlock, vname, value); // 0.0);
+	}
+	else if(value.getFloatValue() == TIMER_RESET_VALUE)
+	{
+		FST_INFO("%d: call_Timer  start", __LINE__);
+		g_structStopWatch[iTimerIdx].start_time = time(0);
+		value.setFloatValue(0); // 0.0; 
+	//	assign_var(objThreadCntrolBlock, vname, value); // 0.0);
+	}
+	else if(value.getFloatValue() == TIMER_STOP_VALUE)
+	{
+		FST_INFO("%d: call_Timer  stop", __LINE__);
+		g_structStopWatch[iTimerIdx].diff_time = time(0) - 
+			g_structStopWatch[iTimerIdx].start_time ;
+		
+		value.setFloatValue(g_structStopWatch[iTimerIdx].diff_time)  ;
+	//	assign_var(objThreadCntrolBlock, vname, value);
+		FST_INFO("Time elapse : %d .", g_structStopWatch[iTimerIdx].diff_time);
+	}
+	return 1 ;
+}
+
+/************************************************* 
+	Function:		call_Timer
+	Description:	Execute Timer
+	                FORMAT: TIMER[1]  = START
+	                    OR: TIMER 1 start
+	Input:			iLineNum               - Line Number
+	Input:			thread_control_block   - interpreter info
+	Return: 		1        -    Success ;
+*************************************************/ 
 int call_Timer(int iLineNum, struct thread_control_block* objThreadCntrolBlock) 
 {  
 	eval_value value;
@@ -1300,20 +1438,18 @@ int call_Timer(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
         FST_INFO("%d: call_Timer  enter %s ", __LINE__, objThreadCntrolBlock->token);
 		if(strcmp(objThreadCntrolBlock->token, "start") == 0)
 		{
-			FST_INFO("%d: call_Timer  start", __LINE__);
-			g_structStopWatch[timerNumber].start_time = time(0);
-			value.setFloatValue(0); // 0.0; 
-			assign_var(objThreadCntrolBlock, var, value); // 0.0);
+			value.setFloatValue(TIMER_START_VALUE); 
+			execute_Timer(objThreadCntrolBlock, var, value); 
+		}
+		else if(strcmp(objThreadCntrolBlock->token, "reset") == 0)
+		{
+			value.setFloatValue(TIMER_RESET_VALUE);
+			execute_Timer(objThreadCntrolBlock, var, value);
 		}
 		else if(strcmp(objThreadCntrolBlock->token, "stop") == 0)
 		{
-			FST_INFO("%d: call_Timer  stop", __LINE__);
-			g_structStopWatch[timerNumber].diff_time = time(0) - 
-				g_structStopWatch[timerNumber].start_time ;
-			
-			eval_value value;
-			value.setFloatValue(g_structStopWatch[timerNumber].diff_time)  ;
-			assign_var(objThreadCntrolBlock, var, value);
+			value.setFloatValue(TIMER_STOP_VALUE); 
+			execute_Timer(objThreadCntrolBlock, var, value);
 			FST_INFO("Time elapse : %d .", g_structStopWatch[timerNumber].diff_time);
 		}
 		else 
@@ -1326,6 +1462,16 @@ int call_Timer(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
     return 1;   
 }
 
+/************************************************* 
+	Function:		call_Wait
+	Description:	Execute Wait
+	                FORMAT: WAIT 3 ;   WAIT R[1]
+			                WAIT DI[3]=ON
+	                        WAIT DI[2]=ON, TimeOut=60 Skip
+	Input:			iLineNum               - Line Number
+	Input:			thread_control_block   - interpreter info
+	Return: 		1        -    Success ;
+*************************************************/ 
 int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock) 
 {  
 	eval_value value;
@@ -1451,6 +1597,14 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
     return 1;   
 }
 
+/************************************************* 
+	Function:		call_Pause
+	Description:	Execute Pause
+	                FORMAT: PAUSE
+	Input:			iLineNum               - Line Number
+	Input:			thread_control_block   - interpreter info
+	Return: 		1        -    Success ;
+*************************************************/ 
 int call_Pause(int iLineNum, struct thread_control_block* objThreadCntrolBlock) 
 {  
 	InterpreterState interpreterState  = INTERPRETER_PAUSED ;
@@ -1476,6 +1630,14 @@ int call_Pause(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
     return 1;   
 }
 
+/************************************************* 
+	Function:		call_Abort
+	Description:	Execute Abort
+	                FORMAT: ABORT
+	Input:			iLineNum               - Line Number
+	Input:			thread_control_block   - interpreter info
+	Return: 		1        -    Success ;
+*************************************************/ 
 int call_Abort(int iLineNum, struct thread_control_block* objThreadCntrolBlock) 
 {  
 	setPrgmState(objThreadCntrolBlock, INTERPRETER_IDLE);
@@ -1490,7 +1652,13 @@ int call_Abort(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 #endif
 }
 
-int getXPathLinenum(char * file_name)
+/************************************************* 
+	Function:		getXPathLineNum
+	Description:	Get line count
+	Input:			file_name               - file name
+	Return: 		iLineCount              - line count
+*************************************************/ 
+int getXPathLineNum(char * file_name)
 {
 	int iLineCount = 0 ;
 	char contentLine[FILE_PATH_LEN];
@@ -1509,6 +1677,13 @@ int getXPathLinenum(char * file_name)
 	return iLineCount ;
 }
 
+/************************************************* 
+	Function:		mergeImportXPathToProjectXPath
+	Description:	merge XPath content of import file into the XPath content of major file
+	Input:			thread_control_block   - interpreter info
+	Input:			fname                  - import file name
+	Return: 		NULL
+*************************************************/ 
 void mergeImportXPathToProjectXPath(
 		struct thread_control_block* objThreadCntrolBlock, char * fname)
 {
@@ -1535,7 +1710,7 @@ void mergeImportXPathToProjectXPath(
 	sprintf(xpath_main_file_name, "%s\/programs\/%s_xpath.txt", 
 			forgesight_get_programs_path(), objThreadCntrolBlock->project_name);
 #endif
-	iMainLineCount = getXPathLinenum(xpath_main_file_name);
+	iMainLineCount = getXPathLineNum(xpath_main_file_name);
 	
 	if((xpath_import_file = fopen(xpath_import_file_name, "r"))==NULL){
 		perror("open xpath_import_file_name file failed\n");  
@@ -1569,6 +1744,13 @@ void mergeImportXPathToProjectXPath(
 	fclose(xpath_main_file);
 }
 
+/************************************************* 
+	Function:		generateXPathVector
+	Description:	generate a Vector which recode all of XPath
+	Input:			thread_control_block   - interpreter info
+	Input:			fname                  - import file name
+	Return: 		NULL
+*************************************************/ 
 void generateXPathVector(char * fname)
 {
 	char xpath_file_name[FILE_PATH_LEN];
@@ -1629,6 +1811,12 @@ void generateXPathVector(char * fname)
 //	}
 }
 
+/************************************************* 
+	Function:		getLineNumFromXPathVector
+	Description:	get line number by XPath 
+	Input:			xPath                  - XPath
+	Return: 		i                      - line number
+*************************************************/ 
 int getLineNumFromXPathVector(char * xPath)
 {
     for(unsigned int i = 0; i < (int)g_vecXPath.size(); ++i)  
@@ -1640,6 +1828,12 @@ int getLineNumFromXPathVector(char * xPath)
 	return -1 ;
 }
 
+/************************************************* 
+	Function:		getMaxLineNum
+	Description:	get line count
+	Input:			NULL
+	Return: 		line count
+*************************************************/ 
 int getMaxLineNum()
 {
 	return (int)g_vecXPath.size() ;

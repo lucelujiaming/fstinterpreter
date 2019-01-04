@@ -3661,10 +3661,10 @@ void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname,
 		if(strchr(vname, '['))
 		{
 			int iRet = 0 ;
-			// iRet = forgesight_set_timer(vname, value);
-			if(iRet == 0)
+			iRet = execute_Timer(objThreadCntrolBlock, vname, value);
+			if(iRet != 1)
 			{
-				FST_INFO("forgesight_set_timer");
+				FST_INFO("forgesight_set_timer Failed");
 				return ;
 			}
 		}
@@ -3773,17 +3773,17 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 	}
 	else if(!strcmp(vname, FORSIGHT_TIMER_START))
 	{
-		value.setFloatValue(1.0);
+		value.setFloatValue(TIMER_START_VALUE);
 		return value ;
 	}
 	else if(!strcmp(vname, FORSIGHT_TIMER_STOP))
 	{
-		value.setFloatValue(0.0);
+		value.setFloatValue(TIMER_STOP_VALUE);
 		return value ;
 	}
 	else if(!strcmp(vname, FORSIGHT_TIMER_RESET))
 	{
-		value.setFloatValue(0.0);
+		value.setFloatValue(TIMER_RESET_VALUE);
 		return value ;
 	}
 	else if(!strcmp(vname, FORSIGHT_PULSE))
