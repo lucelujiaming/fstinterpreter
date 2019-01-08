@@ -710,7 +710,7 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
            		break;
 			}
             FST_INFO("jump to line:%s", intprt_ctrl.jump_line);
-			iLineNum = getLineNumFromXPathVector(intprt_ctrl.jump_line);
+			iLineNum = getLineNumFromXPathVector(objThdCtrlBlockPtr, intprt_ctrl.jump_line);
 			if(iLineNum > 0)
             {
             	setLinenum(objThdCtrlBlockPtr, iLineNum);

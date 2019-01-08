@@ -16,9 +16,11 @@ int call_internal_cmd(int index, int iLineNum,
 					  struct thread_control_block* objThreadCntrolBlock);
 void mergeImportXPathToProjectXPath(
 		struct thread_control_block* objThreadCntrolBlock, char * fname);
-void generateXPathVector(char * fname);
-int getLineNumFromXPathVector(char * xPath);
-int getMaxLineNum();
+void generateXPathVector(
+					  struct thread_control_block* objThreadCntrolBlock, char * fname);
+int getLineNumFromXPathVector(
+					  struct thread_control_block* objThreadCntrolBlock, char * xPath);
+int getMaxLineNum(struct thread_control_block* objThreadCntrolBlock);
 
 int set_global_TF(int iLineNum, int iTFNum, struct thread_control_block* objThreadCntrolBlock);
 int set_global_UF(int iLineNum, int iUFNum, struct thread_control_block* objThreadCntrolBlock);

@@ -1,5 +1,8 @@
 #ifndef WIN32
 #include <unistd.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+
 #include "common.h"
 using namespace fst_log;
 #else
@@ -16,10 +19,26 @@ using namespace fst_log;
 // Logger glog;
 // #endif
 
+#ifndef WIN32
+void signalInterrupt(int signo) 
+{
+	if(log_ptr_ != NULL)
+	{
+        FST_INFO("Free log_ptr_ in the signalInterrupt");
+		
+		delete log_ptr_;
+		log_ptr_ = NULL ;
+	}
+    _exit(0);
+}
+#endif
+
+
 int main(int  argc, char *argv[])
 {
 	InterpreterControl intprt_ctrl; 
 #ifndef WIN32
+	signal(SIGINT, signalInterrupt);
 	if(log_ptr_ == NULL)
 	{
 		log_ptr_ = new fst_log::Logger();
@@ -68,11 +87,21 @@ int main(int  argc, char *argv[])
 			usleep(1000);
 		}
 #else
-		parseCtrlComand(intprt_ctrl, "ALL_INSTRUCTION_TEST");
+		parseCtrlComand(intprt_ctrl, "yyy");
 		intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_LOAD ;
 		Sleep(100);
 #endif
 	}
+	
+#ifndef WIN32
+	if(log_ptr_ != NULL)
+	{
+        FST_INFO("Free log_ptr_");
+		
+		delete log_ptr_;
+		log_ptr_ = NULL ;
+	}
+#endif
 	return 1;
 }
 

@@ -184,6 +184,8 @@ struct thread_control_block {
 //	LineNumState      stateLineNum ;
 //    MotionTarget      currentMotionTarget ;
     map<int, MoveCommandDestination>  start_mov_position ;  // iLineNum :: movCmdDst
+    
+	vector<string> vector_XPath ;
 } ;
 #ifndef WIN32
 extern fst_log::Logger* log_ptr_;

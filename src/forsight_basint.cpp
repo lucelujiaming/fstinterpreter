@@ -377,8 +377,15 @@ void setLinenum(struct thread_control_block* objThreadCntrolBlock, int iLinenum)
     FST_INFO("setLinenum : %d at the %dth thread", 
 		iLinenum, objThreadCntrolBlock->iThreadIdx);
 	objThreadCntrolBlock->iLineNum = iLinenum;
-    FST_INFO("setLinenum: setCurLine (%d) at %s", iLinenum, g_vecXPath[iLinenum].c_str());
-	setCurLine(objThreadCntrolBlock, (char *)g_vecXPath[iLinenum].c_str(), iLinenum);
+	if(iLinenum < (int)objThreadCntrolBlock->vector_XPath.size())
+	{
+		FST_INFO("setLinenum: setCurLine (%d) at %s", 
+			iLinenum, objThreadCntrolBlock->vector_XPath[iLinenum].c_str());
+		setCurLine(objThreadCntrolBlock, 
+			(char *)objThreadCntrolBlock->vector_XPath[iLinenum].c_str(), iLinenum);
+	}
+	else
+		FST_INFO("OutRange with %d", iLinenum);
 }
 
 /************************************************* 
@@ -515,7 +522,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 		  exec_import(objThreadCntrolBlock);
 		  get_token(objThreadCntrolBlock);
 	  }
-      generateXPathVector(objThreadCntrolBlock->project_name);
+      generateXPathVector(objThreadCntrolBlock, objThreadCntrolBlock->project_name);
 	  struct prog_line_info_t objProgLineInfo ;
 	  objProgLineInfo.start_prog_pos = objThreadCntrolBlock->prog_end ;
 	  objProgLineInfo.end_prog_pos   = objThreadCntrolBlock->prog_end ;
@@ -578,6 +585,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	  objThreadCntrolBlock->prog_jmp_line.clear();
 	  objThreadCntrolBlock->sub_label_table.clear();
 	  objThreadCntrolBlock->start_mov_position.clear();
+	  objThreadCntrolBlock->vector_XPath.clear();
 	  FST_INFO("return %d", iRet);
 	  return iRet;
   }
