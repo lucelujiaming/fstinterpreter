@@ -182,7 +182,36 @@ int forgesight_registers_manager_get_register(
 		{
 			bRet = reg_manager_interface_getPr(&objPrRegData, iRegIdx);
 			// PrRegData * ptr = (PrRegData *)reg_content_buffer ;
+#ifndef WIN32
+			if(bRet == false)
+				serror(objThreadCntrolBlock, 4) ; 
+			else
+			{
+				if(objPrRegData.value.pos_type == PR_REG_POS_TYPE_CARTESIAN)
+				{
+				   objPoseEuler.position.x	  = objPrRegData.value.pos[0];
+				   objPoseEuler.position.y	  = objPrRegData.value.pos[1];
+				   objPoseEuler.position.z	  = objPrRegData.value.pos[2];
+				   objPoseEuler.orientation.a = objPrRegData.value.pos[3];
+				   objPoseEuler.orientation.b = objPrRegData.value.pos[4];
+				   objPoseEuler.orientation.c = objPrRegData.value.pos[5];
+				   value->setPoseValue(&objPoseEuler);
+				}
+				else if(objPrRegData.value.pos_type == PR_REG_POS_TYPE_JOINT)
+				{
+				   objJoint.j1 = objPrRegData.value.pos[0];
+				   objJoint.j2 = objPrRegData.value.pos[1];
+				   objJoint.j3 = objPrRegData.value.pos[2];
+				   objJoint.j4 = objPrRegData.value.pos[3];
+				   objJoint.j5 = objPrRegData.value.pos[4];
+				   objJoint.j6 = objPrRegData.value.pos[5];   
+				   value->setJointValue(&objJoint);
+				}
+
+			}
+#else
 			value->setPrRegDataValue(&objPrRegData);
+#endif
 		}
 		// Implement for intergretion
 		else if (!strcmp(reg_member, TXT_POSE))
@@ -346,10 +375,18 @@ int forgesight_registers_manager_get_register(
 				serror(objThreadCntrolBlock, 4) ; 
 			else
 			{
-				if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+#ifndef WIN32
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+					value->setFloatValue(objPrRegData.value.pos[0]);
+				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
+					value->setFloatValue(objPrRegData.value.pos[0]);
+#else
+
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
 					value->setFloatValue(objPrRegData.value.cartesian_pos.position.x);
-				else if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 					value->setFloatValue(objPrRegData.value.joint_pos[0]);
+#endif
 				else
 		       		FST_INFO("PR[%d].pos_type = %d ", 
 	       				iRegIdx, objPrRegData.value.pos_type);
@@ -362,10 +399,17 @@ int forgesight_registers_manager_get_register(
 				serror(objThreadCntrolBlock, 4) ; 
 			else
 			{
-				if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+#ifndef WIN32
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+					value->setFloatValue(objPrRegData.value.pos[1]);
+				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
+					value->setFloatValue(objPrRegData.value.pos[1]);
+#else
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
 					value->setFloatValue(objPrRegData.value.cartesian_pos.position.y);
-				else if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 					value->setFloatValue(objPrRegData.value.joint_pos[1]);
+#endif
 				else
 		       		FST_INFO("PR[%d].pos_type = %d ", 
 		       			iRegIdx, objPrRegData.value.pos_type);
@@ -378,10 +422,17 @@ int forgesight_registers_manager_get_register(
 				serror(objThreadCntrolBlock, 4) ; 
 			else
 			{
-				if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+#ifndef WIN32
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+					value->setFloatValue(objPrRegData.value.pos[2]);
+				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
+					value->setFloatValue(objPrRegData.value.pos[2]);
+#else
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
 					value->setFloatValue(objPrRegData.value.cartesian_pos.position.z);
-				else if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 					value->setFloatValue(objPrRegData.value.joint_pos[2]);
+#endif
 				else
 		       		FST_INFO("PR[%d].pos_type = %d ", 
 		       			iRegIdx, objPrRegData.value.pos_type);
@@ -394,10 +445,17 @@ int forgesight_registers_manager_get_register(
 				serror(objThreadCntrolBlock, 4) ; 
 			else
 			{
-				if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+#ifndef WIN32
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+					value->setFloatValue(objPrRegData.value.pos[3]);
+				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
+					value->setFloatValue(objPrRegData.value.pos[3]);
+#else
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
 					value->setFloatValue(objPrRegData.value.cartesian_pos.orientation.a);
-				else if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 					value->setFloatValue(objPrRegData.value.joint_pos[3]);
+#endif
 				else
 		       		FST_INFO("PR[%d].pos_type = %d ", 
 		       			iRegIdx, objPrRegData.value.pos_type);
@@ -410,10 +468,17 @@ int forgesight_registers_manager_get_register(
 				serror(objThreadCntrolBlock, 4) ; 
 			else
 			{
-				if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+#ifndef WIN32
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+					value->setFloatValue(objPrRegData.value.pos[4]);
+				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
+					value->setFloatValue(objPrRegData.value.pos[4]);
+#else
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
 					value->setFloatValue(objPrRegData.value.cartesian_pos.orientation.b);
-				else if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 					value->setFloatValue(objPrRegData.value.joint_pos[4]);
+#endif
 				else
 		       		FST_INFO("PR[%d].pos_type = %d ", 
 		       			iRegIdx, objPrRegData.value.pos_type);
@@ -426,10 +491,17 @@ int forgesight_registers_manager_get_register(
 				serror(objThreadCntrolBlock, 4) ; 
 			else
 			{
-				if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+#ifndef WIN32
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+					value->setFloatValue(objPrRegData.value.pos[5]);
+				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
+					value->setFloatValue(objPrRegData.value.pos[5]);
+#else
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
 					value->setFloatValue(objPrRegData.value.cartesian_pos.orientation.c);
-				else if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 					value->setFloatValue(objPrRegData.value.joint_pos[5]);
+#endif
 				else
 		       		FST_INFO("PR[%d].pos_type = %d ", 
 		       			iRegIdx, objPrRegData.value.pos_type);
@@ -467,8 +539,13 @@ int forgesight_registers_manager_get_register(
 	{
 		if(strlen(reg_member) == 0)
 		{
+#ifndef WIN32
+			FST_INFO("TXT_SR at (%d), (%s), (%s) ", 
+				objSrRegData.id, objSrRegData.comment.c_str(), objSrRegData.value.c_str());
+#else
 			FST_INFO("TXT_SR at (%d), (%s), (%s) ", 
 				objSrRegData.id, objSrRegData.comment, objSrRegData.value.c_str());
+#endif
 			bRet = reg_manager_interface_getSr(&objSrRegData, iRegIdx);
 			// SrRegData * ptr = (SrRegData *)reg_content_buffer ;
 			// value->setStringValue(ptr->value);
@@ -554,8 +631,13 @@ int forgesight_registers_manager_get_register(
 		{
 			bRet = reg_manager_interface_getMr(&objMrRegData, iRegIdx);
 			// MrRegData * ptr = (MrRegData *)reg_content_buffer ;
+#ifndef WIN32
+	    	FST_INFO("Get at TXT_MR with %d (%s) %d ", 
+	    			objMrRegData.id, objMrRegData.comment.c_str(), objMrRegData.value);
+#else
 	    	FST_INFO("Get at TXT_MR with %d (%s) %d ", 
 	    			objMrRegData.id, objMrRegData.comment, objMrRegData.value);
+#endif
 			// value->setFloatValue(ptr->value);
 			if(bRet == false)
 				serror(objThreadCntrolBlock, 4) ; 
@@ -993,9 +1075,13 @@ int forgesight_registers_manager_set_register(
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
-				if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[0] = fValue ;
+#else
 					objPrRegData.value.cartesian_pos.position.x = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
 				else
@@ -1016,9 +1102,13 @@ int forgesight_registers_manager_set_register(
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
-				if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[1] = fValue ;
+#else
 					objPrRegData.value.cartesian_pos.position.y = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
 				else
@@ -1039,9 +1129,13 @@ int forgesight_registers_manager_set_register(
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
-				if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[2] = fValue ;
+#else
 					objPrRegData.value.cartesian_pos.position.z = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
 				else
@@ -1062,9 +1156,13 @@ int forgesight_registers_manager_set_register(
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
-				if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[3] = fValue ;
+#else
 					objPrRegData.value.cartesian_pos.orientation.a = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
 				else
@@ -1085,9 +1183,13 @@ int forgesight_registers_manager_set_register(
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
-				if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[4] = fValue ;
+#else
 					objPrRegData.value.cartesian_pos.orientation.b = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
 				else
@@ -1108,9 +1210,13 @@ int forgesight_registers_manager_set_register(
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
-				if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[5] = fValue ;
+#else
 					objPrRegData.value.cartesian_pos.orientation.c = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
 				else
@@ -1169,9 +1275,13 @@ int forgesight_registers_manager_set_register(
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
-				if(POS_TYPE_JOINT == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[0] = fValue ;
+#else
 					objPrRegData.value.joint_pos[0] = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
 				else
@@ -1192,9 +1302,13 @@ int forgesight_registers_manager_set_register(
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
-				if(POS_TYPE_JOINT == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[1] = fValue ;
+#else
 					objPrRegData.value.joint_pos[1] = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
 				else
@@ -1215,9 +1329,13 @@ int forgesight_registers_manager_set_register(
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
-				if(POS_TYPE_JOINT == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[2] = fValue ;
+#else
 					objPrRegData.value.joint_pos[2] = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
 				else
@@ -1238,9 +1356,13 @@ int forgesight_registers_manager_set_register(
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
-				if(POS_TYPE_JOINT == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[3] = fValue ;
+#else
 					objPrRegData.value.joint_pos[3] = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
 				else
@@ -1261,9 +1383,13 @@ int forgesight_registers_manager_set_register(
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
-				if(POS_TYPE_JOINT == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[4] = fValue ;
+#else
 					objPrRegData.value.joint_pos[4] = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
 				else
@@ -1284,9 +1410,13 @@ int forgesight_registers_manager_set_register(
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
-				if(POS_TYPE_JOINT == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[5] = fValue ;
+#else
 					objPrRegData.value.joint_pos[5] = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
 				else
@@ -1308,14 +1438,22 @@ int forgesight_registers_manager_set_register(
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
-				if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[0] = fValue ;
+#else
 					objPrRegData.value.cartesian_pos.position.x = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
-				if(POS_TYPE_JOINT == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[0] = fValue ;
+#else
 					objPrRegData.value.joint_pos[0] = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
 				else
@@ -1336,14 +1474,22 @@ int forgesight_registers_manager_set_register(
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
-				if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[1] = fValue ;
+#else
 					objPrRegData.value.cartesian_pos.position.y = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
-				if(POS_TYPE_JOINT == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[1] = fValue ;
+#else
 					objPrRegData.value.joint_pos[1] = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
 				else
@@ -1364,14 +1510,22 @@ int forgesight_registers_manager_set_register(
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
-				if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[2] = fValue ;
+#else
 					objPrRegData.value.cartesian_pos.position.z = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
-				if(POS_TYPE_JOINT == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[2] = fValue ;
+#else
 					objPrRegData.value.joint_pos[2] = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
 				else
@@ -1392,14 +1546,22 @@ int forgesight_registers_manager_set_register(
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
-				if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[3] = fValue ;
+#else
 					objPrRegData.value.cartesian_pos.orientation.a = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
-				if(POS_TYPE_JOINT == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[3] = fValue ;
+#else
 					objPrRegData.value.joint_pos[3] = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
 				else
@@ -1420,14 +1582,22 @@ int forgesight_registers_manager_set_register(
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
-				if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[4] = fValue ;
+#else
 					objPrRegData.value.cartesian_pos.orientation.b = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
-				if(POS_TYPE_JOINT == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[4] = fValue ;
+#else
 					objPrRegData.value.joint_pos[4] = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
 				else
@@ -1448,14 +1618,22 @@ int forgesight_registers_manager_set_register(
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
-				if(POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[5] = fValue ;
+#else
 					objPrRegData.value.cartesian_pos.orientation.c = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
-				if(POS_TYPE_JOINT == objPrRegData.value.pos_type)
+				if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 				{
+#ifndef WIN32
+					objPrRegData.value.pos[5] = fValue ;
+#else
 					objPrRegData.value.joint_pos[5] = fValue ;
+#endif
 					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
 				}
 				else
@@ -2112,458 +2290,6 @@ int forgesight_registers_manager_set_register(
 		}
 	}
 	return 0 ;
-}
-
-int forgesight_read_reg(RegMap & reg)
-{
-
-	PrRegData objPrRegData ;
-	PrRegData * objPrRegDataPtr ;
-	
-	SrRegData objSrRegData ;
-	// SrRegData * objSrRegDataPtr ;
-	
-	MrRegData objMrRegData ;
-	MrRegData * objMrRegDataPtr ;
-	
-	RRegData objRRegData ;
-	RRegData * objRRegDataPtr ;
-
-	HrRegData objHrRegData ;
-	HrRegData * objHrRegDataPtr ;
-
-    int       iID ;
- //   char      cComment[MAX_REG_COMMENT_LENGTH];
-    std::string    strComment;
-
-	PoseEuler objPoseEuler ;
-    Joint     objJoint;
-    int       iType ;
-    
-    std::string    strSrValue;
-    double    dRValue;
-    int       iMrValue;
-	
-    int       iPlFlag ;
-	pl_t      pltValue ;
-	
-	 switch(reg.type)
-	 {
-	 // pose register
-	 case POSE_REG:
-		 reg_manager_interface_getPr(&objPrRegData, reg.index);
-		 objPrRegDataPtr = (PrRegData *)reg.value;
-		 objPrRegDataPtr->id = objPrRegData.id;
-		 memcpy(objPrRegDataPtr->comment, 
-		 		objPrRegData.comment, sizeof(objPrRegData.comment));
- 		 objPrRegDataPtr->value = objPrRegData.value;
-		 break;
-	 case POSE_REG_POSE:
-		 reg_manager_interface_getPosePr(&objPoseEuler, reg.index);
-		 memcpy(reg.value, &objPoseEuler, sizeof(objPoseEuler));
-		 break;
-	 case POSE_REG_JOINT:
-		 reg_manager_interface_getJointPr(&objJoint, reg.index);
-		 memcpy(reg.value, &objJoint, sizeof(objJoint));
-		 break;
-	 case POSE_REG_TYPE:
-		 reg_manager_interface_getTypePr(&iType, reg.index);
-		 memcpy(reg.value, &iType, sizeof(iType));
-		 break;
-	 case POSE_REG_ID:
-		 reg_manager_interface_getIdPr(&iID, reg.index);
-		 memcpy(reg.value, &iID, sizeof(iID));
-		 break;
-	 case POSE_REG_COMMENT:
-		 reg_manager_interface_getCommentPr(reg.value, reg.index);
-		 // memcpy(reg.value, cComment, sizeof(cComment));
-		 break;
-	 // string register
-	 case STR_REG:
-	     reg_manager_interface_getSr(&objSrRegData, reg.index);
-		 memcpy(reg.value, &objSrRegData.id, sizeof(objSrRegData.id));
-		 memcpy(reg.value + sizeof(objSrRegData.id), 
-		 		objSrRegData.comment, sizeof(objSrRegData.comment));
-		 memcpy(reg.value + sizeof(objSrRegData.id) + sizeof(objPrRegData.comment), 
-		 		objSrRegData.value.c_str(), objSrRegData.value.length());
-	 	break;
-	 case STR_REG_VALUE:
-	     reg_manager_interface_getValueSr(strSrValue, reg.index);
-		 memcpy(reg.value, strSrValue.c_str(), strSrValue.length());
-	 	 break;
-	 case STR_REG_ID:
-	     reg_manager_interface_getIdSr(&iID, reg.index);
-		 memcpy(reg.value, &iID, sizeof(iID));
-	 	 break;
-	 case STR_REG_COMMENT:
-	    reg_manager_interface_getCommentSr(reg.value, reg.index);
-		// memcpy(reg.value, cComment, sizeof(cComment));
-	 	break;
-	 // number register
-	 case NUM_REG:
-	    reg_manager_interface_getR(&objRRegData, reg.index);
-		objRRegDataPtr = (RRegData *)reg.value;
-	    objRRegDataPtr->id = objRRegData.id;
-		memcpy(objRRegDataPtr->comment, objRRegData.comment, 
-						sizeof(objRRegData.comment));
-		objRRegDataPtr->value  = objRRegData.value;
-	 	break;
-	 case NUM_REG_VALUE:
-	    reg_manager_interface_getValueR(&dRValue, reg.index);
-		memcpy(reg.value, &dRValue, sizeof(dRValue));
-	 	break;
-	 case NUM_REG_ID:
-	    reg_manager_interface_getIdR(&iID, reg.index);
-		memcpy(reg.value, &iID, sizeof(iID));
-	 	break;
-	 case NUM_REG_COMMENT:
-	    reg_manager_interface_getCommentR(reg.value, reg.index);
-		// memcpy(reg.value, cComment, sizeof(cComment));
-	 	break;
-	 // Special register for motion instruction
-	 case MOT_REG:
-	    reg_manager_interface_getMr(&objMrRegData, reg.index);
-		objMrRegDataPtr = (MrRegData *)reg.value;
-	    objMrRegDataPtr->id = objMrRegData.id;
-		memcpy(objMrRegDataPtr->comment, objMrRegData.comment, 
-						sizeof(objMrRegData.comment));
-		objMrRegDataPtr->value  = objMrRegData.value;
-	 	break;
-	 case MOT_REG_VALUE:
-	    reg_manager_interface_getValueMr(&iMrValue, reg.index);
-		memcpy(reg.value, &iMrValue, sizeof(iMrValue));
-	 	break;
-	 case MOT_REG_ID:
-	    reg_manager_interface_getIdMr(&iID, reg.index);
-		memcpy(reg.value, &iID, sizeof(iID));
-	 	break;
-	 case MOT_REG_COMMENT:
-	    reg_manager_interface_getCommentMr(reg.value, reg.index);
-		// memcpy(reg.value, cComment, sizeof(cComment));
-	 	break;
-	 // home register
-	 case HOME_REG:
-		 reg_manager_interface_getHr(&objHrRegData, reg.index);
-		 objHrRegDataPtr = (HrRegData *)reg.value;
-		 objHrRegDataPtr->id = objHrRegData.id;
-		 memcpy(objHrRegDataPtr->comment, 
-		 		objHrRegData.comment, sizeof(objHrRegData.comment));
- 		 objHrRegDataPtr->value = objHrRegData.value;
-		 break;
-	 case HOME_REG_JOINT:
-		 reg_manager_interface_getJointHr(&objJoint, reg.index);
-		 memcpy(reg.value, &objJoint, sizeof(objJoint));
-		 break;
-	 case HOME_REG_ID:
-		 reg_manager_interface_getIdHr(&iID, reg.index);
-		 memcpy(reg.value, &iID, sizeof(iID));
-		 break;
-	 case HOME_REG_COMMENT:
-		 reg_manager_interface_getCommentHr(reg.value, reg.index);
-		 // memcpy(reg.value, cComment, sizeof(cComment));
-		 break;
-	 // register of user coordinate offset
-	 case UF_REG:
-	    reg_manager_interface_getUf(reg.value, reg.index);
-	 	break;
-	 case UF_REG_COORD:
-	    reg_manager_interface_getCoordinateUf(reg.value, reg.index);
-	 	break;
-	 case UF_REG_ID:
-	    reg_manager_interface_getIdUf(&iID, reg.index);
-	    memcpy(reg.value, &iID, sizeof(iID));
-	 	break;
-	 case UF_REG_COMMENT:
-	    reg_manager_interface_getCommentUf(reg.value, reg.index);
-	 	break;
-	 // register of tool coordinate offset
-	 case TF_REG:
-	    reg_manager_interface_getTf(reg.value, reg.index);
-	 	break;
-	 case TF_REG_COORD:
-	    reg_manager_interface_getCoordinateTf(reg.value, reg.index);
-	 	break;
-	 case TF_REG_ID:
-	    reg_manager_interface_getIdTf(&iID, reg.index);
-	    memcpy(reg.value, &iID, sizeof(iID));
-	 	break;
-	 case TF_REG_COMMENT:
-	    reg_manager_interface_getCommentTf(reg.value, reg.index);
-	 	break;
-	 // stack register
-	 case PL_REG:
-	    reg_manager_interface_getPl(reg.value, reg.index);
-	 	break;
-	 case PL_REG_POSE:
-	    reg_manager_interface_getPosePl(&objPoseEuler, reg.index);
-		 memcpy(reg.value, &objPoseEuler, sizeof(objPoseEuler));
-	 	break;
-	 case PL_REG_PALLET:
-	    reg_manager_interface_getPalletPl(&pltValue, reg.index);
-		memcpy(reg.value, &pltValue, sizeof(pltValue));
-	 	break;
-	 case PL_REG_FLAG:
-	    reg_manager_interface_getFlagPl(&iPlFlag, reg.index);
-		 memcpy(reg.value, &iPlFlag, sizeof(iPlFlag));
-	 	break;
-	 case PL_REG_ID:
-	    reg_manager_interface_getIdPl(&iID, reg.index);
-	    memcpy(reg.value, &iID, sizeof(iID));
-	 	break;
-	 case PL_REG_COMMENT:
-	    reg_manager_interface_getCommentPl(reg.value, reg.index);
-	 	break;
- 	 }
-	 return 1;
-}
-
-int forgesight_mod_reg(RegMap & reg)
-{
-	PrRegData objPrRegData ;
-	PrRegData * objPrRegDataPtr ;
-	
-	SrRegData objSrRegData ;
-//	SrRegData * objSrRegDataPtr ;
-	
-	MrRegData objMrRegData ;
-	MrRegData * objMrRegDataPtr ;
-	
-	RRegData objRRegData ;
-	RRegData * objRRegDataPtr ;
-
-	HrRegData objHrRegData ;
-	HrRegData * objHrRegDataPtr ;
-	
-
-    int       iID ;
-//    char      cComment[MAX_REG_COMMENT_LENGTH];
-
-	PoseEuler objPoseEuler ;
-    Joint     objJoint;
-    int       iType ;
-    
-    std::string    strSrValue;
-    double    dRValue;
-    int       iMrValue;
-	
-    int       iPlFlag ;
-	pl_t      pltValue ;
-	
-  	 printf("reg.type = %d.\n", reg.type);
-	 
-	 switch(reg.type)
-	 {
-	 // pose register
-	 case POSE_REG:
-	 	 objPrRegDataPtr = (PrRegData *)reg.value;
-		 objPrRegData.id = objPrRegDataPtr->id;
-		 memcpy(objPrRegData.comment, objPrRegDataPtr->comment, 
-		 		sizeof(objPrRegData.comment));
-		 objPrRegData.value = objPrRegDataPtr->value;
-		 reg_manager_interface_setPr(&objPrRegData, reg.index);
-		 break;
-	 case POSE_REG_POSE:
-		 memcpy(&objPoseEuler, reg.value, sizeof(objPoseEuler));
-		 reg_manager_interface_setPosePr(&objPoseEuler, reg.index);
-		 break;
-	 case POSE_REG_JOINT:
-		 memcpy(&objJoint, reg.value, sizeof(objJoint));
-		 reg_manager_interface_setJointPr(&objJoint, reg.index);
-		 break;
-	 case POSE_REG_TYPE:
-		 memcpy(&iType, reg.value, sizeof(iType));
-		 reg_manager_interface_setTypePr(&iType, reg.index);
-		 break;
-	 case POSE_REG_ID:
-		 memcpy(&iID, reg.value, sizeof(iID));
-		 reg_manager_interface_setIdPr(&iID, reg.index);
-		 break;
-	 case POSE_REG_COMMENT:
-		 // memcpy(cComment, reg.value, sizeof(cComment));
-		 reg_manager_interface_setCommentPr(reg.value, reg.index);
-		 break;
-	 // string register
-	 case STR_REG:
-		 memcpy(&objSrRegData.id, reg.value, sizeof(objSrRegData.id));
-		 memcpy(objSrRegData.comment, 
-		 	    reg.value + sizeof(objSrRegData.id), 
-		 		sizeof(objSrRegData.comment));
-		 objSrRegData.value = string(reg.value + 
-		 						sizeof(objSrRegData.id) + 
-		 						sizeof(objPrRegData.comment)); 
-	    reg_manager_interface_setSr(&objSrRegData, reg.index);
-	 	break;
-	 case STR_REG_VALUE:
-		strSrValue = string(reg.value);
-	    reg_manager_interface_setValueSr(strSrValue, reg.index);
-	 	break;
-	 case STR_REG_ID:
-		memcpy(&iID, reg.value, sizeof(iID));
-	    reg_manager_interface_setIdSr(&iID, reg.index);
-	 	break;
-	 case STR_REG_COMMENT:
-		 // memcpy(cComment, reg.value, sizeof(cComment));
-	    reg_manager_interface_setCommentSr(reg.value, reg.index);
-	 	break;
-	 // number register
-	 case NUM_REG:
-	 	objRRegDataPtr = (RRegData *)reg.value;
-		 
-		printf("objRRegDataPtr: id = %d, comment = %s\n", objRRegDataPtr->id, objRRegDataPtr->comment);
-		printf("objRRegDataPtr: id = (%f) \n", objRRegDataPtr->value);
-		 
- 		objRRegData.id = objRRegDataPtr->id ;
-		memcpy(objRRegData.comment, objRRegDataPtr->comment, 
-		 		                 sizeof(objRRegData.comment));
-		objRRegData.value = objRRegDataPtr->value ;
-		printf("objRRegData: id = (%f) \n", objRRegData.value);
-
-	    reg_manager_interface_setR(&objRRegData, reg.index);
-	 	break;
-	 case NUM_REG_VALUE:
-		memcpy(&dRValue, reg.value, sizeof(dRValue));
-	    reg_manager_interface_setValueR(&dRValue, reg.index);
-	 	break;
-	 case NUM_REG_ID:
-		memcpy(&iID, reg.value, sizeof(iID));
-	    reg_manager_interface_setIdR(&iID, reg.index);
-	 	break;
-	 case NUM_REG_COMMENT:
-		// memcpy(Comment, reg.value, csizeof(cComment));
-	    reg_manager_interface_setCommentR(reg.value, reg.index);
-	 	break;
-	 // Special register for motion instruction
-	 case MOT_REG:
-	 	 objMrRegDataPtr = (MrRegData *)reg.value;
-		 
-		 printf("objMrRegDataPtr: id = %d, comment = %s\n", objMrRegDataPtr->id, objMrRegDataPtr->comment);
-		 printf("objMrRegDataPtr: id = (%f) \n", objMrRegDataPtr->value);
-
-		objMrRegData.id = objMrRegDataPtr->id;
-		memcpy(objMrRegData.comment, objMrRegDataPtr->comment, 
-		 		sizeof(objMrRegData.comment));
-		objMrRegData.value = objMrRegDataPtr->value;
-		printf("MrRegData: id = (%d) \n", objMrRegData.value);
-
-	    reg_manager_interface_setMr(&objMrRegData, reg.index);
-	 	break;
-	 case MOT_REG_VALUE:
-		memcpy(&iMrValue, reg.value, sizeof(iMrValue));
-	    reg_manager_interface_setValueMr(&iMrValue, reg.index);
-	 	break;
-	 case MOT_REG_ID:
-		memcpy(&iID, reg.value, sizeof(iID));
-	    reg_manager_interface_setIdMr(&iID, reg.index);
-	 	break;
-	 case MOT_REG_COMMENT:
-		// memcpy(cComment, reg.value, sizeof(cComment));
-	    reg_manager_interface_setCommentMr(reg.value, reg.index);
-	 	break;
-	 // home register
-	 case HOME_REG:
-	 	 objHrRegDataPtr = (HrRegData *)reg.value;
-		 objHrRegData.id = objHrRegDataPtr->id;
-		 memcpy(objHrRegData.comment, objHrRegDataPtr->comment, 
-		 		sizeof(objHrRegData.comment));
-		 objHrRegData.value = objHrRegDataPtr->value;
-		 reg_manager_interface_setHr(&objHrRegData, reg.index);
-		 break;
-	 case HOME_REG_JOINT:
-		 memcpy(&objJoint, reg.value, sizeof(objJoint));
-		 reg_manager_interface_setJointHr(&objJoint, reg.index);
-		 break;
-	 case HOME_REG_ID:
-		 memcpy(&iID, reg.value, sizeof(iID));
-		 reg_manager_interface_setIdHr(&iID, reg.index);
-		 break;
-	 case HOME_REG_COMMENT:
-		 // memcpy(cComment, reg.value, sizeof(cComment));
-		 reg_manager_interface_setCommentHr(reg.value, reg.index);
-		 break;
-	 // register of user coordinate offset
-	 case UF_REG:
-	    reg_manager_interface_setUf(reg.value, reg.index);
-	 	break;
-	 case UF_REG_COORD:
-	    reg_manager_interface_setCoordinateUf(reg.value, reg.index);
-	 	break;
-	 case UF_REG_ID:
-	    memcpy(&iID, reg.value, sizeof(iID));
-	    reg_manager_interface_setIdUf(&iID, reg.index);
-	 	break;
-	 case UF_REG_COMMENT:
-	    reg_manager_interface_setCommentUf(reg.value, reg.index);
-	 	break;
-	 // register of tool coordinate offset
-	 case TF_REG:
-	    reg_manager_interface_setTf(reg.value, reg.index);
-	 	break;
-	 case TF_REG_COORD:
-	    reg_manager_interface_setCoordinateTf(reg.value, reg.index);
-	 	break;
-	 case TF_REG_ID:
-	    memcpy(&iID, reg.value, sizeof(iID));
-	    reg_manager_interface_setIdTf(&iID, reg.index);
-	 	break;
-	 case TF_REG_COMMENT:
-	    reg_manager_interface_setCommentTf(reg.value, reg.index);
-	 	break;
-	 // stack register
-	 case PL_REG:
-	    reg_manager_interface_setPl(reg.value, reg.index);
-	 	break;
-	 case PL_REG_POSE:
-	    // reg_manager_interface_setPosePl(reg.value, reg.index);
-	 	break;
-	 case PL_REG_PALLET:
-		memcpy(&pltValue, reg.value, sizeof(pltValue));
-	    reg_manager_interface_setPalletPl(&pltValue, reg.index);
-	 	break;
-	 case PL_REG_FLAG:
-		memcpy(&iPlFlag, reg.value, sizeof(iPlFlag));
-	    reg_manager_interface_setFlagPl(&iPlFlag, reg.index);
-	 	break;
-	 case PL_REG_ID:
-	    memcpy(&iID, reg.value, sizeof(iID));
-	    reg_manager_interface_setIdPl(&iID, reg.index);
-	 	break;
-	 case PL_REG_COMMENT:
-	    reg_manager_interface_setCommentPl(reg.value, reg.index);
-	 	break;
- 	 }
-  	 printf("reg.type = %d end.\n", reg.type);
-	 return 1;
-}
-
-int forgesight_del_reg(RegMap & reg)
-{	
-  	 printf("reg.type = %d.\n", reg.type);
-	 
-	 switch(reg.type)
-	 {
-	 // pose register
-	 case POSE_REG:
-		 reg_manager_interface_delPr(reg.index);
-		 break;
-	 // string register
-	 case STR_REG:
-		 reg_manager_interface_delSr(reg.index);
-	 	break;
-	 // number register
-	 case NUM_REG:
-	    reg_manager_interface_delR(reg.index);
-	 	break;
-	 // Special register for motion instruction
-	 case MOT_REG:
-	    reg_manager_interface_delMr(reg.index);
-	 	break;
-	 // home register
-	 case HOME_REG:
-		 reg_manager_interface_delHr(reg.index);
-		 break;
- 	 }
-  	 printf("reg.type = %d end.\n", reg.type);
-	 return 1;
 }
 
 std::vector<BaseRegData> forgesight_read_valid_pr_lst(int start_id, int size)

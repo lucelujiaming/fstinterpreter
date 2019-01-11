@@ -145,7 +145,7 @@ typedef struct _ErrInfo {
 char * gosub_pop(struct thread_control_block * objThreadCntrolBlock);
 
 struct thread_control_block g_thread_control_block[NUM_THREAD + 1];
-jmp_buf e_buf; /* hold environment for longjmp() */
+// jmp_buf e_buf; /* hold environment for longjmp() */
 
 struct select_and_cycle_stack select_and_cycle_pop(
 	struct thread_control_block * objThreadCntrolBlock);

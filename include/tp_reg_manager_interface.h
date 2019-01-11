@@ -47,8 +47,8 @@ enum
 
 typedef enum
 {
-    POS_TYPE_CARTESIAN = 0,
-    POS_TYPE_JOINT = 1,
+    PR_REG_POS_TYPE_CARTESIAN = 0,
+    PR_REG_POS_TYPE_JOINT = 1,
 }PosType;
 
 typedef struct

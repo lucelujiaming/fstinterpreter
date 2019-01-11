@@ -1820,8 +1820,6 @@ void generateXPathVector(
 	}
 	
 	// Pre-arrange
-	// for(int i =0 ; i < g_lineNum + 1 ; i++)
-	//  	vecXPath.push_back("");
 	objThreadCntrolBlock->vector_XPath.resize(1024);
 
 	memset(contentLine,    0x00, FILE_PATH_LEN);

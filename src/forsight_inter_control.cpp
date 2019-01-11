@@ -28,23 +28,14 @@ using namespace fst_ctrl ;
 #define VELOCITY    (500)
 using namespace std;
 
-static std::vector<Instruction> g_script;
-// static int block_start;
-static int block_end;
-bool terminated = false;
-
-bool is_backward= false;
-InterpreterState prgm_state = INTERPRETER_IDLE;
-//bool send_flag = false;
-// int target_line;
+// bool is_backward= false;
+// InterpreterState prgm_state = INTERPRETER_IDLE;
 // static IntprtStatus intprt_status;
 // static Instruction instruction;
-static CtrlStatus ctrl_status;
-// static InterpreterControl intprt_ctrl;
+// static CtrlStatus ctrl_status;
 
-static InterpreterState g_privateInterpreterState;
 
-extern jmp_buf e_buf; /* hold environment for longjmp() */
+// extern jmp_buf e_buf; /* hold environment for longjmp() */
 extern struct thread_control_block g_thread_control_block[NUM_THREAD + 1];
 
 #ifdef WIN32
@@ -56,6 +47,7 @@ int  g_iCurrentThreadSeq = -1 ;  // minus one add one equals to zero
 
 std::string g_files_manager_data_path = "";
 
+static InterpreterState g_privateInterpreterState;
 InterpreterPublish  g_interpreter_publish; 
 
 /************************************************* 
@@ -356,7 +348,6 @@ bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instructio
 	// We had eaten MOV* as token. 
     if (objThdCtrlBlockPtr->is_abort)
     {
-        // target_line++;
         return false;
     }
 	// Speed up at 0930
@@ -370,12 +361,12 @@ bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instructio
 	
 //    int count = 0;
     //FST_INFO("cur state:%d", prgm_state);
-    if ((objThdCtrlBlockPtr->prog_mode == STEP_MODE) 
-		&& (prgm_state == INTERPRETER_EXECUTE_TO_PAUSE))
-    {
-		// FST_INFO("cur state:%d in STEP_MODE ", prgm_state);
-        return false;
-    }
+//    if (objThdCtrlBlockPtr->prog_mode == STEP_MODE) 
+//	//	&& (prgm_state == INTERPRETER_EXECUTE_TO_PAUSE))
+//    {
+//		// FST_INFO("cur state:%d in STEP_MODE ", prgm_state);
+//        return false;
+//    }
 
     do
     {
@@ -397,12 +388,12 @@ bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instructio
 	    if (ret)
 #endif
 	    {
-	        if (is_backward)
-	        {
-	            is_backward = false;
-		        //    iLineNum--;
-		        //    setCurLine(iLineNum);
-	        }
+//	        if (is_backward)
+//	        {
+//	            is_backward = false;
+//		        //    iLineNum--;
+//		        //    setCurLine(iLineNum);
+//	        }
 	        //else
 	        //{
 	        //    iLineNum++;
@@ -769,7 +760,7 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 			
             objThdCtrlBlockPtr->prog_mode = STEP_MODE ;
 			objThdCtrlBlockPtr->execute_direction = EXECUTE_FORWARD ;
-            // target_line++;
+
 			iLineNum = calc_line_from_prog(objThdCtrlBlockPtr);
             setLinenum(objThdCtrlBlockPtr, iLineNum);
             FST_INFO("step forward to %d ", iLineNum);
@@ -778,8 +769,6 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 			// Controller use the PrgmState and LineNum to check to execute 
 //            FST_INFO("Enter waitInterpreterStateToPaused %d ", iLineNum);
 //            waitInterpreterStateToPaused(objThdCtrlBlockPtr);
-// 			// target_line++ in setInstruction
-//            FST_INFO("Left  waitInterpreterStateToPaused %d ", iLineNum);
 
 			// Use the program pointer to get the current line number.
 			// to support logic
@@ -843,7 +832,7 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
                 break;
             }
             // if (objThdCtrlBlockPtr->prog_jmp_line[iLineNum].type == MOTION)
-            is_backward = true;
+//            is_backward = true;
             // else {  perror("can't back");  break;      }
             objThdCtrlBlockPtr->prog_mode = STEP_MODE ;
 			objThdCtrlBlockPtr->execute_direction = EXECUTE_BACKWARD ;
@@ -864,8 +853,6 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 			// Controller use the PrgmState and LineNum to check to execute 
 //            FST_INFO("Enter waitInterpreterStateToPaused %d ", iLineNum);
 //			waitInterpreterStateToPaused(objThdCtrlBlockPtr);
-//			// target_line-- in setInstruction
-//            FST_INFO("Left  waitInterpreterStateToPaused %d ", iLineNum);			
 		    break;
 		case fst_base::INTERPRETER_SERVER_CMD_RESUME:
 			if(getCurrentThreadSeq() < 0) break ;
@@ -916,8 +903,6 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 			
   			FST_INFO("set abort motion flag.");
 	        objThdCtrlBlockPtr->is_abort = true;
-            // target_line = getMaxLineNum();
-            // target_line = 0;
             // Restore program pointer
   			FST_INFO("reset prog position.");
             objThdCtrlBlockPtr->prog = objThdCtrlBlockPtr->p_buf ;

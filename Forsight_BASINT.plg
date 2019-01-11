@@ -6,30 +6,13 @@
 --------------------Configuration: Forsight_BASINT - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\Users\jiaming.lu\AppData\Local\Temp\RSP102D.tmp" with contents
+Creating temporary file "C:\Users\jiaming.lu\AppData\Local\Temp\RSP2F72.tmp" with contents
 [
 /nologo /MTd /W3 /WX /Gm /GX /ZI /Od /I "INCLUDE INCLUDE\REG-SHMI ..\INCLUDE ..\INCLUDE\REG-SHMI" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FR"Debug/" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
-"C:\Users\jiaming.lu\Downloads\MiniCPlusPlus\Forsight_BASINT\src\forsight_basint.cpp"
-"C:\Users\jiaming.lu\Downloads\MiniCPlusPlus\Forsight_BASINT\src\forsight_innercmd.cpp"
-"C:\Users\jiaming.lu\Downloads\MiniCPlusPlus\Forsight_BASINT\src\forsight_innerfunc.cpp"
-"C:\Users\jiaming.lu\Downloads\MiniCPlusPlus\Forsight_BASINT\src\forsight_int_main.cpp"
-"C:\Users\jiaming.lu\Downloads\MiniCPlusPlus\Forsight_BASINT\src\forsight_inter_control.cpp"
-"C:\Users\jiaming.lu\Downloads\MiniCPlusPlus\Forsight_BASINT\src\forsight_io_mapping.cpp"
-"C:\Users\jiaming.lu\Downloads\MiniCPlusPlus\Forsight_BASINT\src\forsight_launch_code_startup.cpp"
-"C:\Users\jiaming.lu\Downloads\MiniCPlusPlus\Forsight_BASINT\src\forsight_macro_instr_startup.cpp"
-"C:\Users\jiaming.lu\Downloads\MiniCPlusPlus\Forsight_BASINT\src\forsight_program_property.cpp"
 "C:\Users\jiaming.lu\Downloads\MiniCPlusPlus\Forsight_BASINT\src\reg_manager\forsight_registers_manager.cpp"
-"C:\Users\jiaming.lu\Downloads\MiniCPlusPlus\Forsight_BASINT\src\forsight_xml_reader.cpp"
-"C:\Users\jiaming.lu\Downloads\MiniCPlusPlus\Forsight_BASINT\src\reg_manager\reg_manager_interface_wrapper.cpp"
 ]
-Creating command line "cl.exe @C:\Users\jiaming.lu\AppData\Local\Temp\RSP102D.tmp" 
-Creating temporary file "C:\Users\jiaming.lu\AppData\Local\Temp\RSP102E.tmp" with contents
-[
-/nologo /MTd /W3 /Gm /GX /ZI /Od /I "INCLUDE INCLUDE\REG-SHMI ..\INCLUDE ..\INCLUDE\REG-SHMI" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FR"Debug/" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
-"C:\Users\jiaming.lu\Downloads\MiniCPlusPlus\Forsight_BASINT\src\forsight_io_controller.cpp"
-]
-Creating command line "cl.exe @C:\Users\jiaming.lu\AppData\Local\Temp\RSP102E.tmp" 
-Creating temporary file "C:\Users\jiaming.lu\AppData\Local\Temp\RSP102F.tmp" with contents
+Creating command line "cl.exe @C:\Users\jiaming.lu\AppData\Local\Temp\RSP2F72.tmp" 
+Creating temporary file "C:\Users\jiaming.lu\AppData\Local\Temp\RSP2F83.tmp" with contents
 [
 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libxml2.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/Forsight_BASINT.pdb" /debug /machine:I386 /out:"Debug/Forsight_BASINT.exe" /pdbtype:sept 
 .\Debug\forsight_basint.obj
@@ -51,28 +34,12 @@ kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32
 .\Debug\macro_instr_mgr.obj
 .\Debug\reg_manager_interface_wrapper.obj
 ]
-Creating command line "link.exe @C:\Users\jiaming.lu\AppData\Local\Temp\RSP102F.tmp"
+Creating command line "link.exe @C:\Users\jiaming.lu\AppData\Local\Temp\RSP2F83.tmp"
 <h3>Output Window</h3>
 Compiling...
-forsight_basint.cpp
-forsight_innercmd.cpp
-forsight_inter_control.cpp
-Generating Code...
-Compiling...
-forsight_innerfunc.cpp
-forsight_int_main.cpp
-forsight_io_mapping.cpp
-forsight_launch_code_startup.cpp
-forsight_macro_instr_startup.cpp
-forsight_program_property.cpp
 forsight_registers_manager.cpp
-forsight_xml_reader.cpp
-reg_manager_interface_wrapper.cpp
-Generating Code...
-Compiling...
-forsight_io_controller.cpp
 Linking...
-Creating temporary file "C:\Users\jiaming.lu\AppData\Local\Temp\RSP329E.tmp" with contents
+Creating temporary file "C:\Users\jiaming.lu\AppData\Local\Temp\RSP36E4.tmp" with contents
 [
 /nologo /o"Debug/Forsight_BASINT.bsc" 
 .\Debug\forsight_basint.sbr
@@ -93,7 +60,7 @@ Creating temporary file "C:\Users\jiaming.lu\AppData\Local\Temp\RSP329E.tmp" wit
 .\Debug\launch_code_mgr.sbr
 .\Debug\macro_instr_mgr.sbr
 .\Debug\reg_manager_interface_wrapper.sbr]
-Creating command line "bscmake.exe @C:\Users\jiaming.lu\AppData\Local\Temp\RSP329E.tmp"
+Creating command line "bscmake.exe @C:\Users\jiaming.lu\AppData\Local\Temp\RSP36E4.tmp"
 Creating browse info file...
 <h3>Output Window</h3>
 

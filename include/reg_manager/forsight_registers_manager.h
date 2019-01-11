@@ -22,9 +22,6 @@ int forgesight_registers_manager_set_register(
 							char *name, eval_value * value);
 // int forgesight_registers_manager_read_reg(RegMap & reg);
 // int forgesight_registers_manager_mod_reg(RegMap & reg);
-int forgesight_read_reg(RegMap & reg);
-int forgesight_mod_reg(RegMap & reg);
-int forgesight_del_reg(RegMap & reg);
 
 std::vector<BaseRegData> forgesight_read_valid_pr_lst(int start_id, int size);
 std::vector<BaseRegData> forgesight_read_valid_sr_lst(int start_id, int size);

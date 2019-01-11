@@ -262,8 +262,8 @@ public:
 	
 	void setPrRegDataWithJointValue(Joint * jointVal){
 		evalType  |= TYPE_PR ;
+		reg_pr.value.pos_type     = PR_REG_POS_TYPE_JOINT ;
 #ifdef WIN32
-		reg_pr.value.pos_type     = POS_TYPE_JOINT ;
 		reg_pr.value.joint_pos[0] = jointVal->j1;
 		reg_pr.value.joint_pos[1] = jointVal->j2;
 		reg_pr.value.joint_pos[2] = jointVal->j3;
@@ -271,7 +271,6 @@ public:
 		reg_pr.value.joint_pos[4] = jointVal->j5;
 		reg_pr.value.joint_pos[5] = jointVal->j6;
 #else
-		reg_pr.value.pos_type     = PR_REG_POS_TYPE_JOINT ;
 		reg_pr.value.pos[0] = jointVal->j1;
 		reg_pr.value.pos[1] = jointVal->j2;
 		reg_pr.value.pos[2] = jointVal->j3;
@@ -286,12 +285,11 @@ public:
 	
 	void setPrRegDataWithPoseEulerValue(PoseEuler * pointEulerVal){
 		evalType  |= TYPE_PR ;
+		reg_pr.value.pos_type      = PR_REG_POS_TYPE_CARTESIAN ;
 #ifdef WIN32
-		reg_pr.value.pos_type      = POS_TYPE_CARTESIAN ;
 		reg_pr.value.cartesian_pos.position    = pointEulerVal->position;
 		reg_pr.value.cartesian_pos.orientation = pointEulerVal->orientation;
 #else
-		reg_pr.value.pos_type      = PR_REG_POS_TYPE_CARTESIAN ;
 		reg_pr.value.pos[0]        = pointEulerVal->position.x;
 		reg_pr.value.pos[1]        = pointEulerVal->position.y;
 		reg_pr.value.pos[2]        = pointEulerVal->position.z;
