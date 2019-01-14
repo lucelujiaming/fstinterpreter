@@ -108,6 +108,14 @@ static int get_num_token(char * src, char * dst)
 #ifdef WIN32
 #define USE_FAKE_DATA 
 #endif
+/************************************************* 
+	Function:		forgesight_registers_manager_get_register
+	Description:	Get the register info from controller .
+	Input:			thread_control_block  - interpreter info
+	Input:			name             - register name, like PR[1]
+	Output:			value            - register value
+	Return: 		1 - success
+*************************************************/
 int forgesight_registers_manager_get_register(
 			struct thread_control_block* objThreadCntrolBlock, 
 							char *name, eval_value * value)
@@ -976,6 +984,14 @@ int forgesight_registers_manager_get_register(
 	return 0 ;
 }
 
+/************************************************* 
+	Function:		forgesight_registers_manager_set_register
+	Description:	Set the register info from controller .
+	Input:			thread_control_block  - interpreter info
+	Input:			name             - register name, like PR[1]
+	Input:			valueStart       - register value
+	Return: 		1 - success
+*************************************************/
 int forgesight_registers_manager_set_register(
 		struct thread_control_block* objThreadCntrolBlock, 
 		char *name, eval_value * valueStart)
@@ -2292,26 +2308,61 @@ int forgesight_registers_manager_set_register(
 	return 0 ;
 }
 
+/************************************************* 
+	Function:		forgesight_read_valid_pr_lst
+	Description:	Get valid PR.
+	Input:			start_id         - start index
+	Input:			size             - number of PR
+	Return: 		std::vector<BaseRegData>
+*************************************************/
 std::vector<BaseRegData> forgesight_read_valid_pr_lst(int start_id, int size)
 {
 	return reg_manager_interface_read_valid_pr_lst(start_id, size);
 }
 
+/************************************************* 
+	Function:		forgesight_read_valid_sr_lst
+	Description:	Get valid SR.
+	Input:			start_id         - start index
+	Input:			size             - number of SR
+	Return: 		std::vector<BaseRegData>
+*************************************************/
 std::vector<BaseRegData> forgesight_read_valid_sr_lst(int start_id, int size)
 {
 	return reg_manager_interface_read_valid_sr_lst(start_id, size);
 }
 
+/************************************************* 
+	Function:		forgesight_read_valid_r_lst
+	Description:	Get valid R.
+	Input:			start_id         - start index
+	Input:			size             - number of R
+	Return: 		std::vector<BaseRegData>
+*************************************************/
 std::vector<BaseRegData> forgesight_read_valid_r_lst(int start_id, int size)
 {
 	return reg_manager_interface_read_valid_r_lst(start_id, size);
 }
 
+/************************************************* 
+	Function:		forgesight_read_valid_mr_lst
+	Description:	Get valid MR.
+	Input:			start_id         - start index
+	Input:			size             - number of MR
+	Return: 		std::vector<BaseRegData>
+*************************************************/
 std::vector<BaseRegData> forgesight_read_valid_mr_lst(int start_id, int size)
 {
 	return reg_manager_interface_read_valid_mr_lst(start_id, size);
 }
 
+/************************************************* 
+	Function:		forgesight_read_valid_hr_lst
+	Description:	Get valid HR.
+	Input:			start_id         - start index
+	Input:			size             - number of HR
+	Return: 		std::vector<BaseRegData>
+*************************************************/
 std::vector<BaseRegData> forgesight_read_valid_hr_lst(int start_id, int size)
 {
 	return reg_manager_interface_read_valid_hr_lst(start_id, size);

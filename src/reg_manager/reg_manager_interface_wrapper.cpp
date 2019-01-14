@@ -59,7 +59,12 @@ static int get_num_token(char * src, char * dst)
 	return src - tmp ;
 }
 
-
+/************************************************* 
+	Function:		load_register_data
+	Description:	Initialize ProcessComm.
+	Input:			NULL
+	Return: 		1 - success
+*************************************************/
 void load_register_data()
 {
 #ifndef WIN32
@@ -97,6 +102,13 @@ void load_register_data()
 
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_getPr
+	Description:	get PR.
+	Input:			num        -  Index of PR
+	Ouput:			ptr        -  PR register Data
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_getPr(PrRegData *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -133,6 +145,13 @@ bool reg_manager_interface_getPr(PrRegData *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_setPr
+	Description:	set PR.
+	Input:			num        -  Index of PR
+	Input:			ptr        -  PR register Data
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_setPr(PrRegData *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -174,6 +193,12 @@ bool reg_manager_interface_setPr(PrRegData *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_delPr
+	Description:	delete PR.
+	Input:			num        -  Index of PR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_delPr(uint16_t num)
 {
 	bool bRet = false ;
@@ -194,9 +219,13 @@ bool reg_manager_interface_delPr(uint16_t num)
 	return bRet ;
 }
 
-/*
- * The operated object is an individual member of PR.
- */
+/************************************************* 
+	Function:		reg_manager_interface_getPosePr
+	Description:	get Pose info of PR.
+	Input:			num        -  Index of PR
+	Ouput:			ptr        -  PoseEuler Data
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_getPosePr(PoseEuler *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -225,6 +254,13 @@ bool reg_manager_interface_getPosePr(PoseEuler *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_setPosePr
+	Description:	set Pose info of PR.
+	Input:			num        -  Index of PR
+	Input:			ptr        -  PoseEuler Data of PR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_setPosePr(PoseEuler *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -266,6 +302,13 @@ bool reg_manager_interface_setPosePr(PoseEuler *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_getJointPr
+	Description:	get Joint info of PR.
+	Input:			num        -  Index of PR
+	Ouput:			ptr        -  Joint Data of PR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_getJointPr(Joint *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -294,6 +337,13 @@ bool reg_manager_interface_getJointPr(Joint *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_setJointPr
+	Description:	set Joint info of PR.
+	Input:			num        -  Index of PR
+	Input:			ptr        -  Joint Data of PR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_setJointPr(Joint *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -326,6 +376,13 @@ bool reg_manager_interface_setJointPr(Joint *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_getTypePr
+	Description:	get Type info of PR.
+	Input:			num        -  Index of PR
+	Ouput:			ptr        -  Type info of PR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_getTypePr(int *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -351,6 +408,13 @@ bool reg_manager_interface_getTypePr(int *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_setTypePr
+	Description:	set Type info of PR.
+	Input:			num        -  Index of PR
+	Input:			ptr        -  Type info of PR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_setTypePr(int *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -377,6 +441,13 @@ bool reg_manager_interface_setTypePr(int *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_getIdPr
+	Description:	get Id info of PR.
+	Input:			num        -  Index of PR
+	Ouput:			ptr        -  Id info of PR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_getIdPr(int *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -402,6 +473,13 @@ bool reg_manager_interface_getIdPr(int *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_setIdPr
+	Description:	set Id info of PR.
+	Input:			num        -  Index of PR
+	Input:			ptr        -  Id info of PR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_setIdPr(int *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -428,6 +506,13 @@ bool reg_manager_interface_setIdPr(int *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_getCommentPr
+	Description:	get Comment info of PR.
+	Input:			num        -  Index of PR
+	Ouput:			ptr        -  Comment info of PR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_getCommentPr(char *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -453,6 +538,13 @@ bool reg_manager_interface_getCommentPr(char *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_setCommentPr
+	Description:	set Comment info of PR.
+	Input:			num        -  Index of PR
+	Input:			ptr        -  Comment info of PR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_setCommentPr(char *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -483,6 +575,13 @@ bool reg_manager_interface_setCommentPr(char *ptr, uint16_t num)
  ********* SR *********
  **********************/
 
+/************************************************* 
+	Function:		reg_manager_interface_getSr
+	Description:	get SR.
+	Input:			num        -  Index of SR
+	Ouput:			ptr        -  SR register Data
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_getSr(SrRegData *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -506,6 +605,13 @@ bool reg_manager_interface_getSr(SrRegData *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_setSr
+	Description:	set SR.
+	Input:			num        -  Index of SR
+	Input:			ptr        -  SR register Data
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_setSr(SrRegData *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -536,6 +642,12 @@ bool reg_manager_interface_setSr(SrRegData *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_delSr
+	Description:	delete SR.
+	Input:			num        -  Index of SR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_delSr(uint16_t num)
 {
 	bool bRet = false ;
@@ -556,6 +668,13 @@ bool reg_manager_interface_delSr(uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_getValueSr
+	Description:	get string info of SR.
+	Input:			num        -  Index of SR
+	Ouput:			ptr        -  string info of SR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_getValueSr(string &strVal, uint16_t num)
 {
 	bool bRet = false ;
@@ -580,6 +699,13 @@ bool reg_manager_interface_getValueSr(string &strVal, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_setValueSr
+	Description:	set string info of SR.
+	Input:			num        -  Index of SR
+	Input:			ptr        -  string info of SR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_setValueSr(string &strVal, uint16_t num)
 {
 	bool bRet = false ;
@@ -602,6 +728,13 @@ bool reg_manager_interface_setValueSr(string &strVal, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_getIdSr
+	Description:	get Id info of SR.
+	Input:			num        -  Index of SR
+	Ouput:			ptr        -  Id info of SR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_getIdSr(int *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -625,6 +758,13 @@ bool reg_manager_interface_getIdSr(int *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_setIdSr
+	Description:	set Id info of SR.
+	Input:			num        -  Index of SR
+	Input:			ptr        -  Id info of SR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_setIdSr(int *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -649,6 +789,13 @@ bool reg_manager_interface_setIdSr(int *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_getCommentSr
+	Description:	get Comment info of SR.
+	Input:			num        -  Index of SR
+	Ouput:			ptr        -  Comment info of SR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_getCommentSr(char *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -674,6 +821,13 @@ bool reg_manager_interface_getCommentSr(char *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_setCommentPr
+	Description:	set Comment info of SR.
+	Input:			num        -  Index of SR
+	Input:			ptr        -  Comment info of SR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_setCommentSr(char *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -703,6 +857,14 @@ bool reg_manager_interface_setCommentSr(char *ptr, uint16_t num)
 /**********************
  ********* R **********
  **********************/
+
+/************************************************* 
+	Function:		reg_manager_interface_getR
+	Description:	get R.
+	Input:			num        -  Index of R
+	Ouput:			ptr        -  R register Data
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_getR(RRegData *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -727,6 +889,13 @@ bool reg_manager_interface_getR(RRegData *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_setR
+	Description:	set R.
+	Input:			num        -  Index of R
+	Input:			ptr        -  R register Data
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_setR(RRegData *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -756,6 +925,12 @@ bool reg_manager_interface_setR(RRegData *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_delR
+	Description:	delete R.
+	Input:			num        -  Index of R
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_delR(uint16_t num)
 {
 	bool bRet = false ;
@@ -776,6 +951,13 @@ bool reg_manager_interface_delR(uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_getValueR
+	Description:	get number info of R.
+	Input:			num        -  Index of R
+	Ouput:			ptr        -  number info of R
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_getValueR(double *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -799,6 +981,13 @@ bool reg_manager_interface_getValueR(double *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_setValueR
+	Description:	set number info of R.
+	Input:			num        -  Index of R
+	Input:			ptr        -  number info of R
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_setValueR(double *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -822,6 +1011,13 @@ bool reg_manager_interface_setValueR(double *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_getIdR
+	Description:	get Id info of R.
+	Input:			num        -  Index of R
+	Ouput:			ptr        -  Id info of R
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_getIdR(int *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -845,6 +1041,13 @@ bool reg_manager_interface_getIdR(int *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_setIdR
+	Description:	set Id info of R.
+	Input:			num        -  Index of R
+	Input:			ptr        -  Id info of R
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_setIdR(int *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -865,6 +1068,13 @@ bool reg_manager_interface_setIdR(int *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_getCommentR
+	Description:	get Comment info of R.
+	Input:			num        -  Index of R
+	Ouput:			ptr        -  Comment info of R
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_getCommentR(char *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -890,6 +1100,13 @@ bool reg_manager_interface_getCommentR(char *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_setCommentR
+	Description:	set Comment info of R.
+	Input:			num        -  Index of R
+	Input:			ptr        -  Comment info of R
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_setCommentR(char *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -919,6 +1136,14 @@ bool reg_manager_interface_setCommentR(char *ptr, uint16_t num)
 /**********************
  ********* MR *********
  **********************/
+
+/************************************************* 
+	Function:		reg_manager_interface_getMr
+	Description:	get MR.
+	Input:			num        -  Index of MR
+	Ouput:			ptr        -  MR register Data
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_getMr(MrRegData *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -943,6 +1168,13 @@ bool reg_manager_interface_getMr(MrRegData *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_setMr
+	Description:	set MR.
+	Input:			num        -  Index of MR
+	Input:			ptr        -  MR register Data
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_setMr(MrRegData *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -971,6 +1203,12 @@ bool reg_manager_interface_setMr(MrRegData *ptr, uint16_t num)
 	return bRet ;
 }
  
+/************************************************* 
+	 Function:		 reg_manager_interface_delMr
+	 Description:	 delete MR.
+	 Input: 		 num		-  Index of MR
+	 Return:		 1 - success
+ *************************************************/
 bool reg_manager_interface_delMr(uint16_t num)
 {
 	bool bRet = false ;
@@ -991,6 +1229,13 @@ bool reg_manager_interface_delMr(uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_getValueMr
+	Description:	get number info of MR.
+	Input:			num        -  Index of MR
+	Ouput:			ptr        -  number info of MR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_getValueMr(int *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -1014,6 +1259,13 @@ bool reg_manager_interface_getValueMr(int *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_setValueMr
+	Description:	set number info of MR.
+	Input:			num        -  Index of MR
+	Input:			ptr        -  number info of MR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_setValueMr(int *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -1036,6 +1288,13 @@ bool reg_manager_interface_setValueMr(int *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_getIdMr
+	Description:	get Id info of MR.
+	Input:			num        -  Index of MR
+	Ouput:			ptr        -  Id info of MR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_getIdMr(int *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -1059,6 +1318,13 @@ bool reg_manager_interface_getIdMr(int *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_setIdMr
+	Description:	set Id info of MR.
+	Input:			num        -  Index of MR
+	Input:			ptr        -  Id info of MR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_setIdMr(int *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -1086,6 +1352,13 @@ bool reg_manager_interface_setIdMr(int *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_getCommentMr
+	Description:	get Comment info of MR.
+	Input:			num        -  Index of MR
+	Ouput:			ptr        -  Comment info of MR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_getCommentMr(char *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -1111,6 +1384,13 @@ bool reg_manager_interface_getCommentMr(char *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_setCommentMr
+	Description:	set Comment info of MR.
+	Input:			num        -  Index of MR
+	Input:			ptr        -  Comment info of MR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_setCommentMr(char *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -1141,6 +1421,13 @@ bool reg_manager_interface_setCommentMr(char *ptr, uint16_t num)
  ********* HR *********
  **********************/
 
+/************************************************* 
+	Function:		reg_manager_interface_getHr
+	Description:	get HR.
+	Input:			num        -  Index of HR
+	Ouput:			ptr        -  HR register Data
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_getHr(HrRegData *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -1179,6 +1466,13 @@ bool reg_manager_interface_getHr(HrRegData *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_setHr
+	Description:	set HR.
+	Input:			num        -  Index of HR
+	Input:			ptr        -  HR register Data
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_setHr(HrRegData *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -1211,6 +1505,12 @@ bool reg_manager_interface_setHr(HrRegData *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	 Function:		 reg_manager_interface_delHr
+	 Description:	 delete HR.
+	 Input: 		 num		-  Index of HR
+	 Return:		 1 - success
+ *************************************************/
 bool reg_manager_interface_delHr(uint16_t num)
 {
 	bool bRet = false ;
@@ -1231,6 +1531,13 @@ bool reg_manager_interface_delHr(uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_getJointHr
+	Description:	get Joint info of HR.
+	Input:			num        -  Index of HR
+	Ouput:			ptr        -  Joint Data of HR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_getJointHr(Joint *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -1259,6 +1566,13 @@ bool reg_manager_interface_getJointHr(Joint *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_setJointHr
+	Description:	set Pose info of HR.
+	Input:			num        -  Index of HR
+	Input:			ptr        -  PoseEuler Data of HR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_setJointHr(Joint *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -1285,6 +1599,13 @@ bool reg_manager_interface_setJointHr(Joint *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_getIdHr
+	Description:	get Id info of HR.
+	Input:			num        -  Index of HR
+	Ouput:			ptr        -  Id info of HR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_getIdHr(int *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -1308,6 +1629,13 @@ bool reg_manager_interface_getIdHr(int *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_setIdHr
+	Description:	set Id info of HR.
+	Input:			num        -  Index of HR
+	Input:			ptr        -  Id info of HR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_setIdHr(int *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -1334,6 +1662,13 @@ bool reg_manager_interface_setIdHr(int *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_getCommentHr
+	Description:	get Comment info of HR.
+	Input:			num        -  Index of HR
+	Ouput:			ptr        -  Comment info of HR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_getCommentHr(char *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -1359,6 +1694,13 @@ bool reg_manager_interface_getCommentHr(char *ptr, uint16_t num)
 	return bRet ;
 }
 
+/************************************************* 
+	Function:		reg_manager_interface_setCommentHr
+	Description:	set Comment info of HR.
+	Input:			num        -  Index of HR
+	Input:			ptr        -  Comment info of HR
+	Return: 		1 - success
+*************************************************/
 bool reg_manager_interface_setCommentHr(char *ptr, uint16_t num)
 {
 	bool bRet = false ;
@@ -1604,7 +1946,7 @@ std::vector<BaseRegData> reg_manager_interface_read_valid_mr_lst(int start_id, i
 	{
 #ifdef USE_LOCAL_REG_MANAGER_INTERFACE
 		vecRet = g_objRegManagerInterface->getMrRegValidIdList(0, 255);
-	bRet = true ;
+		bRet = true ;
 #endif
 	}
 	else

@@ -34,6 +34,14 @@ void signalInterrupt(int signo)
 #endif
 
 
+/************************************************* 
+	Function:		main
+	Description:	main function.
+	Input:			name  - io name
+	Input:			NULL
+	Output: 		NULL
+	Return: 		Never
+*************************************************/ 
 int main(int  argc, char *argv[])
 {
 	InterpreterControl intprt_ctrl; 

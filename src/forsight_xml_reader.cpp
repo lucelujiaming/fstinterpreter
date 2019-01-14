@@ -50,6 +50,14 @@ int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo);
 int generateFunctionCall(xmlNodePtr nodeFunctionCall, LineInfo objLineInfo);
 int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char * label_str);
 
+/************************************************* 
+	Function:		exportBASCode
+	Description:	Append one line .
+	Input:			objLineInfo      - Line Info
+	Input:			format           - Line format string, such as "%s "
+	Input:			value            - Line content
+	Return: 		1 - success
+*************************************************/ 
 int printBASCode(LineInfo objLineInfo, char *format, char * value)
 {
 	FILE * fpMix   = fopen(g_mix_file_name,"a");
@@ -66,6 +74,15 @@ int printBASCode(LineInfo objLineInfo, char *format, char * value)
 
 #define PRINT_XPATH 
 // /bookstore/book[1]	选取属于 bookstore 子元素的第一个 book 元素。
+/************************************************* 
+	Function:		exportBASCode
+	Description:	Output one line basic code .
+	Input:			objLineInfo      - Line Info
+	Input:			title            - Line title, such as "EXPORT:"
+	Input:			format           - Line format string, such as "%s "
+	Input:			value            - Line content
+	Return: 		1 - success
+*************************************************/ 
 int exportBASCode(LineInfo objLineInfo, char *title, char *format, char * value)
 {
 	int iPathLen = 0 ;
@@ -110,6 +127,13 @@ int exportBASCode(LineInfo objLineInfo, char *title, char *format, char * value)
 	return 1;
 }
 
+/************************************************* 
+	Function:		generateElementStr
+	Description:	parse <head> node and output basic code .
+	Input:			nodehead         - <head> node
+	Input:			objLineInfo      - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateIncludeFile(xmlNodePtr nodehead, LineInfo objLineInfo)
 {
 	LineInfo objLineInfoTemp = objLineInfo;
@@ -128,6 +152,13 @@ int generateIncludeFile(xmlNodePtr nodehead, LineInfo objLineInfo)
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		serializeFunctionParam
+	Description:    generate parameters of function .
+	Input:			labels         - parameter vector
+	Output:			result         - Output String as parse result
+	Return: 		1 - success
+*************************************************/ 
 void serializeFunctionParam(vector<Label> labels, char * result)
 {
 	if(labels.size()== 0)        // No Param
@@ -147,6 +178,14 @@ void serializeFunctionParam(vector<Label> labels, char * result)
 	}
 }
 
+/************************************************* 
+	Function:		generateElementStr
+	Description:	parse <element> node .
+	Input:			nodeValueElement         - <element> node
+	Input:			objLineInfo              - Line Info
+	Output:			label_str                - Output String as parse result
+	Return: 		1 - success
+*************************************************/ 
 int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char * label_str)
 {
     char label_output[1024];
@@ -442,6 +481,13 @@ int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char *
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generatePoseRegElement
+	Description:	Wapper: call generateElementStr.
+	Input:			nodeValueElement         - <element> node
+	Input:			objLineInfo              - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateElement(xmlNodePtr nodeValueElement, LineInfo objLineInfo)
 {
     char label_params[1024];
@@ -477,6 +523,13 @@ void trim ( char *s )
     rtrim ( s );
 }
 
+/************************************************* 
+	Function:		generatePoseRegElement
+	Description:	parse <pose_register> node and output basic code.
+	Input:			nodeAssignmentStatement  - <pose_register> node
+	Input:			objLineInfo              - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generatePoseRegElement(xmlNodePtr nodeInstructionParam, LineInfo objLineInfo)
 {
     xmlNodePtr nodeElement;
@@ -499,6 +552,13 @@ int generatePoseRegElement(xmlNodePtr nodeInstructionParam, LineInfo objLineInfo
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generatePoseElement
+	Description:	parse <pose> node and output basic code.
+	Input:			nodeAssignmentStatement  - <pose> node
+	Input:			objLineInfo              - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generatePoseElement(xmlNodePtr nodeInstructionParam, LineInfo objLineInfo)
 {
     xmlNodePtr nodeElement;
@@ -639,6 +699,13 @@ int generateElementOld(xmlNodePtr nodeValueElement, LineInfo objLineInfo)
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generateAssignment
+	Description:	parse <assignment> node and output basic code.
+	Input:			nodeAssignmentStatement  - <assignment> node
+	Input:			objLineInfo              - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateAssignment(xmlNodePtr nodeAssignmentStatement, LineInfo objLineInfo)
 {
 	// char currentChildPath[LAB_LEN];
@@ -689,6 +756,13 @@ int generateAssignment(xmlNodePtr nodeAssignmentStatement, LineInfo objLineInfo)
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generateOffsetPR
+	Description:	parse <tool_offset_pr/offset_pr> node and output basic code.
+	Input:			nodeInstructionParam  - <tool_offset_pr/offset_pr> node
+	Input:			objLineInfo           - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateOffsetPR(xmlNodePtr nodeInstructionParam, LineInfo objLineInfo)
 {
     char label_uf[32];
@@ -724,6 +798,13 @@ int generateOffsetPR(xmlNodePtr nodeInstructionParam, LineInfo objLineInfo)
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generateOffsetVEC
+	Description:	parse <offset_XXX> node and output basic code.
+	Input:			nodeInstructionParam  - <offset_XXX> node
+	Input:			objLineInfo           - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateOffsetVEC(xmlNodePtr nodeInstructionParam, LineInfo objLineInfo)
 {
     xmlNodePtr nodeElement;
@@ -792,6 +873,13 @@ int generateOffsetVEC(xmlNodePtr nodeInstructionParam, LineInfo objLineInfo)
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generateOffsetCondExecute
+	Description:	parse <TB/TA/DB> node and output basic code.
+	Input:			nodeInstructionParam  - <TB/TA/DB> node
+	Input:			objLineInfo           - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateOffsetCondExecute(xmlNodePtr nodeInstructionParam, LineInfo objLineInfo)
 {
     xmlNodePtr nodeElement;
@@ -827,6 +915,13 @@ int generateOffsetCondExecute(xmlNodePtr nodeInstructionParam, LineInfo objLineI
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generateOffsetCondition
+	Description:	parse <condition> node and output basic code.
+	Input:			nodeInstructionParam  - <condition> node
+	Input:			objLineInfo           - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateOffsetCondition(xmlNodePtr nodeInstructionParam, LineInfo objLineInfo)
 {
     xmlNodePtr nodeSubValueElement;
@@ -841,6 +936,13 @@ int generateOffsetCondition(xmlNodePtr nodeInstructionParam, LineInfo objLineInf
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generateWaitInstruction
+	Description:	parse <wait> node and output basic code.
+	Input:			nodeInstructionStatement  - <wait> node
+	Input:			objLineInfo           - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateWaitInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLineInfo)
 {
 	// char waitParam[1024];
@@ -896,6 +998,13 @@ int generateWaitInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLin
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generatePauseInstruction
+	Description:	parse <abort> node and output basic code.
+	Input:			nodeInstructionStatement  - <abort> node
+	Input:			objLineInfo           - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateAbortInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLineInfo)
 {
     xmlChar *name;
@@ -910,6 +1019,13 @@ int generateAbortInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLi
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generatePauseInstruction
+	Description:	parse <pause> node and output basic code.
+	Input:			nodeInstructionStatement  - <pause> node
+	Input:			objLineInfo           - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generatePauseInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLineInfo)
 {
     xmlChar *name;
@@ -924,6 +1040,13 @@ int generatePauseInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLi
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generateUserAlarmInstruction
+	Description:	parse <useralarm> node and output basic code.
+	Input:			nodeInstructionStatement  - <useralarm> node
+	Input:			objLineInfo           - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateUserAlarmInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLineInfo)
 {
     xmlNodePtr nodeInstructionParam;
@@ -958,6 +1081,13 @@ int generateUserAlarmInstruction(xmlNodePtr nodeInstructionStatement, LineInfo o
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generatePrintInstruction
+	Description:	parse <print> node and output basic code.
+	Input:			nodeInstructionStatement  - <print> node
+	Input:			objLineInfo           - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generatePrintInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLineInfo)
 {
 	// char timerParam[1024];
@@ -999,6 +1129,13 @@ int generatePrintInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLi
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generateTimerInstruction
+	Description:	parse <timer> node and output basic code.
+	Input:			nodeInstructionStatement  - <timer> node
+	Input:			objLineInfo           - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateTimerInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLineInfo)
 {
 	// char timerParam[1024];
@@ -1037,6 +1174,13 @@ int generateTimerInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLi
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generateMoveInstruction
+	Description:	parse <move_XXX> node and output basic code.
+	Input:			nodeInstructionStatement  - <move_XXX> node
+	Input:			objLineInfo           - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateMoveInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLineInfo)
 {
     xmlNodePtr nodeInstructionParam, nodeElement;
@@ -1186,6 +1330,13 @@ int generateMoveInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLin
 }
 
 // Same with IF without endif
+/************************************************* 
+	Function:		generateLogicalElseIF
+	Description:	parse <vice_logical> node of <if> node and output basic code.
+	Input:			nodeLogicalStatement  - <vice_logical> node
+	Input:			objLineInfo           - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateLogicalElseIF(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 {
 	LineInfo objLineInfoTemp = objLineInfo;
@@ -1247,6 +1398,13 @@ int generateLogicalElseIF(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generateLogicalIF
+	Description:	parse <if> node and output basic code.
+	Input:			nodeLogicalStatement  - <if> node
+	Input:			objLineInfo   - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateLogicalIF(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 {
 	LineInfo objLineInfoTemp = objLineInfo;
@@ -1304,6 +1462,13 @@ int generateLogicalIF(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generateLogicalWHILE
+	Description:	parse <while> node and output basic code.
+	Input:			nodeLogicalStatement  - <while> node
+	Input:			objLineInfo   - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateLogicalWHILE(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 {
 	LineInfo objLineInfoTemp = objLineInfo;
@@ -1357,6 +1522,13 @@ int generateLogicalWHILE(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generateCASEInSWITCH
+	Description:	parse <vice_logical> node of <switch> node and output basic code.
+	Input:			nodeLogicalStatement  - <vice_logical> node
+	Input:			objLineInfo   - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateCASEInSWITCH(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 {
 	LineInfo objLineInfoTemp = objLineInfo;
@@ -1418,6 +1590,13 @@ int generateCASEInSWITCH(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generateLogicalSWITCH
+	Description:	parse <switch> node and output basic code.
+	Input:			nodeLogicalStatement  - <switch> node
+	Input:			objLineInfo   - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateLogicalSWITCH(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 {
 	int iCaseIdx = 0 ;
@@ -1477,6 +1656,13 @@ int generateLogicalSWITCH(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generateLogicalLOOP
+	Description:	parse <call> node and output basic code.
+	Input:			nodeFunctionCall  - <call> node
+	Input:			objLineInfo   - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateFunctionCall(xmlNodePtr nodeFunctionCall, LineInfo objLineInfo)
 {
     char label_instr[32];
@@ -1538,6 +1724,13 @@ int generateFunctionCall(xmlNodePtr nodeFunctionCall, LineInfo objLineInfo)
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generateLogicalLOOP
+	Description:	parse <loop> node and output basic code.
+	Input:			nodeLogicalStatement  - <loop> node
+	Input:			objLineInfo   - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateLogicalLOOP(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 {
 	LineInfo objLineInfoTemp = objLineInfo;
@@ -1591,6 +1784,13 @@ int generateLogicalLOOP(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generateLogicalFOR
+	Description:	parse <for> node and output basic code.
+	Input:			nodeLogicalStatement  - <for> node
+	Input:			objLineInfo   - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateLogicalFOR(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 {
 	LineInfo objLineInfoTemp = objLineInfo;
@@ -1644,6 +1844,13 @@ int generateLogicalFOR(xmlNodePtr nodeLogicalStatement, LineInfo objLineInfo)
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generateFunctionBody
+	Description:	parse <body> node of function node and output basic code.
+	Input:			nodeFunctionBody  - <body> node
+	Input:			objLineInfo   - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
 {
     int iAssignmentIdx = 0 , iInstructionIdx = 0 , iLogicalIdx = 0  , 
@@ -1799,6 +2006,13 @@ int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generateFunction
+	Description:	parse <function> node and output basic code.
+	Input:			nodeFunction  - <function> node
+	Input:			objLineInfo   - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateFunction(xmlNodePtr nodeFunction, LineInfo objLineInfo)
 {
 	LineInfo objLineInfoTemp = objLineInfo;
@@ -1859,6 +2073,13 @@ int generateFunction(xmlNodePtr nodeFunction, LineInfo objLineInfo)
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		generateProgBody
+	Description:	parse <prog_body> node and output basic code.
+	Input:			nodeProgBody  - <prog_body> node
+	Input:			objLineInfo   - Line Info
+	Return: 		1 - success
+*************************************************/ 
 int generateProgBody(xmlNodePtr nodeProgBody, LineInfo objLineInfo)
 {
 	LineInfo objLineInfoTemp = objLineInfo;
@@ -1898,6 +2119,12 @@ int generateProgBody(xmlNodePtr nodeProgBody, LineInfo objLineInfo)
 	return 1 ;
 }
 
+/************************************************* 
+	Function:		parse_xml_file
+	Description:	parse xml file.
+	Input:			file_name  - xml file name
+	Return: 		0 - Success , -1 -  Failed
+*************************************************/ 
 int parse_xml_file(char * file_name){
 	LineInfo objLineInfo ;
 	// char currentChildPath[LAB_LEN];
@@ -2079,6 +2306,13 @@ static int iswhite(char c)
 // 		// FST_INFO("content:\n%s\n",content);	
 // 	}
 
+/************************************************* 
+	Function:		outputXPathVector
+	Description:	Print xpath file content.
+	Input:			xpath_file_name  - xml file name
+	Output: 		NULL
+	Return: 		NULL
+*************************************************/ 
 void outputXPathVector(char * xpath_file_name)
 {
 	vector<string> vecXPath ;
@@ -2122,7 +2356,14 @@ void outputXPathVector(char * xpath_file_name)
 	}
 }
 
-int parse_xml_file_wrapper(char * project_name, char * xml_file_name){
+/************************************************* 
+	Function:		parse_xml_file_wrapper
+	Description:	Wrapper function: Open file and call parse_xml_file.
+	Input:			xml_file_name  - xml file name
+	Output: 		NULL
+	Return: 		0 - Success , -1 -  Failed
+*************************************************/ 
+int parse_xml_file_wrapper(char * xml_file_name){
     xmlDocPtr doc;
 	char   xmlFileName[FILE_PATH_LEN];
 	if(xml_file_name == 0) {

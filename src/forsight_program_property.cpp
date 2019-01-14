@@ -19,6 +19,15 @@ using namespace std;
 #define POSE_CART      1
 #define POSE_JOINT     2
 
+/************************************************* 
+	Function:		parseCart
+	Description:	Analyze the PoseEuler info in the properity json file .
+	Input:			thread_control_block  - interpreter info
+	Input:			jsonCart        - cJSON object
+	Input:			cart            - PoseEuler object
+	Output: 		NULL
+	Return: 		1 - success
+*************************************************/
 int parseCart(struct thread_control_block * objThreadCntrolBlock, 
 			   cJSON *jsonCart, PoseEuler & cart)
 {
@@ -56,6 +65,15 @@ int parseCart(struct thread_control_block * objThreadCntrolBlock,
 	return 1;
 }
 
+/************************************************* 
+	Function:		parseJoint
+	Description:	Analyze the Joint info in the properity json file .
+	Input:			thread_control_block  - interpreter info
+	Input:			jsonJoint       - cJSON object
+	Input:			joint           - joint object
+	Output: 		NULL
+	Return: 		1 - success
+*************************************************/ 
 int parseJoint(struct thread_control_block * objThreadCntrolBlock, 
 			  cJSON *jsonJoint, Joint & joint)
 {
@@ -93,6 +111,15 @@ int parseJoint(struct thread_control_block * objThreadCntrolBlock,
 	return 1;
 }
 
+/************************************************* 
+	Function:		parseAdditionalE
+	Description:	Analyze the Additional info in the properity json file .
+	Input:			thread_control_block  - interpreter info
+	Input:			jsonAdditionalE       - cJSON object
+	Input:			additionalE           - AdditionalE object
+	Output: 		NULL
+	Return: 		1 - success
+*************************************************/ 
 int parseAdditionalE(struct thread_control_block * objThreadCntrolBlock, 
 			   cJSON *jsonAdditionalE, AdditionalE & additionalE)
 {
@@ -124,6 +151,14 @@ int parseAdditionalE(struct thread_control_block * objThreadCntrolBlock,
 	return 1;
 }
 
+/************************************************* 
+	Function:		parsePoses
+	Description:	Analyze the P[*] in the properity json file .
+	Input:			thread_control_block  - interpreter info
+	Input:			jsonPose              - cJSON object
+	Output: 		NULL
+	Return: 		1 - success
+*************************************************/ 
 int parsePosesContent(struct thread_control_block * objThreadCntrolBlock, 
 			   cJSON *jsonPoseContent)
 {
@@ -206,6 +241,14 @@ int parsePosesContent(struct thread_control_block * objThreadCntrolBlock,
 	return 1;
 }
 
+/************************************************* 
+	Function:		parsePoses
+	Description:	Analyze the P[*] in the properity json file .
+	Input:			thread_control_block  - interpreter info
+	Input:			jsonPose              - cJSON object
+	Output: 		NULL
+	Return: 		1 - success
+*************************************************/ 
 int parsePoses(struct thread_control_block * objThreadCntrolBlock, 
 			 cJSON *jsonPose)
 {
@@ -238,6 +281,14 @@ int parsePoses(struct thread_control_block * objThreadCntrolBlock,
 	return 1;
 }
 
+/************************************************* 
+	Function:		parseProgramProp
+	Description:	Analyze the properity json file of program.
+	Input:			thread_control_block  - interpreter info
+	Input:			data                  - file content
+	Output: 		NULL
+	Return: 		1 - success
+*************************************************/ 
 int parseProgramProp(struct thread_control_block * objThreadCntrolBlock, char * data)
 {
 	cJSON *json;
@@ -292,6 +343,13 @@ int parseProgramProp(struct thread_control_block * objThreadCntrolBlock, char * 
 	return 1;
 }
 
+/************************************************* 
+	Function:		print_program_prop_poses
+	Description:	print all of P[*] in the program properity info.
+	Input:			thread_control_block  - interpreter info
+	Output: 		NULL
+	Return: 		1 - success
+*************************************************/ 
 int print_program_prop_poses(struct thread_control_block * objThreadCntrolBlock)
 {
     for(unsigned i=0; i < objThreadCntrolBlock->global_vars.size(); i++)
@@ -301,6 +359,14 @@ int print_program_prop_poses(struct thread_control_block * objThreadCntrolBlock)
 	return 1;
 }
 
+/************************************************* 
+	Function:		append_program_prop_mapper
+	Description:	Analyze the properity json file of program.
+	Input:			thread_control_block  - interpreter info
+	Input:			filename - program filename
+	Output: 		NULL
+	Return: 		1 - success
+*************************************************/ 
 int append_program_prop_mapper(struct thread_control_block * objThreadCntrolBlock, char *filename)
 {
 	char fname[128];

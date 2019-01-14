@@ -978,7 +978,7 @@ int load_program(struct thread_control_block * objThreadCntrolBlock, char *p, ch
   // use bas directly 
   // if((access(fBASName,F_OK))==-1)
   // use XML directly 
-  parse_xml_file_wrapper(objThreadCntrolBlock->project_name, fXMLName);
+  parse_xml_file_wrapper(fXMLName);
 #else
   sprintf(fXMLName, "%s/programs/%s.xml", forgesight_get_programs_path(), pname);
   sprintf(fBASName, "%s/programs/%s.bas", forgesight_get_programs_path(), pname);
@@ -987,7 +987,7 @@ int load_program(struct thread_control_block * objThreadCntrolBlock, char *p, ch
   // use XML directly 
   if((access(fXMLName, F_OK))==0)
   {   
-      parse_xml_file_wrapper(objThreadCntrolBlock->project_name, fXMLName);
+      parse_xml_file_wrapper(fXMLName);
   }
 #endif
   
