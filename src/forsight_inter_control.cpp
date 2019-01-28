@@ -468,7 +468,15 @@ bool getIntprtCtrl(InterpreterControl& intprt_ctrl)
 void startFile(struct thread_control_block * objThdCtrlBlockPtr, 
 	char * proj_name, int idx)
 {
-	strcpy(objThdCtrlBlockPtr->project_name, proj_name); // "prog_demo_dec"); // "BAS-EX1.BAS") ; // 
+	if(strlen(proj_name) < LAB_LEN)
+	{
+		strcpy(objThdCtrlBlockPtr->project_name, proj_name); // "prog_demo_dec"); // "BAS-EX1.BAS") ; // 
+	}
+	else
+	{
+		serror(objThdCtrlBlockPtr, 23);
+		return;
+	}
 	// Just set to default value and it will change in the append_program_prop_mapper
 	objThdCtrlBlockPtr->is_main_thread = MAIN_THREAD ;
 	objThdCtrlBlockPtr->is_in_macro    = false ;
@@ -713,6 +721,7 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 			else
             {
             	FST_ERROR("Failed to jump to line:%d", iLineNum);
+				setWarning(FAIL_INTERPRETER_ILLEGAL_LINE_NUMBER);
 			}
 			break;
         case fst_base::INTERPRETER_SERVER_CMD_SWITCH_STEP:
@@ -757,8 +766,14 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
             	FST_ERROR("Can not FORWARD in EXECUTE_R ");
            		break;
 			}
+	        // Checking prog_mode on 190125 
+			if(objThdCtrlBlockPtr->prog_mode != STEP_MODE)
+			{
+            	FST_ERROR("Can not FORWARD in other mode ");
+           		break;
+			}
 			
-            objThdCtrlBlockPtr->prog_mode = STEP_MODE ;
+            // objThdCtrlBlockPtr->prog_mode = STEP_MODE ;
 			objThdCtrlBlockPtr->execute_direction = EXECUTE_FORWARD ;
 
 			iLineNum = calc_line_from_prog(objThdCtrlBlockPtr);
@@ -796,16 +811,27 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 			}
 			if(getPrgmState() == INTERPRETER_EXECUTE)
 			{
-            	FST_ERROR("Can not FORWARD in EXECUTE_R ");
+            	FST_ERROR("Can not BACKWARD in EXECUTE_R ");
            		break;
 			}
-
-			if(lastCmd == fst_base::INTERPRETER_SERVER_CMD_FORWARD)
+	        // Checking prog_mode on 190125 
+			if(objThdCtrlBlockPtr->prog_mode != STEP_MODE)
+			{
+            	FST_ERROR("Can not BACKWARD in other mode ");
+           		break;
+			}
+			// Revert checking condition on 190125
+			// if(lastCmd == fst_base::INTERPRETER_SERVER_CMD_FORWARD)
+			if(lastCmd != fst_base::INTERPRETER_SERVER_CMD_BACKWARD)
 			{
 			    // In this circumstance, 
 			    // we need not call calc_line_from_prog to get the next FORWARD line.
 				// Just execute last statemant
 			    iLineNum = getLinenum(objThdCtrlBlockPtr);
+				// SWitch prog_mode and execute_direction on 190125
+                // objThdCtrlBlockPtr->prog_mode = STEP_MODE ;
+			    objThdCtrlBlockPtr->execute_direction = EXECUTE_BACKWARD ;
+			
 				if((objThdCtrlBlockPtr->prog_jmp_line[iLineNum - 1].type == LOGIC_TOK)
 				 ||(objThdCtrlBlockPtr->prog_jmp_line[iLineNum - 1].type == END_TOK))
 				{
@@ -834,7 +860,7 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
             // if (objThdCtrlBlockPtr->prog_jmp_line[iLineNum].type == MOTION)
 //            is_backward = true;
             // else {  perror("can't back");  break;      }
-            objThdCtrlBlockPtr->prog_mode = STEP_MODE ;
+            // objThdCtrlBlockPtr->prog_mode = STEP_MODE ;
 			objThdCtrlBlockPtr->execute_direction = EXECUTE_BACKWARD ;
             FST_INFO("step BACKWARD to %d ", iLineNum);
 			// set_prog_from_line(objThdCtrlBlockPtr, iLineNum);
@@ -895,7 +921,7 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
             setPrgmState(objThdCtrlBlockPtr, INTERPRETER_PAUSED); 
             break;
         case fst_base::INTERPRETER_SERVER_CMD_ABORT:
-            FST_INFO("abort motion");
+            FST_ERROR("abort motion");
 			if(getCurrentThreadSeq() < 0) break ;
 		    // objThdCtrlBlockPtr = &g_thread_control_block[getCurrentThreadSeq()];
 		    objThdCtrlBlockPtr = getThreadControlBlock();

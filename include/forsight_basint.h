@@ -45,7 +45,7 @@ using namespace std;
 
 #define PROGRAM_START_LINE_NUM     2
 
-#define LAB_LEN 128
+#define LAB_LEN 256
 #define SELECT_AND_CYCLE_NEST 64
 #define SUB_NEST 16
 #define PROG_SIZE 40960   // 4096
@@ -139,7 +139,7 @@ typedef struct select_and_cycle_stack {
 
 struct thread_control_block {
 	int iThreadIdx ;              // Thread Idx
-	char project_name[128];       // project_name
+	char project_name[LAB_LEN];       // project_name
 	// This vector holds info for global variables.
 	vector<var_type> global_vars;
 	

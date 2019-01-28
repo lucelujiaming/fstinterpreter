@@ -1424,7 +1424,7 @@ int execute_Timer(struct thread_control_block* objThreadCntrolBlock, char *vname
 	}
 	else if(value.getFloatValue() == TIMER_RESET_VALUE)
 	{
-		FST_INFO("%d: call_Timer  start", __LINE__);
+		FST_INFO("%d: call_Timer restart", __LINE__);
 		g_structStopWatch[iTimerIdx].start_time = time(0);
 		value.setFloatValue(0); // 0.0; 
 	//	assign_var(objThreadCntrolBlock, vname, value); // 0.0);

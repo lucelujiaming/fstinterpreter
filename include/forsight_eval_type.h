@@ -862,21 +862,85 @@ public:
 			return ;
 		}
 	}
- 
+	
+	void calcDIVToInt(eval_value * operand)
+	{
+		if(evalType == TYPE_INT){
+			iValue = iValue / operand->getIntValue();
+			return ;
+		}else if(evalType == TYPE_FLOAT){
+			fValue = fValue / operand->getFloatValue();
+			fValue = (int)fValue ;
+			return ;
+		}else if(evalType == (int)(TYPE_R | TYPE_FLOAT)){
+			if(operand->getType() == TYPE_FLOAT)
+			{
+				reg_r.value = reg_r.value / operand->getFloatValue();
+				fValue = fValue / operand->getFloatValue();
+				fValue = (int)fValue ;
+				
+				//	printf("RRegData: id = %d, comment = %s\n", reg_r.id, reg_r.comment.c_str());
+				//	printf("reg_r.value = %f and operand = %f\n", reg_r.value, operand->getFloatValue());
+			}
+			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
+			{
+				reg_r.value = reg_r.value / operand->getRRegDataValue().value;
+				fValue  = reg_r.value;
+				fValue = (int)fValue ;
+			}
+			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
+			{
+				reg_r.value = reg_r.value / operand->getMrRegDataValue().value;
+				fValue = fValue / operand->getMrRegDataValue().value;
+				fValue = (int)fValue ;
+			}
+			return ;
+		}else if(evalType == (int)(TYPE_MR | TYPE_FLOAT)){
+			if(operand->getType() == TYPE_FLOAT)
+			{
+				reg_mr.value = reg_mr.value / operand->getFloatValue();
+				fValue = fValue / operand->getFloatValue();
+				fValue = (int)fValue ;
+				
+				//	printf("RRegData: id = %d, comment = %s\n", reg_r.id, reg_r.comment.c_str());
+				//	printf("reg_r.value = %f and operand = %f\n", reg_r.value, operand->getFloatValue());
+			}
+			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
+			{
+				reg_mr.value = reg_mr.value / operand->getRRegDataValue().value;
+				fValue = fValue / operand->getRRegDataValue().value;
+				fValue = (int)fValue ;
+			}
+			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
+			{
+				reg_mr.value = reg_mr.value / operand->getMrRegDataValue().value;
+				fValue = fValue / operand->getMrRegDataValue().value;
+				fValue = (int)fValue ;
+			}
+			return ;
+		}
+		else {
+			noticeErrorType(operand->getType()) ;
+			return ;
+		}
+	}
+
 	void calcMod(eval_value * operand)
 	{
-		int iTmp = 0 ;
 		if(evalType == TYPE_INT){
+			int iTmp = 0 ;
 			iTmp = iValue / operand->getIntValue();
 			iValue = iValue - (iTmp * operand->getIntValue());
 		}else if(evalType == TYPE_FLOAT){
-			iTmp = fValue / (int)operand->getIntValue();
-			fValue = fValue - (iTmp * (int)operand->getFloatValue());
+			// iTmp = fValue / (int)operand->getFloatValue();
+			// fValue = fValue - (iTmp * (int)operand->getFloatValue());
+			fValue    = fmodf(fValue, operand->getFloatValue());
 		}else if(evalType == (int)(TYPE_R | TYPE_FLOAT)){
 		    if(operand->getType() == TYPE_FLOAT)
 		    {
-				iTmp = reg_r.value / (int)operand->getFloatValue();
-				reg_r.value = reg_r.value - (iTmp * (int)operand->getFloatValue());
+			//	iTmp = reg_r.value / (int)operand->getFloatValue();
+			//	reg_r.value = reg_r.value - (iTmp * (int)operand->getFloatValue());
+				reg_r.value  = fmodf(reg_r.value, operand->getFloatValue());
 				fValue  = reg_r.value;
 				
 			//	printf("RRegData: id = %d, comment = %s\n", reg_r.id, reg_r.comment.c_str());
@@ -884,22 +948,25 @@ public:
 		    }
 			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
 		    {
-				iTmp = reg_r.value / (int)operand->getRRegDataValue().value;
-				reg_r.value = reg_r.value - (iTmp * (int)operand->getRRegDataValue().value);
+			//	iTmp = reg_r.value / (int)operand->getRRegDataValue().value;
+			//	reg_r.value = reg_r.value - (iTmp * (int)operand->getRRegDataValue().value);
+				reg_r.value  = fmodf(reg_r.value, operand->getRRegDataValue().value);
 				fValue  = reg_r.value;
 		    }
 			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
 		    {
-				iTmp = reg_r.value / (int)operand->getMrRegDataValue().value;
-				reg_r.value = reg_r.value - (iTmp * (int)operand->getMrRegDataValue().value);
+			//	iTmp = reg_r.value / (int)operand->getMrRegDataValue().value;
+			//	reg_r.value = reg_r.value - (iTmp * (int)operand->getMrRegDataValue().value);
+				reg_r.value  = fmodf(reg_r.value, operand->getMrRegDataValue().value);
 				fValue  = reg_r.value;
 		    }
 			return ;
 		}else if(evalType == (int)(TYPE_MR | TYPE_FLOAT)){
 		    if(operand->getType() == TYPE_FLOAT)
 		    {
-				iTmp = reg_mr.value / (int)operand->getFloatValue();
-				reg_mr.value = reg_mr.value - (iTmp * (int)operand->getFloatValue());
+			//	iTmp = reg_mr.value / (int)operand->getFloatValue();
+			//	reg_mr.value = reg_mr.value - (iTmp * (int)operand->getFloatValue());
+				reg_mr.value  = fmodf(reg_mr.value, operand->getFloatValue());
 				fValue  = reg_mr.value;
 				
 			//	printf("RRegData: id = %d, comment = %s\n", reg_r.id, reg_r.comment.c_str());
@@ -907,14 +974,16 @@ public:
 		    }
 			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
 		    {
-				iTmp = reg_mr.value / (int)operand->getRRegDataValue().value;
-				reg_mr.value = reg_mr.value - (iTmp * (int)operand->getRRegDataValue().value);
+			//	iTmp = reg_mr.value / (int)operand->getRRegDataValue().value;
+			//	reg_mr.value = reg_mr.value - (iTmp * (int)operand->getRRegDataValue().value);
+				reg_mr.value  = fmodf(reg_mr.value, operand->getRRegDataValue().value);
 				fValue  = reg_mr.value;
 		    }
 			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
 		    {
-				iTmp = reg_mr.value / (int)operand->getMrRegDataValue().value;
-				reg_mr.value = reg_mr.value - (iTmp * (int)operand->getMrRegDataValue().value);
+			//	iTmp = reg_mr.value / (int)operand->getMrRegDataValue().value;
+			//	reg_mr.value = reg_mr.value - (iTmp * (int)operand->getMrRegDataValue().value);
+				reg_mr.value  = fmodf(reg_mr.value, operand->getMrRegDataValue().value);
 				fValue  = reg_mr.value;
 		    }
 			return ;

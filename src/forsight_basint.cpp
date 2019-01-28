@@ -189,7 +189,7 @@ void    level1(struct thread_control_block * objThreadCntrolBlock, eval_value *r
         level7(struct thread_control_block * objThreadCntrolBlock, eval_value *result, int* boolValue),
         primitive(struct thread_control_block * objThreadCntrolBlock, eval_value *result);
 void unary(char, eval_value *r),
-	arith(char o, eval_value *r, eval_value *h);
+	arith(struct thread_control_block * objThreadCntrolBlock, char o, eval_value *r, eval_value *h);
 
 int load_program(struct thread_control_block * objThreadCntrolBlock, char *p, char *pname);
 void scan_labels(struct thread_control_block * objThreadCntrolBlock, 
@@ -600,6 +600,19 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 // #endif
   isExecuteEmptyLine = 0 ;
   do {
+	// Deal PAUSED_R at the beginning on 190125 
+	InterpreterState interpreterState  = getPrgmState();
+	while(interpreterState == INTERPRETER_PAUSED)
+	{
+		FST_INFO("interpreterState is PAUSED_R.");
+#ifdef WIN32
+		interpreterState =  INTERPRETER_EXECUTE;
+		Sleep(1000);
+#else
+		interpreterState  = getPrgmState();
+		sleep(1);
+#endif
+	}
   	if((objThreadCntrolBlock->prog_mode == STEP_MODE)
 		&& (isExecuteEmptyLine == 0))
   	{
@@ -693,19 +706,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
   		FST_INFO("objThreadCntrolBlock->is_abort == true.");
         break ; // return 0 ; // NULL ;
 	}
-	// Deal PAUSED_R
-	InterpreterState interpreterState  = getPrgmState();
-	while(interpreterState == INTERPRETER_PAUSED)
-	{
-		FST_INFO("interpreterState is PAUSED_R.");
-#ifdef WIN32
-		interpreterState =  INTERPRETER_EXECUTE;
-		Sleep(1000);
-#else
-		interpreterState  = getPrgmState();
-		sleep(1);
-#endif
-	}
+	// Deal PAUSED_R opration had moved to the beginning on 190125 
     /* check for assignment statement */
 	iLinenum = calc_line_from_prog(objThreadCntrolBlock);
     FST_INFO("objThreadCntrolBlock->token_type = %d at line %d ", 
@@ -2673,6 +2674,11 @@ void exec_import(struct thread_control_block * objThreadCntrolBlock)
   }
   objLabel.type = OUTSIDE_FUNC ;
   
+  if(objThreadCntrolBlock->iSubProgNum > NUM_SUBROUTINE)
+  {
+    	serror(objThreadCntrolBlock, 22);
+		return;
+  }
   if(!(objThreadCntrolBlock->sub_prog[objThreadCntrolBlock->iSubProgNum]
 	    =(char *) malloc(PROG_SIZE))) {
 	  FST_ERROR("allocation failure");
@@ -2957,7 +2963,13 @@ void serror(struct thread_control_block * objThreadCntrolBlock, int error)
 		FAIL_INTERPRETER_MOVJ_WITH_POINT          ,     "movj with point",             // 16
 		FAIL_INTERPRETER_ILLEGAL_LINE_NUMBER      ,     "illegal line number",         // 17
 		FAIL_INTERPRETER_FUNC_PARAMS_MISMATCH     ,     "func params mismatching",     // 18
-		FAIL_INTERPRETER_DUPLICATE_EXEC_MACRO     ,     "exec macro duplicating"       // 19
+		FAIL_INTERPRETER_DUPLICATE_EXEC_MACRO     ,     "exec macro duplicating",      // 19 - used by setWarning
+		INFO_INTERPRETER_BACK_TO_BEGIN            ,     "Backward to begin",           // 20 - used by setWarning
+		INFO_INTERPRETER_THREAD_NOT_EXIST         ,     "thread not exist",            // 21 - used by setWarning
+		INFO_INTERPRETER_TOO_MANY_IMPORT          ,     "too many import file",        // 22 
+		INFO_INTERPRETER_TOO_LONG_PROJECT_NAME    ,     "too long project name",       // 23
+		INFO_INTERPRETER_ARITHMETIC_EXCEPTION     ,     "Arithmetic Exception",        // 24
+		INFO_INTERPRETER_UNKNOWN_ARITHM     	  , 	"Unknown Arithm"		       // 25
   };
   if(error > (int)(sizeof(errInfo)/sizeof(ErrInfo))) {
   	FST_ERROR("\t NOTICE : Error out of range %d ", error);
@@ -3041,8 +3053,8 @@ int get_token(struct thread_control_block * objThreadCntrolBlock)
     // return (objThreadCntrolBlock->token_type = DELIMITER);
 	return (objThreadCntrolBlock->token_type = COMMENT);
   }
-
-  if(strchr("+-*^/%=;(),><[].", *objThreadCntrolBlock->prog)){ /* delimiter */
+  // Add @ as DIV operation
+  if(strchr("+-*^/%@=;(),><[].", *objThreadCntrolBlock->prog)){ /* delimiter */
     // *temp=*objThreadCntrolBlock->prog;
   	if(strchr("<>=", *objThreadCntrolBlock->prog)) {
 		switch(*objThreadCntrolBlock->prog) {
@@ -3353,7 +3365,7 @@ void level3(struct thread_control_block * objThreadCntrolBlock, eval_value *resu
   while((op = *(objThreadCntrolBlock->token)) == '+' || op == '-') {
     get_token(objThreadCntrolBlock);
     level4(objThreadCntrolBlock, &hold, boolValue);
-    arith(op, result, &hold);
+    arith(objThreadCntrolBlock, op, result, &hold);
   }
 }
 
@@ -3373,10 +3385,10 @@ void level4(struct thread_control_block * objThreadCntrolBlock, eval_value *resu
 
   level5(objThreadCntrolBlock, result, boolValue);
   while((op = *(objThreadCntrolBlock->token))
-  	== '*' || op == '/' || op == '%') {
+  	== '*' || op == '/' || op == '%'|| op == '@') {
     get_token(objThreadCntrolBlock);
     level5(objThreadCntrolBlock, &hold, boolValue);
-    arith(op, result, &hold);
+    arith(objThreadCntrolBlock, op, result, &hold);
   }
 }
 
@@ -3397,7 +3409,7 @@ void level5(struct thread_control_block * objThreadCntrolBlock, eval_value *resu
   if(*(objThreadCntrolBlock->token)== '^') {
     get_token(objThreadCntrolBlock);
     level5(objThreadCntrolBlock, &hold, boolValue);
-    arith('^', result, &hold);
+    arith(objThreadCntrolBlock, '^', result, &hold);
   }
 }
 
@@ -3546,7 +3558,7 @@ void primitive(struct thread_control_block * objThreadCntrolBlock, eval_value *r
 	Ouput:			r                 - operand1
 	Return: 		NULL
 *************************************************/ 
-void arith(char o, eval_value *r, eval_value *h)
+void arith(struct thread_control_block * objThreadCntrolBlock, char o, eval_value *r, eval_value *h)
 {
 //  register int t, ex;
 
@@ -3565,11 +3577,19 @@ void arith(char o, eval_value *r, eval_value *h)
       break;
     case '/':
       // r->fValue = (r->fValue)/(h->fValue);
+	  if(h->getFloatValue() == 0.0)
+	  {
+		 serror(objThreadCntrolBlock, 24);
+	  }
       r->calcDivide(h);
       break;
     case '%':
       // t = (r->fValue)/(h->fValue);
       // r->fValue = r->fValue-(t*(h->fValue));
+	  if(h->getFloatValue() == 0.0)
+	  {
+		 serror(objThreadCntrolBlock, 24);
+	  }
       r->calcMod(h);
       break;
     case '^':
@@ -3581,6 +3601,16 @@ void arith(char o, eval_value *r, eval_value *h)
       // for(t=h->fValue-1; t>0; --t) 
 	  //    r->fValue = (r->fValue) * ex;
       r->calcPower(h);
+      break;
+    case '@':
+	  if(h->getFloatValue() == 0.0)
+	  {
+		 serror(objThreadCntrolBlock, 24);
+	  }
+	  r->calcDIVToInt(h);
+      break;
+	default:
+	  serror(objThreadCntrolBlock, 25);
       break;
   }
 }

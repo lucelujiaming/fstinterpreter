@@ -46,12 +46,12 @@
                 </instruction>
                 <instruction type="move_line">
                     <argument name="pose" type="pose">
-                            <element type="num">77</element>
+                            <element type="num">5</element>
                     </argument>
                     <argument name="velocity" type="num" unit="mm/s">2000</argument>
                     <argument name="fine" type="num">-1</argument>
                 </instruction>
-                <instruction type="move_joint">
+                <instruction type="move_line">
                     <argument name="pose" type="pose">
                         <element type="num">5</element>
                     </argument>
@@ -68,9 +68,9 @@
                         <element type="num">2</element>
                         <element type="operation">+</element>
                         <element type="bracket">
-                            <element type="num">2</element>
-                            <element type="operation">+</element>
-                            <element type="num">2</element>
+                            <element type="num">33.65</element>
+                            <element type="operation">MOD</element>
+                            <element type="num">7.2</element>
                         </element>
                     </rvalue>
                 </assignment>

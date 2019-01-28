@@ -18,7 +18,7 @@ using namespace std;
 #include "forsight_xml_reader.h"
 
 #define PROG_HEAD         "head"
-#define LAB_LEN           128
+#define LINE_LAB_LEN      256
 #define FILE_PATH_LEN     1024
 
 typedef enum _WaitType
@@ -30,12 +30,12 @@ typedef enum _WaitType
 } WaitType;
 
 typedef struct label_t {
-  char name[LAB_LEN];
+	char name[LINE_LAB_LEN];
 } Label;
 
 typedef struct line_info_t {
 	int  indentValue ;
-	char xPath[LAB_LEN];
+	char xPath[LINE_LAB_LEN];
 	int  xPathIdx;
 	char fileName[FILE_PATH_LEN];
 } LineInfo;
@@ -227,7 +227,16 @@ int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char *
 		}
 		else if(xmlStrcasecmp(name, BAD_CAST"operation")==0){ 
 			value = xmlNodeGetContent(nodeValueElement);
-			sprintf(label_str, "%s%s", label_str, (char*)value);
+			if(xmlStrcasecmp(value, BAD_CAST"MOD")==0)
+			{
+				sprintf(label_str, "%s %% ", label_str);
+			}
+			else if(xmlStrcasecmp(value, BAD_CAST"DIV")==0)
+			{
+				sprintf(label_str, "%s @ ", label_str);
+			}
+			else
+				sprintf(label_str, "%s%s", label_str, (char*)value);
 		}
 		else if(xmlStrcasecmp(name, BAD_CAST"boolean_operation")==0){ 
 			value = xmlNodeGetContent(nodeValueElement);
@@ -2319,7 +2328,7 @@ void outputXPathVector(char * xpath_file_name)
 	int iLineNum = 0 ;
 	char contentLine[FILE_PATH_LEN];
 	char * contentSepPtr; 
-	char contentLineNum[LAB_LEN];
+	char contentLineNum[LINE_LAB_LEN];
 	char contentXPath[FILE_PATH_LEN];
 
 	FILE *xpath_file ;
@@ -2337,7 +2346,7 @@ void outputXPathVector(char * xpath_file_name)
 	memset(contentLine,    0x00, FILE_PATH_LEN);
 	while(fgets(contentLine,sizeof(contentLine),xpath_file)!=NULL)  
 	{  
-		memset(contentLineNum, 0x00, LAB_LEN);
+		memset(contentLineNum, 0x00, LINE_LAB_LEN);
 		memset(contentXPath,   0x00, FILE_PATH_LEN);
 		contentSepPtr = strchr(contentLine, ':');
 		if(contentSepPtr)
