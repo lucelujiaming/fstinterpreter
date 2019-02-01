@@ -774,6 +774,28 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			instr.target.joint_target.j3, instr.target.joint_target.j4, 
 			instr.target.joint_target.j5, instr.target.joint_target.j6);
 	}
+	else if(value.getType() == TYPE_PR)
+	{
+#ifdef WIN32
+		instr.target.joint_target.j1 = value.getPrRegDataValue().value.joint_pos[0];
+		instr.target.joint_target.j2 = value.getPrRegDataValue().value.joint_pos[1];
+		instr.target.joint_target.j3 = value.getPrRegDataValue().value.joint_pos[2];
+		instr.target.joint_target.j4 = value.getPrRegDataValue().value.joint_pos[3];
+		instr.target.joint_target.j5 = value.getPrRegDataValue().value.joint_pos[4];
+		instr.target.joint_target.j6 = value.getPrRegDataValue().value.joint_pos[5];
+#else
+		instr.target.joint_target.j1 = value.getPrRegDataValue().value.pos[0];
+		instr.target.joint_target.j2 = value.getPrRegDataValue().value.pos[1];
+		instr.target.joint_target.j3 = value.getPrRegDataValue().value.pos[2];
+		instr.target.joint_target.j4 = value.getPrRegDataValue().value.pos[3];
+		instr.target.joint_target.j5 = value.getPrRegDataValue().value.pos[4];
+		instr.target.joint_target.j6 = value.getPrRegDataValue().value.pos[5];
+#endif		
+	    FST_INFO("TYPE_PR: Forward move to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ", 
+			instr.target.joint_target.j1, instr.target.joint_target.j2, 
+			instr.target.joint_target.j3, instr.target.joint_target.j4, 
+			instr.target.joint_target.j5, instr.target.joint_target.j6);
+	}
 	// Use start point in revert mode  
 	if(objThreadCntrolBlock->execute_direction == EXECUTE_BACKWARD)
 	{
@@ -1003,6 +1025,25 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		find_eol(objThreadCntrolBlock);
     	return 0;
 	}
+	else if(value.getType() == TYPE_PR)
+	{
+#ifdef WIN32
+		instr.target.pose_target.position    = value.getPrRegDataValue().value.cartesian_pos.position ;
+		instr.target.pose_target.orientation = value.getPrRegDataValue().value.cartesian_pos.orientation;
+#else
+		instr.target.pose_target.position.x    = value.getPrRegDataValue().value.pos[0];
+		instr.target.pose_target.position.y    = value.getPrRegDataValue().value.pos[1];
+		instr.target.pose_target.position.z    = value.getPrRegDataValue().value.pos[2];
+		instr.target.pose_target.orientation.a = value.getPrRegDataValue().value.pos[3];
+		instr.target.pose_target.orientation.b = value.getPrRegDataValue().value.pos[4];
+		instr.target.pose_target.orientation.c = value.getPrRegDataValue().value.pos[5];
+#endif	
+	    FST_INFO("TYPE_PR: Forward move to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ", 
+			instr.target.joint_target.j1, instr.target.joint_target.j2, 
+			instr.target.joint_target.j3, instr.target.joint_target.j4, 
+			instr.target.joint_target.j5, instr.target.joint_target.j6);
+	}
+	
 	// Use start point in revert mode  
 	if(objThreadCntrolBlock->execute_direction == EXECUTE_BACKWARD)
 	{
@@ -1437,6 +1478,8 @@ int execute_Timer(struct thread_control_block* objThreadCntrolBlock, char *vname
 		
 		value.setFloatValue(g_structStopWatch[iTimerIdx].diff_time)  ;
 	//	assign_var(objThreadCntrolBlock, vname, value);
+	
+		assign_global_var(objThreadCntrolBlock, vname, value);
 		FST_INFO("Time elapse : %d .", g_structStopWatch[iTimerIdx].diff_time);
 	}
 	return 1 ;

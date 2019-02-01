@@ -111,7 +111,7 @@ struct sub_label {
 };
 
 struct var_type {
-    char var_name[80]; // name
+    char var_name[LAB_LEN]; // name
     // var_inner_type v_type; // data type
 	eval_value value ;
 };
@@ -220,6 +220,8 @@ int  calc_line_from_prog(struct thread_control_block * objThreadCntrolBlock);
 void serror(struct thread_control_block * objThreadCntrolBlock, int error);
 
 void assignment(struct thread_control_block * objThreadCntrolBlock) ;
+
+void assign_global_var(struct thread_control_block * objThreadCntrolBlock, char *vname, eval_value value);
 
 #endif
 

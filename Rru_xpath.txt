@@ -1,0 +1,16 @@
+001:Rru:/prog/prog_body/function
+002:Rru:/prog/prog_body/function/body/logical[1]/determine
+003:Rru:/prog/prog_body/function/body/logical[1]/logical_body/instruction
+004:Rru:/prog/prog_body/function/body/logical[1]/vice_logical/determine
+005:Rru:/prog/prog_body/function/body/logical[1]/vice_logical/vice_logical_body/instruction
+006:Rru:/prog/prog_body/function/body/logical[1]
+007:Rru:/prog/prog_body/function/body/logical[2]/determine
+008:Rru:/prog/prog_body/function/body/logical[2]/vice_logical[1]/determine
+009:Rru:/prog/prog_body/function/body/logical[2]/vice_logical[1]/vice_logical_body/assignment
+010:Rru:/prog/prog_body/function/body/logical[2]
+011:Rru:/prog/prog_body/function/body/logical[2]/vice_logical[2]/determine
+012:Rru:/prog/prog_body/function/body/logical[2]/vice_logical[2]/vice_logical_body/assignment
+013:Rru:/prog/prog_body/function/body/logical[2]
+014:Rru:/prog/prog_body/function/body/logical[2]
+015:Rru:/prog/prog_body/function/body/end
+016:Rru:/prog/prog_body/function

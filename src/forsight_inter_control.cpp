@@ -3,7 +3,6 @@
 #endif
 #include "forsight_inter_control.h"
 #include "forsight_innercmd.h"
-#include "forsight_program_property.h"
 #include "forsight_io_controller.h"
 #ifndef WIN32
 // #include "io_interface.h"
@@ -481,7 +480,6 @@ void startFile(struct thread_control_block * objThdCtrlBlockPtr,
 	objThdCtrlBlockPtr->is_main_thread = MAIN_THREAD ;
 	objThdCtrlBlockPtr->is_in_macro    = false ;
 	objThdCtrlBlockPtr->iThreadIdx = idx ;
-	append_program_prop_mapper(objThdCtrlBlockPtr, proj_name);
 	// Refresh InterpreterPublish project_name
 	
 	setProgramName(objThdCtrlBlockPtr, proj_name); 

@@ -95,7 +95,7 @@ int main(int  argc, char *argv[])
 			usleep(1000);
 		}
 #else
-		parseCtrlComand(intprt_ctrl, "prog_1");
+		parseCtrlComand(intprt_ctrl, "timer_test");
 		intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_LOAD ;
 		Sleep(100);
 #endif

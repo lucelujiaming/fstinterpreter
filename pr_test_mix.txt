@@ -1,11 +1,11 @@
 EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main (param0, param1)
-EXPORT: (002)(015)/prog/prog_body                                                                                         P[1] = 7  
-EXPORT: (003)(015)/prog/prog_body                                                                                         P[1] = 7 + P[1]  
-EXPORT: (004)(015)/prog/prog_body                                                                                         R[1] = 5  
-EXPORT: (005)(015)/prog/prog_body                                                                                         PR[1].JOINT = 35.9 46.7 76.4 18.5 152.4 145.3  
-EXPORT: (006)(015)/prog/prog_body                                                                                         PR[1].ID = 123  
-EXPORT: (007)(015)/prog/prog_body                                                                                         PR[1].TYPE = 123  
-EXPORT: (008)(015)/prog/prog_body                                                                                         PR[1].COMMENT =  "lujiaming test for comment"   
-EXPORT: (009)(015)/prog/prog_body                                                                                         PR[1].J1  = 7 + R[1]   
-EXPORT: (010)(015)/prog/prog_body                                                                                         PR[1].PJ3  = 5 + R[1]   
+EXPORT: (002)(043)/prog/prog_body/function/body/assignment[1]                                                             P[2]  = PR[5]   
+EXPORT: (003)(043)/prog/prog_body/function/body/assignment[2]                                                             PR[2]  = P[5]   
+EXPORT: (004)(043)/prog/prog_body/function/body/assignment[3]                                                             R[1] = 5  
+EXPORT: (005)(043)/prog/prog_body/function/body/assignment[4]                                                             PR[1].JOINT = 35.9 46.7 76.4 18.5 152.4 145.3  
+EXPORT: (006)(043)/prog/prog_body/function/body/assignment[5]                                                             PR[1].ID = 123  
+EXPORT: (007)(043)/prog/prog_body/function/body/assignment[6]                                                             PR[1].TYPE = 123  
+EXPORT: (008)(043)/prog/prog_body/function/body/assignment[7]                                                             PR[1].COMMENT = "lujiaming test for comment"  
+EXPORT: (009)(043)/prog/prog_body/function/body/assignment[8]                                                             PR[1].J1  = 7 + R[1]   
+EXPORT: (010)(043)/prog/prog_body/function/body/assignment[9]                                                             PR[1].PJ3  = 5 + R[1]   
 EXPORT: (011)(024)/prog/prog_body/function                                                                            END SUB 

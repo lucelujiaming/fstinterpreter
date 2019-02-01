@@ -11,9 +11,11 @@
 011:lineno_test_2:/prog/prog_body/function/body/instruction[1]
 012:lineno_test_2:/prog/prog_body/function/body/call
 013:lineno_test_2:/prog/prog_body/function/body/instruction[2]
-014:lineno_test_2:/prog/prog_body/function/body/end
-015:lineno_test_2:/prog/prog_body/function
-016:Marcusc_Test:/prog/prog_body/function
-017:Marcusc_Test:/prog/prog_body/function/body/instruction
-018:Marcusc_Test:/prog/prog_body/function/body/end
-019:Marcusc_Test:/prog/prog_body/function
+014:lineno_test_2:/prog/prog_body/function/body/instruction[3]
+015:lineno_test_2:/prog/prog_body/function/body/end
+016:lineno_test_2:/prog/prog_body/function
+017:Marcusc_Test:/prog/prog_body/function
+018:Marcusc_Test:/prog/prog_body/function/body/instruction[1]
+019:Marcusc_Test:/prog/prog_body/function/body/instruction[2]
+020:Marcusc_Test:/prog/prog_body/function/body/end
+021:Marcusc_Test:/prog/prog_body/function

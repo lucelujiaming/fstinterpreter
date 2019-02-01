@@ -1,0 +1,16 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(050)/prog/prog_body/function/body/logical[1]/determine                                                      IF R[1]  = R[1]  THEN 
+EXPORT: (003)(065)/prog/prog_body/function/body/logical[1]/logical_body/instruction                                           WAIT  2
+EXPORT: (004)(063)/prog/prog_body/function/body/logical[1]/vice_logical/determine                                         ELSEIF 2 = 2 THEN 
+EXPORT: (005)(083)/prog/prog_body/function/body/logical[1]/vice_logical/vice_logical_body/instruction                         WAIT  2
+EXPORT: (006)(040)/prog/prog_body/function/body/logical[1]                                                                ENDIF 
+EXPORT: (007)(050)/prog/prog_body/function/body/logical[2]/determine                                                      SELECT CASE  R[1]  
+EXPORT: (008)(066)/prog/prog_body/function/body/logical[2]/vice_logical[1]/determine                                          CASE  R[3]  
+EXPORT: (009)(085)/prog/prog_body/function/body/logical[2]/vice_logical[1]/vice_logical_body/assignment                           R[1]  = R[2]   
+EXPORT: (010)(040)/prog/prog_body/function/body/logical[2]                                                                    BREAK 
+EXPORT: (011)(066)/prog/prog_body/function/body/logical[2]/vice_logical[2]/determine                                          CASE  R[2]  
+EXPORT: (012)(085)/prog/prog_body/function/body/logical[2]/vice_logical[2]/vice_logical_body/assignment                           R[1]  = R[3]   
+EXPORT: (013)(040)/prog/prog_body/function/body/logical[2]                                                                    BREAK 
+EXPORT: (014)(040)/prog/prog_body/function/body/logical[2]                                                                END SELECT 
+EXPORT: (015)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (016)(024)/prog/prog_body/function                                                                            END SUB 

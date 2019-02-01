@@ -65,6 +65,18 @@
                         </element>
                     </lvalue>
                     <rvalue>
+						<element name="strlen" type="function">
+							<element type="string">sdfsdfsdfsd</element>
+						</element>
+                    </rvalue>
+                </assignment>
+                <assignment>
+                    <lvalue>
+                        <element type="register">
+                            <element type="num">1</element>
+                        </element>
+                    </lvalue>
+                    <rvalue>
                         <element type="num">2</element>
                         <element type="operation">+</element>
                         <element type="bracket">

@@ -268,7 +268,7 @@ bool reg_manager_interface_setPosePr(PoseEuler *ptr, uint16_t num)
 	if(g_objRegManagerInterface)
 	{
 		PrRegDataIpc objPrRegDataIpc ;
-		
+		objPrRegDataIpc.id     = num ;
 		objPrRegDataIpc.pos[0] = ptr->position.x   ;
 		objPrRegDataIpc.pos[1] = ptr->position.y   ;
 		objPrRegDataIpc.pos[2] = ptr->position.z   ;
@@ -278,19 +278,11 @@ bool reg_manager_interface_setPosePr(PoseEuler *ptr, uint16_t num)
 		objPrRegDataIpc.pos[6] = 0.0;
 		objPrRegDataIpc.pos[7] = 0.0;
 		objPrRegDataIpc.pos[8] = 0.0;
-		bRet = g_objRegManagerInterface->getPrReg(num, &objPrRegDataIpc);
+		bRet = g_objRegManagerInterface->setPrReg(&objPrRegDataIpc);
 		FST_INFO("setPr: id = %d (%f, %f, %f, %f, %f, %f) at %d with %s ", num, 
 			objPrRegDataIpc.pos[0], objPrRegDataIpc.pos[1], 
 			objPrRegDataIpc.pos[2], objPrRegDataIpc.pos[3], 
 			objPrRegDataIpc.pos[4], objPrRegDataIpc.pos[5], num, bRet?"TRUE":"FALSE");
-		if(bRet)
-		{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		    memcpy(&(objPrRegDataIpc.pos), ptr, 
-				sizeof(objPrRegDataIpc.pos));
-			reg_manager_interface_setPr(&objPrRegDataIpc, num);
-#endif
-		}
 	}
 	else
 	{

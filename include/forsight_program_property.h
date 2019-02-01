@@ -3,6 +3,7 @@
 
 #include "forsight_basint.h"
 
-int append_program_prop_mapper(struct thread_control_block * objThreadCntrolBlock, char *filename);
+int append_program_prop_mapper(struct thread_control_block * objThreadCntrolBlock, 
+		char *filename, bool isMainThread);
 
 #endif

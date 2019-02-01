@@ -237,7 +237,12 @@ int parsePosesContent(struct thread_control_block * objThreadCntrolBlock,
 	
 	value.setUFIndex(uf);   value.setTFIndex(tf);  
 	value.updateAdditionalE(additionalE);
-	assign_var(objThreadCntrolBlock, var, value);
+	
+	// assign_var(objThreadCntrolBlock, var, value);
+    var_type vt;
+    memset(vt.var_name, 0x00, LAB_LEN);
+    strcpy(vt.var_name, var),  vt.value = value;
+    objThreadCntrolBlock->local_var_stack.push_back(vt);
 	return 1;
 }
 
@@ -289,7 +294,7 @@ int parsePoses(struct thread_control_block * objThreadCntrolBlock,
 	Output: 		NULL
 	Return: 		1 - success
 *************************************************/ 
-int parseProgramProp(struct thread_control_block * objThreadCntrolBlock, char * data)
+int parseProgramProp(struct thread_control_block * objThreadCntrolBlock, char * data, bool isMainThread)
 {
 	cJSON *json;
 	json=cJSON_Parse(data);
@@ -305,10 +310,13 @@ int parseProgramProp(struct thread_control_block * objThreadCntrolBlock, char * 
 			FST_INFO("cJSON_True"); break;
 		case cJSON_Number:		
 			{
-				if(strcmp(child->string, "launchCode") == 0)
+				if(isMainThread)
 				{
-					FST_INFO("cJSON_Number %s : %d", 
-						child->string, child->valueint);
+					if(strcmp(child->string, "launchCode") == 0)
+					{
+						FST_INFO("cJSON_Number %s : %d", 
+							child->string, child->valueint);
+					}
 				}
 			}
 			break;
@@ -316,12 +324,15 @@ int parseProgramProp(struct thread_control_block * objThreadCntrolBlock, char * 
 			{
 				if(strcmp(child->string, "programType") == 0)
 				{
-					if(strcmp(child->valuestring, "Monitor") == 0)
+					if(isMainThread)
 					{
-						objThreadCntrolBlock->is_main_thread = MONITOR_THREAD ;
-					}
-					else {
-						objThreadCntrolBlock->is_main_thread = MAIN_THREAD ;
+						if(strcmp(child->valuestring, "Monitor") == 0)
+						{
+							objThreadCntrolBlock->is_main_thread = MONITOR_THREAD ;
+						}
+						else {
+							objThreadCntrolBlock->is_main_thread = MAIN_THREAD ;
+						}
 					}
 				}
 			}
@@ -352,9 +363,9 @@ int parseProgramProp(struct thread_control_block * objThreadCntrolBlock, char * 
 *************************************************/ 
 int print_program_prop_poses(struct thread_control_block * objThreadCntrolBlock)
 {
-    for(unsigned i=0; i < objThreadCntrolBlock->global_vars.size(); i++)
+    for(unsigned i=0; i < objThreadCntrolBlock->local_var_stack.size(); i++)
     {
-		FST_INFO("%d : %s ", i, objThreadCntrolBlock->global_vars[i].var_name);
+		FST_INFO("%d : %s ", i, objThreadCntrolBlock->local_var_stack[i].var_name);
 	}
 	return 1;
 }
@@ -367,7 +378,8 @@ int print_program_prop_poses(struct thread_control_block * objThreadCntrolBlock)
 	Output: 		NULL
 	Return: 		1 - success
 *************************************************/ 
-int append_program_prop_mapper(struct thread_control_block * objThreadCntrolBlock, char *filename)
+int append_program_prop_mapper(struct thread_control_block * objThreadCntrolBlock, 
+				char *filename, bool isMainThread)
 {
 	char fname[128];
 	FILE *f;long len;char *data;
@@ -384,7 +396,7 @@ int append_program_prop_mapper(struct thread_control_block * objThreadCntrolBloc
 	    fseek(f,0,SEEK_END); len=ftell(f); fseek(f,0,SEEK_SET);
 	    data=(char*)malloc(len+1); fread(data,1,len,f); 
 		fclose(f);
-		parseProgramProp(objThreadCntrolBlock, data);
+		parseProgramProp(objThreadCntrolBlock, data, isMainThread);
 		free(data);
 	}
 	

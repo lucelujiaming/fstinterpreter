@@ -7,6 +7,7 @@
 #include "forsight_inter_control.h"
 #include "forsight_xml_reader.h"
 #include "forsight_io_controller.h"
+#include "forsight_program_property.h"
 
 #ifndef WIN32
 #include "error_code.h"
@@ -506,6 +507,8 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	  	// exit(1);
 		return -1;
 	  }
+	  // Call in the first time to load major P[*]
+  	  append_program_prop_mapper(objThreadCntrolBlock, objThreadCntrolBlock->project_name, true);
 	  
 	  objThreadCntrolBlock->prog = objThreadCntrolBlock->p_buf;
 	  objThreadCntrolBlock->prog_end = objThreadCntrolBlock->prog + strlen(objThreadCntrolBlock->prog);
@@ -1670,11 +1673,13 @@ int calc_conditions(
 *************************************************/ 
 void exec_if(struct thread_control_block * objThreadCntrolBlock)
 {
+  eval_value x ;
   int iRet = JUMP_OUT_INIT ;
   struct select_and_cycle_stack if_stack ;
   int cond;
 
   cond = calc_conditions(objThreadCntrolBlock);
+  x.setFloatValue(cond);
 
   if(cond) { /* is true so process target of IF */
     get_token(objThreadCntrolBlock);
@@ -1687,6 +1692,7 @@ void exec_if(struct thread_control_block * objThreadCntrolBlock)
        find_eol(objThreadCntrolBlock);
     }
     if_stack.itokentype = IF ;
+	if_stack.target = x;
     select_and_cycle_push(objThreadCntrolBlock, if_stack);
   }
   // else find_eol(); /* find start of next line */
@@ -1709,11 +1715,16 @@ void exec_if(struct thread_control_block * objThreadCntrolBlock)
 		else if(objThreadCntrolBlock->tok==ELSE)  // Execute else
 		{
 		    if_stack.itokentype = IF ;
+			if_stack.target = x;
             select_and_cycle_push(objThreadCntrolBlock, if_stack);
 			break ;
 	    }
 		else if(objThreadCntrolBlock->tok==ELSEIF)  // Execute else
 		{
+		    /* is false so process target of ELSEIF */
+		    if_stack.itokentype = IF ;
+			if_stack.target = x;
+            select_and_cycle_push(objThreadCntrolBlock, if_stack);
 			putback(objThreadCntrolBlock);
 			break ;
 	    }
@@ -1784,8 +1795,17 @@ void exec_elseif(struct thread_control_block * objThreadCntrolBlock)
   struct select_and_cycle_stack if_stack ;
   // float x , y;
   int cond;
+  
+  if_stack = select_and_cycle_pop(objThreadCntrolBlock); /* read the loop info */
+  if(if_stack.itokentype != IF){
+	serror(objThreadCntrolBlock, 4);
+	return;
+  }
 
-  cond = calc_conditions(objThreadCntrolBlock);
+  if(if_stack.target.getFloatValue() != 0.0)  // if statement is true
+  	cond = 0 ;
+  else
+  	cond = calc_conditions(objThreadCntrolBlock);
 
   if(cond) { /* is true so process target of IF */
     get_token(objThreadCntrolBlock);
@@ -2689,6 +2709,8 @@ void exec_import(struct thread_control_block * objThreadCntrolBlock)
   // objLabel.p = objThreadCntrolBlock->sub_prog[objThreadCntrolBlock->iSubProgNum] ;
   load_program(objThreadCntrolBlock, 
 	  objThreadCntrolBlock->sub_prog[objThreadCntrolBlock->iSubProgNum], objLabel.name);
+  // NOTICE: We should not call it , it should be loaded as the local variable.
+  // append_program_prop_mapper(objThreadCntrolBlock, objLabel.name, false);
   // Scan the labels in the import files
   proglabelsScan = objThreadCntrolBlock->prog ;
   objThreadCntrolBlock->prog = objThreadCntrolBlock->sub_prog[objThreadCntrolBlock->iSubProgNum];
@@ -2748,7 +2770,9 @@ void exec_import(struct thread_control_block * objThreadCntrolBlock)
 *************************************************/ 
 int exec_call(struct thread_control_block * objThreadCntrolBlock, bool isMacro)
 {
-  char func_name[1024];
+  char * fileNamePtr = NULL ;
+  char func_name[256];
+  char file_name[256];
   int lvartemp;
   char *loc;
 
@@ -2757,7 +2781,7 @@ int exec_call(struct thread_control_block * objThreadCntrolBlock, bool isMacro)
   loc = find_label(objThreadCntrolBlock, objThreadCntrolBlock->token);
   if(loc=='\0')
   {
-	  memset(func_name, 0x00, 1024);
+	  memset(func_name, 0x00, 256);
 	  sprintf(func_name, "%s::main", objThreadCntrolBlock->token);
 	  loc = find_label(objThreadCntrolBlock, func_name);
 	  if(loc=='\0')
@@ -2765,6 +2789,12 @@ int exec_call(struct thread_control_block * objThreadCntrolBlock, bool isMacro)
 		  serror(objThreadCntrolBlock, 7); /* label not defined */
 		  return 0;
 	  }
+  }
+  memset(file_name, 0x00, 256);
+  sprintf(file_name, "%s", objThreadCntrolBlock->token);
+  if(fileNamePtr = strchr(file_name, ':'))
+  {
+	 *fileNamePtr = '\0';
   }
   
 #if 0
@@ -2793,7 +2823,8 @@ int exec_call(struct thread_control_block * objThreadCntrolBlock, bool isMacro)
   objThreadCntrolBlock->prog = loc;  /* start program running at that loc */
 
   get_params(objThreadCntrolBlock); // load the function's parameters with
-  
+
+  append_program_prop_mapper(objThreadCntrolBlock, file_name, false);
   FST_INFO("Execute call_interpreter at exec_call.");
   int iRet = call_interpreter(objThreadCntrolBlock, 0);
   // find_eol(objThreadCntrolBlock);
@@ -3476,6 +3507,15 @@ void primitive(struct thread_control_block * objThreadCntrolBlock, eval_value *r
   int iRet = 0 ;
   // char *progFuncCall; 
   switch(objThreadCntrolBlock->token_type) {
+  case INNERCMD:
+    // Timer
+	if(strcmp(objThreadCntrolBlock->token, "timer") != 0)
+    {
+		result->setFloatValue(1.0);
+		get_token(objThreadCntrolBlock);
+		return;
+	}
+	// if objThreadCntrolBlock->token == "timer",take it as the VARIABLE
   case VARIABLE:
 	objThreadCntrolBlock->g_variable_error = 0 ;
     *result = find_var(objThreadCntrolBlock, objThreadCntrolBlock->token);
@@ -3536,11 +3576,6 @@ void primitive(struct thread_control_block * objThreadCntrolBlock, eval_value *r
   case QUOTE:
   	strValue = std::string(objThreadCntrolBlock->token);
 	result->setStringValue(strValue);
-    get_token(objThreadCntrolBlock);
-    return;
-  case INNERCMD:
-    // Timer
-    result->setFloatValue(1.0);
     get_token(objThreadCntrolBlock);
     return;
   default:
@@ -3638,6 +3673,91 @@ static int get_char_token(char * src, char * dst)
 	return tmp - src ;
 }
 
+
+void set_var_value(struct thread_control_block * objThreadCntrolBlock, 
+				   char *dst_reg_name, eval_value& valueDst, eval_value& valueSrc)
+{
+	FST_INFO("set_var_value = %s with %04X and %04X", dst_reg_name, valueSrc.getType(), valueDst.getType());
+	if(strcmp(dst_reg_name, "p") == 0) // lvalue is P register
+	{
+		if (valueSrc.getType() == TYPE_PR)
+		{
+			if (valueDst.getType() == TYPE_POSE)
+			{
+				PoseEuler pointEulerVal ;
+#ifdef WIN32
+				pointEulerVal.position = valueSrc.getPrRegDataValue().value.cartesian_pos.position ;
+				pointEulerVal.orientation = valueSrc.getPrRegDataValue().value.cartesian_pos.orientation;
+#else
+				pointEulerVal.position.x    = valueSrc.getPrRegDataValue().value.pos[0];
+				pointEulerVal.position.y    = valueSrc.getPrRegDataValue().value.pos[1];
+				pointEulerVal.position.z    = valueSrc.getPrRegDataValue().value.pos[2];
+				pointEulerVal.orientation.a = valueSrc.getPrRegDataValue().value.pos[3];
+				pointEulerVal.orientation.b = valueSrc.getPrRegDataValue().value.pos[4];
+				pointEulerVal.orientation.c = valueSrc.getPrRegDataValue().value.pos[5];
+				
+				FST_INFO("set_var_value: id = (%f, %f, %f, %f, %f, %f) ", 
+					valueSrc.getPrRegDataValue().value.pos[0], valueSrc.getPrRegDataValue().value.pos[1], 
+					valueSrc.getPrRegDataValue().value.pos[2], valueSrc.getPrRegDataValue().value.pos[3], 
+					valueSrc.getPrRegDataValue().value.pos[4], valueSrc.getPrRegDataValue().value.pos[5]);
+#endif
+				//	vt.value = value;
+				valueDst.setPoseValue(&pointEulerVal);
+			}
+			else if (valueDst.getType() == TYPE_JOINT)
+			{
+				Joint jointVal ;
+#ifdef WIN32
+				jointVal.j1 = valueSrc.getPrRegDataValue().value.joint_pos[0];
+				jointVal.j2 = valueSrc.getPrRegDataValue().value.joint_pos[1];
+				jointVal.j3 = valueSrc.getPrRegDataValue().value.joint_pos[2];
+				jointVal.j4 = valueSrc.getPrRegDataValue().value.joint_pos[3];
+				jointVal.j5 = valueSrc.getPrRegDataValue().value.joint_pos[4];
+				jointVal.j6 = valueSrc.getPrRegDataValue().value.joint_pos[5];
+#else
+				jointVal.j1 = valueSrc.getPrRegDataValue().value.pos[0];
+				jointVal.j2 = valueSrc.getPrRegDataValue().value.pos[1];
+				jointVal.j3 = valueSrc.getPrRegDataValue().value.pos[2];
+				jointVal.j4 = valueSrc.getPrRegDataValue().value.pos[3];
+				jointVal.j5 = valueSrc.getPrRegDataValue().value.pos[4];
+				jointVal.j6 = valueSrc.getPrRegDataValue().value.pos[5];
+#endif
+				//	vt.value = value;
+				valueDst.setJointValue(&jointVal);
+			}
+		}
+		else if (valueSrc.getType() == TYPE_POSE)
+		{
+			valueDst.setPoseValue(&valueSrc.getPoseValue());
+		}
+		else if (valueSrc.getType() == TYPE_JOINT)
+		{
+			valueDst.setJointValue(&valueSrc.getJointValue());
+		}
+	}
+	else
+	{
+		FST_ERROR("Not support variable...");
+	}
+}
+
+void assign_global_var(struct thread_control_block * objThreadCntrolBlock, char *vname, eval_value value)
+{
+	var_type vt;
+	// Otherwise, try global vars.
+	for(unsigned i=0; i < objThreadCntrolBlock->global_vars.size(); i++)
+	{
+	    if(!strcmp(objThreadCntrolBlock->global_vars[i].var_name, vname)) {
+	        objThreadCntrolBlock->global_vars[i].value = value;
+	        return;
+	    }
+	}
+	memset(vt.var_name, 0x00, LAB_LEN);
+	strcpy(vt.var_name, vname);
+	vt.value = value;
+	objThreadCntrolBlock->global_vars.push_back(vt);
+}
+
 /************************************************* 
 	Function:		assign_var
 	Description:	Declare a global variable.
@@ -3703,8 +3823,8 @@ void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname,
 			if(iRet != 1)
 			{
 				FST_INFO("forgesight_set_timer Failed");
-				return ;
 			}
+			return ;
 		}
     }
 
@@ -3736,19 +3856,25 @@ void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname,
 		set_OAC(iLineNum, value.getFloatValue(), objThreadCntrolBlock);
 		return ;
     }
-
-    var_type vt;
-    // Otherwise, try global vars.
-    for(unsigned i=0; i < objThreadCntrolBlock->global_vars.size(); i++)
-    {
-        if(!strcmp(objThreadCntrolBlock->global_vars[i].var_name, vname)) {
-            objThreadCntrolBlock->global_vars[i].value = value;
-            return;
-        }
+	
+	// P register was saved in the local_var_stack
+	if(strcmp(reg_name, "p") == 0) // lvalue is P register
+	{
+	    // Otherwise, try global vars.
+	    for(unsigned i=0; i < objThreadCntrolBlock->local_var_stack.size(); i++)
+	    {
+	        if(!strcmp(objThreadCntrolBlock->local_var_stack[i].var_name, vname)) {
+				set_var_value(objThreadCntrolBlock, reg_name, 
+					objThreadCntrolBlock->local_var_stack[i].value, value);
+	            return;
+	        }
+		}
+		FST_ERROR("The %s does not exist", vname);
 	}
-    strcpy(vt.var_name, vname);
-	vt.value = value;
-    objThreadCntrolBlock->global_vars.push_back(vt);
+	else
+	{
+		assign_global_var(objThreadCntrolBlock, vname, value);
+	}
 }
 
 /************************************************* 

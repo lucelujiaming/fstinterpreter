@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<prog>
+  <head/>
+  <prog_body>
+    <function name="main">
+      <body>
+        <nop/>
+        <nop/>
+        <logical type="if">
+          <determine>
+            <element type="register">
+              <element type="num">1</element>
+            </element>
+            <element type="boolean_operation">=</element>
+            <element type="register">
+              <element type="num">1</element>
+            </element>
+          </determine>
+          <logical_body>
+            <nop/>
+            <instruction type="wait">
+              <argument name="timeout" type="num" unit="sec">2</argument>
+            </instruction>
+          </logical_body>
+          <vice_logical type="elif">
+            <determine>
+              <element type="num">2</element>
+              <element type="boolean_operation">=</element>
+              <element type="num">2</element>
+            </determine>
+            <vice_logical_body>
+              <nop/>
+              <instruction type="wait">
+                <argument name="timeout" type="num" unit="sec">2</argument>
+              </instruction>
+            </vice_logical_body>
+          </vice_logical>
+        </logical>
+        <logical type="switch">
+          <determine>
+            <element type="register">
+              <element type="num">1</element>
+            </element>
+          </determine>
+          <logical_body/>
+          <vice_logical type="case">
+            <determine>
+              <element type="register">
+                <element type="num">3</element>
+              </element>
+            </determine>
+            <vice_logical_body>
+              <nop/>
+              <assignment type="assignment">
+                <lvalue>
+                  <element type="register">
+                    <element type="num">1</element>
+                  </element>
+                </lvalue>
+                <rvalue>
+                  <element type="register">
+                    <element type="num">2</element>
+                  </element>
+                </rvalue>
+              </assignment>
+            </vice_logical_body>
+          </vice_logical>
+          <vice_logical type="case">
+            <determine>
+              <element type="register">
+                <element type="num">2</element>
+              </element>
+            </determine>
+            <vice_logical_body>
+              <nop/>
+              <assignment type="assignment">
+                <lvalue>
+                  <element type="register">
+                    <element type="num">1</element>
+                  </element>
+                </lvalue>
+                <rvalue>
+                  <element type="register">
+                    <element type="num">3</element>
+                  </element>
+                </rvalue>
+              </assignment>
+            </vice_logical_body>
+          </vice_logical>
+        </logical>
+        <end name="prog"/>
+      </body>
+    </function>
+  </prog_body>
+</prog>

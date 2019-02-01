@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prog>
+    <prog_body name="test">
+        <function name="main">
+          <body>
+			<assignment type="timer">
+			  <lvalue>
+				<element type="timer">
+				  <element type="num">1</element>
+				</element>
+			  </lvalue>
+			  <rvalue>
+				<element type="timer_status">START</element>
+			  </rvalue>
+			</assignment>
+			<instruction type="wait">
+			  <argument name="timeout" type="num" unit="sec">1</argument>
+			</instruction>
+			<assignment type="timer">
+			  <lvalue>
+				<element type="timer">
+				  <element type="num">1</element>
+				</element>
+			  </lvalue>
+			  <rvalue>
+				<element type="timer_status">RESET</element>
+			  </rvalue>
+			</assignment>
+			<instruction type="wait">
+			  <argument name="timeout" type="num" unit="sec">3</argument>
+			</instruction>
+			<assignment type="timer">
+			  <lvalue>
+				<element type="timer">
+				  <element type="num">1</element>
+				</element>
+			  </lvalue>
+			  <rvalue>
+				<element type="timer_status">STOP</element>
+			  </rvalue>
+			</assignment>
+			<assignment type="reg_assignment">
+			  <lvalue>
+				<element type="register">
+				  <element type="num">3</element>
+				</element>
+			  </lvalue>
+			  <rvalue>
+				<element type="timer">
+				  <element type="num">1</element>
+				</element>
+			  </rvalue>
+			</assignment>
+          </body>
+        </function>
+    </prog_body>
+</prog>

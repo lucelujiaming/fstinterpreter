@@ -471,6 +471,7 @@ bool call_strlen (eval_value *result, const char * valFirst,
 						const char * valSecond, const char * valThird)
 {
 	result->setFloatValue(strlen(valFirst));
+	FST_INFO("result = %f", result->getFloatValue());
     return true ;
 }
 
@@ -486,6 +487,7 @@ bool call_findstr (eval_value *result, const char * valFirst,
 	else 
 	{
 		result->setFloatValue((int)(strRet - valFirst));
+		FST_INFO("result = %f", result->getFloatValue());
 		return true ;
 	}
 }
@@ -504,6 +506,7 @@ bool call_substr (eval_value *result, const char * valFirst,
 	else 
 	{
 		result->setStringValue(strRet);
+		FST_INFO("result = %s", result->getStringValue().c_str());
 		return true ;
 	}
 }

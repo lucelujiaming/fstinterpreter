@@ -37,12 +37,20 @@
           </logical_body>
         </logical>
         <instruction type="wait">
-          <argument name="timeout" type="num" unit="sec">5</argument>
+          <argument name="timeout" type="num" unit="sec">1</argument>
         </instruction>
         <call file="Marcusc_Test"/>
         <instruction type="wait">
           <argument name="timeout" type="num" unit="sec">3</argument>
         </instruction>
+		<instruction type="move_line">
+			<argument name="pose" type="pose">
+					<element type="num">5</element>
+			</argument>
+			<argument name="velocity" type="num" unit="mm/s">2000</argument>
+			<argument name="smooth_velocity" type="num">100</argument>
+			<argument name="acceleration" type="num" unit="%">40</argument>
+		</instruction>
         <end name="prog"/>
       </body>
     </function>

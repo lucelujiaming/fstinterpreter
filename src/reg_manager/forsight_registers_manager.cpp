@@ -192,30 +192,12 @@ int forgesight_registers_manager_get_register(
 			// PrRegData * ptr = (PrRegData *)reg_content_buffer ;
 #ifndef WIN32
 			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
+			{
+				serror(objThreadCntrolBlock, 4) ;
+			}
 			else
 			{
-				if(objPrRegData.value.pos_type == PR_REG_POS_TYPE_CARTESIAN)
-				{
-				   objPoseEuler.position.x	  = objPrRegData.value.pos[0];
-				   objPoseEuler.position.y	  = objPrRegData.value.pos[1];
-				   objPoseEuler.position.z	  = objPrRegData.value.pos[2];
-				   objPoseEuler.orientation.a = objPrRegData.value.pos[3];
-				   objPoseEuler.orientation.b = objPrRegData.value.pos[4];
-				   objPoseEuler.orientation.c = objPrRegData.value.pos[5];
-				   value->setPoseValue(&objPoseEuler);
-				}
-				else if(objPrRegData.value.pos_type == PR_REG_POS_TYPE_JOINT)
-				{
-				   objJoint.j1 = objPrRegData.value.pos[0];
-				   objJoint.j2 = objPrRegData.value.pos[1];
-				   objJoint.j3 = objPrRegData.value.pos[2];
-				   objJoint.j4 = objPrRegData.value.pos[3];
-				   objJoint.j5 = objPrRegData.value.pos[4];
-				   objJoint.j6 = objPrRegData.value.pos[5];   
-				   value->setJointValue(&objJoint);
-				}
-
+				value->setPrRegDataValue(&objPrRegData);
 			}
 #else
 			value->setPrRegDataValue(&objPrRegData);
@@ -1043,7 +1025,30 @@ int forgesight_registers_manager_set_register(
 	{
 		if(strlen(reg_member) == 0)
 		{
-			reg_manager_interface_setPr(&(valueStart->getPrRegDataValue()), iRegIdx);
+			if (valueStart->getType() == TYPE_PR)
+			{
+				reg_manager_interface_setPr(&(valueStart->getPrRegDataValue()), iRegIdx);
+			}
+			else if (valueStart->getType() == TYPE_POSE)
+			{
+				pose = valueStart->getPoseValue();
+				FST_INFO("Set POSE->PR:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
+					pose.position.x, pose.position.y, pose.position.z, 
+					pose.orientation.a, pose.orientation.b, pose.orientation.c,
+					reg_idx);
+				reg_manager_interface_setPosePr(&pose, iRegIdx);
+				return 0 ;
+			}
+			else if (valueStart->getType() == TYPE_JOINT)
+			{
+				joint = valueStart->getJointValue();
+				FST_INFO("Set JOINT->PR:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
+					joint.j1, joint.j2, joint.j3, 
+					joint.j4, joint.j5, joint.j6, 
+					reg_idx);
+				reg_manager_interface_setJointPr(&joint, iRegIdx);
+				return 0 ;
+			}
 	       	return 0 ;
 		}
 		else if (!strcmp(reg_member, TXT_POSE))
@@ -1067,7 +1072,7 @@ int forgesight_registers_manager_set_register(
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
 				pose.orientation.c = (double)value.getFloatValue();
 
-				FST_INFO("Set POSE:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
+				FST_INFO("Set FLOAT->POSE:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
 					pose.position.x, pose.position.y, pose.position.z, 
 					pose.orientation.a, pose.orientation.b, pose.orientation.c,
 					reg_idx);
@@ -1077,7 +1082,7 @@ int forgesight_registers_manager_set_register(
 			else if (valueStart->getType() == TYPE_POSE)
 			{
 				pose = valueStart->getPoseValue();
-				FST_INFO("Set POSE:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
+				FST_INFO("Set POSE->POSE:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
 					pose.position.x, pose.position.y, pose.position.z, 
 					pose.orientation.a, pose.orientation.b, pose.orientation.c,
 					reg_idx);
@@ -2139,7 +2144,7 @@ int forgesight_registers_manager_set_register(
 			else if (valueStart->getType() == TYPE_POSE)
 			{
 				pose = valueStart->getPoseValue();
-				FST_INFO("Set POSE:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
+				FST_INFO("Set POSE->COORDINATE:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
 					pose.position.x, pose.position.y, pose.position.z, 
 					pose.orientation.a, pose.orientation.b, pose.orientation.c,
 					reg_idx);
@@ -2193,7 +2198,7 @@ int forgesight_registers_manager_set_register(
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
 				pose.orientation.c = (double)value.getFloatValue();
 				
-				FST_INFO("Set COORDINATE:(%f, %f, %f, %f, %f, %f) to TF[%s]", 
+				FST_INFO("Set FLOAT->COORDINATE:(%f, %f, %f, %f, %f, %f) to TF[%s]", 
 					pose.position.x, pose.position.y, pose.position.z, 
 					pose.orientation.a, pose.orientation.b, pose.orientation.c,
 					reg_idx);
@@ -2203,7 +2208,7 @@ int forgesight_registers_manager_set_register(
 			else if (valueStart->getType() == TYPE_POSE)
 			{
 				pose = valueStart->getPoseValue();
-				FST_INFO("Set POSE:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
+				FST_INFO("Set POSE->COORDINATE:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
 					pose.position.x, pose.position.y, pose.position.z, 
 					pose.orientation.a, pose.orientation.b, pose.orientation.c,
 					reg_idx);
@@ -2257,7 +2262,7 @@ int forgesight_registers_manager_set_register(
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
 				pose.orientation.c = (double)value.getFloatValue();
 				
-				FST_INFO("Set COORDINATE:(%f, %f, %f, %f, %f, %f) to TF[%s]", 
+				FST_INFO("Set FLOAT->PL_POSE:(%f, %f, %f, %f, %f, %f) to TF[%s]", 
 					pose.position.x, pose.position.y, pose.position.z, 
 					pose.orientation.a, pose.orientation.b, pose.orientation.c,
 					reg_idx);
@@ -2267,7 +2272,7 @@ int forgesight_registers_manager_set_register(
 			else if (valueStart->getType() == TYPE_POSE)
 			{
 				pose = valueStart->getPoseValue();
-				FST_INFO("Set POSE:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
+				FST_INFO("Set POSE->PL_POSE:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
 					pose.position.x, pose.position.y, pose.position.z, 
 					pose.orientation.a, pose.orientation.b, pose.orientation.c,
 					reg_idx);

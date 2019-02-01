@@ -7,20 +7,26 @@
           <body>
             <assignment>
                 <lvalue type="num">
-                    <element type="num">P[1]</element>
+					  <element name="pose" type="pose">
+						<element type="num">2</element>
+					  </element>
                 </lvalue>
                 <rvalue>
-                    <element type="num">7</element>
+					<element name="pose" type="pose_register">
+							<element type="num">5</element>
+					</element>
                 </rvalue>
             </assignment>
             <assignment>
                 <lvalue type="num">
-                    <element type="num">P[1]</element>
+					  <element name="pose" type="pose_register">
+						<element type="num">2</element>
+					  </element>
                 </lvalue>
                 <rvalue>
-	                <element type="num">7</element>
-		            <element type="operation">+</element>
-                    <element type="num">P[1]</element>
+					<element name="pose" type="pose">
+							<element type="num">5</element>
+					</element>
                 </rvalue>
             </assignment>
             <assignment>

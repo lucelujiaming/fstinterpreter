@@ -296,6 +296,17 @@ int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char *
 			serializeFunctionParam(label_vector, label_output);
 			sprintf(label_str, "%s%s)", label_str, label_output);
 		}
+		else if(xmlStrcasecmp(name, BAD_CAST"argument")==0){ 
+			value = xmlNodeGetContent(nodeValueElement);
+			sprintf(label_str, "%s", label_str, "");
+			
+			for(nodeSubValueElement = nodeValueElement->children; 
+			nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
+				objLineInfoTemp.indentValue = objLineInfo.indentValue ;
+				generateElementStr(nodeSubValueElement, objLineInfoTemp, label_str);
+			}
+			sprintf(label_str, "%s", label_str);
+		}
 		else if(xmlStrcasecmp(name, BAD_CAST"subroutine")==0){ 
 			file = xmlGetProp(nodeValueElement, BAD_CAST"file");
 			name = xmlGetProp(nodeValueElement, BAD_CAST"name");
@@ -336,6 +347,17 @@ int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char *
 			memset(label_output, 0x00, 1024);
 			serializeFunctionParam(label_vector, label_output);
 			sprintf(label_str, "%s%s)", label_str, label_output);
+		}
+		else if(xmlStrcasecmp(name, BAD_CAST"pose")==0){
+			for(nodeSubValueElement = nodeValueElement->children; 
+			nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
+				if(xmlStrcasecmp(nodeSubValueElement->name,BAD_CAST"element")==0){ 
+					//	value = xmlNodeGetContent(nodeSubValueElement);
+					memset(label_output, 0x00, 1024);
+					generateElementStr(nodeSubValueElement, objLineInfoTemp, label_output);
+					sprintf(label_str, "%sP[%s] ", label_str, (char*)label_output);
+				}
+			}
 		}
 		else if(xmlStrcasecmp(name, BAD_CAST"pose_register")==0){ 
 			int iCount = 0 ;
@@ -2186,7 +2208,7 @@ int parse_xml_file(char * file_name){
     }
     // if(nodeHead == NULL){
 	if(isNodeExist == 0)   {
-        FST_ERROR("\t\t\t\t ERROR: no node = head\n");
+        FST_INFO("\t\t\t\t ERROR: no node = head\n");
     }
 
 	// generate prog_body 
@@ -2205,7 +2227,7 @@ int parse_xml_file(char * file_name){
     }
     // if(nodeProgBody == NULL){
 	if(isNodeExist == 0)   {
-        FST_ERROR("\t\t\t\t ERROR: no node = ProgBody\n");
+        FST_INFO("\t\t\t\t ERROR: no node = ProgBody\n");
         return -1;
     }
     xmlFreeDoc(doc);

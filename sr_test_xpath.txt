@@ -1,10 +1,3 @@
 001:sr_test:/prog/prog_body/function
-002:sr_test:/prog/prog_body
-003:sr_test:/prog/prog_body
-004:sr_test:/prog/prog_body
-005:sr_test:/prog/prog_body
-006:sr_test:/prog/prog_body
-007:sr_test:/prog/prog_body
-008:sr_test:/prog/prog_body
-009:sr_test:/prog/prog_body
-010:sr_test:/prog/prog_body/function
+002:sr_test:/prog/prog_body/function/body/assignment
+003:sr_test:/prog/prog_body/function
