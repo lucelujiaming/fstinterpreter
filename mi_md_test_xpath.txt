@@ -1,0 +1,6 @@
+001:mi_md_test:/prog/prog_body/function
+002:mi_md_test:/prog/prog_body/function/body/assignment[1]
+003:mi_md_test:/prog/prog_body/function/body/assignment[2]
+004:mi_md_test:/prog/prog_body/function/body/assignment[3]
+005:mi_md_test:/prog/prog_body/function/body/assignment[4]
+006:mi_md_test:/prog/prog_body/function

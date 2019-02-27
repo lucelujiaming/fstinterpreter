@@ -27,9 +27,9 @@
 class LaunchCodeMgr
 {
   public:	 
-    LaunchCodeMgr();
+    LaunchCodeMgr(std::string path);
     ~LaunchCodeMgr();
-    int initial();
+    int initial(std::string path);
     
     /**
      * @brief: get Program by Code
@@ -58,6 +58,7 @@ class LaunchCodeMgr
 	int parseLaunchCode(char * data);
 	
     std::map<int, std::string>  launchCodeList; 
+	std::string program_path;
 };
 
 #endif

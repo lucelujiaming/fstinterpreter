@@ -1,0 +1,6 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main (param0, param1)
+EXPORT: (002)(043)/prog/prog_body/function/body/assignment[1]                                                             MI[3]  = 5  
+EXPORT: (003)(043)/prog/prog_body/function/body/assignment[2]                                                             MI[5]  = R[3]   
+EXPORT: (004)(043)/prog/prog_body/function/body/assignment[3]                                                             MH[3]  = 5  
+EXPORT: (005)(043)/prog/prog_body/function/body/assignment[4]                                                             MH[5]  = MI[3]   
+EXPORT: (006)(024)/prog/prog_body/function                                                                            END SUB 

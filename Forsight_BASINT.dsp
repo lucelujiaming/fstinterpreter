@@ -113,6 +113,10 @@ SOURCE=.\src\forsight_cJSON.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\forsight_home_pose.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\forsight_innercmd.cpp
 
 !IF  "$(CFG)" == "Forsight_BASINT - Win32 Release"
@@ -296,6 +300,10 @@ SOURCE=.\include\forsight_eval_type.h
 # Begin Source File
 
 SOURCE=".\include\reg-shmi\forsight_fst_datatype.h"
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\forsight_home_pose.h
 # End Source File
 # Begin Source File
 

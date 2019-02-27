@@ -1,3 +1,14 @@
 001:sr_test:/prog/prog_body/function
-002:sr_test:/prog/prog_body/function/body/assignment
-003:sr_test:/prog/prog_body/function
+002:sr_test:/prog/prog_body/function/body/assignment[1]
+003:sr_test:/prog/prog_body/function/body/assignment[2]
+004:sr_test:/prog/prog_body/function/body/assignment[3]
+005:sr_test:/prog/prog_body/function/body/assignment[4]
+006:sr_test:/prog/prog_body/function/body/assignment[5]
+007:sr_test:/prog/prog_body/function/body/assignment[6]
+008:sr_test:/prog/prog_body/function/body/assignment[7]
+009:sr_test:/prog/prog_body/function/body/assignment[8]
+010:sr_test:/prog/prog_body/function/body/assignment[9]
+011:sr_test:/prog/prog_body/function/body/assignment[10]
+012:sr_test:/prog/prog_body/function/body/assignment[11]
+013:sr_test:/prog/prog_body/function/body/end
+014:sr_test:/prog/prog_body/function

@@ -23,6 +23,7 @@ using namespace fst_ctrl ;
 #include "reg-shmi/forsight_registers.h"
 #include "reg-shmi/forsight_op_regs_shmi.h"
 #endif
+#include "launch_code_mgr.h"
 
 #define VELOCITY    (500)
 using namespace std;
@@ -48,6 +49,9 @@ std::string g_files_manager_data_path = "";
 
 static InterpreterState g_privateInterpreterState;
 InterpreterPublish  g_interpreter_publish; 
+
+LaunchCodeMgr *    g_launch_code_mgr_ptr; 
+HomePoseMgr *      g_home_pose_mgr_ptr; 
 
 /************************************************* 
 	Function:		split
@@ -77,17 +81,6 @@ vector<string> split(string str,string pattern)
 }
 
 /************************************************* 
-	Function:		setMoveCommandDestination
-	Description:	save start position of MOV* (Used in the BACKWARD)
-	Input:			movCmdDst        - start position of MOV*
-	Return: 		NULL
-*************************************************/ 
-void setMoveCommandDestination(MoveCommandDestination movCmdDst)
-{ 
-//    writeShm(SHM_INTPRT_DST, 0, (void*)&movCmdDst, sizeof(movCmdDst));
-}
-
-/************************************************* 
 	Function:		getMoveCommandDestination
 	Description:	get start position of MOV* (Used in the BACKWARD)
 	Input:			movCmdDst        - start position of MOV*
@@ -95,19 +88,9 @@ void setMoveCommandDestination(MoveCommandDestination movCmdDst)
 *************************************************/ 
 void getMoveCommandDestination(MoveCommandDestination& movCmdDst)
 {
+	  forgesight_registers_manager_get_joint(movCmdDst.joint_target);
+	  forgesight_registers_manager_get_cart(movCmdDst.pose_target);
 //    readShm(SHM_INTPRT_DST, 0, (void*)&movCmdDst, sizeof(movCmdDst));
-}
-
-/************************************************* 
-	Function:		copyMoveCommandDestination
-	Description:	copy start position of MOV* (Used in the BACKWARD)
-	Input:			movCmdDst        - start position of MOV*
-	Return: 		NULL
-*************************************************/ 
-void copyMoveCommandDestination(MoveCommandDestination& movCmdDst)
-{
-    getMoveCommandDestination(movCmdDst);
-    setMoveCommandDestination(movCmdDst);
 }
 
 /************************************************* 
@@ -268,8 +251,15 @@ void setCurLine(struct thread_control_block * objThdCtrlBlockPtr, char * line, i
 
 	if(objThdCtrlBlockPtr->is_main_thread == MAIN_THREAD)
 	{
-		strcpy(g_interpreter_publish.current_line_path, line); 
-		g_interpreter_publish.current_line_num = lineNum; 
+		if(objThdCtrlBlockPtr->is_in_macro == false)
+		{
+			strcpy(g_interpreter_publish.current_line_path, line); 
+			g_interpreter_publish.current_line_num = lineNum; 
+		}
+		else
+		{
+			FST_INFO("setCurLine Failed to %d in the macro", (int)lineNum);
+		}
 	}
 	else
 	{
@@ -455,6 +445,38 @@ bool getIntprtCtrl(InterpreterControl& intprt_ctrl)
 	return iRet ;
 }
 */
+	
+void dealCodeStart(int program_code)
+{
+	struct thread_control_block * objThdCtrlBlockPtr ;
+	g_launch_code_mgr_ptr->updateAll();
+	std::string program_name = g_launch_code_mgr_ptr->getProgramByCode(program_code);
+	if(program_name != "")
+	{
+        FST_INFO("start run %s ...", program_name.c_str());
+		if(strcmp(getProgramName(), program_name.c_str()) == 0)
+        {
+        	FST_INFO("Duplicate to trigger and omit it while %s is executing ...", program_name.c_str());
+        	return;
+		}
+		incCurrentThreadSeq();
+	    // objThdCtrlBlockPtr = &g_thread_control_block[getCurrentThreadSeq()];
+	    objThdCtrlBlockPtr = getThreadControlBlock();
+		if(objThdCtrlBlockPtr == NULL) return ;
+		// Clear last lineNum
+		setCurLine(objThdCtrlBlockPtr, (char *)"", 0);
+		
+        objThdCtrlBlockPtr->prog_mode = FULL_MODE;
+		objThdCtrlBlockPtr->execute_direction = EXECUTE_FORWARD ;
+		startFile(objThdCtrlBlockPtr, 
+			(char *)program_name.c_str(), getCurrentThreadSeq());
+        setPrgmState(objThdCtrlBlockPtr, INTERPRETER_EXECUTE);
+	}
+	else 
+	{
+  		setWarning(FAIL_INTERPRETER_FILE_NOT_FOUND); 
+	}
+}
 
 /************************************************* 
 	Function:		startFile
@@ -612,8 +634,10 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 #endif
 //	UserOpMode userOpMode ;
 	AutoMode   autoMode ;
+	int        program_code ;
     thread_control_block * objThdCtrlBlockPtr = NULL;
 
+	g_launch_code_mgr_ptr->updateAll();
 #ifndef WIN32
 //	RegMap reg ;
 	IOPathInfo  dioPathInfo ;
@@ -951,6 +975,13 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 			// Move to Controller
 			// deal_auto_mode(autoMode);
             break;
+        case fst_base::INTERPRETER_SERVER_CMD_CODE_START:
+			memcpy(&intprt_ctrl.program_code, requestDataPtr, sizeof(AutoMode));
+			// intprt_ctrl.RegMap.
+			program_code = intprt_ctrl.program_code ;
+			// Move to Controller
+			dealCodeStart(program_code);
+            break;
         default:
             break;
 
@@ -970,7 +1001,9 @@ void forgesight_load_programs_path()
 	std::string data_path = "";
 	g_files_manager_data_path = "";
 #ifdef WIN32
-    g_files_manager_data_path = std::string(DATA_PATH);
+	TCHAR pBuf[MAX_PATH];
+	GetCurrentDirectory(MAX_PATH, pBuf);
+    g_files_manager_data_path = std::string(pBuf) + std::string(DATA_PATH);
 #else
 	if(getenv("ROBOT_DATA_PREFIX") != NULL)
 		g_files_manager_data_path = string(getenv("ROBOT_DATA_PREFIX"));
@@ -1005,32 +1038,15 @@ char * forgesight_get_programs_path()
 }
 
 /************************************************* 
-	Function:		initShm
+	Function:		initInterpreter
 	Description:	init interpretor
 	Input:			NULL
 	Return: 		programs path
 *************************************************/ 
-void initShm()
+void initInterpreter()
 {
-//    openShm(SHM_INTPRT_CMD, 1024);
-//    openShm(SHM_INTPRT_STATUS, 1024);
-	
-	// Lujiaming add at 0323
-//    openShm(SHM_REG_IO_INFO, 1024);
-	// Lujiaming add at 0323 end
-	
-	// Lujiaming add at 0514
-//    openShm(SHM_CHG_REG_LIST_INFO, 1024);
-	// Lujiaming add at 0514 end
-	
-//    openShm(SHM_CTRL_CMD, 1024);
-//    openShm(SHM_CTRL_STATUS, 1024);
-//    openShm(SHM_INTPRT_DST, 1024);
-    // intprt_ctrl.cmd = LOAD;
-    // intprt_ctrl.cmd = START;
 	g_privateInterpreterState = INTERPRETER_IDLE ;
 	
-//	setPrgmState(objThdCtrlBlockPtr, INTERPRETER_IDLE);
 #ifdef WIN32
 //	generateFakeData();
 #else
@@ -1041,8 +1057,31 @@ void initShm()
 //	initShmi(1024);
 #endif
 	forgesight_load_programs_path();
+	g_launch_code_mgr_ptr = new LaunchCodeMgr(g_files_manager_data_path);
+	g_home_pose_mgr_ptr   = new HomePoseMgr(g_files_manager_data_path);
 }
 
+void updateHomePoseMgr()
+{
+	g_home_pose_mgr_ptr->updateAll();
+}
+
+checkHomePoseResult checkSingleHomePoseByCurrentJoint(int idx, Joint currentJoint)
+{
+	return g_home_pose_mgr_ptr->checkSingleHomePoseByJoint(idx, currentJoint);
+}
+
+/************************************************* 
+	Function:		uninitInterpreter
+	Description:	uninit interpretor
+	Input:			NULL
+	Return: 		programs path
+*************************************************/ 
+void uninitInterpreter()
+{
+	delete g_launch_code_mgr_ptr;
+	delete g_home_pose_mgr_ptr;
+}
 
 /************************************************* 
 	Function:		updateIOError (Legacy)

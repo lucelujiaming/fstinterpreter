@@ -144,7 +144,7 @@
               <element type="num">1</element>
             </element>
             <element type="boolean_operation">=</element>
-            <element type="io_val">OFF</element>&gt;
+            <element type="io_val">OFF</element>
           </determine>
           <logical_body>
             <assignment type="assignment">

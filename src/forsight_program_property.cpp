@@ -10,6 +10,9 @@
 #include <algorithm>
 using namespace std;
 
+#include<libxml/parser.h>
+#include<libxml/tree.h>
+
 #include "forsight_program_property.h"
 #include "forsight_cJSON.h"
 #include "forsight_basint.h"
@@ -18,6 +21,87 @@ using namespace std;
 #define POSE_NONE      0
 #define POSE_CART      1
 #define POSE_JOINT     2
+
+// -------------------------------- libxml --------------------------------
+int parseHomePoseElement(xmlNodePtr nodeHead, char * home_pose_exp)
+{
+    xmlNodePtr nodeElement;
+    xmlChar *type, *value;
+	
+    for(nodeElement = nodeHead->children; 
+			nodeElement; nodeElement = nodeElement->next){
+		if(xmlStrcasecmp(nodeElement->name,BAD_CAST"element")==0){ 
+			type = xmlGetProp(nodeElement, BAD_CAST"type");
+			if(xmlStrcasecmp(type, BAD_CAST"num")==0){
+				value = xmlNodeGetContent(nodeElement);
+			//	sprintf(home_pose_exp, "%s HP[%s]", 
+				sprintf(home_pose_exp, "%s %s", 
+							home_pose_exp, (char *)value);
+			}
+        }
+    }
+	return 1 ;
+}
+
+int parseHomePose(xmlNodePtr nodeRoot, char * home_pose_exp)
+{
+    xmlNodePtr nodeHead ;
+    xmlChar *type, *value;
+    for(nodeHead = nodeRoot->children; 
+				nodeHead; nodeHead = nodeHead->next){
+		if(xmlStrcasecmp(nodeHead->name, BAD_CAST"element")==0)
+		{
+			type = xmlGetProp(nodeHead, BAD_CAST"type");
+			if(xmlStrcasecmp(type, BAD_CAST"home_pose")==0)
+			{
+				parseHomePoseElement(nodeHead, home_pose_exp);
+			}
+			else if(xmlStrcasecmp(type, BAD_CAST"boolean_operation")==0)
+			{
+				value = xmlNodeGetContent(nodeHead);
+				if(xmlStrcasecmp(value, BAD_CAST"AND")==0)
+				{
+					sprintf(home_pose_exp, "%s AND", home_pose_exp);
+				}
+				else if(xmlStrcasecmp(value, BAD_CAST"OR")==0)
+				{
+					sprintf(home_pose_exp, "%s OR", home_pose_exp);
+				}
+			}
+			else if(xmlStrcasecmp(type, BAD_CAST"bracket")==0)
+			{
+				sprintf(home_pose_exp, "%s (", home_pose_exp);
+				parseHomePose(nodeHead, home_pose_exp);
+				sprintf(home_pose_exp, "%s )", home_pose_exp);
+			}
+			else if(xmlStrcasecmp(type, BAD_CAST"num")==0)
+			{
+				value = xmlNodeGetContent(nodeHead);
+				if(xmlStrcasecmp(value, BAD_CAST"-1")==0)
+				{
+					return 1;
+				}
+			}
+		}
+	}
+	return 1 ;
+}
+
+int parse_home_pose_exp(char *valuestring, char * home_pose_exp)
+{	
+    xmlDocPtr doc;
+    xmlNodePtr rootProg ;
+	
+	string strValue = string(valuestring); 
+
+    doc = xmlRecoverDoc((const unsigned char *)strValue.c_str());
+    rootProg = xmlDocGetRootElement(doc);
+	
+	parseHomePose(rootProg, home_pose_exp);
+	return 1 ;
+}
+
+// -------------------------------- cJSON --------------------------------
 
 /************************************************* 
 	Function:		parseCart
@@ -42,17 +126,41 @@ int parseCart(struct thread_control_block * objThreadCntrolBlock,
 		case cJSON_Number:	
 			// FST_INFO("cJSON_Number %f", child->valuedouble); 
 			if(strcmp(child->string, "a") == 0)
+#ifndef WIN32
+				cart.euler_.a_ = child->valuedouble;
+#else
 				cart.orientation.a = child->valuedouble;
+#endif
 			else if(strcmp(child->string, "b") == 0)
+#ifndef WIN32
+				cart.euler_.b_ = child->valuedouble;
+#else
 				cart.orientation.b = child->valuedouble;
+#endif
 			else if(strcmp(child->string, "c") == 0)
+#ifndef WIN32
+				cart.euler_.c_ = child->valuedouble;
+#else
 				cart.orientation.c = child->valuedouble;
+#endif
 			else if(strcmp(child->string, "x") == 0)
+#ifndef WIN32
+				cart.point_.x_ = child->valuedouble;
+#else
 				cart.position.x = child->valuedouble;
+#endif
 			else if(strcmp(child->string, "y") == 0)
+#ifndef WIN32
+				cart.point_.y_ = child->valuedouble;
+#else
 				cart.position.y = child->valuedouble;
+#endif
 			else if(strcmp(child->string, "z") == 0)
+#ifndef WIN32
+				cart.point_.z_ = child->valuedouble;
+#else
 				cart.position.z = child->valuedouble;
+#endif
 			break;
 		case cJSON_String:	
 			FST_INFO("cJSON_String %s", child->valuestring); break;
@@ -88,17 +196,41 @@ int parseJoint(struct thread_control_block * objThreadCntrolBlock,
 		case cJSON_Number:	
 			// FST_INFO("cJSON_Number %f", child->valuedouble); 
 			if(strcmp(child->string, "j1") == 0)
+#ifndef WIN32
+				joint.j1_ = child->valuedouble;
+#else
 				joint.j1 = child->valuedouble;
+#endif
 			else if(strcmp(child->string, "j2") == 0)
+#ifndef WIN32
+				joint.j2_ = child->valuedouble;
+#else
 				joint.j2 = child->valuedouble;
+#endif
 			else if(strcmp(child->string, "j3") == 0)
+#ifndef WIN32
+				joint.j3_ = child->valuedouble;
+#else
 				joint.j3 = child->valuedouble;
+#endif
 			else if(strcmp(child->string, "j4") == 0)
+#ifndef WIN32
+				joint.j4_ = child->valuedouble;
+#else
 				joint.j4 = child->valuedouble;
+#endif
 			else if(strcmp(child->string, "j5") == 0)
+#ifndef WIN32
+				joint.j5_ = child->valuedouble;
+#else
 				joint.j5 = child->valuedouble;
+#endif
 			else if(strcmp(child->string, "j6") == 0)
+#ifndef WIN32
+				joint.j6_ = child->valuedouble;
+#else
 				joint.j6 = child->valuedouble;
+#endif
 			break;
 		case cJSON_String:	
 			FST_INFO("cJSON_String %s", child->valuestring); break;
@@ -308,42 +440,50 @@ int parseProgramProp(struct thread_control_block * objThreadCntrolBlock, char * 
 		{
 		case cJSON_True:	
 			FST_INFO("cJSON_True"); break;
-		case cJSON_Number:		
+		case cJSON_Number:
+			if(isMainThread)
 			{
-				if(isMainThread)
+				if(strcmp(child->string, "launchCode") == 0)
 				{
-					if(strcmp(child->string, "launchCode") == 0)
-					{
-						FST_INFO("cJSON_Number %s : %d", 
-							child->string, child->valueint);
-					}
+					FST_INFO("cJSON_Number %s : %d", 
+						child->string, child->valueint);
 				}
 			}
 			break;
 		case cJSON_String:	
+			if(strcmp(child->string, "programType") == 0)
 			{
-				if(strcmp(child->string, "programType") == 0)
+				if(isMainThread)
 				{
-					if(isMainThread)
+					if(strcmp(child->valuestring, "Monitor") == 0)
 					{
-						if(strcmp(child->valuestring, "Monitor") == 0)
-						{
-							objThreadCntrolBlock->is_main_thread = MONITOR_THREAD ;
-						}
-						else {
-							objThreadCntrolBlock->is_main_thread = MAIN_THREAD ;
-						}
+						objThreadCntrolBlock->is_main_thread = MONITOR_THREAD ;
+					}
+					else {
+						objThreadCntrolBlock->is_main_thread = MAIN_THREAD ;
 					}
 				}
 			}
-			break;
-		case cJSON_Array:	
+			else if(strcmp(child->string, "homePose") == 0)
 			{
-				FST_INFO("parseDIOMap: cJSON_Array %s", child->string);
-				if(strcmp(child->string, "poses") == 0)
-					parsePoses(objThreadCntrolBlock, child);
-				break;
+				memset(objThreadCntrolBlock->home_pose_exp, 0x00, STR_VALUE_SIZE);
+
+				if(strlen(child->valuestring) < STR_VALUE_SIZE)
+				{
+					parse_home_pose_exp(child->valuestring, 
+						objThreadCntrolBlock->home_pose_exp) ;
+				//	FST_INFO("home_pose_exp = %s", objThreadCntrolBlock->home_pose_exp);
+				}
+				else {
+					strcpy(objThreadCntrolBlock->home_pose_exp, "ERROR") ;
+				}
 			}
+			break;
+		case cJSON_Array:
+			FST_INFO("parseDIOMap: cJSON_Array %s", child->string);
+			if(strcmp(child->string, "poses") == 0)
+				parsePoses(objThreadCntrolBlock, child);
+			break;
 		case cJSON_Object:	
 			// FST_INFO("cJSON_Object"); 
 			break;

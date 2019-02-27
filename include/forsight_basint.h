@@ -35,7 +35,7 @@
 using namespace std;
 
 #ifdef WIN32
-#define DATA_PATH        "\\root\\files_manager_python27\\data"
+#define DATA_PATH        "\\data"
 #else
 #define DATA_PATH        "\/root\/files_manager_python27\/data"
 #endif
@@ -186,6 +186,10 @@ struct thread_control_block {
     map<int, MoveCommandDestination>  start_mov_position ;  // iLineNum :: movCmdDst
     
 	vector<string> vector_XPath ;
+	// Home Pose
+	char home_pose_exp[LAB_LEN];
+	Joint currentJoint ;
+	PoseEuler currentCart ;
 } ;
 #ifndef WIN32
 extern fst_log::Logger* log_ptr_;
@@ -213,6 +217,7 @@ int exec_call(struct thread_control_block * objThreadCntrolBlock, bool isMacro =
 
 void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname, eval_value value);
 eval_value find_var(struct thread_control_block * objThreadCntrolBlock, char *s, int raise_unkown_error = 0);
+int erase_var(struct thread_control_block * objThreadCntrolBlock, char *vname);
 
 void find_eol(struct thread_control_block * objThreadCntrolBlock);
 int  jump_prog_from_line(struct thread_control_block * objThreadCntrolBlock, int iNum);

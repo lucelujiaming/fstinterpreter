@@ -268,37 +268,61 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 					return 0 ;
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+				additionalInfomation.offset.pose_target.point_.x_ = value.getFloatValue();
+#else
 				additionalInfomation.offset.pose_target.position.x = value.getFloatValue();
+#endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ',')
 					return 0 ;
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+				additionalInfomation.offset.pose_target.point_.y_ = value.getFloatValue();
+#else
 				additionalInfomation.offset.pose_target.position.y = value.getFloatValue();
+#endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ',')
 					return 0 ;
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+				additionalInfomation.offset.pose_target.point_.z_ = value.getFloatValue();
+#else
 				additionalInfomation.offset.pose_target.position.z = value.getFloatValue();
+#endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ',')
 					return 0 ;
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+				additionalInfomation.offset.pose_target.euler_.a_ = value.getFloatValue();
+#else
 				additionalInfomation.offset.pose_target.orientation.a = value.getFloatValue();
+#endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ',')
 					return 0 ;
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+				additionalInfomation.offset.pose_target.euler_.b_ = value.getFloatValue();
+#else
 				additionalInfomation.offset.pose_target.orientation.b = value.getFloatValue();
+#endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ',')
 					return 0 ;
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+				additionalInfomation.offset.pose_target.euler_.c_ = value.getFloatValue();
+#else
 				additionalInfomation.offset.pose_target.orientation.c = value.getFloatValue();
+#endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ')')
 					return 0 ;
@@ -336,37 +360,61 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 					return 0 ;
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+				additionalInfomation.offset.joint_target.j1_ = value.getFloatValue();
+#else
 				additionalInfomation.offset.joint_target.j1 = value.getFloatValue();
+#endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ',')
 					return 0 ;
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+				additionalInfomation.offset.joint_target.j2_ = value.getFloatValue();
+#else
 				additionalInfomation.offset.joint_target.j2 = value.getFloatValue();
+#endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ',')
 					return 0 ;
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+				additionalInfomation.offset.joint_target.j3_ = value.getFloatValue();
+#else
 				additionalInfomation.offset.joint_target.j3 = value.getFloatValue();
+#endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ',')
 					return 0 ;
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+				additionalInfomation.offset.joint_target.j4_ = value.getFloatValue();
+#else
 				additionalInfomation.offset.joint_target.j4 = value.getFloatValue();
+#endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ',')
 					return 0 ;
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+				additionalInfomation.offset.joint_target.j5_ = value.getFloatValue();
+#else
 				additionalInfomation.offset.joint_target.j5 = value.getFloatValue();
+#endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ',')
 					return 0 ;
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+				additionalInfomation.offset.joint_target.j6_ = value.getFloatValue();
+#else
 				additionalInfomation.offset.joint_target.j6 = value.getFloatValue();
+#endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ')')
 					return 0 ;
@@ -683,7 +731,7 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	instr.line = iLineNum;
 #endif
 	// Save start position
-	memset(&movCmdDst ,0x00, sizeof(MoveCommandDestination));
+	// memset(&movCmdDst ,0x00, sizeof(MoveCommandDestination));
 	getMoveCommandDestination(movCmdDst);
 	if(iLineNum < (int)objThreadCntrolBlock->vector_XPath.size())
 	{
@@ -735,27 +783,51 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	}
 	else if((value.getType() == TYPE_INT) || (value.getType() == TYPE_FLOAT))
 	{
+#ifndef WIN32
+		instr.target.joint_target.j1_ = value.getFloatValue();
+#else
 		instr.target.joint_target.j1 = value.getFloatValue();
+#endif
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+		instr.target.joint_target.j2_ = value.getFloatValue();
+#else
 		instr.target.joint_target.j2 = value.getFloatValue();
+#endif
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+		instr.target.joint_target.j3_ = value.getFloatValue();
+#else
 		instr.target.joint_target.j3 = value.getFloatValue();
+#endif
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+		instr.target.joint_target.j4_ = value.getFloatValue();
+#else
 		instr.target.joint_target.j4 = value.getFloatValue();
+#endif
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+		instr.target.joint_target.j5_ = value.getFloatValue();
+#else
 		instr.target.joint_target.j5 = value.getFloatValue();
+#endif
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+		instr.target.joint_target.j6_ = value.getFloatValue();
+#else
 		instr.target.joint_target.j6 = value.getFloatValue();
+#endif
 	}
 	else if(value.getType() == TYPE_POSE)
 	{
@@ -770,9 +842,15 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		instr.target.joint_target = value.getJointValue();
 		
 	    FST_INFO("Forward move to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ", 
+#ifndef WIN32
+			instr.target.joint_target.j1_, instr.target.joint_target.j2_, 
+			instr.target.joint_target.j3_, instr.target.joint_target.j4_, 
+			instr.target.joint_target.j5_, instr.target.joint_target.j6_);
+#else
 			instr.target.joint_target.j1, instr.target.joint_target.j2, 
 			instr.target.joint_target.j3, instr.target.joint_target.j4, 
 			instr.target.joint_target.j5, instr.target.joint_target.j6);
+#endif		
 	}
 	else if(value.getType() == TYPE_PR)
 	{
@@ -784,17 +862,17 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		instr.target.joint_target.j5 = value.getPrRegDataValue().value.joint_pos[4];
 		instr.target.joint_target.j6 = value.getPrRegDataValue().value.joint_pos[5];
 #else
-		instr.target.joint_target.j1 = value.getPrRegDataValue().value.pos[0];
-		instr.target.joint_target.j2 = value.getPrRegDataValue().value.pos[1];
-		instr.target.joint_target.j3 = value.getPrRegDataValue().value.pos[2];
-		instr.target.joint_target.j4 = value.getPrRegDataValue().value.pos[3];
-		instr.target.joint_target.j5 = value.getPrRegDataValue().value.pos[4];
-		instr.target.joint_target.j6 = value.getPrRegDataValue().value.pos[5];
-#endif		
+		instr.target.joint_target.j1_ = value.getPrRegDataValue().value.pos[0];
+		instr.target.joint_target.j2_ = value.getPrRegDataValue().value.pos[1];
+		instr.target.joint_target.j3_ = value.getPrRegDataValue().value.pos[2];
+		instr.target.joint_target.j4_ = value.getPrRegDataValue().value.pos[3];
+		instr.target.joint_target.j5_ = value.getPrRegDataValue().value.pos[4];
+		instr.target.joint_target.j6_ = value.getPrRegDataValue().value.pos[5];
 	    FST_INFO("TYPE_PR: Forward move to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ", 
-			instr.target.joint_target.j1, instr.target.joint_target.j2, 
-			instr.target.joint_target.j3, instr.target.joint_target.j4, 
-			instr.target.joint_target.j5, instr.target.joint_target.j6);
+			instr.target.joint_target.j1_, instr.target.joint_target.j2_, 
+			instr.target.joint_target.j3_, instr.target.joint_target.j4_, 
+			instr.target.joint_target.j5_, instr.target.joint_target.j6_);
+#endif		
 	}
 	// Use start point in revert mode  
 	if(objThreadCntrolBlock->execute_direction == EXECUTE_BACKWARD)
@@ -820,10 +898,17 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			FST_ERROR("call_MoveJ XPATH out of range at %d", iLineNum);
 		}
 		 
+#ifndef WIN32
+	    FST_INFO("Backward move to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ", 
+			instr.target.joint_target.j1_, instr.target.joint_target.j2_, 
+			instr.target.joint_target.j3_, instr.target.joint_target.j4_, 
+			instr.target.joint_target.j5_, instr.target.joint_target.j6_);
+#else
 	    FST_INFO("Backward move to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ", 
 			instr.target.joint_target.j1, instr.target.joint_target.j2, 
 			instr.target.joint_target.j3, instr.target.joint_target.j4, 
 			instr.target.joint_target.j5, instr.target.joint_target.j6);
+#endif		
 	}
 	get_token(objThreadCntrolBlock);
 
@@ -929,7 +1014,7 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	instr.line = iLineNum;
 #endif
 	// Save start position
-	memset(&movCmdDst ,0x00, sizeof(MoveCommandDestination));
+	// memset(&movCmdDst ,0x00, sizeof(MoveCommandDestination));
 	getMoveCommandDestination(movCmdDst);
 	if(iLineNum < (int)objThreadCntrolBlock->vector_XPath.size())
 	{
@@ -982,27 +1067,51 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	}
 	else if((value.getType() == TYPE_INT) || (value.getType() == TYPE_FLOAT))
 	{
+#ifndef WIN32
+		instr.target.pose_target.point_.x_    = value.getFloatValue();
+#else
 		instr.target.pose_target.position.x    = value.getFloatValue();
+#endif
 		get_token(objThreadCntrolBlock);
 		
 		get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+		instr.target.pose_target.point_.y_    = value.getFloatValue();
+#else
 		instr.target.pose_target.position.y    = value.getFloatValue();
+#endif
 		get_token(objThreadCntrolBlock);
 		
 		get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+		instr.target.pose_target.point_.z_    = value.getFloatValue();
+#else
 		instr.target.pose_target.position.z    = value.getFloatValue();
+#endif
 		get_token(objThreadCntrolBlock);
 		
 		get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+		instr.target.pose_target.euler_.a_ = value.getFloatValue();
+#else
 		instr.target.pose_target.orientation.a = value.getFloatValue();
+#endif
 		get_token(objThreadCntrolBlock);
 		
 		get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+		instr.target.pose_target.euler_.b_ = value.getFloatValue();
+#else
 		instr.target.pose_target.orientation.b = value.getFloatValue();
+#endif
 		get_token(objThreadCntrolBlock);
 		
 		get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+		instr.target.pose_target.euler_.c_ = value.getFloatValue();
+#else
 		instr.target.pose_target.orientation.c = value.getFloatValue();
+#endif
 
 		instr.target.user_frame_id = instr.target.tool_frame_id = -1 ;
 	}
@@ -1012,10 +1121,17 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		instr.target.user_frame_id = value.getUFIndex();
 		instr.target.tool_frame_id = value.getTFIndex();
 		
+#ifndef WIN32
+	    FST_INFO("Forward move to POSE:(%f, %f, %f, %f, %f, %f) in MovL", 
+			instr.target.pose_target.point_.x_, instr.target.pose_target.point_.y_, 
+			instr.target.pose_target.point_.z_, instr.target.pose_target.euler_.a_, 
+			instr.target.pose_target.euler_.b_, instr.target.pose_target.euler_.c_);
+#else
 	    FST_INFO("Forward move to POSE:(%f, %f, %f, %f, %f, %f) in MovL", 
 			instr.target.pose_target.position.x, instr.target.pose_target.position.y, 
 			instr.target.pose_target.position.z, instr.target.pose_target.orientation.a, 
 			instr.target.pose_target.orientation.b, instr.target.pose_target.orientation.c);
+#endif
 	}
 	else if(value.getType() == TYPE_JOINT)
 	{
@@ -1031,17 +1147,17 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		instr.target.pose_target.position    = value.getPrRegDataValue().value.cartesian_pos.position ;
 		instr.target.pose_target.orientation = value.getPrRegDataValue().value.cartesian_pos.orientation;
 #else
-		instr.target.pose_target.position.x    = value.getPrRegDataValue().value.pos[0];
-		instr.target.pose_target.position.y    = value.getPrRegDataValue().value.pos[1];
-		instr.target.pose_target.position.z    = value.getPrRegDataValue().value.pos[2];
-		instr.target.pose_target.orientation.a = value.getPrRegDataValue().value.pos[3];
-		instr.target.pose_target.orientation.b = value.getPrRegDataValue().value.pos[4];
-		instr.target.pose_target.orientation.c = value.getPrRegDataValue().value.pos[5];
+		instr.target.pose_target.point_.x_    = value.getPrRegDataValue().value.pos[0];
+		instr.target.pose_target.point_.y_    = value.getPrRegDataValue().value.pos[1];
+		instr.target.pose_target.point_.z_    = value.getPrRegDataValue().value.pos[2];
+		instr.target.pose_target.euler_.a_    = value.getPrRegDataValue().value.pos[3];
+		instr.target.pose_target.euler_.b_    = value.getPrRegDataValue().value.pos[4];
+		instr.target.pose_target.euler_.c_    = value.getPrRegDataValue().value.pos[5];
+	    FST_INFO("TYPE_PR: Forward move to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ",
+			instr.target.joint_target.j1_, instr.target.joint_target.j2_, 
+			instr.target.joint_target.j3_, instr.target.joint_target.j4_, 
+			instr.target.joint_target.j5_, instr.target.joint_target.j6_);
 #endif	
-	    FST_INFO("TYPE_PR: Forward move to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ", 
-			instr.target.joint_target.j1, instr.target.joint_target.j2, 
-			instr.target.joint_target.j3, instr.target.joint_target.j4, 
-			instr.target.joint_target.j5, instr.target.joint_target.j6);
 	}
 	
 	// Use start point in revert mode  
@@ -1068,10 +1184,17 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			FST_INFO("call_MoveL XPATH out of range at %d", iLineNum);
 		}
 		 
+#ifndef WIN32
+	    FST_INFO("Backward move to POSE:(%f, %f, %f, %f, %f, %f) in MovL", 
+			instr.target.pose_target.point_.x_, instr.target.pose_target.point_.y_, 
+			instr.target.pose_target.point_.z_, instr.target.pose_target.euler_.a_, 
+			instr.target.pose_target.euler_.b_, instr.target.pose_target.euler_.c_);
+#else
 	    FST_INFO("Backward move to POSE:(%f, %f, %f, %f, %f, %f) in MovL", 
 			instr.target.pose_target.position.x, instr.target.pose_target.position.y, 
 			instr.target.pose_target.position.z, instr.target.pose_target.orientation.a, 
 			instr.target.pose_target.orientation.b, instr.target.pose_target.orientation.c);
+#endif	
 	}
 	
 	
@@ -1141,11 +1264,7 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	while(bRet == false)
 	{
 		bRet = setInstruction(objThreadCntrolBlock, objThreadCntrolBlock->instrSet);
-#ifdef WIN32
-		Sleep(1);
-#else
         usleep(1000);
-#endif
 	}
 #endif
 
@@ -1182,7 +1301,7 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	instr.line = iLineNum;
 #endif
 	// Save start position
-	memset(&movCmdDst ,0x00, sizeof(MoveCommandDestination));
+	// memset(&movCmdDst ,0x00, sizeof(MoveCommandDestination));
 	getMoveCommandDestination(movCmdDst);
 	if(iLineNum < (int)objThreadCntrolBlock->vector_XPath.size())
 	{
@@ -1227,36 +1346,66 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	}
 	else if((value.getType() == TYPE_INT) || (value.getType() == TYPE_FLOAT))
 	{
+#ifndef WIN32
+		instr.target.circle_target.pose1.point_.x_    = value.getFloatValue();
+#else
 		instr.target.circle_target.pose1.position.x    = value.getFloatValue();
+#endif	
 		get_token(objThreadCntrolBlock);
 
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+		instr.target.circle_target.pose1.point_.y_    = value.getFloatValue();
+#else
 		instr.target.circle_target.pose1.position.y    = value.getFloatValue();
+#endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+		instr.target.circle_target.pose1.point_.z_    = value.getFloatValue();
+#else
 		instr.target.circle_target.pose1.position.z    = value.getFloatValue();
+#endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+		instr.target.circle_target.pose1.euler_.a_ = value.getFloatValue();
+#else
 		instr.target.circle_target.pose1.orientation.a = value.getFloatValue();
+#endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+		instr.target.circle_target.pose1.euler_.b_ = value.getFloatValue();
+#else
 		instr.target.circle_target.pose1.orientation.b = value.getFloatValue();
+#endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+		instr.target.circle_target.pose1.euler_.c_ = value.getFloatValue();
+#else
 		instr.target.circle_target.pose1.orientation.c = value.getFloatValue();
+#endif	
 	}
 	else if(value.getType() == TYPE_POSE)
 	{
 		instr.target.pose_target = value.getPoseValue();
-		
+#ifndef WIN32
+	    FST_INFO("move to POSE:(%f, %f, %f, %f, %f, %f) in MovC", 
+			instr.target.pose_target.point_.x_, instr.target.pose_target.point_.y_, 
+			instr.target.pose_target.point_.z_, instr.target.pose_target.euler_.a_, 
+			instr.target.pose_target.euler_.b_, instr.target.pose_target.euler_.c_);
+#else
 	    FST_INFO("move to POSE:(%f, %f, %f, %f, %f, %f) in MovC", 
 			instr.target.pose_target.position.x, instr.target.pose_target.position.y, 
 			instr.target.pose_target.position.z, instr.target.pose_target.orientation.a, 
 			instr.target.pose_target.orientation.b, instr.target.pose_target.orientation.c);
+#endif	
 	}
 	else if(value.getType() == TYPE_JOINT)
 	{
@@ -1275,27 +1424,51 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	}
 	else if((value.getType() == TYPE_INT) || (value.getType() == TYPE_FLOAT))
 	{
+#ifndef WIN32
+		instr.target.circle_target.pose2.point_.x_    = value.getFloatValue();
+#else
 		instr.target.circle_target.pose2.position.x    = value.getFloatValue();
+#endif	
 		get_token(objThreadCntrolBlock);
 
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+		instr.target.circle_target.pose2.point_.y_    = value.getFloatValue();
+#else
 		instr.target.circle_target.pose2.position.y    = value.getFloatValue();
+#endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+		instr.target.circle_target.pose2.point_.z_    = value.getFloatValue();
+#else
 		instr.target.circle_target.pose2.position.z    = value.getFloatValue();
+#endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+		instr.target.circle_target.pose2.euler_.a_ = value.getFloatValue();
+#else
 		instr.target.circle_target.pose2.orientation.a = value.getFloatValue();
+#endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+		instr.target.circle_target.pose2.euler_.b_ = value.getFloatValue();
+#else
 		instr.target.circle_target.pose2.orientation.b = value.getFloatValue();
+#endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
+#ifndef WIN32
+		instr.target.circle_target.pose2.euler_.c_ = value.getFloatValue();
+#else
 		instr.target.circle_target.pose2.orientation.c = value.getFloatValue();
+#endif	
 	}
 	else if(value.getType() == TYPE_POSE)
 	{
@@ -1461,6 +1634,7 @@ int execute_Timer(struct thread_control_block* objThreadCntrolBlock, char *vname
 		FST_INFO("%d: call_Timer  start", __LINE__);
 		g_structStopWatch[iTimerIdx].start_time = time(0);
 		value.setFloatValue(0); // 0.0; 
+		erase_var(objThreadCntrolBlock, vname);
 	//	assign_var(objThreadCntrolBlock, vname, value); // 0.0);
 	}
 	else if(value.getFloatValue() == TIMER_RESET_VALUE)
@@ -1468,6 +1642,7 @@ int execute_Timer(struct thread_control_block* objThreadCntrolBlock, char *vname
 		FST_INFO("%d: call_Timer restart", __LINE__);
 		g_structStopWatch[iTimerIdx].start_time = time(0);
 		value.setFloatValue(0); // 0.0; 
+		erase_var(objThreadCntrolBlock, vname);
 	//	assign_var(objThreadCntrolBlock, vname, value); // 0.0);
 	}
 	else if(value.getFloatValue() == TIMER_STOP_VALUE)
@@ -1636,7 +1811,7 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			outTime = (int)value.getFloatValue() ;
 			wait_stack.loc = objThreadCntrolBlock->prog;
 			now = timeStart  = time(0);
-			while(!cond)
+			while(cond == 0)
 			{
 #ifdef WIN32
 				Sleep(100);
@@ -1647,16 +1822,27 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 				objThreadCntrolBlock->prog = wait_stack.while_loc;
 				cond = calc_conditions(objThreadCntrolBlock);
 				if(now - timeStart > outTime)
+				{
+	    			FST_INFO("cond Timeout.");
 					break ;
+				}
 			}
 			
 			objThreadCntrolBlock->prog = wait_stack.loc;
-			if(!cond)
+	    	FST_INFO("cond = %d .", cond);
+			// Execute Timeout operation
+			if(cond == 0)
 			{
 				get_token(objThreadCntrolBlock);
 				if(strcmp(objThreadCntrolBlock->token, "skip") == 0)
 				{
 					; // Do nothing  
+				}
+				else if(strcmp(objThreadCntrolBlock->token, "warning") == 0)
+				{
+					// exec_call(objThreadCntrolBlock)
+	    			FST_INFO("setWarning(INFO_INTERPRETER_WAIT_TIMEOUT).");
+					setWarning(INFO_INTERPRETER_WAIT_TIMEOUT) ; 
 				}
 				else if(strcmp(objThreadCntrolBlock->token, "call") == 0)
 				{
@@ -1670,8 +1856,8 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 					putback(objThreadCntrolBlock);
 				}
 			}
-			else
-				find_eol(objThreadCntrolBlock);
+		//	else
+		//		find_eol(objThreadCntrolBlock);
 			
 		}
 		else 

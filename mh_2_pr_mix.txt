@@ -1,0 +1,14 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main (param0, param1)
+EXPORT: (002)(047)/prog/prog_body/function/body/logical/determine                                                         FOR X=1 TO 9 
+EXPORT: (003)(061)/prog/prog_body/function/body/logical/logical_body/assignment                                               MH[X]  = -10000 * X  
+EXPORT: (004)(037)/prog/prog_body/function/body/logical                                                                   NEXT 
+EXPORT: (005)(043)/prog/prog_body/function/body/assignment[1]                                                             PR[3].PJ1  = MH[1]   
+EXPORT: (006)(043)/prog/prog_body/function/body/assignment[2]                                                             PR[3].PJ2  = MH[2]   
+EXPORT: (007)(043)/prog/prog_body/function/body/assignment[3]                                                             PR[3].PJ3  = MH[3]   
+EXPORT: (008)(043)/prog/prog_body/function/body/assignment[4]                                                             PR[3].PJ4  = MH[4]   
+EXPORT: (009)(043)/prog/prog_body/function/body/assignment[5]                                                             PR[3].PJ5  = MH[5]   
+EXPORT: (010)(043)/prog/prog_body/function/body/assignment[6]                                                             PR[3].PJ6  = MH[6]   
+EXPORT: (011)(043)/prog/prog_body/function/body/assignment[7]                                                             PR[3].PJ7  = MH[7]   
+EXPORT: (012)(043)/prog/prog_body/function/body/assignment[8]                                                             PR[3].PJ8  = MH[8]   
+EXPORT: (013)(043)/prog/prog_body/function/body/assignment[9]                                                             PR[3].PJ9  = MH[9]   
+EXPORT: (014)(024)/prog/prog_body/function                                                                            END SUB 

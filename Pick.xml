@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<prog>
+  <head>
+    <include>MarcuscTest</include>
+  </head>
+  <prog_body>
+    <function name="main">
+      <body>
+        <nop/>
+        <instruction type="move_joint">
+          <argument name="pose" type="pose_register">
+            <element type="num">1</element>
+          </argument>
+          <argument name="velocity" unit="%" type="num">100</argument>
+          <argument name="fine" type="num">-1</argument>
+        </instruction>
+        <assignment type="assignment">
+          <lvalue>
+            <element type="do">
+              <element type="num">1</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="io_val">ON</element>
+          </rvalue>
+        </assignment>
+        <assignment type="assignment">
+          <lvalue>
+            <element type="do">
+              <element type="num">2</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="io_val">OFF</element>
+          </rvalue>
+        </assignment>
+        <assignment type="assignment">
+          <lvalue>
+            <element type="ro">
+              <element type="num">1</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="io_val">ON</element>
+          </rvalue>
+        </assignment>
+        <assignment type="io_assignment">
+          <lvalue>
+            <element type="ro">
+              <element type="num">2</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="io_val">OFF</element>
+          </rvalue>
+        </assignment>
+        <instruction type="wait">
+          <argument name="timeout" type="num" unit="sec">2</argument>
+        </instruction>
+        <call file="MarcuscTest"/>
+        <end name="prog"/>
+      </body>
+    </function>
+  </prog_body>
+</prog>

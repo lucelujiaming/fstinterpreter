@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prog>
+    <prog_body name="test">
+        <function name="main">
+          <parameter type="num">param0</parameter>
+          <parameter type="string">param1</parameter>
+          <body>
+		    <!-- PR[3].PJ1  = PR[2].PJ1 + 5 -->
+            <assignment>
+                <lvalue type="num">
+					<element type="pose_register">
+					  <element type="num">3</element>
+					  <element type="num">1</element>
+					</element>
+                </lvalue>
+                <rvalue>
+					<element type="pose_register">
+					  <element type="num">2</element>
+					  <element type="num">1</element>
+					</element>
+		            <element type="operation">+</element>
+	                <element type="num">5</element>
+                </rvalue>
+            </assignment>
+		    <!-- PR[3].PJ2  = PR[2].PJ2 + 5 -->
+            <assignment>
+                <lvalue type="num">
+					<element type="pose_register">
+					  <element type="num">3</element>
+					  <element type="num">2</element>
+					</element>
+                </lvalue>
+                <rvalue>
+					<element type="pose_register">
+					  <element type="num">2</element>
+					  <element type="num">1</element>
+					</element>
+		            <element type="operation">+</element>
+	                <element type="num">5</element>
+                </rvalue>
+            </assignment>
+          </body>
+        </function>
+    </prog_body>
+</prog>

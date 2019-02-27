@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prog>
+    <prog_body name="test">
+        <function name="main">
+          <parameter type="num">param0</parameter>
+          <body>
+
+            <!-- PR[2].PJ1  = MI[1] -->
+            <assignment>
+                <lvalue type="num">
+					<element type="pose_register">
+						<element type="motion_register">
+						  <element type="num">1</element>
+						</element>
+					    <element type="num">1</element>
+					</element>
+                </lvalue>
+                <rvalue>
+                  <element name="pose" type="modbus_input_register">
+                        <element type="num">1</element>
+                  </element>
+                  <element type="operation">/</element>
+                  <element type="num">1000</element>
+                </rvalue>
+            </assignment>
+                    <!-- PR[2].PJ2  = MI[2] -->
+            <assignment>
+                <lvalue type="num">
+					<element type="pose_register">
+						<element type="motion_register">
+						  <element type="num">1</element>
+						</element>
+					    <element type="pose_element">2</element>
+					</element>
+                </lvalue>
+                <rvalue>
+                  <element name="pose" type="modbus_input_register">
+                        <element type="num">2</element>
+                  </element>
+                  <element type="operation">/</element>
+                  <element type="num">1000</element>
+                </rvalue>
+            </assignment>
+                    <!-- PR[2].PJ3  = MI[3] -->
+            <assignment>
+                <lvalue type="num">
+					<element type="pose_register">
+						<element type="motion_register">
+						  <element type="num">1</element>
+						</element>
+					  <element type="num">3</element>
+					</element>
+                </lvalue>
+                <rvalue>
+                  <element name="pose" type="modbus_input_register">
+                        <element type="num">3</element>
+                  </element>
+                  <element type="operation">/</element>
+                  <element type="num">1000</element>
+                </rvalue>
+            </assignment>
+                    <!-- PR[2].PJ4  = MI[4] -->
+            <assignment>
+                <lvalue type="num">
+					<element type="pose_register">
+						<element type="motion_register">
+						  <element type="num">1</element>
+						</element>
+					  <element type="num">4</element>
+					</element>
+                </lvalue>
+                <rvalue>
+                  <element name="pose" type="modbus_input_register">
+                        <element type="num">4</element>
+                  </element>
+                  <element type="operation">/</element>
+                  <element type="num">1000</element>
+                </rvalue>
+            </assignment>
+                    <!-- PR[2].PJ5  = MI[5] -->
+            <assignment>
+                <lvalue type="num">
+					<element type="pose_register">
+						<element type="motion_register">
+						  <element type="num">1</element>
+						</element>
+					  <element type="num">5</element>
+					</element>
+                </lvalue>
+                <rvalue>
+                  <element name="pose" type="modbus_input_register">
+                        <element type="num">5</element>
+                  </element>
+                  <element type="operation">/</element>
+                  <element type="num">1000</element>
+                </rvalue>
+            </assignment>
+                    <!-- PR[2].PJ6  = MI[6] -->
+            <assignment>
+                <lvalue type="num">
+					<element type="pose_register">
+						<element type="motion_register">
+						  <element type="num">1</element>
+						</element>
+					  <element type="num">6</element>
+					</element>
+                </lvalue>
+                <rvalue>
+                  <element name="pose" type="modbus_input_register">
+                        <element type="num">6</element>
+                  </element>
+                  <element type="operation">/</element>
+                  <element type="num">1000</element>
+                </rvalue>
+            </assignment>
+                    <!-- PR[2].PJ7  = MI[7] -->
+            <assignment>
+                <lvalue type="num">
+					<element type="pose_register">
+						<element type="motion_register">
+						  <element type="num">1</element>
+						</element>
+					  <element type="num">7</element>
+					</element>
+                </lvalue>
+                <rvalue>
+                  <element name="pose" type="modbus_input_register">
+                        <element type="num">7</element>
+                  </element>
+                  <element type="operation">/</element>
+                  <element type="num">1000</element>
+                </rvalue>
+            </assignment>
+                    <!-- PR[2].PJ8  = MI[8] -->
+            <assignment>
+                <lvalue type="num">
+					<element type="pose_register">
+						<element type="motion_register">
+						  <element type="num">1</element>
+						</element>
+					  <element type="num">8</element>
+					</element>
+                </lvalue>
+                <rvalue>
+                  <element name="pose" type="modbus_input_register">
+                        <element type="num">8</element>
+                  </element>
+                  <element type="operation">/</element>
+                  <element type="num">1000</element>
+                </rvalue>
+            </assignment>
+                    <!-- PR[2].PJ9  = MI[9] -->
+            <assignment>
+                <lvalue type="num">
+					<element type="pose_register">
+						<element type="motion_register">
+						  <element type="num">1</element>
+						</element>
+					  <element type="num">9</element>
+					</element>
+                </lvalue>
+                <rvalue>
+                  <element name="pose" type="modbus_input_register">
+                        <element type="num">9</element>
+                  </element>
+                  <element type="operation">/</element>
+                  <element type="num">1000</element>
+                </rvalue>
+            </assignment>
+            <return />
+          </body>
+        </function>
+    </prog_body>
+</prog>

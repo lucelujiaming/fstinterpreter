@@ -1,5 +1,5 @@
 /**
- * @file reg_interface.cpp
+ * @file launch_code_mgr.cpp
  * @brief 
  * @author Lujiaming
  * @version 1.0.0
@@ -14,16 +14,21 @@
 #include <boost/algorithm/string.hpp>
 #include "common.h"
 #include "error_code.h"
+#else
+#pragma warning(disable : 4786)
 #endif
+#include <string>
 
 #include "launch_code_mgr.h"
 #include "forsight_cJSON.h"
 
 #define INVALID_LAUNCHCODE   -1
 
-LaunchCodeMgr::LaunchCodeMgr()
+LaunchCodeMgr::LaunchCodeMgr(std::string path)
 {
-    int result = initial();
+	program_path = path;
+	program_path += std::string("/programs/");
+    int result = initial(program_path);
     if (result != 0)
     {
         // rcs::Error::instance()->add(result);
@@ -126,7 +131,7 @@ int LaunchCodeMgr::readFileList(char *basePath)
             continue;
         else if(ptr->d_type == 8)    ///file
         {
-        	printf("d_name:%s/%s\n",basePath,ptr->d_name);
+        //	printf("d_name:%s/%s\n",basePath,ptr->d_name);
 			strExtPtr = strrchr(ptr->d_name, '.');
 			if(strExtPtr)
 			{
@@ -147,7 +152,7 @@ int LaunchCodeMgr::readFileList(char *basePath)
         }
         else if(ptr->d_type == 10)    ///link file
         {
-            printf("d_name:%s/%s\n",basePath,ptr->d_name);
+            ; // printf("d_name:%s/%s\n",basePath,ptr->d_name);
         }
         else if(ptr->d_type == 4)    ///dir
         {
@@ -163,13 +168,9 @@ int LaunchCodeMgr::readFileList(char *basePath)
     return 1;
 }
 
-int LaunchCodeMgr::initial()
+int LaunchCodeMgr::initial(std::string path)
 {
-#ifdef WIN32
-	int iRet = readFileList("\\data\\programs\\");
-#else
-	int iRet = readFileList("/data/programs/");
-#endif
+	int iRet = readFileList((char *)path.c_str());
 	// printLaunchCodeList();
 	return iRet;
 }
@@ -177,7 +178,7 @@ int LaunchCodeMgr::initial()
 int LaunchCodeMgr::updateAll()
 {	
 	launchCodeList.clear();
-    return initial();
+    return initial(program_path);
 }
 
 std::string LaunchCodeMgr::getProgramByCode(int iLaunchCode)

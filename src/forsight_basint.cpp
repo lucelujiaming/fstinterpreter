@@ -172,7 +172,7 @@ void exec_if(struct thread_control_block * objThreadCntrolBlock),
 	 exec_elseif(struct thread_control_block * objThreadCntrolBlock),
 	 exec_endif(struct thread_control_block * objThreadCntrolBlock);
 
-int  exec_end(struct thread_control_block * objThreadCntrolBlock);
+bool exec_end(struct thread_control_block * objThreadCntrolBlock);
 int  gosub(struct thread_control_block * objThreadCntrolBlock);
 void greturn(struct thread_control_block * objThreadCntrolBlock),
 	 gosub_push(struct thread_control_block * objThreadCntrolBlock, char *s),
@@ -453,6 +453,60 @@ void printProgJmpLine(struct thread_control_block* objThreadCntrolBlock)
 	objThreadCntrolBlock->prog     = proglabelsScan;
 }
 
+checkHomePoseResult check_home_pose(struct thread_control_block* objThreadCntrolBlock)
+{
+	char home_pose_exp[LAB_LEN];
+    eval_value value;
+	int boolValue = 0;
+	char *proglabelsScan; 
+	updateHomePoseMgr();
+	if(strlen(objThreadCntrolBlock->home_pose_exp) == 0)
+	{
+		return HOME_POSE_WITHIN_CUR_POS ;
+	}
+	memset(home_pose_exp, 0x00, LAB_LEN);
+	strcpy(home_pose_exp, objThreadCntrolBlock->home_pose_exp);
+
+	// Switch prog on home_pose_exp and execute it as program
+	proglabelsScan = objThreadCntrolBlock->prog ;
+	objThreadCntrolBlock->prog = home_pose_exp ;
+	do {
+		objThreadCntrolBlock->token_type = get_token(objThreadCntrolBlock);
+		if(objThreadCntrolBlock->token_type==NUMBER) {
+			int iLen = strlen(objThreadCntrolBlock->token);
+			int iIdx = atoi(objThreadCntrolBlock->token);
+
+			checkHomePoseResult checkRet = checkSingleHomePoseByCurrentJoint(
+				iIdx, objThreadCntrolBlock->currentJoint);
+			putback(objThreadCntrolBlock);
+			if(checkRet == HOME_POSE_NOT_EXIST)
+			{
+				// Restore prog to original program
+				objThreadCntrolBlock->prog     = proglabelsScan;
+				return HOME_POSE_NOT_EXIST ;
+			}
+			if(iLen > 1)
+				memset(objThreadCntrolBlock->prog, ' ', iLen -1);
+			char *progReplace = objThreadCntrolBlock->prog + iLen -1;
+			progReplace[0] = (checkRet == HOME_POSE_WITHIN_CUR_POS)?'1':'0';
+			objThreadCntrolBlock->prog += iLen;
+		}
+	} while (objThreadCntrolBlock->tok != FINISHED);
+
+	// 
+	objThreadCntrolBlock->prog = home_pose_exp ;
+	get_exp(objThreadCntrolBlock, &value, &boolValue);
+	// Restore prog to original program
+	objThreadCntrolBlock->prog     = proglabelsScan;
+
+	FST_INFO("check_home_pose: %s -> %s", 
+		objThreadCntrolBlock->home_pose_exp, home_pose_exp);
+	if(boolValue)
+		return HOME_POSE_WITHIN_CUR_POS ;
+	else
+		return HOME_POSE_NOT_WITHIN_CUR_POS ;
+}
+
 /************************************************* 
 	Function:		call_interpreter
 	Description:	load program or execute interpreter process.
@@ -465,6 +519,7 @@ void printProgJmpLine(struct thread_control_block* objThreadCntrolBlock)
 int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode)
 {
   int isExecuteEmptyLine ;
+  bool bRet = 0;
   int iRet = 0;
   int iLinenum;
   char * cLineContentPtr = 0 ;
@@ -508,7 +563,21 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 		return -1;
 	  }
 	  // Call in the first time to load major P[*]
+	  forgesight_registers_manager_get_joint(objThreadCntrolBlock->currentJoint);
+	  memset(objThreadCntrolBlock->home_pose_exp, 0x00, LAB_LEN);
   	  append_program_prop_mapper(objThreadCntrolBlock, objThreadCntrolBlock->project_name, true);
+	  checkHomePoseResult checkRet = check_home_pose(objThreadCntrolBlock) ;
+	  if(checkRet == HOME_POSE_NOT_WITHIN_CUR_POS) 
+	  {
+		  serror(objThreadCntrolBlock, 27); /* Overrun home pose */
+		  return -1;
+	  }
+	  else if(checkRet == HOME_POSE_NOT_EXIST) 
+	  {
+	  //  setWarning(INFO_INTERPRETER_HOME_POSE_NOT_EXIST);
+		  serror(objThreadCntrolBlock, 28); /* Home pose not exist */
+		  return -1;
+	  }
 	  
 	  objThreadCntrolBlock->prog = objThreadCntrolBlock->p_buf;
 	  objThreadCntrolBlock->prog_end = objThreadCntrolBlock->prog + strlen(objThreadCntrolBlock->prog);
@@ -862,25 +931,43 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 		     return END_COMMND_RET;
 		  break;
 		case CALLMACRO:
-//			objThreadCntrolBlock->is_in_macro = true ;
-			if(objThreadCntrolBlock->prog_mode == STEP_MODE)
+			if(objThreadCntrolBlock->is_in_macro == true)
 			{
-				objThreadCntrolBlock->prog_mode = FULL_MODE;
-				iRet = exec_call(objThreadCntrolBlock, true);
-				objThreadCntrolBlock->prog_mode = STEP_MODE;
+				if(objThreadCntrolBlock->prog_mode == STEP_MODE)
+				{
+					objThreadCntrolBlock->prog_mode = FULL_MODE;
+					iRet = exec_call(objThreadCntrolBlock, true);
+					objThreadCntrolBlock->prog_mode = STEP_MODE;
+				}
+				else
+				{
+					iRet = exec_call(objThreadCntrolBlock, true);
+				}
 			}
-			else
+			else     
 			{
-				iRet = exec_call(objThreadCntrolBlock, true);
+				// luiaming reopen at 190219
+				objThreadCntrolBlock->is_in_macro = true ;
+				if(objThreadCntrolBlock->prog_mode == STEP_MODE)
+				{
+					objThreadCntrolBlock->prog_mode = FULL_MODE;
+					iRet = exec_call(objThreadCntrolBlock, true);
+					objThreadCntrolBlock->prog_mode = STEP_MODE;
+				}
+				else
+				{
+					iRet = exec_call(objThreadCntrolBlock, true);
+				}
+				// luiaming reopen at 190219
+				objThreadCntrolBlock->is_in_macro = false ;
 			}
-//			objThreadCntrolBlock->is_in_macro = false ;
 			if(iRet == END_COMMND_RET)
 				return END_COMMND_RET;
 		  break;
 		case END:
 		  // exit(0);
-		  iRet = exec_end(objThreadCntrolBlock);
-		  if(iRet == 1)
+		  bRet = exec_end(objThreadCntrolBlock);
+		  if(bRet == true)
 		  {
              return 0 ; // NULL ;
 		  }
@@ -2356,9 +2443,10 @@ void exec_endif(struct thread_control_block * objThreadCntrolBlock)
 	Function:		exec_end
 	Description:	Execute a END statement. 
 	Input:			thread_control_block  - interpreter info
-	Return: 		NULL.
+	Return: 		true  - exec end and return .
+	                false - exec end and not return.
 *************************************************/ 
-int exec_end(struct thread_control_block * objThreadCntrolBlock)
+bool exec_end(struct thread_control_block * objThreadCntrolBlock)
 {
   struct select_and_cycle_stack select_stack ;
 
@@ -2368,33 +2456,25 @@ int exec_end(struct thread_control_block * objThreadCntrolBlock)
     select_stack = select_and_cycle_pop(objThreadCntrolBlock);
 	if(objThreadCntrolBlock->tok!=select_stack.itokentype) {
 	   serror(objThreadCntrolBlock, 4);
-	   return 0;
+	   return false;
 	}
     find_eol(objThreadCntrolBlock);
-	return 0;
+	return false;
   }
   else if(objThreadCntrolBlock->tok == SUB)
   {
     putback(objThreadCntrolBlock);
   	greturn(objThreadCntrolBlock);
-	return 1;
+	return true;
   }
-  putback(objThreadCntrolBlock);
-/*
-  if(select_and_cycle_tos>0)
+  // Single END also mean finish the whole subroutine 
+  // and need to call greturn
+  else  
   {
-    select_stack = select_and_cycle_pop();
-    if(tok == WHILE){
-		return ;
-	}
-	else {
-	   serror(objThreadCntrolBlock, 4);
-	   return;
-	}
+    putback(objThreadCntrolBlock);
+    greturn(objThreadCntrolBlock);
+    return true;
   }
- */
-  // exit(0);
-  return 1 ;
 }
 
 /************************************************* 
@@ -2715,10 +2795,21 @@ void exec_import(struct thread_control_block * objThreadCntrolBlock)
   proglabelsScan = objThreadCntrolBlock->prog ;
   objThreadCntrolBlock->prog = objThreadCntrolBlock->sub_prog[objThreadCntrolBlock->iSubProgNum];
   scan_labels(objThreadCntrolBlock, OUTSIDE_FUNC, objLabel.name);
+  
+  // merge by order before import subroutine in the subroutine
+  mergeImportXPathToProjectXPath(objThreadCntrolBlock, objLabel.name);
+  
+  // Load import subroutine in the subroutine
+  get_token(objThreadCntrolBlock);
+  while(objThreadCntrolBlock->tok == IMPORT)
+  {
+	  exec_import(objThreadCntrolBlock);
+	  get_token(objThreadCntrolBlock);
+  }
+
   objThreadCntrolBlock->prog = proglabelsScan;
   objThreadCntrolBlock->iSubProgNum++ ;
   
-  mergeImportXPathToProjectXPath(objThreadCntrolBlock, objLabel.name);
 /*
  *	  addr = add_label(objThreadCntrolBlock, objLabel);
  *    if(addr==-1 || addr==-2) {
@@ -2829,7 +2920,10 @@ int exec_call(struct thread_control_block * objThreadCntrolBlock, bool isMacro)
   int iRet = call_interpreter(objThreadCntrolBlock, 0);
   // find_eol(objThreadCntrolBlock);
   FST_INFO("Left   call_interpreter at exec_call.");
-  greturn(objThreadCntrolBlock);
+  // Lujiaming commit at 190218
+  // This line use to return from subroutine to main
+  // And it should be called in the END case
+  // greturn(objThreadCntrolBlock);
   if(iRet == END_COMMND_RET)
 	 return END_COMMND_RET;
   return 1;
@@ -3000,7 +3094,10 @@ void serror(struct thread_control_block * objThreadCntrolBlock, int error)
 		INFO_INTERPRETER_TOO_MANY_IMPORT          ,     "too many import file",        // 22 
 		INFO_INTERPRETER_TOO_LONG_PROJECT_NAME    ,     "too long project name",       // 23
 		INFO_INTERPRETER_ARITHMETIC_EXCEPTION     ,     "Arithmetic Exception",        // 24
-		INFO_INTERPRETER_UNKNOWN_ARITHM     	  , 	"Unknown Arithm"		       // 25
+		INFO_INTERPRETER_UNKNOWN_ARITHM     	  , 	"Unknown Arithm",		       // 25
+		INFO_INTERPRETER_WAIT_TIMEOUT        	  , 	"Wait Timeout",		           // 26
+		INFO_INTERPRETER_OVERRUN_HOME_POSE   	  , 	"Overrun home pose",           // 27
+		INFO_INTERPRETER_HOME_POSE_NOT_EXIST   	  , 	"Home pose not exist"          // 28
   };
   if(error > (int)(sizeof(errInfo)/sizeof(ErrInfo))) {
   	FST_ERROR("\t NOTICE : Error out of range %d ", error);
@@ -3689,12 +3786,12 @@ void set_var_value(struct thread_control_block * objThreadCntrolBlock,
 				pointEulerVal.position = valueSrc.getPrRegDataValue().value.cartesian_pos.position ;
 				pointEulerVal.orientation = valueSrc.getPrRegDataValue().value.cartesian_pos.orientation;
 #else
-				pointEulerVal.position.x    = valueSrc.getPrRegDataValue().value.pos[0];
-				pointEulerVal.position.y    = valueSrc.getPrRegDataValue().value.pos[1];
-				pointEulerVal.position.z    = valueSrc.getPrRegDataValue().value.pos[2];
-				pointEulerVal.orientation.a = valueSrc.getPrRegDataValue().value.pos[3];
-				pointEulerVal.orientation.b = valueSrc.getPrRegDataValue().value.pos[4];
-				pointEulerVal.orientation.c = valueSrc.getPrRegDataValue().value.pos[5];
+				pointEulerVal.point_.x_    = valueSrc.getPrRegDataValue().value.pos[0];
+				pointEulerVal.point_.y_    = valueSrc.getPrRegDataValue().value.pos[1];
+				pointEulerVal.point_.z_    = valueSrc.getPrRegDataValue().value.pos[2];
+				pointEulerVal.euler_.a_ = valueSrc.getPrRegDataValue().value.pos[3];
+				pointEulerVal.euler_.b_ = valueSrc.getPrRegDataValue().value.pos[4];
+				pointEulerVal.euler_.c_ = valueSrc.getPrRegDataValue().value.pos[5];
 				
 				FST_INFO("set_var_value: id = (%f, %f, %f, %f, %f, %f) ", 
 					valueSrc.getPrRegDataValue().value.pos[0], valueSrc.getPrRegDataValue().value.pos[1], 
@@ -3715,12 +3812,12 @@ void set_var_value(struct thread_control_block * objThreadCntrolBlock,
 				jointVal.j5 = valueSrc.getPrRegDataValue().value.joint_pos[4];
 				jointVal.j6 = valueSrc.getPrRegDataValue().value.joint_pos[5];
 #else
-				jointVal.j1 = valueSrc.getPrRegDataValue().value.pos[0];
-				jointVal.j2 = valueSrc.getPrRegDataValue().value.pos[1];
-				jointVal.j3 = valueSrc.getPrRegDataValue().value.pos[2];
-				jointVal.j4 = valueSrc.getPrRegDataValue().value.pos[3];
-				jointVal.j5 = valueSrc.getPrRegDataValue().value.pos[4];
-				jointVal.j6 = valueSrc.getPrRegDataValue().value.pos[5];
+				jointVal.j1_ = valueSrc.getPrRegDataValue().value.pos[0];
+				jointVal.j2_ = valueSrc.getPrRegDataValue().value.pos[1];
+				jointVal.j3_ = valueSrc.getPrRegDataValue().value.pos[2];
+				jointVal.j4_ = valueSrc.getPrRegDataValue().value.pos[3];
+				jointVal.j5_ = valueSrc.getPrRegDataValue().value.pos[4];
+				jointVal.j6_ = valueSrc.getPrRegDataValue().value.pos[5];
 #endif
 				//	vt.value = value;
 				valueDst.setJointValue(&jointVal);
@@ -3921,7 +4018,7 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 
 	if(!strcmp(vname, FORSIGHT_CURRENT_JOINT))
 	{
-		copyMoveCommandDestination(movCmdDst);
+		getMoveCommandDestination(movCmdDst);
 	    value.setJointValue(&movCmdDst.joint_target);
 		
 		value.setPrRegDataWithJointValue(&movCmdDst.joint_target);
@@ -3929,7 +4026,7 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 	}
 	else if(!strcmp(vname, FORSIGHT_CURRENT_POS))
 	{
-		copyMoveCommandDestination(movCmdDst);
+		getMoveCommandDestination(movCmdDst);
 		value.setPoseValue(&movCmdDst.pose_target);
 		
 		value.setPrRegDataWithPoseEulerValue(&movCmdDst.pose_target);

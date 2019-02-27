@@ -1,0 +1,8 @@
+001:Stab_timer_test:/prog/prog_body/function
+002:Stab_timer_test:/prog/prog_body/function/body/assignment[1]
+003:Stab_timer_test:/prog/prog_body/function/body/instruction
+004:Stab_timer_test:/prog/prog_body/function/body/assignment[2]
+005:Stab_timer_test:/prog/prog_body/function/body/assignment[3]
+006:Stab_timer_test:/prog/prog_body/function/body/assignment[4]
+007:Stab_timer_test:/prog/prog_body/function/body/assignment[5]
+008:Stab_timer_test:/prog/prog_body/function

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prog>
+    <prog_body name="test">
+        <function name="main">
+          <body>
+              <assignment type="timer">
+                <lvalue>
+                  <element type="timer">
+                    <element type="num">1</element>
+                  </element>
+                </lvalue>
+                <rvalue>
+                  <element type="timer_status">START</element>
+                </rvalue>
+              </assignment>
+            <instruction type="wait">
+              <argument name="timeout" type="num" unit="sec">5</argument>
+            </instruction>
+              <assignment type="assignment">
+                <lvalue>
+                  <element type="timer">
+                    <element type="num">2</element>
+                  </element>
+                </lvalue>
+                <rvalue>
+                  <element type="timer_status">START</element>
+                </rvalue>
+              </assignment>
+              <assignment type="assignment">
+                <lvalue>
+                  <element type="register">
+                    <element type="num">3</element>
+                  </element>
+                </lvalue>
+                <rvalue>
+                  <element type="timer">
+                    <element type="num">1</element>
+                  </element>
+                </rvalue>
+              </assignment>
+              <assignment type="reg_assignment">
+                <lvalue>
+                  <element type="register">
+                    <element type="num">4</element>
+                  </element>
+                </lvalue>
+                <rvalue>
+                  <element type="timer">
+                    <element type="num">2</element>
+                  </element>
+                </rvalue>
+              </assignment>
+            <assignment type="reg_assignment">
+              <lvalue>
+                <element type="register">
+                  <element type="num">5</element>
+                </element>
+              </lvalue>
+              <rvalue>
+                <element type="register">
+                  <element type="num">4</element>
+                </element>
+                <element type="operation">-</element>
+                <element type="register">
+                  <element type="num">3</element>
+                </element>
+              </rvalue>
+            </assignment>
+          </body>
+        </function>
+    </prog_body>
+</prog>

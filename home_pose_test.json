@@ -1,0 +1,56 @@
+{
+    "lastModifiedAuthor": "admin",
+    "author": "admin",
+    "codeNumber": 2,
+    "programType": "Main",
+    "protectStatus": 1,
+    "note": "None",
+    "modifyTime": 1519924282240,
+    "homePose": "<home_pose>
+					<element type=\"home_pose\">
+						<element type=\"num\">1</element>
+					</element>
+					<element type=\"boolean_operation\">OR</element>
+					<element type=\"bracket\">
+						<element type=\"home_pose\">
+							<element type=\"num\">2</element>
+						</element>
+						<element type=\"boolean_operation\">AND</element>
+						<element type=\"home_pose\">
+							<element type=\"num\">3</element>
+						</element>
+					</element>
+				</home_pose>",
+    "poses": [{
+        "cart": {
+            "a": 0,
+            "b": 0,
+            "c": 3.141592653589793,
+            "x": 400,
+            "y": 400,
+            "z": 400
+        },
+        "comment": "",
+        "groupNumber": 0,
+        "id": 5,
+        "joint": {
+            "j1": 0.7853981633974483,
+            "j2": -0.6642199534314821,
+            "j3": 0.21320942142362728,
+            "j4": 3.141592653589793,
+            "j5": 1.119785794787042,
+            "j6": -2.356194490192345
+        },
+        "name": "福賽特比心1",
+        "poseType": "cart",
+        "additionalE": {
+            "e1": 0,
+            "e2": 0,
+            "e3": 0
+        },
+        "tf": 1,
+        "uf": 0
+    }],
+
+    "createTime": 1519924282240
+}

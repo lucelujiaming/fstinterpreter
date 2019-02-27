@@ -1,0 +1,15 @@
+<home_pose>
+	<element type="home_pose">
+		<element type=”num”>1</element>
+	</element>
+	<element type="boolean_operation">OR</element>
+	<element type="bracket">
+		<element type="home_pose">
+			<element type=”num”>2</element>
+		</element>
+		<element type="boolean_operation">AND</element>
+		<element type="home_pose">
+		<element type=”num”>3</element>
+		</element>
+	</element>
+</home_pose>

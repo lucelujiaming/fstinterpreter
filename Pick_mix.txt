@@ -1,0 +1,11 @@
+EXPORT: (001)(018)/prog/head/include                                                                                  IMPORT MarcuscTest
+EXPORT: (002)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (003)(044)/prog/prog_body/function/body/instruction[1]                                                            MOVEJ PR[1], 100 CNT -1 
+EXPORT: (004)(043)/prog/prog_body/function/body/assignment[1]                                                             DO[1]  = ON   
+EXPORT: (005)(043)/prog/prog_body/function/body/assignment[2]                                                             DO[2]  = OFF   
+EXPORT: (006)(043)/prog/prog_body/function/body/assignment[3]                                                             RO[1]  = ON   
+EXPORT: (007)(043)/prog/prog_body/function/body/assignment[4]                                                             RO[2]  = OFF   
+EXPORT: (008)(044)/prog/prog_body/function/body/instruction[2]                                                            WAIT  2
+EXPORT: (009)(034)/prog/prog_body/function/body/call                                                                      CALL MarcuscTest::main () 
+EXPORT: (010)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (011)(024)/prog/prog_body/function                                                                            END SUB 

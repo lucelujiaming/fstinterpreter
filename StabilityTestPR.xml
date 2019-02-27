@@ -1,0 +1,461 @@
+<?xml version='1.0' encoding='utf-8'?>
+<prog>
+    <head>
+        <include>Pick</include>
+    </head>
+    <prog_body>
+        <function name="main">
+            <body>
+                <assignment type="reg_assignment">
+                    <lvalue>
+                        <element type="register">
+                            <element type="num">1</element>
+                        </element>
+                    </lvalue>
+                    <rvalue>
+                        <element type="num">1</element>
+                    </rvalue>
+                </assignment>
+                <assignment type="assignment">
+                    <lvalue>
+                        <element type="register">
+                            <element type="num">2</element>
+                        </element>
+                    </lvalue>
+                    <rvalue>
+                        <element type="num">1</element>
+                    </rvalue>
+                </assignment>
+                <logical type="while">
+                    <determine>
+                        <element type="register">
+                            <element type="num">1</element>
+                        </element>
+                        <element type="boolean_operation">&lt;=</element>
+                        <element type="num">9</element>
+                    </determine>
+                    <logical_body>
+                        <assignment type="assignment">
+                            <lvalue>
+                                <element type="motion_register">
+                                    <element type="register">
+                                        <element type="num">1</element>
+                                    </element>
+                                </element>
+                            </lvalue>
+                            <rvalue>
+                                <element type="register">
+                                    <element type="num">1</element>
+                                </element>
+                                <element type="operation">+</element>
+                                <element type="num">0</element>
+                            </rvalue>
+                        </assignment>
+                        <assignment type="reg_assignment">
+                            <lvalue>
+                                <element type="register">
+                                    <element type="num">1</element>
+                                </element>
+                            </lvalue>
+                            <rvalue>
+                                <element type="register">
+                                    <element type="num">1</element>
+                                </element>
+                                <element type="operation">+</element>
+                                <element type="num">1</element>
+                            </rvalue>
+                        </assignment>
+                    </logical_body>
+                </logical>
+                <assignment type="reg_assignment">
+                    <lvalue>
+                        <element type="register">
+                            <element type="num">1</element>
+                        </element>
+                    </lvalue>
+                    <rvalue>
+                        <element type="num">1</element>
+                    </rvalue>
+                </assignment>
+                <instruction type="move_joint">
+                    <argument name="pose" type="pose">
+                        <element type="num">1</element>
+                    </argument>
+                    <argument name="velocity" unit="%" type="num">100</argument>
+                    <argument name="fine" type="num"></argument>
+                </instruction>
+                <logical type="while">
+                    <determine>
+                        <element type="register">
+                            <element type="num">1</element>
+                        </element>
+                        <element type="boolean_operation">&lt;</element>
+                        <element type="num">4</element>
+                    </determine>
+                    <logical_body>
+                        <assignment type="timer">
+                            <lvalue>
+                                <element type="timer">
+                                    <element type="num">1</element>
+                                </element>
+                            </lvalue>
+                            <rvalue>
+                                <element type="timer_status">START</element>
+                            </rvalue>
+                        </assignment>
+                        <instruction type="wait">
+                            <argument name="timeout" type="num" unit="sec">5</argument>
+                        </instruction>
+                        <assignment type="timer">
+                            <lvalue>
+                                <element type="timer">
+                                    <element type="num">2</element>
+                                </element>
+                            </lvalue>
+                            <rvalue>
+                                <element type="timer_status">START</element>
+                            </rvalue>
+                        </assignment>
+                        <assignment type="assignment">
+                            <lvalue>
+                                <element type="register">
+                                    <element type="num">3</element>
+                                </element>
+                            </lvalue>
+                            <rvalue>
+                                <element type="timer">
+                                    <element type="num">1</element>
+                                </element>
+                            </rvalue>
+                        </assignment>
+                        <assignment type="reg_assignment">
+                            <lvalue>
+                                <element type="register">
+                                    <element type="num">4</element>
+                                </element>
+                            </lvalue>
+                            <rvalue>
+                                <element type="timer">
+                                    <element type="num">2</element>
+                                </element>
+                            </rvalue>
+                        </assignment>
+                        <assignment type="reg_assignment">
+                            <lvalue>
+                                <element type="register">
+                                    <element type="num">5</element>
+                                </element>
+                            </lvalue>
+                            <rvalue>
+                                <element type="register">
+                                    <element type="num">4</element>
+                                </element>
+                                <element type="operation">-</element>
+                                <element type="register">
+                                    <element type="num">3</element>
+                                </element>
+                            </rvalue>
+                        </assignment>
+                        <assignment type="reg_assignment">
+                            <lvalue>
+                                <element type="motion_register">
+                                    <element type="register">
+                                        <element type="num">1</element>
+                                    </element>
+                                    <element type="operation">+</element>
+                                    <element type="num">5</element>
+                                </element>
+                            </lvalue>
+                            <rvalue>
+                                <element type="register">
+                                    <element type="register">
+                                        <element type="num">1</element>
+                                    </element>
+                                    <element type="operation">+</element>
+                                    <element type="num">5</element>
+                                </element>
+                            </rvalue>
+                        </assignment>
+                        <assignment type="reg_assignment">
+                            <lvalue>
+                                <element type="register">
+                                    <element type="num">10</element>
+                                </element>
+                            </lvalue>
+                            <rvalue>
+                                <element type="string_register">
+                                    <element type="num">1</element>
+                                </element>
+                                <element type="operation">+</element>
+                                <element type="string_register">
+                                    <element type="register">
+                                        <element type="num">1</element>
+                                    </element>
+                                    <element type="operation">+</element>
+                                    <element type="num">5</element>
+                                </element>
+                                <element type="operation">+</element>
+                                <element type="string_register">
+                                    <element type="num">5</element>
+                                </element>
+                            </rvalue>
+                        </assignment>
+                        <logical type="switch">
+                            <determine>
+                                <element type="register">
+                                    <element type="num">10</element>
+                                </element>
+                            </determine>
+                            <logical_body/>
+                            <vice_logical type="case">
+                                <determine>
+                                    <element type="num">1</element>
+                                </determine>
+                                <vice_logical_body>
+                                    <logical type="while">
+                                        <determine>
+                                            <element type="register">
+                                                <element type="num">2</element>
+                                            </element>
+                                            <element type="boolean_operation">&lt;=</element>
+                                            <element type="num">9</element>
+                                        </determine>
+                                        <logical_body>
+                                            <assignment type="tf_no">
+                                                <lvalue>
+                                                    <element type="system">TF_NO.</element>
+                                                </lvalue>
+                                                <rvalue>
+                                                    <element type="num">1</element>
+                                                </rvalue>
+                                            </assignment>
+                                            <assignment type="uf_no">
+                                                <lvalue>
+                                                    <element type="system">UF_NO.</element>
+                                                </lvalue>
+                                                <rvalue>
+                                                    <element type="num">1</element>
+                                                </rvalue>
+                                            </assignment>
+                                            <assignment type="assignment">
+                                                <lvalue>
+                                                    <element type="motion_register">
+                                                        <element type="num">1</element>
+                                                    </element>
+                                                </lvalue>
+                                                <rvalue>
+                                                    <element type="register">
+                                                        <element type="num">2</element>
+                                                    </element>
+                                                </rvalue>
+                                            </assignment>
+                                            <instruction type="move_line">
+                                                <argument name="pose" type="pose_register">
+                                                    <element type="motion_register">
+                                                        <element type="num">1</element>
+                                                    </element>
+                                                </argument>
+                                                <argument name="velocity" unit="mm/s" type="num">4000</argument>
+                                                <argument name="fine" type="num">-1</argument>
+                                            </instruction>
+                                            <assignment type="io_assignment">
+                                                <lvalue>
+                                                    <element type="do">
+                                                        <element type="num">1</element>
+                                                    </element>
+                                                </lvalue>
+                                                <rvalue>
+                                                    <element type="io_val">OFF</element>
+                                                </rvalue>
+                                            </assignment>
+                                            <assignment type="io_assignment">
+                                                <lvalue>
+                                                    <element type="do">
+                                                        <element type="num">2</element>
+                                                    </element>
+                                                </lvalue>
+                                                <rvalue>
+                                                    <element type="io_val">ON</element>
+                                                </rvalue>
+                                            </assignment>
+                                            <instruction type="wait">
+                                                <argument name="timeout" type="num" unit="sec">2</argument>
+                                            </instruction>
+                                            <assignment type="reg_assignment">
+                                                <lvalue>
+                                                    <element type="register">
+                                                        <element type="num">2</element>
+                                                    </element>
+                                                </lvalue>
+                                                <rvalue>
+                                                    <element type="register">
+                                                        <element type="num">2</element>
+                                                    </element>
+                                                    <element type="operation">+</element>
+                                                    <element type="num">1</element>
+                                                </rvalue>
+                                            </assignment>
+                                            <call file="Pick"></call>
+                                        </logical_body>
+                                    </logical>
+                                    <assignment type="reg_assignment">
+                                        <lvalue>
+                                            <element type="register">
+                                                <element type="num">1</element>
+                                            </element>
+                                        </lvalue>
+                                        <rvalue>
+                                            <element type="register">
+                                                <element type="num">1</element>
+                                            </element>
+                                            <element type="operation">+</element>
+                                            <element type="num">1</element>
+                                        </rvalue>
+                                    </assignment>
+                                    <assignment type="reg_assignment">
+                                        <lvalue>
+                                            <element type="register">
+                                                <element type="num">2</element>
+                                            </element>
+                                        </lvalue>
+                                        <rvalue>
+                                            <element type="num">1</element>
+                                        </rvalue>
+                                    </assignment>
+                                </vice_logical_body>
+                            </vice_logical>
+                            <vice_logical type="case">
+                                <determine>
+                                    <element type="num">2</element>
+                                </determine>
+                                <vice_logical_body>
+                                    <logical type="while">
+                                        <determine>
+                                            <element type="register">
+                                                <element type="num">2</element>
+                                            </element>
+                                            <element type="boolean_operation">&lt;=</element>
+                                            <element type="num">3</element>
+                                        </determine>
+                                        <logical_body>
+                                            <assignment type="tf_no">
+                                                <lvalue>
+                                                    <element type="system">TF_NO.</element>
+                                                </lvalue>
+                                                <rvalue>
+                                                    <element type="num">2</element>
+                                                </rvalue>
+                                            </assignment>
+                                            <assignment type="uf_no">
+                                                <lvalue>
+                                                    <element type="system">UF_NO.</element>
+                                                </lvalue>
+                                                <rvalue>
+                                                    <element type="num">2</element>
+                                                </rvalue>
+                                            </assignment>
+                                            <call file="Pick"></call>
+                                            <instruction type="move_line">
+                                                <argument name="pose" type="pose">
+                                                    <element type="num">2</element>
+                                                </argument>
+                                                <argument name="velocity" unit="mm/s" type="num">4000</argument>
+                                                <argument name="fine" type="num">-1</argument>
+                                            </instruction>
+                                            <assignment type="io_assignment">
+                                                <lvalue>
+                                                    <element type="do">
+                                                        <element type="num">1</element>
+                                                    </element>
+                                                </lvalue>
+                                                <rvalue>
+                                                    <element type="io_val">OFF</element>
+                                                </rvalue>
+                                            </assignment>
+                                            <assignment type="assignment">
+                                                <lvalue>
+                                                    <element type="do">
+                                                        <element type="num">2</element>
+                                                    </element>
+                                                </lvalue>
+                                                <rvalue>
+                                                    <element type="io_val">ON</element>
+                                                </rvalue>
+                                            </assignment>
+                                            <instruction type="wait">
+                                                <argument name="timeout" type="num" unit="sec">2</argument>
+                                            </instruction>
+                                        </logical_body>
+                                    </logical>
+                                    <assignment type="reg_assignment">
+                                        <lvalue>
+                                            <element type="register">
+                                                <element type="num">1</element>
+                                            </element>
+                                        </lvalue>
+                                        <rvalue>
+                                            <element type="register">
+                                                <element type="num">1</element>
+                                            </element>
+                                            <element type="operation">+</element>
+                                            <element type="num">1</element>
+                                        </rvalue>
+                                    </assignment>
+                                </vice_logical_body>
+                            </vice_logical>
+                        </logical>
+                        <assignment type="tf_no">
+                            <lvalue>
+                                <element type="system">TF_NO.</element>
+                            </lvalue>
+                            <rvalue>
+                                <element type="num">3</element>
+                            </rvalue>
+                        </assignment>
+                        <assignment type="uf_no">
+                            <lvalue>
+                                <element type="system">UF_NO.</element>
+                            </lvalue>
+                            <rvalue>
+                                <element type="num">3</element>
+                            </rvalue>
+                        </assignment>
+                        <logical type="if">
+                            <determine>
+                                <element type="register">
+                                    <element type="num">1</element>
+                                </element>
+                                <element type="boolean_operation">=</element>
+                                <element type="num">3</element>
+                            </determine>
+                            <logical_body>
+                                <call file="Pick"></call>
+                                <instruction type="move_line">
+                                    <argument name="pose" type="pose">
+                                        <element type="num">3</element>
+                                    </argument>
+                                    <argument name="velocity" unit="mm/s" type="num">4000</argument>
+                                    <argument name="fine" type="num">-1</argument>
+                                </instruction>
+                                <instruction type="wait">
+                                    <argument name="timeout" type="num" unit="sec">5</argument>
+                                </instruction>
+                            </logical_body>
+                        </logical>
+                        <assignment type="reg_assignment">
+                            <lvalue>
+                                <element type="register">
+                                    <element type="num">1</element>
+                                </element>
+                            </lvalue>
+                            <rvalue>
+                                <element type="num">1</element>
+                            </rvalue>
+                        </assignment>
+                    </logical_body>
+                </logical>
+                <end name="prog"/>
+            </body>
+        </function>
+    </prog_body>
+</prog>

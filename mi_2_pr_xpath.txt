@@ -1,0 +1,12 @@
+001:mi_2_pr:/prog/prog_body/function
+002:mi_2_pr:/prog/prog_body/function/body/assignment[1]
+003:mi_2_pr:/prog/prog_body/function/body/assignment[2]
+004:mi_2_pr:/prog/prog_body/function/body/assignment[3]
+005:mi_2_pr:/prog/prog_body/function/body/assignment[4]
+006:mi_2_pr:/prog/prog_body/function/body/assignment[5]
+007:mi_2_pr:/prog/prog_body/function/body/assignment[6]
+008:mi_2_pr:/prog/prog_body/function/body/assignment[7]
+009:mi_2_pr:/prog/prog_body/function/body/assignment[8]
+010:mi_2_pr:/prog/prog_body/function/body/assignment[9]
+011:mi_2_pr:/prog/prog_body/function/body/return
+012:mi_2_pr:/prog/prog_body/function

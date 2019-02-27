@@ -44,7 +44,9 @@ pthread_t g_launch_code_interpreter_handle;
 // extern int  g_iCurrentThreadSeq ;  
 // extern struct thread_control_block g_thread_control_block[NUM_THREAD];
 
-LaunchCodeMgr  *  g_launch_code_mgr_ptr; 
+extern std::string g_files_manager_data_path ;
+
+LaunchCodeMgr  *  g_launch_code_mgr_startup_ptr; 
 
 void forgesight_simulate_launch_config_values()
 {
@@ -215,7 +217,7 @@ void* launch_code_thread(void* arg)
 	int iRet = 0 ; 
 	eval_value value ;
 	thread_control_block * objThdCtrlBlockPtr = NULL;
-	g_launch_code_mgr_ptr = new LaunchCodeMgr();
+	g_launch_code_mgr_startup_ptr = new LaunchCodeMgr(g_files_manager_data_path);
 	while(1)
 	{
 		// According to chapter 2.4 in the Document(0110401110300)
@@ -247,7 +249,7 @@ void* launch_code_thread(void* arg)
 		value = forgesight_get_io_status((char *)UI_MPLCS_START);
 		if(value.getFloatValue() != 0.0)
 		{
-			std:: string strRet = g_launch_code_mgr_ptr->getProgramByCode(iRet);
+			std:: string strRet = g_launch_code_mgr_startup_ptr->getProgramByCode(iRet);
 			// Step6: Send MPLCS Start Done
 			value.setFloatValue(1.0);
 			forgesight_set_io_status((char *)UO_MPLCS_START_DONE, value);
@@ -299,14 +301,14 @@ void* launch_code_thread(void* arg)
 				forgesight_set_io_status((char *)UO_MPLCS_START_DONE, value);
 			}
 		}
-		// g_launch_code_mgr_ptr.updateAll();
+		// g_launch_code_mgr_startup_ptr.updateAll();
 #ifdef WIN32
 		Sleep(100);
 #else
 		usleep(1000);
 #endif
 	}
-	delete g_launch_code_mgr_ptr;
+	delete g_launch_code_mgr_startup_ptr;
 
 #ifdef WIN32
 	CloseHandle( g_launch_code_interpreter_handle );  

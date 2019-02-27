@@ -53,7 +53,7 @@ int main(int  argc, char *argv[])
     	FST_LOG_INIT("Interpreter");
 	}
 #endif
-	initShm();
+	initInterpreter();
 	memset(&intprt_ctrl, 0x00, sizeof(intprt_ctrl));
 #ifndef WIN32
 	intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_START ;
@@ -101,6 +101,7 @@ int main(int  argc, char *argv[])
 #endif
 	}
 	
+	uninitInterpreter();
 #ifndef WIN32
 	if(log_ptr_ != NULL)
 	{

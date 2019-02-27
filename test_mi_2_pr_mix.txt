@@ -1,0 +1,12 @@
+EXPORT: (001)(018)/prog/head/include                                                                                  IMPORT mi_2_pr
+EXPORT: (002)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (003)(047)/prog/prog_body/function/body/logical/determine                                                         FOR X=1 TO 9 
+EXPORT: (004)(061)/prog/prog_body/function/body/logical/logical_body/assignment                                               MI[X]  = -10000 * X  
+EXPORT: (005)(037)/prog/prog_body/function/body/logical                                                                   NEXT 
+EXPORT: (006)(043)/prog/prog_body/function/body/assignment[1]                                                             MR[1] = 1  
+EXPORT: (007)(037)/prog/prog_body/function/body/call[1]                                                                   CALL mi_2_pr::main () 
+EXPORT: (008)(043)/prog/prog_body/function/body/assignment[2]                                                             MR[1] = 2  
+EXPORT: (009)(037)/prog/prog_body/function/body/call[2]                                                                   CALL mi_2_pr::main () 
+EXPORT: (010)(043)/prog/prog_body/function/body/assignment[3]                                                             MR[1] = 3  
+EXPORT: (011)(037)/prog/prog_body/function/body/call[3]                                                                   CALL mi_2_pr::main () 
+EXPORT: (012)(024)/prog/prog_body/function                                                                            END SUB 

@@ -1,0 +1,4 @@
+001:pr_2_pr:/prog/prog_body/function
+002:pr_2_pr:/prog/prog_body/function/body/assignment[1]
+003:pr_2_pr:/prog/prog_body/function/body/assignment[2]
+004:pr_2_pr:/prog/prog_body/function

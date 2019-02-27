@@ -24,6 +24,7 @@
 #include "interpreter_common.h"
 
 #include "forsight_basint.h"
+#include "forsight_home_pose.h"
 
 // #define USE_WAITING_R
 
@@ -52,7 +53,8 @@ void* script_func(void* arg);
 #endif
 void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr); 
 							// (struct thread_control_block * objThdCtrlBlock);
-void initShm();
+void initInterpreter();
+void uninitInterpreter();
 void forgesight_load_programs_path();
 char * forgesight_get_programs_path();
 
@@ -69,16 +71,15 @@ void waitInterpreterStateleftPaused(
 void waitInterpreterStateToPaused(
 	struct thread_control_block * objThdCtrlBlockPtr);
 
-void setMoveCommandDestination(MoveCommandDestination movCmdDst);
 void getMoveCommandDestination(MoveCommandDestination& movCmdDst);
-void copyMoveCommandDestination(MoveCommandDestination& movCmdDst);
 
 struct thread_control_block *  getThreadControlBlock();
 int  getCurrentThreadSeq();
 void incCurrentThreadSeq();
 void decCurrentThreadSeq();
 
-
+void updateHomePoseMgr();
+checkHomePoseResult checkSingleHomePoseByCurrentJoint(int idx, Joint currentJoint);
 #endif
 
 

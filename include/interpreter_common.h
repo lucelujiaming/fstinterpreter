@@ -9,6 +9,8 @@ using namespace fst_controller;
 #include "motion_control_datatype.h"
 #include "stdint.h"
 using namespace fst_mc;
+#include "basic_alg_datatype.h" 
+using namespace basic_alg;
 #endif
 
 #define ADD_INFO_NUM    10
@@ -214,6 +216,7 @@ typedef struct _InterpreterControl
         // int            jump_line;    // Jump 
         char           jump_line[256];
         int            step_mode;       // auto or debug 
+        int            program_code;    // CODE_START
     };
 }InterpreterControl;
 
@@ -243,11 +246,11 @@ typedef struct _IntprtStatus
 typedef struct _AdditionalOffsetInfomation
 {
     AdditionalOffsetInfomationType        type;
-    union {
+//    union {
         Reg             pr_reg;
         PoseEuler       pose_target;
         Joint           joint_target;
-    };
+//    };
     Reg                 uf_reg;
 } AdditionalOffsetInfomation;
 
@@ -255,21 +258,21 @@ typedef struct _AdditionalExecuteInfomation
 {
     AdditionalExecuteInfomationType type;
     double    range ;
-    union {
+//    union {
         RegMap          assignment;
         char            fname[128];
-    };
+//    };
 } AdditionalExecuteInfomation;
 
 typedef struct _AdditionalInfomation
 {
     AdditionalInfomationType        type;
-    union 
-    {
+//    union 
+//    {
     	int acc_speed ;                         // used for AAC, EV, IND_EV
     	AdditionalOffsetInfomation offset ; // used for OFFSET, TOOL_OFFSET
     	AdditionalExecuteInfomation execute ; // used for TB, TA, DB
-    };
+//    };
 } AdditionalInfomation;
 
 typedef struct _Instruction

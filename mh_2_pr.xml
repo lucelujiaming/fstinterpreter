@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prog>
+    <prog_body name="test">
+        <function name="main">
+          <parameter type="num">param0</parameter>
+          <parameter type="string">param1</parameter>
+          <body>
+            <logical type="for">
+                <determine>
+                    <element type="num">X</element>
+                    <element type="operation">=</element>
+                    <element type="num">1</element>
+                    <element type="command">TO</element>
+                    <element type="num">9</element>
+                </determine>
+                <logical_body>
+					<assignment>
+						<lvalue type="num">
+						  <element name="pose" type="modbus_holding_register">
+								<element type="num">X</element>
+						  </element>
+						</lvalue>
+						<rvalue>
+							<element type="num">-10000</element>
+							<element type="operation">*</element>
+							<element type="num">X</element>
+						</rvalue>
+					</assignment>
+                </logical_body>
+            </logical>
+
+		    <!-- PR[3].PJ1  = MH[1] -->
+            <assignment>
+                <lvalue type="num">
+					<element type="pose_register">
+					  <element type="num">3</element>
+					  <element type="num">1</element>
+					</element>
+                </lvalue>
+                <rvalue>
+                  <element name="pose" type="modbus_holding_register">
+                        <element type="num">1</element>
+                  </element>
+                </rvalue>
+            </assignment>
+		    <!-- PR[3].PJ2  = MH[2] -->
+            <assignment>
+                <lvalue type="num">
+					<element type="pose_register">
+					  <element type="num">3</element>
+					  <element type="num">2</element>
+					</element>
+                </lvalue>
+                <rvalue>
+                  <element name="pose" type="modbus_holding_register">
+                        <element type="num">2</element>
+                  </element>
+                </rvalue>
+            </assignment>
+		    <!-- PR[3].PJ3  = MH[3] -->
+            <assignment>
+                <lvalue type="num">
+					<element type="pose_register">
+					  <element type="num">3</element>
+					  <element type="num">3</element>
+					</element>
+                </lvalue>
+                <rvalue>
+                  <element name="pose" type="modbus_holding_register">
+                        <element type="num">3</element>
+                  </element>
+                </rvalue>
+            </assignment>
+		    <!-- PR[3].PJ4  = MH[4] -->
+            <assignment>
+                <lvalue type="num">
+					<element type="pose_register">
+					  <element type="num">3</element>
+					  <element type="num">4</element>
+					</element>
+                </lvalue>
+                <rvalue>
+                  <element name="pose" type="modbus_holding_register">
+                        <element type="num">4</element>
+                  </element>
+                </rvalue>
+            </assignment>
+		    <!-- PR[3].PJ5  = MH[5] -->
+            <assignment>
+                <lvalue type="num">
+					<element type="pose_register">
+					  <element type="num">3</element>
+					  <element type="num">5</element>
+					</element>
+                </lvalue>
+                <rvalue>
+                  <element name="pose" type="modbus_holding_register">
+                        <element type="num">5</element>
+                  </element>
+                </rvalue>
+            </assignment>
+		    <!-- PR[3].PJ6  = MH[6] -->
+            <assignment>
+                <lvalue type="num">
+					<element type="pose_register">
+					  <element type="num">3</element>
+					  <element type="num">6</element>
+					</element>
+                </lvalue>
+                <rvalue>
+                  <element name="pose" type="modbus_holding_register">
+                        <element type="num">6</element>
+                  </element>
+                </rvalue>
+            </assignment>
+		    <!-- PR[3].PJ7  = MH[7] -->
+            <assignment>
+                <lvalue type="num">
+					<element type="pose_register">
+					  <element type="num">3</element>
+					  <element type="num">7</element>
+					</element>
+                </lvalue>
+                <rvalue>
+                  <element name="pose" type="modbus_holding_register">
+                        <element type="num">7</element>
+                  </element>
+                </rvalue>
+            </assignment>
+		    <!-- PR[3].PJ8  = MH[8] -->
+            <assignment>
+                <lvalue type="num">
+					<element type="pose_register">
+					  <element type="num">3</element>
+					  <element type="num">8</element>
+					</element>
+                </lvalue>
+                <rvalue>
+                  <element name="pose" type="modbus_holding_register">
+                        <element type="num">8</element>
+                  </element>
+                </rvalue>
+            </assignment>
+		    <!-- PR[3].PJ9  = MH[9] -->
+            <assignment>
+                <lvalue type="num">
+					<element type="pose_register">
+					  <element type="num">3</element>
+					  <element type="num">9</element>
+					</element>
+                </lvalue>
+                <rvalue>
+                  <element name="pose" type="modbus_holding_register">
+                        <element type="num">9</element>
+                  </element>
+                </rvalue>
+            </assignment>
+          </body>
+        </function>
+    </prog_body>
+</prog>

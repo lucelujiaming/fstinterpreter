@@ -1,0 +1,9 @@
+EXPORT: (001)(018)/prog/head/include                                                                                  IMPORT Pick
+EXPORT: (002)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (003)(043)/prog/prog_body/function/body/assignment[1]                                                             R[1]  = 1  
+EXPORT: (004)(043)/prog/prog_body/function/body/assignment[2]                                                             R[2]  = 1  
+EXPORT: (005)(034)/prog/prog_body/function/body/call                                                                      CALL Pick::main () 
+EXPORT: (006)(043)/prog/prog_body/function/body/assignment[3]                                                             R[1]  = 1  
+EXPORT: (007)(041)/prog/prog_body/function/body/instruction                                                               MOVEJ P[1], 100 CNT -1 
+EXPORT: (008)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (009)(024)/prog/prog_body/function                                                                            END SUB 

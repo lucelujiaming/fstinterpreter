@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<prog>
+  <head>
+    <include>mi_2_pr</include>
+  </head>
+  <prog_body>
+    <function name="main">
+      <body>
+            <logical type="for">
+                <determine>
+                    <element type="num">X</element>
+                    <element type="operation">=</element>
+                    <element type="num">1</element>
+                    <element type="command">TO</element>
+                    <element type="num">9</element>
+                </determine>
+                <logical_body>
+                   <assignment>
+                        <lvalue type="num">
+                                  <element name="pose" type="modbus_input_register">
+                                        <element type="num">X</element>
+                                  </element>
+                        </lvalue>
+                        <rvalue>
+                                <element type="num">-10000</element>
+                                <element type="operation">*</element>
+                                <element type="num">X</element>
+                        </rvalue>
+                   </assignment>
+                </logical_body>
+            </logical>
+			
+			<assignment type="reg_assignment">
+			  <lvalue>
+				<element type="motion_register">
+				  <element type="num">1</element>
+				</element>
+			  </lvalue>
+			  <rvalue>
+				<element type="num">1</element>
+			  </rvalue>
+			</assignment>
+           <call file="mi_2_pr" type="common" />
+		   
+			<assignment type="reg_assignment">
+			  <lvalue>
+				<element type="motion_register">
+				  <element type="num">1</element>
+				</element>
+			  </lvalue>
+			  <rvalue>
+				<element type="num">2</element>
+			  </rvalue>
+			</assignment>
+           <call file="mi_2_pr" type="common" />
+		   
+			<assignment type="reg_assignment">
+			  <lvalue>
+				<element type="motion_register">
+				  <element type="num">1</element>
+				</element>
+			  </lvalue>
+			  <rvalue>
+				<element type="num">3</element>
+			  </rvalue>
+			</assignment>
+           <call file="mi_2_pr" type="common" />
+      </body>
+    </function>
+  </prog_body>
+</prog>
+
