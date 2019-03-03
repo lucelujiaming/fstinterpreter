@@ -949,19 +949,23 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	// result.size() > MOVJ_COMMAND_PARAM_MIN
 	if(objThreadCntrolBlock->token_type == DELIMITER)
 	{
-		if(*(objThreadCntrolBlock->token) == ';')
-		{
-			char * instrSetPtr = 
+		char * instrSetPtr = 
 				(char *)objThreadCntrolBlock->instrSet
 				+ sizeof(Instruction) - sizeof(char) ;
-			objThreadCntrolBlock->instrSet->is_additional = true ;
+		objThreadCntrolBlock->instrSet->is_additional = true ;
+		if(*(objThreadCntrolBlock->token) == ';')
+		{
 			objThreadCntrolBlock->instrSet->add_num    =  
 				getAditionalInfomation(objThreadCntrolBlock, instrSetPtr);
 		}
 		else
 		{
-			objThreadCntrolBlock->instrSet->is_additional = false ;
-			objThreadCntrolBlock->instrSet->add_num    = 0 ;
+			AdditionalInfomation additionalInfomation ;
+			additionalInfomation.type = ACC ;
+			additionalInfomation.acc_speed = 100 ;
+			memcpy(instrSetPtr, &additionalInfomation, sizeof(AdditionalInfomation));
+			
+			objThreadCntrolBlock->instrSet->add_num    = 1 ;
 		}
 	}
 	
@@ -1235,19 +1239,23 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	// result.size() > MOVJ_COMMAND_PARAM_MIN
 	if(objThreadCntrolBlock->token_type == DELIMITER)
 	{
+		char * instrSetPtr = 
+			(char *)objThreadCntrolBlock->instrSet
+			+ sizeof(Instruction) - sizeof(char) ;
+		objThreadCntrolBlock->instrSet->is_additional = true ;
 		if(*(objThreadCntrolBlock->token) == ';')
 		{
-			char * instrSetPtr = 
-				(char *)objThreadCntrolBlock->instrSet
-				+ sizeof(Instruction) - sizeof(char) ;
-			objThreadCntrolBlock->instrSet->is_additional = true ;
 			objThreadCntrolBlock->instrSet->add_num    =  
 				getAditionalInfomation(objThreadCntrolBlock, instrSetPtr);
 		}
 		else
 		{
-			objThreadCntrolBlock->instrSet->is_additional = false ;
-			objThreadCntrolBlock->instrSet->add_num    = 0 ;
+			AdditionalInfomation additionalInfomation ;
+			additionalInfomation.type = ACC ;
+			additionalInfomation.acc_speed = 100 ;
+			memcpy(instrSetPtr, &additionalInfomation, sizeof(AdditionalInfomation));
+			
+			objThreadCntrolBlock->instrSet->add_num    = 1 ;
 		}
 	}
 	// FST_INFO("MOVL: instr.target.accleration = %f .", instr.target.acc);
@@ -1259,14 +1267,16 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 // 	#endif
 	
 	 FST_INFO("instr.target.cnt = %f setInstruction.", instr.target.cnt);
-#ifndef WIN32
 	bool bRet = setInstruction(objThreadCntrolBlock, objThreadCntrolBlock->instrSet);
 	while(bRet == false)
 	{
 		bRet = setInstruction(objThreadCntrolBlock, objThreadCntrolBlock->instrSet);
+#ifdef WIN32
+		Sleep(1);
+#else
         usleep(1000);
-	}
 #endif
+	}
 
 //    FST_INFO("setInstruction return true");
     return 1;   
@@ -1394,17 +1404,17 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	}
 	else if(value.getType() == TYPE_POSE)
 	{
-		instr.target.pose_target = value.getPoseValue();
+		instr.target.circle_target.pose1 = value.getPoseValue();
 #ifndef WIN32
 	    FST_INFO("move to POSE:(%f, %f, %f, %f, %f, %f) in MovC", 
-			instr.target.pose_target.point_.x_, instr.target.pose_target.point_.y_, 
-			instr.target.pose_target.point_.z_, instr.target.pose_target.euler_.a_, 
-			instr.target.pose_target.euler_.b_, instr.target.pose_target.euler_.c_);
+			instr.target.circle_target.pose1.point_.x_, instr.target.circle_target.pose1.point_.y_, 
+			instr.target.circle_target.pose1.point_.z_, instr.target.circle_target.pose1.euler_.a_, 
+			instr.target.circle_target.pose1.euler_.b_, instr.target.circle_target.pose1.euler_.c_);
 #else
 	    FST_INFO("move to POSE:(%f, %f, %f, %f, %f, %f) in MovC", 
-			instr.target.pose_target.position.x, instr.target.pose_target.position.y, 
-			instr.target.pose_target.position.z, instr.target.pose_target.orientation.a, 
-			instr.target.pose_target.orientation.b, instr.target.pose_target.orientation.c);
+			instr.target.circle_target.pose1.position.x, instr.target.circle_target.pose1.position.y, 
+			instr.target.circle_target.pose1.position.z, instr.target.circle_target.pose1.orientation.a, 
+			instr.target.circle_target.pose1.orientation.b, instr.target.circle_target.pose1.orientation.c);
 #endif	
 	}
 	else if(value.getType() == TYPE_JOINT)
@@ -1472,7 +1482,7 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	}
 	else if(value.getType() == TYPE_POSE)
 	{
-		instr.target.pose_target = value.getPoseValue();
+		instr.target.circle_target.pose2 = value.getPoseValue();
 	}
 	else if(value.getType() == TYPE_JOINT)
 	{
@@ -1519,19 +1529,23 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	// result.size() > MOVJ_COMMAND_PARAM_MIN
 	if(objThreadCntrolBlock->token_type == DELIMITER)
 	{
+		char * instrSetPtr = 
+			(char *)objThreadCntrolBlock->instrSet
+			+ sizeof(Instruction) - sizeof(char) ;
+		objThreadCntrolBlock->instrSet->is_additional = true ;
 		if(*(objThreadCntrolBlock->token) == ';')
 		{
-			char * instrSetPtr = 
-				(char *)objThreadCntrolBlock->instrSet
-				+ sizeof(Instruction) - sizeof(char) ;
-			objThreadCntrolBlock->instrSet->is_additional = true ;
 			objThreadCntrolBlock->instrSet->add_num    =  
 				getAditionalInfomation(objThreadCntrolBlock, instrSetPtr);
 		}
 		else
 		{
-			objThreadCntrolBlock->instrSet->is_additional = false ;
-			objThreadCntrolBlock->instrSet->add_num    = 0 ;
+			AdditionalInfomation additionalInfomation ;
+			additionalInfomation.type = ACC ;
+			additionalInfomation.acc_speed = 100 ;
+			memcpy(instrSetPtr, &additionalInfomation, sizeof(AdditionalInfomation));
+			
+			objThreadCntrolBlock->instrSet->add_num    = 1 ;
 		}
 	}
 	

@@ -1,0 +1,10 @@
+001:CtoC:/prog/prog_body/function
+002:CtoC:/prog/prog_body/function/body/logical/determine
+003:CtoC:/prog/prog_body/function/body/logical/logical_body/instruction[1]
+004:CtoC:/prog/prog_body/function/body/logical/logical_body/instruction[2]
+005:CtoC:/prog/prog_body/function/body/logical/logical_body/instruction[3]
+006:CtoC:/prog/prog_body/function/body/logical/logical_body/instruction[4]
+007:CtoC:/prog/prog_body/function/body/logical/logical_body/instruction[5]
+008:CtoC:/prog/prog_body/function/body/logical
+009:CtoC:/prog/prog_body/function/body/end
+010:CtoC:/prog/prog_body/function

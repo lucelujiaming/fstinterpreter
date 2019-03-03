@@ -1,7 +1,8 @@
 EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
-EXPORT: (002)(041)/prog/prog_body/function/body/instruction                                                               MOVEL 250, 150, 310, 0, 0, 3.1415, 50 CNT -1 
-EXPORT: (003)(047)/prog/prog_body/function/body/logical/determine                                                         FOR X=1 TO 10 
-EXPORT: (004)(065)/prog/prog_body/function/body/logical/logical_body/instruction[1]                                           MOVEL 550, -150, 610, 0, 0, 3.1415, 50 CNT -1 
-EXPORT: (005)(065)/prog/prog_body/function/body/logical/logical_body/instruction[2]                                           MOVEL 250, 150, 310, 0, 0, 3.1415, 50 CNT -1 
-EXPORT: (006)(037)/prog/prog_body/function/body/logical                                                                   NEXT 
-EXPORT: (007)(024)/prog/prog_body/function                                                                            END SUB 
+EXPORT: (002)(044)/prog/prog_body/function/body/instruction[1]                                                            MOVEL 250, 150, 310, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (003)(044)/prog/prog_body/function/body/instruction[2]                                                            WAIT  5
+EXPORT: (004)(047)/prog/prog_body/function/body/logical/determine                                                         FOR X=1 TO 10 
+EXPORT: (005)(065)/prog/prog_body/function/body/logical/logical_body/instruction[1]                                           MOVEL 550, -150, 610, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (006)(065)/prog/prog_body/function/body/logical/logical_body/instruction[2]                                           MOVEL 250, 150, 310, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (007)(037)/prog/prog_body/function/body/logical                                                                   NEXT 
+EXPORT: (008)(024)/prog/prog_body/function                                                                            END SUB 

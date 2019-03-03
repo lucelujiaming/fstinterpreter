@@ -1268,7 +1268,7 @@ int generateMoveInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLin
 	if(xmlStrcasecmp(name,BAD_CAST"move_line")==0){
 		exportBASCode(objLineInfo, (char *)"EXPORT: ", (char *)"%s ", (char *)"MOVEL");
 	}
-	else if(xmlStrcasecmp(name,BAD_CAST"move_curve")==0){
+	else if(xmlStrcasecmp(name,BAD_CAST"move_circle")==0){
 		exportBASCode(objLineInfo, (char *)"EXPORT: ", (char *)"%s ", (char *)"MOVEC");
 	}
 	else if(xmlStrcasecmp(name,BAD_CAST"move_joint")==0){
@@ -1283,7 +1283,9 @@ int generateMoveInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLin
 			name = xmlGetProp(nodeInstructionParam, BAD_CAST"name");
 			// All of parameters should have spaces after them . 
 			// Without the space, it would cause the expression analyzer work failed
-			if(xmlStrcasecmp(name, BAD_CAST"pose")==0){
+			if((xmlStrcasecmp(name, BAD_CAST"pose")==0) 
+				||(xmlStrcasecmp(name, BAD_CAST"cirpose")==0) 
+				||(xmlStrcasecmp(name, BAD_CAST"topose")==0)) {
 				nameType = xmlGetProp(nodeInstructionParam, BAD_CAST"type");
 				if(xmlStrcasecmp(nameType, BAD_CAST"num")==0){
 					for(nodeElement = nodeInstructionParam->children; 
@@ -1959,7 +1961,7 @@ int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
 
 			type = xmlGetProp(nodeStatement,BAD_CAST"type");
 			if((xmlStrcasecmp(type,BAD_CAST"move_line")==0)
-					||(xmlStrcasecmp(type,BAD_CAST"move_curve")==0)
+					||(xmlStrcasecmp(type,BAD_CAST"move_circle")==0)
 					||(xmlStrcasecmp(type,BAD_CAST"move_joint")==0)){
 				generateMoveInstruction(nodeStatement, objLineInfoTemp);
 			}
