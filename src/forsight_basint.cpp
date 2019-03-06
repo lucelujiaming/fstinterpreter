@@ -3904,7 +3904,7 @@ void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname,
 		if(strchr(vname, '['))
 		{
 			int iRet = 0 ;
-			iRet = forgesight_set_io_status(vname, value);
+			iRet = forgesight_set_io_status(objThreadCntrolBlock, vname, value);
 			if(iRet == 0)
 			{
 				return ;
@@ -4081,7 +4081,7 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 		if(strchr(vname, '['))
 		{
 			// int iValue = -1;
-			value = forgesight_get_io_status(vname);
+			value = forgesight_get_io_status(objThreadCntrolBlock, vname);
 			return value;
 		}
 	}

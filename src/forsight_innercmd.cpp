@@ -18,7 +18,6 @@
 #endif
 
 #define FILE_PATH_LEN       1024
-#define MAX_WAIT_SECOND     30
 #define MAX_STOPWATCH_NUM   128
 
 #define   MOVJ_COMMAND_PARAM_MIN     8
@@ -1798,9 +1797,11 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		cond = calc_conditions(objThreadCntrolBlock);
 		
 		get_token(objThreadCntrolBlock);
+		// Without timeout dealing which includes Timeout and skip/warning/call XXX
 		if(objThreadCntrolBlock->token[0] == '\r')
 		{
 			putback(objThreadCntrolBlock);
+			outTime = forgesight_get_wait_time_out_config();
 			now = timeStart  = time(0);
 			while(!cond)
 			{
@@ -1813,7 +1814,7 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 
 				objThreadCntrolBlock->prog = wait_stack.while_loc;
 				cond = calc_conditions(objThreadCntrolBlock);
-				while(now - timeStart > MAX_WAIT_SECOND)
+				while(now - timeStart > outTime)
 					break ;
 			}
 		}
@@ -1823,6 +1824,10 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			putback(objThreadCntrolBlock);
 			get_exp(objThreadCntrolBlock, &value, &boolValue);
 			outTime = (int)value.getFloatValue() ;
+			if(outTime <= 0)
+			{
+				outTime = forgesight_get_wait_time_out_config();
+			}
 			wait_stack.loc = objThreadCntrolBlock->prog;
 			now = timeStart  = time(0);
 			while(cond == 0)

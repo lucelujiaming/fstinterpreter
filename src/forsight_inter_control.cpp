@@ -28,6 +28,8 @@ using namespace fst_ctrl ;
 #define VELOCITY    (500)
 using namespace std;
 
+#define MAX_WAIT_SECOND     30
+
 // bool is_backward= false;
 // InterpreterState prgm_state = INTERPRETER_IDLE;
 // static IntprtStatus intprt_status;
@@ -46,6 +48,7 @@ extern pthread_t g_basic_interpreter_handle[NUM_THREAD + 1];
 int  g_iCurrentThreadSeq = -1 ;  // minus one add one equals to zero
 
 std::string g_files_manager_data_path = "";
+int         g_wait_time_out_config    = -1;
 
 static InterpreterState g_privateInterpreterState;
 InterpreterPublish  g_interpreter_publish; 
@@ -1038,6 +1041,40 @@ char * forgesight_get_programs_path()
 }
 
 /************************************************* 
+	Function:		forgesight_load_wait_time_out_config
+	Description:	load programs path
+	Input:			NULL
+	Return: 		NULL
+*************************************************/ 
+void forgesight_load_wait_time_out_config()
+{
+	g_files_manager_data_path = "";
+#ifdef WIN32
+    g_wait_time_out_config = 10;
+#else
+    fst_parameter::ParamGroup param_;
+    param_.loadParamFile("/root/install/share/configuration/machine/prg_interpreter_config.yaml");
+    param_.getParam("wait_time/time_out", g_wait_time_out_config);
+	FST_INFO("forgesight_load_wait_time_out_config: %d .", g_wait_time_out_config);
+	
+	if(g_wait_time_out_config <= 0)
+	    g_wait_time_out_config = MAX_WAIT_SECOND ;
+#endif
+	
+}
+
+/************************************************* 
+	Function:		forgesight_get_programs_path
+	Description:	get programs path
+	Input:			NULL
+	Return: 		programs path
+*************************************************/ 
+int forgesight_get_wait_time_out_config()
+{
+	return g_wait_time_out_config;
+}
+
+/************************************************* 
 	Function:		initInterpreter
 	Description:	init interpretor
 	Input:			NULL
@@ -1057,6 +1094,7 @@ void initInterpreter()
 //	initShmi(1024);
 #endif
 	forgesight_load_programs_path();
+	forgesight_load_wait_time_out_config();
 	g_launch_code_mgr_ptr = new LaunchCodeMgr(g_files_manager_data_path);
 	g_home_pose_mgr_ptr   = new HomePoseMgr(g_files_manager_data_path);
 }

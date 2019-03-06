@@ -58,6 +58,9 @@ void uninitInterpreter();
 void forgesight_load_programs_path();
 char * forgesight_get_programs_path();
 
+void forgesight_load_wait_time_out_config();
+int forgesight_get_wait_time_out_config();
+
 void updateIOError();
 vector<string> split(string str,string pattern);
 void startFile(struct thread_control_block * objThdCtrlBlockPtr, 

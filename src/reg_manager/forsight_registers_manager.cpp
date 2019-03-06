@@ -939,7 +939,7 @@ int forgesight_registers_manager_get_register(
 	    FST_INFO("forgesight_registers_manager_get_register at TXT_MI ");
 		if(strlen(reg_member) == 0)
 		{
-	        FST_INFO("reg_manager_interface_getR at TXT_MI ");
+	        FST_INFO("reg_manager_interface_getMI at TXT_MI ");
             // Use TXT_REG_VALUE
 			bRet = reg_manager_interface_getMI(&objMiData, iRegIdx);
 			if(bRet == false)
@@ -2024,15 +2024,19 @@ int forgesight_registers_manager_set_register(
 			if(valueStart->getType() == TYPE_FLOAT)
 			{    
 				double fValue = valueStart->getFloatValue();
+				FST_INFO("Set FLOAT:(%f) to R[%s]", fValue, reg_idx);
 			    reg_manager_interface_setValueR(&fValue, iRegIdx);
 			}
 			else if(valueStart->getType() == (int)(TYPE_FLOAT | TYPE_MR))
 			{    
-				double dValue = valueStart->getFloatValue();
-			    reg_manager_interface_setValueR(&dValue, iRegIdx);
+				double fValue = valueStart->getFloatValue();
+				FST_INFO("Set MR/FLOAT:(%f) to R[%s]", fValue, reg_idx);
+			    reg_manager_interface_setValueR(&fValue, iRegIdx);
 			}
 			else if(valueStart->getType() == (int)(TYPE_FLOAT | TYPE_R))
 			{    
+				FST_INFO("Set R:(%f) to R[%s]", 
+					valueStart->getRRegDataValue().value, reg_idx);
 				reg_manager_interface_setR(&(valueStart->getRRegDataValue()), iRegIdx);
 			}
 			else if(valueStart->getType() == (int)(TYPE_STRING | TYPE_SR))
@@ -2043,6 +2047,7 @@ int forgesight_registers_manager_set_register(
 				double fValue = atof(strValue.c_str());
 			    reg_manager_interface_setValueR(&fValue, iRegIdx);
 			}
+			FST_INFO("Set to R[%s]", reg_idx);
 	       	return 0 ;
 		}
 		else if (!strcmp(reg_member, TXT_REG_VALUE))
@@ -2440,21 +2445,21 @@ int forgesight_registers_manager_set_register(
 		else if (!strcmp(reg_member, TXT_REG_VALUE))
 		{
 			int iValue = (int)valueStart->getFloatValue();
-			FST_INFO("Set VALUE:(%f) to SR[%s]", iValue, reg_idx);
+			FST_INFO("Set VALUE:(%f) to MI[%s]", iValue, reg_idx);
 			reg_manager_interface_setValueMI(&iValue, iRegIdx);
 	       	return 0 ;
 		}
 		else if (!strcmp(reg_member, TXT_REG_ID))
 		{
 			int iID = (int)valueStart->getFloatValue();
-			FST_INFO("Set ID:(%d) to SR[%s]", iID, reg_idx);
+			FST_INFO("Set ID:(%d) to MI[%s]", iID, reg_idx);
 			reg_manager_interface_setIdMI(&iID, iRegIdx);
 	       	return 0 ;
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
 			// get_token(objThreadCntrolBlock);
-			FST_INFO("Set COMMENT:(%s) to SR[%s]", 
+			FST_INFO("Set COMMENT:(%s) to MI[%s]", 
 				objThreadCntrolBlock->token, reg_idx);
 			reg_manager_interface_setCommentMI(
 				(char *)valueStart->getStringValue().c_str(), iRegIdx);
@@ -2503,21 +2508,21 @@ int forgesight_registers_manager_set_register(
 		else if (!strcmp(reg_member, TXT_REG_VALUE))
 		{
 			int iValue = (int)valueStart->getFloatValue();
-			FST_INFO("Set VALUE:(%d) to SR[%s]", iValue, reg_idx);
+			FST_INFO("Set VALUE:(%d) to MH[%s]", iValue, reg_idx);
 			reg_manager_interface_setValueMH(&iValue, iRegIdx);
 	       	return 0 ;
 		}
 		else if (!strcmp(reg_member, TXT_REG_ID))
 		{
 			int iID = (int)valueStart->getFloatValue();
-			FST_INFO("Set ID:(%d) to SR[%s]", iID, reg_idx);
+			FST_INFO("Set ID:(%d) to MH[%s]", iID, reg_idx);
 			reg_manager_interface_setIdMH(&iID, iRegIdx);
 	       	return 0 ;
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
 			// get_token(objThreadCntrolBlock);
-			FST_INFO("Set COMMENT:(%s) to SR[%s]", 
+			FST_INFO("Set COMMENT:(%s) to MH[%s]", 
 				objThreadCntrolBlock->token, reg_idx);
 			reg_manager_interface_setCommentMH(
 				(char *)valueStart->getStringValue().c_str(), iRegIdx);
