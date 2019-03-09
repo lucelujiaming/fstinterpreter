@@ -34,8 +34,10 @@ void* macro_instr_thread(void* arg)
 		it = g_macro_instr_mgr_ptr->ioMgrList.begin();
 		while(it != g_macro_instr_mgr_ptr->ioMgrList.end())
 		{
+			objThdCtrlBlockPtr = getThreadControlBlock();
+			if(objThdCtrlBlockPtr == NULL) break ;
 			value.setFloatValue(0.0);
-			value = forgesight_get_io_status((char *)it->first.c_str());
+			value = forgesight_get_io_status(objThdCtrlBlockPtr, (char *)it->first.c_str());
 			if((value.getFloatValue() != 0.0) 
 				&&(it->second.iValue == 0)
 				&&(strlen(it->second.program_name) > 0)
@@ -43,8 +45,6 @@ void* macro_instr_thread(void* arg)
 			{
 				printf("start run...\n");
 				// objThdCtrlBlockPtr = &g_thread_control_block[getCurrentThreadSeq()];
-				objThdCtrlBlockPtr = getThreadControlBlock();
-				if(objThdCtrlBlockPtr == NULL) break ;
 				if(objThdCtrlBlockPtr->is_in_macro == true)
 				{
 					printf("Can not run macro again\n");

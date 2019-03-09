@@ -1,0 +1,5 @@
+001:TestKeyValue:/prog/prog_body/function
+002:TestKeyValue:/prog/prog_body/function/body/assignment
+003:TestKeyValue:/prog/prog_body/function/body/instruction
+004:TestKeyValue:/prog/prog_body/function/body/end
+005:TestKeyValue:/prog/prog_body/function

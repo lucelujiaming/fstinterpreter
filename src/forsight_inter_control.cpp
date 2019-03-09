@@ -1,6 +1,8 @@
 #ifdef WIN32
 #pragma warning(disable : 4786)
 #endif
+#include<libxml/parser.h>
+
 #include "forsight_inter_control.h"
 #include "forsight_innercmd.h"
 #include "forsight_io_controller.h"
@@ -49,6 +51,8 @@ int  g_iCurrentThreadSeq = -1 ;  // minus one add one equals to zero
 
 std::string g_files_manager_data_path = "";
 int         g_wait_time_out_config    = -1;
+
+vector<key_variable> g_vecKeyVariables ;
 
 static InterpreterState g_privateInterpreterState;
 InterpreterPublish  g_interpreter_publish; 
@@ -230,6 +234,39 @@ void setPrgmState(struct thread_control_block * objThdCtrlBlockPtr, InterpreterS
 		FST_INFO("setPrgmState Failed to %d", (int)state);
 	}
 }
+
+/************************************************* 
+	Function:		getProgMode
+	Description:	get current Program Mode
+	Input:			NULL
+	Return: 		current Program Mode
+*************************************************/ 
+ProgMode getProgMode(struct thread_control_block * objThdCtrlBlockPtr)
+{
+	return objThdCtrlBlockPtr->prog_mode ;
+}
+
+/************************************************* 
+	Function:		setPrgmState
+	Description:	set current Program State
+	Input:			thread_control_block   - interpreter info
+	Input:			state                  - Program State
+	Return: 		NULL
+*************************************************/ 
+void setProgMode(struct thread_control_block * objThdCtrlBlockPtr, ProgMode progMode)
+{
+    FST_INFO("setProgMode to %d at %d", (int)progMode, objThdCtrlBlockPtr->is_main_thread);
+	if(objThdCtrlBlockPtr->is_main_thread == MAIN_THREAD)
+	{
+	 	objThdCtrlBlockPtr->prog_mode   = progMode ;
+		g_interpreter_publish.progMode = progMode ;
+	}
+	else
+	{
+		FST_INFO("setProgMode Failed to %d", (int)progMode);
+	}
+}
+
 
 /************************************************* 
 	Function:		setCurLine
@@ -469,7 +506,9 @@ void dealCodeStart(int program_code)
 		// Clear last lineNum
 		setCurLine(objThdCtrlBlockPtr, (char *)"", 0);
 		
-        objThdCtrlBlockPtr->prog_mode = FULL_MODE;
+//      objThdCtrlBlockPtr->prog_mode   = FULL_MODE;
+//  	g_interpreter_publish.progMode  = FULL_MODE;
+  		setProgMode(objThdCtrlBlockPtr, FULL_MODE);
 		objThdCtrlBlockPtr->execute_direction = EXECUTE_FORWARD ;
 		startFile(objThdCtrlBlockPtr, 
 			(char *)program_name.c_str(), getCurrentThreadSeq());
@@ -669,7 +708,9 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 			// Clear last lineNum
 			setCurLine(objThdCtrlBlockPtr, (char *)"", 0);
 			
-            objThdCtrlBlockPtr->prog_mode = STEP_MODE;
+       //     objThdCtrlBlockPtr->prog_mode = STEP_MODE;
+  	   //	  g_interpreter_publish.progMode  = STEP_MODE;
+  			setProgMode(objThdCtrlBlockPtr, STEP_MODE);
 			objThdCtrlBlockPtr->execute_direction = EXECUTE_FORWARD ;
 			if(strlen(intprt_ctrl.start_ctrl) == 0)
 			{
@@ -696,7 +737,9 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 			// Clear last lineNum
 			setCurLine(objThdCtrlBlockPtr, (char *)"", 0);
 			
-            objThdCtrlBlockPtr->prog_mode = FULL_MODE;
+       //     objThdCtrlBlockPtr->prog_mode   = FULL_MODE;
+  	   //	  g_interpreter_publish.progMode  = FULL_MODE;
+  			setProgMode(objThdCtrlBlockPtr, FULL_MODE);
 			objThdCtrlBlockPtr->execute_direction = EXECUTE_FORWARD ;
 			if(strlen(intprt_ctrl.start_ctrl) == 0)
 			{
@@ -763,7 +806,9 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 		    objThdCtrlBlockPtr = getThreadControlBlock();
 			if(objThdCtrlBlockPtr == NULL) break ;
             FST_INFO("SWITCH_STEP with %d", intprt_ctrl.step_mode);
-            objThdCtrlBlockPtr->prog_mode = (ProgMode)intprt_ctrl.step_mode;
+            // objThdCtrlBlockPtr->prog_mode = (ProgMode)intprt_ctrl.step_mode;
+  			// g_interpreter_publish.progMode  = (ProgMode)intprt_ctrl.step_mode;
+  			setProgMode(objThdCtrlBlockPtr, (ProgMode)intprt_ctrl.step_mode);
             break;
         case fst_base::INTERPRETER_SERVER_CMD_FORWARD:
             FST_INFO("step forward at %d ", getCurrentThreadSeq());
@@ -1048,7 +1093,6 @@ char * forgesight_get_programs_path()
 *************************************************/ 
 void forgesight_load_wait_time_out_config()
 {
-	g_files_manager_data_path = "";
 #ifdef WIN32
     g_wait_time_out_config = 10;
 #else
@@ -1082,21 +1126,39 @@ int forgesight_get_wait_time_out_config()
 *************************************************/ 
 void initInterpreter()
 {
+	xmlInitParser();
 	g_privateInterpreterState = INTERPRETER_IDLE ;
 	
-#ifdef WIN32
-//	generateFakeData();
-#else
-	
-#ifndef USE_FORSIGHT_REGISTERS_MANAGER
-	initRegShmi();
-#endif
-//	initShmi(1024);
-#endif
 	forgesight_load_programs_path();
 	forgesight_load_wait_time_out_config();
 	g_launch_code_mgr_ptr = new LaunchCodeMgr(g_files_manager_data_path);
 	g_home_pose_mgr_ptr   = new HomePoseMgr(g_files_manager_data_path);
+#ifdef WIN32
+	import_external_resource("config\\user_defined_variable.xml", g_vecKeyVariables);
+#else
+	import_external_resource(
+		"/root/install/share/configuration/machine/user_defined_variable.xml", 
+		g_vecKeyVariables);
+#endif
+}
+
+/************************************************* 
+	Function:		forgesight_get_programs_path
+	Description:	get programs path
+	Input:			NULL
+	Return: 		programs path
+*************************************************/ 
+bool forgesight_find_external_resource(char *vname, key_variable& keyVar)
+{
+	// Otherwise, try global vars.
+	for(unsigned i=0; i < g_vecKeyVariables.size(); i++)
+	{
+		if(!strcmp(g_vecKeyVariables[i].key_name, vname)) {
+			keyVar = g_vecKeyVariables[i] ;
+			return true;
+		}
+	}
+	return false;
 }
 
 void updateHomePoseMgr()
@@ -1119,6 +1181,7 @@ void uninitInterpreter()
 {
 	delete g_launch_code_mgr_ptr;
 	delete g_home_pose_mgr_ptr;
+	xmlCleanupParser();
 }
 
 /************************************************* 

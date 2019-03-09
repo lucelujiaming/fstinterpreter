@@ -9,7 +9,9 @@
             <assignment>
                 <lvalue type="num">
 					<element type="pose_register">
-						<element type="num">1</element>
+						<element type="motion_register">
+						  <element type="num">1</element>
+						</element>
 					    <element type="pose_element">1</element>
 					</element>
                 </lvalue>
@@ -25,7 +27,9 @@
             <assignment>
                 <lvalue type="num">
 					<element type="pose_register">
-						<element type="num">1</element>
+						<element type="motion_register">
+						  <element type="num">1</element>
+						</element>
 					    <element type="pose_element">2</element>
 					</element>
                 </lvalue>
@@ -41,7 +45,9 @@
             <assignment>
                 <lvalue type="num">
 					<element type="pose_register">
+						<element type="motion_register">
 						  <element type="num">1</element>
+						</element>
 					  <element type="pose_element">3</element>
 					</element>
                 </lvalue>
@@ -57,7 +63,9 @@
             <assignment>
                 <lvalue type="num">
 					<element type="pose_register">
+						<element type="motion_register">
 						  <element type="num">1</element>
+						</element>
 					  <element type="pose_element">4</element>
 					</element>
                 </lvalue>
@@ -73,7 +81,9 @@
             <assignment>
                 <lvalue type="num">
 					<element type="pose_register">
+						<element type="motion_register">
 						  <element type="num">1</element>
+						</element>
 					  <element type="pose_element">5</element>
 					</element>
                 </lvalue>
@@ -89,7 +99,9 @@
             <assignment>
                 <lvalue type="num">
 					<element type="pose_register">
+						<element type="motion_register">
 						  <element type="num">1</element>
+						</element>
 					  <element type="pose_element">6</element>
 					</element>
                 </lvalue>
@@ -105,7 +117,9 @@
             <assignment>
                 <lvalue type="num">
 					<element type="pose_register">
+						<element type="motion_register">
 						  <element type="num">1</element>
+						</element>
 					  <element type="pose_element">7</element>
 					</element>
                 </lvalue>
@@ -121,7 +135,9 @@
             <assignment>
                 <lvalue type="num">
 					<element type="pose_register">
+						<element type="motion_register">
 						  <element type="num">1</element>
+						</element>
 					  <element type="pose_element">8</element>
 					</element>
                 </lvalue>
@@ -137,7 +153,9 @@
             <assignment>
                 <lvalue type="num">
 					<element type="pose_register">
+						<element type="motion_register">
 						  <element type="num">1</element>
+						</element>
 					  <element type="pose_element">9</element>
 					</element>
                 </lvalue>

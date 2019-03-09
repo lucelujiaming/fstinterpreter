@@ -21,24 +21,6 @@ typedef struct
 	int layer;
 }pl_t;
 
-
-typedef struct
-{
-    int id;
-    std::string name;
-    std::string comment;
-    int value;
-}MiData;
-
-typedef struct
-{
-    int id;
-    std::string name;
-    std::string comment;
-    int value;
-}MhData;
-
-
 typedef enum _EvalValueType
 {
 	TYPE_NONE   = 0x00,
@@ -55,8 +37,6 @@ typedef enum _EvalValueType
 	TYPE_MR     = 0x200,
 	TYPE_HR     = 0x400,
 	
-	TYPE_MI 	= 0x800,
-	TYPE_MH 	= 0x1000,
 }EvalValueType;
 
 typedef struct _AdditionalE {
@@ -71,13 +51,6 @@ class eval_value {
 public:
 	eval_value() 
 	{
-//			memset((void *)&poseFake, 0x00, sizeof(poseFake));
-//			memset((void *)&jointFake, 0x00, sizeof(jointFake));
-//			memset((void *)&prRegDataFake, 0x00, sizeof(prRegDataFake));
-//	//		memset((void *)&srRegDataFake, 0x00, sizeof(srRegDataFake));
-//			memset((void *)&rRegDataFake,  0x00, sizeof(rRegDataFake));
-//	//		memset((void *)&mrRegDataFake, 0x00, sizeof(mrRegDataFake));
-			
 		resetNoneValue() ;
 	}
 	int getType(){
@@ -442,43 +415,6 @@ public:
 		}
 	}
 	
-	// TYPE_MI
-	void setMIDataValue(MiData * rRegDataVal){
-		evalType |= TYPE_MI ;
-		reg_mi     = * rRegDataVal ;
-		evalType |= TYPE_FLOAT ;
-		fValue    = rRegDataVal->value ;
-	}
-	
-	MiData getMIDataValue(){
-		int iType = evalType & TYPE_MI ;
-		if(iType != 0) {
-			return reg_mi ;
-		}
-		else {
-			noticeErrorType(TYPE_MI) ;
-			return miDataFake;
-		}
-	}
-	
-	// TYPE_MH
-	void setMHDataValue(MhData * rRegDataVal){
-		evalType |= TYPE_MH ;
-		reg_mh     = * rRegDataVal ;
-		evalType |= TYPE_FLOAT ;
-		fValue    = rRegDataVal->value ;
-	}
-	
-	MhData getMHDataValue(){
-		int iType = evalType & TYPE_MH ;
-		if(iType != 0) {
-			return reg_mh ;
-		}
-		else {
-			noticeErrorType(TYPE_MH) ;
-			return mhDataFake;
-		}
-	}
 public:
 	void calcAdd(eval_value * operand)
 	{
@@ -621,16 +557,6 @@ public:
 				reg_r.value = reg_r.value + operand->getMrRegDataValue().value;
 				fValue = fValue + operand->getMrRegDataValue().value;
 		    }
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-		    {
-				reg_r.value = reg_r.value + operand->getMIDataValue().value;
-				fValue = fValue + operand->getMIDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-		    {
-				reg_r.value = reg_r.value + operand->getMHDataValue().value;
-				fValue = fValue + operand->getMHDataValue().value;
-		    }
 			else {
 				noticeErrorType(operand->getType()) ;
 			}
@@ -649,16 +575,6 @@ public:
 		    {
 				reg_mr.value = reg_mr.value + operand->getMrRegDataValue().value;
 				fValue = fValue + operand->getMrRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-		    {
-				reg_mr.value = reg_mr.value + operand->getMIDataValue().value;
-				fValue = fValue + operand->getMIDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-		    {
-				reg_mr.value = reg_mr.value + operand->getMHDataValue().value;
-				fValue = fValue + operand->getMHDataValue().value;
 		    }
 			else {
 				noticeErrorType(operand->getType()) ;
@@ -716,83 +632,6 @@ public:
 		    	sprintf(strTmp, "%d", (int)operand->getFloatValue());
 				reg_sr.value += strTmp;
 				strContent   += strTmp;
-		    }
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-		    {
-		    	char strTmp[256];
-				memset(strTmp, 0x00, 256);
-		    	sprintf(strTmp, "%d", (int)operand->getFloatValue());
-				reg_sr.value += strTmp;
-				strContent   += strTmp;
-		    }
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-		    {
-		    	char strTmp[256];
-				memset(strTmp, 0x00, 256);
-		    	sprintf(strTmp, "%d", (int)operand->getFloatValue());
-				reg_sr.value += strTmp;
-				strContent   += strTmp;
-		    }
-			else {
-				noticeErrorType(operand->getType()) ;
-			}
-		}else if(evalType == (int)(TYPE_MI | TYPE_FLOAT)){
-		    if(operand->getType() == TYPE_FLOAT)
-		    {
-				reg_mi.value = reg_mi.value + operand->getFloatValue();
-				fValue = fValue + operand->getFloatValue();
-		    }
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-		    {
-				reg_mi.value = reg_mi.value + operand->getRRegDataValue().value;
-				fValue = fValue + operand->getRRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-		    {
-				reg_mi.value = reg_mi.value + operand->getMrRegDataValue().value;
-				fValue = fValue + operand->getMrRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-		    {
-				reg_mi.value = reg_mi.value + operand->getMIDataValue().value;
-				fValue = fValue + operand->getMIDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-		    {
-				reg_mi.value = reg_mi.value + operand->getMHDataValue().value;
-				fValue = fValue + operand->getMHDataValue().value;
-		    }
-			else {
-				noticeErrorType(operand->getType()) ;
-			}
-		}else if(evalType == (int)(TYPE_MH | TYPE_FLOAT)){
-		    if(operand->getType() == TYPE_FLOAT)
-		    {
-				reg_mh.value = reg_mh.value + operand->getFloatValue();
-				fValue = fValue + operand->getFloatValue();
-				
-			//	printf("RRegData: id = %d, comment = %s\n", reg_r.id, reg_r.comment.c_str());
-	        //	printf("reg_r.value = %f and operand = %f\n", reg_r.value, operand->getFloatValue());
-		    }
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-		    {
-				reg_mh.value = reg_mh.value + operand->getRRegDataValue().value;
-				fValue = fValue + operand->getRRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-		    {
-				reg_mh.value = reg_mh.value + operand->getMrRegDataValue().value;
-				fValue = fValue + operand->getMrRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-		    {
-				reg_mh.value = reg_mh.value + operand->getMIDataValue().value;
-				fValue = fValue + operand->getMIDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-		    {
-				reg_mh.value = reg_mh.value + operand->getMHDataValue().value;
-				fValue = fValue + operand->getMHDataValue().value;
 		    }
 			else {
 				noticeErrorType(operand->getType()) ;
@@ -943,16 +782,6 @@ public:
 				reg_r.value = reg_r.value - operand->getMrRegDataValue().value;
 				fValue = fValue - operand->getMrRegDataValue().value;
 		    }
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-		    {
-				reg_r.value = reg_r.value - operand->getMIDataValue().value;
-				fValue = fValue - operand->getMIDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-		    {
-				reg_r.value = reg_r.value - operand->getMHDataValue().value;
-				fValue = fValue - operand->getMHDataValue().value;
-		    }
 			else {
 				noticeErrorType(operand->getType()) ;
 				return ;
@@ -972,16 +801,6 @@ public:
 		    {
 				reg_mr.value = reg_mr.value - operand->getMrRegDataValue().value;
 				fValue = fValue - operand->getMrRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-		    {
-				reg_mr.value = reg_mr.value - operand->getMIDataValue().value;
-				fValue = fValue - operand->getMIDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-		    {
-				reg_mr.value = reg_mr.value - operand->getMHDataValue().value;
-				fValue = fValue - operand->getMHDataValue().value;
 		    }
 			else {
 				noticeErrorType(operand->getType()) ;
@@ -1011,66 +830,6 @@ public:
 					strContent = strContent.substr(0, strContent.length() - testKey.length());
 				}
 				reg_sr.value = strContent;
-		    }
-			else {
-				noticeErrorType(operand->getType()) ;
-				return ;
-			}
-		}else if(evalType == (int)(TYPE_MI | TYPE_FLOAT)){
-		    if(operand->getType() == TYPE_FLOAT)
-		    {
-				reg_mi.value = reg_mi.value - (int)operand->getFloatValue();
-				fValue = fValue - operand->getFloatValue();
-		    }
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-		    {
-				reg_mi.value = reg_mi.value - operand->getRRegDataValue().value;
-				fValue = fValue - operand->getRRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-		    {
-				reg_mi.value = reg_mi.value - operand->getMrRegDataValue().value;
-				fValue = fValue - operand->getMrRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-		    {
-				reg_mi.value = reg_mi.value - operand->getMIDataValue().value;
-				fValue = fValue - operand->getMIDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-		    {
-				reg_mi.value = reg_mi.value - operand->getMHDataValue().value;
-				fValue = fValue - operand->getMHDataValue().value;
-		    }
-			else {
-				noticeErrorType(operand->getType()) ;
-				return ;
-			}
-		}else if(evalType == (int)(TYPE_MH | TYPE_FLOAT)){
-		    if(operand->getType() == TYPE_FLOAT)
-		    {
-				reg_mh.value = reg_mh.value - (int)operand->getFloatValue();
-				fValue = fValue - operand->getFloatValue();
-		    }
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-		    {
-				reg_mh.value = reg_mh.value - operand->getRRegDataValue().value;
-				fValue = fValue - operand->getRRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-		    {
-				reg_mh.value = reg_mh.value - operand->getMrRegDataValue().value;
-				fValue = fValue - operand->getMrRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-		    {
-				reg_mh.value = reg_mh.value - operand->getMIDataValue().value;
-				fValue = fValue - operand->getMIDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-		    {
-				reg_mh.value = reg_mh.value - operand->getMHDataValue().value;
-				fValue = fValue - operand->getMHDataValue().value;
 		    }
 			else {
 				noticeErrorType(operand->getType()) ;
@@ -1107,16 +866,6 @@ public:
 				reg_r.value = reg_r.value * operand->getMrRegDataValue().value;
 				fValue = fValue * operand->getMrRegDataValue().value;
 		    }
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-		    {
-				reg_r.value = reg_r.value * operand->getMIDataValue().value;
-				fValue = fValue * operand->getMIDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-		    {
-				reg_r.value = reg_r.value * operand->getMHDataValue().value;
-				fValue = fValue * operand->getMHDataValue().value;
-		    }
 			else {
 				noticeErrorType(operand->getType()) ;
 				return ;
@@ -1137,16 +886,6 @@ public:
 				reg_mr.value = reg_mr.value * operand->getMrRegDataValue().value;
 				fValue = fValue * operand->getMrRegDataValue().value;
 		    }
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-		    {
-				reg_mr.value = reg_mr.value * operand->getMIDataValue().value;
-				fValue = fValue * operand->getMIDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-		    {
-				reg_mr.value = reg_mr.value * operand->getMHDataValue().value;
-				fValue = fValue * operand->getMHDataValue().value;
-		    }
 			else {
 				noticeErrorType(operand->getType()) ;
 				return ;
@@ -1163,66 +902,6 @@ public:
 					strContent += strOpt;	
 				}
 				reg_sr.value = strContent;
-			}
-		}else if(evalType == (int)(TYPE_MI | TYPE_FLOAT)){
-		    if(operand->getType() == TYPE_FLOAT)
-		    {
-				reg_mi.value = reg_mi.value * operand->getFloatValue();
-				fValue = fValue * operand->getFloatValue();
-		    }
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-		    {
-				reg_mi.value = reg_mi.value * operand->getRRegDataValue().value;
-				fValue = fValue * operand->getRRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-		    {
-				reg_mi.value = reg_mi.value * operand->getMrRegDataValue().value;
-				fValue = fValue * operand->getMrRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-		    {
-				reg_mi.value = reg_mi.value * operand->getMIDataValue().value;
-				fValue = fValue * operand->getMIDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-		    {
-				reg_mi.value = reg_mi.value * operand->getMHDataValue().value;
-				fValue = fValue * operand->getMHDataValue().value;
-		    }
-			else {
-				noticeErrorType(operand->getType()) ;
-				return ;
-			}
-		}else if(evalType == (int)(TYPE_MH | TYPE_FLOAT)){
-		    if(operand->getType() == TYPE_FLOAT)
-		    {
-				reg_mh.value = reg_mh.value * operand->getFloatValue();
-				fValue = fValue * operand->getFloatValue();
-		    }
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-		    {
-				reg_mh.value = reg_mh.value * operand->getRRegDataValue().value;
-				fValue = fValue * operand->getRRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-		    {
-				reg_mh.value = reg_mh.value * operand->getMrRegDataValue().value;
-				fValue = fValue * operand->getMrRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-		    {
-				reg_mh.value = reg_mh.value * operand->getMIDataValue().value;
-				fValue = fValue * operand->getMIDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-		    {
-				reg_mh.value = reg_mh.value * operand->getMHDataValue().value;
-				fValue = fValue * operand->getMHDataValue().value;
-		    }
-			else {
-				noticeErrorType(operand->getType()) ;
-				return ;
 			}
 		}
 		else {
@@ -1258,16 +937,6 @@ public:
 				reg_r.value = reg_r.value / operand->getMrRegDataValue().value;
 				fValue = fValue / operand->getMrRegDataValue().value;
 		    }
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-		    {
-				reg_r.value = reg_r.value / operand->getMIDataValue().value;
-				fValue = fValue / operand->getMIDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-		    {
-				reg_r.value = reg_r.value / operand->getMHDataValue().value;
-				fValue = fValue / operand->getMHDataValue().value;
-		    }
 			else {
 				noticeErrorType(operand->getType()) ;
 				return ;
@@ -1287,79 +956,6 @@ public:
 		    {
 				reg_mr.value = reg_mr.value / operand->getMrRegDataValue().value;
 				fValue = fValue / operand->getMrRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-		    {
-				reg_mr.value = reg_mr.value / operand->getMIDataValue().value;
-				fValue = fValue / operand->getMIDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-		    {
-				reg_mr.value = reg_mr.value / operand->getMHDataValue().value;
-				fValue = fValue / operand->getMHDataValue().value;
-		    }
-			else {
-				noticeErrorType(operand->getType()) ;
-				return ;
-			}
-		}else if(evalType == (int)(TYPE_MI | TYPE_FLOAT)){
-		    if(operand->getType() == TYPE_FLOAT)
-		    {
-				reg_mi.value = reg_mi.value / operand->getFloatValue();
-				fValue = fValue / operand->getFloatValue();
-		    }
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-		    {
-				reg_mi.value = reg_mi.value / operand->getRRegDataValue().value;
-				fValue = fValue / operand->getRRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-		    {
-				reg_mi.value = reg_mi.value / operand->getMrRegDataValue().value;
-				fValue = fValue / operand->getMrRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-		    {
-				reg_mi.value = reg_mi.value / operand->getMIDataValue().value;
-				fValue = fValue / operand->getMIDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-		    {
-				reg_mi.value = reg_mi.value / operand->getMHDataValue().value;
-				fValue = fValue / operand->getMHDataValue().value;
-		    }
-			else {
-				noticeErrorType(operand->getType()) ;
-				return ;
-			}
-		}else if(evalType == (int)(TYPE_MH | TYPE_FLOAT)){
-		    if(operand->getType() == TYPE_FLOAT)
-		    {
-				reg_mh.value = reg_mh.value / operand->getFloatValue();
-				fValue = fValue / operand->getFloatValue();
-				
-			//	printf("RRegData: id = %d, comment = %s\n", reg_r.id, reg_r.comment.c_str());
-	        //	printf("reg_r.value = %f and operand = %f\n", reg_r.value, operand->getFloatValue());
-		    }
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-		    {
-				reg_mh.value = reg_mh.value / operand->getRRegDataValue().value;
-				fValue = fValue / operand->getRRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-		    {
-				reg_mh.value = reg_mh.value / operand->getMrRegDataValue().value;
-				fValue = fValue / operand->getMrRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-		    {
-				reg_mh.value = reg_mh.value / operand->getMIDataValue().value;
-				fValue = fValue / operand->getMIDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-		    {
-				reg_mh.value = reg_mh.value / operand->getMHDataValue().value;
-				fValue = fValue / operand->getMHDataValue().value;
 		    }
 			else {
 				noticeErrorType(operand->getType()) ;
@@ -1403,18 +999,6 @@ public:
 				fValue = fValue / operand->getMrRegDataValue().value;
 				fValue = (int)fValue ;
 			}
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-			{
-				reg_r.value = reg_r.value / operand->getMIDataValue().value;
-				fValue = fValue / operand->getMIDataValue().value;
-				fValue = (int)fValue ;
-			}
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-			{
-				reg_r.value = reg_r.value / operand->getMHDataValue().value;
-				fValue = fValue / operand->getMHDataValue().value;
-				fValue = (int)fValue ;
-			}
 			else {
 				noticeErrorType(operand->getType()) ;
 				return ;
@@ -1439,88 +1023,6 @@ public:
 			{
 				reg_mr.value = reg_mr.value / operand->getMrRegDataValue().value;
 				fValue = fValue / operand->getMrRegDataValue().value;
-				fValue = (int)fValue ;
-			}
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-			{
-				reg_mr.value = reg_mr.value / operand->getMIDataValue().value;
-				fValue = fValue / operand->getMIDataValue().value;
-				fValue = (int)fValue ;
-			}
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-			{
-				reg_mr.value = reg_mr.value / operand->getMHDataValue().value;
-				fValue = fValue / operand->getMHDataValue().value;
-				fValue = (int)fValue ;
-			}
-			else {
-				noticeErrorType(operand->getType()) ;
-				return ;
-			}
-		}else if(evalType == (int)(TYPE_MI | TYPE_FLOAT)){
-			if(operand->getType() == TYPE_FLOAT)
-			{
-				reg_mi.value = reg_mi.value / operand->getFloatValue();
-				fValue = fValue / operand->getFloatValue();
-				fValue = (int)fValue ;
-			}
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-			{
-				reg_mi.value = reg_mi.value / operand->getRRegDataValue().value;
-				fValue = fValue / operand->getRRegDataValue().value;
-				fValue = (int)fValue ;
-			}
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-			{
-				reg_mi.value = reg_mi.value / operand->getMrRegDataValue().value;
-				fValue = fValue / operand->getMrRegDataValue().value;
-				fValue = (int)fValue ;
-			}
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-			{
-				reg_mi.value = reg_mi.value / operand->getMIDataValue().value;
-				fValue = fValue / operand->getMIDataValue().value;
-				fValue = (int)fValue ;
-			}
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-			{
-				reg_mi.value = reg_mi.value / operand->getMHDataValue().value;
-				fValue = fValue / operand->getMHDataValue().value;
-				fValue = (int)fValue ;
-			}
-			else {
-				noticeErrorType(operand->getType()) ;
-				return ;
-			}
-		}else if(evalType == (int)(TYPE_MH | TYPE_FLOAT)){
-			if(operand->getType() == TYPE_FLOAT)
-			{
-				reg_mh.value = reg_mh.value / operand->getFloatValue();
-				fValue = fValue / operand->getFloatValue();
-				fValue = (int)fValue ;
-			}
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-			{
-				reg_mh.value = reg_mh.value / operand->getRRegDataValue().value;
-				fValue = fValue / operand->getRRegDataValue().value;
-				fValue = (int)fValue ;
-			}
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-			{
-				reg_mh.value = reg_mh.value / operand->getMrRegDataValue().value;
-				fValue = fValue / operand->getMrRegDataValue().value;
-				fValue = (int)fValue ;
-			}
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-			{
-				reg_mh.value = reg_mh.value / operand->getMIDataValue().value;
-				fValue = fValue / operand->getMIDataValue().value;
-				fValue = (int)fValue ;
-			}
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-			{
-				reg_mh.value = reg_mh.value / operand->getMHDataValue().value;
-				fValue = fValue / operand->getMHDataValue().value;
 				fValue = (int)fValue ;
 			}
 			else {
@@ -1558,16 +1060,6 @@ public:
 				reg_r.value  = fmodf(reg_r.value, operand->getMrRegDataValue().value);
 				fValue  = reg_r.value;
 		    }
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-		    {
-				reg_r.value  = fmodf(reg_r.value, operand->getMIDataValue().value);
-				fValue  = reg_r.value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-		    {
-				reg_r.value  = fmodf(reg_r.value, operand->getMHDataValue().value);
-				fValue  = reg_r.value;
-		    }
 			else {
 				noticeErrorType(operand->getType()) ;
 				return ;
@@ -1587,76 +1079,6 @@ public:
 		    {
 				reg_mr.value  = fmodf(reg_mr.value, operand->getMrRegDataValue().value);
 				fValue  = reg_mr.value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-		    {
-				reg_mr.value  = fmodf(reg_mr.value, operand->getMIDataValue().value);
-				fValue  = reg_mr.value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-		    {
-				reg_mr.value  = fmodf(reg_mr.value, operand->getMHDataValue().value);
-				fValue  = reg_mr.value;
-		    }
-			else {
-				noticeErrorType(operand->getType()) ;
-				return ;
-			}
-		}else if(evalType == (int)(TYPE_MI | TYPE_FLOAT)){
-		    if(operand->getType() == TYPE_FLOAT)
-		    {
-				reg_mi.value  = fmodf(reg_mi.value, operand->getFloatValue());
-				fValue  = reg_mi.value;
-		    }
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-		    {
-				reg_mi.value  = fmodf(reg_mi.value, operand->getRRegDataValue().value);
-				fValue  = reg_mi.value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-		    {
-				reg_mi.value  = fmodf(reg_mi.value, operand->getMrRegDataValue().value);
-				fValue  = reg_mi.value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-		    {
-				reg_mi.value  = fmodf(reg_mi.value, operand->getMIDataValue().value);
-				fValue  = reg_mi.value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-		    {
-				reg_mi.value  = fmodf(reg_mi.value, operand->getMHDataValue().value);
-				fValue  = reg_mi.value;
-		    }
-			else {
-				noticeErrorType(operand->getType()) ;
-				return ;
-			}
-		}else if(evalType == (int)(TYPE_MR | TYPE_FLOAT)){
-		    if(operand->getType() == TYPE_FLOAT)
-		    {
-				reg_mh.value  = fmodf(reg_mh.value, operand->getFloatValue());
-				fValue  = reg_mh.value;
-		    }
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-		    {
-				reg_mh.value  = fmodf(reg_mh.value, operand->getRRegDataValue().value);
-				fValue  = reg_mh.value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-		    {
-				reg_mh.value  = fmodf(reg_mh.value, operand->getMrRegDataValue().value);
-				fValue  = reg_mh.value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MI | TYPE_FLOAT))
-		    {
-				reg_mh.value  = fmodf(reg_mh.value, operand->getMIDataValue().value);
-				fValue  = reg_mh.value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MH | TYPE_FLOAT))
-		    {
-				reg_mh.value  = fmodf(reg_mh.value, operand->getMHDataValue().value);
-				fValue  = reg_mh.value;
 		    }
 			else {
 				noticeErrorType(operand->getType()) ;
@@ -1703,22 +1125,6 @@ public:
 					reg_mr.value = (reg_mr.value) * ex;
 			}
 			fValue  = reg_mr.value;
-		}else if(evalType == (int)(TYPE_MI | TYPE_FLOAT)){
-			if(ex == 0)
-				reg_mi.value = 1 ;
-			else {
-				for(t=ex-1; t>0; --t) 
-					reg_mi.value = (reg_mi.value) * ex;
-			}
-			fValue  = reg_mi.value;
-		}else if(evalType == (int)(TYPE_MH | TYPE_FLOAT)){
-			if(ex == 0)
-				reg_mh.value = 1 ;
-			else {
-				for(t=ex-1; t>0; --t) 
-					reg_mh.value = (reg_mh.value) * ex;
-			}
-			fValue  = reg_mh.value;
 		}
 		else {
 			noticeErrorType(operand->getType()) ;
@@ -1738,12 +1144,6 @@ public:
 		}else if(evalType == (int)(TYPE_MR | TYPE_FLOAT)){
 			reg_mr.value = -(reg_mr.value);
 			fValue  = reg_mr.value;
-		}else if(evalType == (int)(TYPE_MI | TYPE_FLOAT)){
-			reg_mi.value = -(reg_mi.value);
-			fValue  = reg_mi.value;
-		}else if(evalType == (int)(TYPE_MH | TYPE_FLOAT)){
-			reg_mh.value = -(reg_mh.value);
-			fValue  = reg_mh.value;
 		}
 		else {
 			noticeErrorType(TYPE_FLOAT | TYPE_INT) ;
@@ -1813,12 +1213,6 @@ private:
 		
         HrRegData reg_hr ;
 		HrRegData     hrRegDataFake;
-		
-        MiData    reg_mi ;
-		MiData        miDataFake;
-		
-        MhData    reg_mh ;
-		MhData        mhDataFake;
 #endif
 	// };
 };

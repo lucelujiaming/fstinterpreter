@@ -8,8 +8,10 @@
 #define IO_NAMES   "ai;ao;di;do;ri;ro;si;so;ui;uo"
 int forgesight_load_io_config();
 
-eval_value forgesight_get_io_status(char *name);
-int forgesight_set_io_status(char *name, eval_value& valueStart);
+eval_value forgesight_get_io_status(
+			struct thread_control_block* objThreadCntrolBlock, char *name);
+int forgesight_set_io_status(
+			struct thread_control_block* objThreadCntrolBlock, char *name, eval_value& valueStart);
 int forgesight_reset_uio_config_values();
 
 int forgesight_read_io_emulate_status(char * name, int& value);

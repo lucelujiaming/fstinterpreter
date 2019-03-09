@@ -65,10 +65,9 @@ static int get_num_token(char * src, char * dst)
 	Input:			NULL
 	Return: 		1 - success
 *************************************************/
-void load_register_data()
+bool load_register_data()
 {
 #ifndef WIN32
-
 	g_process_comm_ptr = fst_base::ProcessComm::getInstance();
     if(fst_base::ProcessComm::getInitErrorCode() != SUCCESS)
     {
@@ -97,9 +96,8 @@ void load_register_data()
 	usleep(10);
 	memset(&g_interpreter_publish, 0x00, sizeof(InterpreterPublish));
 	g_objInterpreterServer->addPublishTask(300, &g_interpreter_publish);
-
 #endif
-
+	return true ;
 }
 
 /************************************************* 
@@ -1803,26 +1801,32 @@ bool reg_manager_interface_setCommentHr(char *ptr, uint16_t num)
 	Ouput:			ptr        -  MI Data
 	Return: 		1 - success
 *************************************************/
-bool reg_manager_interface_getMI(MiData *ptr, uint16_t num)
+bool reg_manager_interface_getMI(int *ptr, uint16_t num)
 {
 	bool bRet = false ;
-	ptr->id    = num ;
 #ifndef WIN32
 	if(g_objRegManagerInterface)
 	{
 		fst_base::MiDataIpc objMiDataIpc ;
-		ptr->value = 0.0;
 		bRet = g_objRegManagerInterface->getMi(num, &objMiDataIpc);
 		FST_INFO("getMI: value = (%d) at %d with %s", 
 			objMiDataIpc.value, num, bRet?"TRUE":"FALSE");
-		ptr->value = objMiDataIpc.value;
+		if(bRet)
+		{
+		   *ptr = objMiDataIpc.value;
+		}
+		else 
+		{
+			bRet = true ;
+		   *ptr = 0.0;
+		}
 	}
 	else
 	{
 		FST_ERROR("g_objRegManagerInterface is NULL");
 	}
 #else
-	ptr->value = 1 ;
+	*ptr = 1 ;
 	bRet = true ;
 #endif
 	return bRet ;
@@ -1835,7 +1839,7 @@ bool reg_manager_interface_getMI(MiData *ptr, uint16_t num)
 	Input:			ptr        -  MI register Data
 	Return: 		1 - success
 *************************************************/
-bool reg_manager_interface_setMI(MiData *ptr, uint16_t num)
+bool reg_manager_interface_setMI(int *ptr, uint16_t num)
 {
 	bool bRet = false ;
 #ifndef WIN32
@@ -1843,7 +1847,7 @@ bool reg_manager_interface_setMI(MiData *ptr, uint16_t num)
 	{
 		fst_base::MiDataIpc objMiDataIpc ;
 		objMiDataIpc.id    = num;
-		objMiDataIpc.value = ptr->value;
+		objMiDataIpc.value = *ptr;
 		bRet = g_objRegManagerInterface->setMi(&objMiDataIpc);
 		FST_INFO("setR:(%f) at %d with %s", objMiDataIpc.value, num, bRet?"TRUE":"FALSE");
 #ifdef USE_LOCAL_REG_MANAGER_INTERFACE
@@ -1852,32 +1856,10 @@ bool reg_manager_interface_setMI(MiData *ptr, uint16_t num)
 			bRet = g_objRegManagerInterface->addMi(objMiDataIpc);
 		}
 #endif
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_delMI
-	Description:	delete MI.
-	Input:			num        -  Index of MI
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_delMI(uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		bRet = g_objRegManagerInterface->deleteMi(num);
-#endif
+		if(!bRet)
+		{
+			bRet = true ;
+		}
 	}
 	else
 	{
@@ -1907,6 +1889,11 @@ bool reg_manager_interface_getValueMI(int *ptr, uint16_t num)
 		if(bRet)
 		{
 		   *ptr = objMiDataIpc.value;
+		}
+		else 
+		{
+			bRet = true ;
+		   *ptr = 0.0;
 		}
 	}
 	else
@@ -1938,35 +1925,9 @@ bool reg_manager_interface_setValueMI(int *ptr, uint16_t num)
 		bRet = g_objRegManagerInterface->setMi(&objMiDataIpc);
 		FST_INFO("setValueMI:(%f) at %d with %s", 
 			objMiDataIpc.value, num, bRet?"TRUE":"FALSE");
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_getIdMI
-	Description:	get Id info of MI.
-	Input:			num        -  Index of MI
-	Ouput:			ptr        -  Id info of MI
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_getIdMI(int *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		fst_base::MiDataIpc objMiDataIpc ;
-		bRet = g_objRegManagerInterface->getMi(num, &objMiDataIpc);
-		if(bRet)
+		if(!bRet)
 		{
-		   *ptr = objMiDataIpc.id;
+			bRet = true ;
 		}
 	}
 	else
@@ -1978,99 +1939,6 @@ bool reg_manager_interface_getIdMI(int *ptr, uint16_t num)
 #endif
 	return bRet ;
 }
-
-/************************************************* 
-	Function:		reg_manager_interface_setIdMI
-	Description:	set Id info of MI.
-	Input:			num        -  Index of MI
-	Input:			ptr        -  Id info of MI
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_setIdMI(int *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		fst_base::MiDataIpc objMiDataIpc ;
-	    objMiDataIpc.id = *ptr;
-		bRet = g_objRegManagerInterface->setMi(&objMiDataIpc);
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_getCommentMI
-	Description:	get Comment info of MI.
-	Input:			num        -  Index of MI
-	Ouput:			ptr        -  Comment info of MI
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_getCommentMI(char *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		fst_base::MiDataIpc objMiDataIpc ;
-		bRet = g_objRegManagerInterface->getMi(num, &objMiDataIpc);
-		if(bRet)
-		{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		   memcpy(ptr, objMiDataIpc.comment.c_str(), objMiDataIpc.comment.length());
-#endif
-		}
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_setCommentMI
-	Description:	set Comment info of MI.
-	Input:			num        -  Index of MI
-	Input:			ptr        -  Comment info of MI
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_setCommentMI(char *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		fst_base::MiDataIpc objMiDataIpc ;
-		bRet = g_objRegManagerInterface->getMi(num, &objMiDataIpc);
-		if(bRet)
-		{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		    objMiDataIpc.comment = string(ptr);
-			reg_manager_interface_setMI(&objMiDataIpc, num);
-#endif
-		}
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
 
 /**********************
  ********* MH **********
@@ -2083,27 +1951,33 @@ bool reg_manager_interface_setCommentMI(char *ptr, uint16_t num)
 	Ouput:			ptr        -  MH Data
 	Return: 		1 - success
 *************************************************/
-bool reg_manager_interface_getMH(MhData *ptr, uint16_t num)
+bool reg_manager_interface_getMH(int *ptr, uint16_t num)
 {
 	bool bRet = false ;
-	ptr->id    = num ;
 #ifndef WIN32
 	if(g_objRegManagerInterface)
 	{
 		fst_base::MhDataIpc objMhDataIpc ;
-		ptr->value = 0.0;
 	    FST_INFO("getMh at TXT_MH = %d", num);
 		bRet = g_objRegManagerInterface->getMh(num, &objMhDataIpc);
 		FST_INFO("getMH: value = (%d) at %d with %s", 
 			objMhDataIpc.value, num, bRet?"TRUE":"FALSE");
-		ptr->value = objMhDataIpc.value;
+		if(bRet)
+		{
+		   *ptr = objMhDataIpc.value;
+		}
+		else 
+		{
+			bRet = true ;
+		   *ptr = 0.0;
+		}
 	}
 	else
 	{
 		FST_ERROR("g_objRegManagerInterface is NULL");
 	}
 #else
-	ptr->value = 1 ;
+	*ptr = 1 ;
 	bRet = true ;
 #endif
 	return bRet ;
@@ -2116,7 +1990,7 @@ bool reg_manager_interface_getMH(MhData *ptr, uint16_t num)
 	Input:			ptr        -  MH register Data
 	Return: 		1 - success
 *************************************************/
-bool reg_manager_interface_setMH(MhData *ptr, uint16_t num)
+bool reg_manager_interface_setMH(int *ptr, uint16_t num)
 {
 	bool bRet = false ;
 #ifndef WIN32
@@ -2124,7 +1998,7 @@ bool reg_manager_interface_setMH(MhData *ptr, uint16_t num)
 	{
 		fst_base::MhDataIpc objMhDataIpc ;
 		objMhDataIpc.id    = num;
-		objMhDataIpc.value = ptr->value;
+		objMhDataIpc.value = *ptr;
 		bRet = g_objRegManagerInterface->setMh(&objMhDataIpc);
 		FST_INFO("setR:(%f) at %d with %s", objMhDataIpc.value, num, bRet?"TRUE":"FALSE");
 #ifdef USE_LOCAL_REG_MANAGER_INTERFACE
@@ -2133,32 +2007,10 @@ bool reg_manager_interface_setMH(MhData *ptr, uint16_t num)
 			bRet = g_objRegManagerInterface->addMh(objMhDataIpc);
 		}
 #endif
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_delMH
-	Description:	delete MH.
-	Input:			num        -  Index of MH
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_delMH(uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		bRet = g_objRegManagerInterface->deleteMh(num);
-#endif
+		if(!bRet)
+		{
+			bRet = true ;
+		}
 	}
 	else
 	{
@@ -2188,6 +2040,11 @@ bool reg_manager_interface_getValueMH(int *ptr, uint16_t num)
 		if(bRet)
 		{
 		   *ptr = objMhDataIpc.value;
+		}
+		else 
+		{
+			bRet = true ;
+		   *ptr = 0.0;
 		}
 	}
 	else
@@ -2219,35 +2076,9 @@ bool reg_manager_interface_setValueMH(int *ptr, uint16_t num)
 		bRet = g_objRegManagerInterface->setMh(&objMhDataIpc);
 		FST_INFO("setValueMH:(%f) at %d with %s", 
 			objMhDataIpc.value, num, bRet?"TRUE":"FALSE");
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_getIdMH
-	Description:	get Id info of MH.
-	Input:			num        -  Index of MH
-	Ouput:			ptr        -  Id info of MH
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_getIdMH(int *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		fst_base::MhDataIpc objMhDataIpc ;
-		bRet = g_objRegManagerInterface->getMh(num, &objMhDataIpc);
-		if(bRet)
+		if(!bRet)
 		{
-		   *ptr = objMhDataIpc.id;
+			bRet = true ;
 		}
 	}
 	else
@@ -2259,100 +2090,6 @@ bool reg_manager_interface_getIdMH(int *ptr, uint16_t num)
 #endif
 	return bRet ;
 }
-
-/************************************************* 
-	Function:		reg_manager_interface_setIdMH
-	Description:	set Id info of MH.
-	Input:			num        -  Index of MH
-	Input:			ptr        -  Id info of MH
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_setIdMH(int *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		fst_base::MhDataIpc objMhDataIpc ;
-	    objMhDataIpc.id = *ptr;
-		bRet = g_objRegManagerInterface->setMh(&objMhDataIpc);
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_getCommentMH
-	Description:	get Comment info of MH.
-	Input:			num        -  Index of MH
-	Ouput:			ptr        -  Comment info of MH
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_getCommentMH(char *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		fst_base::MhDataIpc objMhDataIpc ;
-		bRet = g_objRegManagerInterface->getMh(num, &objMhDataIpc);
-		if(bRet)
-		{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		   memcpy(ptr, objMhDataIpc.comment.c_str(), objMhDataIpc.comment.length());
-#endif
-		}
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_setCommentMH
-	Description:	set Comment info of MH.
-	Input:			num        -  Index of MH
-	Input:			ptr        -  Comment info of MH
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_setCommentMH(char *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		fst_base::MhDataIpc objMhDataIpc ;
-		bRet = g_objRegManagerInterface->getMh(num, &objMhDataIpc);
-		if(bRet)
-		{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		    objMhDataIpc.comment = string(ptr);
-			reg_manager_interface_setMH(&objMhDataIpc, num);
-#endif
-		}
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-
 
 /**********************
  ********* UF *********

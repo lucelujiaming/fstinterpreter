@@ -3113,7 +3113,9 @@ void serror(struct thread_control_block * objThreadCntrolBlock, int error)
   FST_INFO("-----------------ERR:%d----------------------", error);
   
   setWarning(errInfo[error].warn) ; 
-  objThreadCntrolBlock->prog_mode = ERROR_MODE;
+//  objThreadCntrolBlock->prog_mode = ERROR_MODE;
+//  g_interpreter_publish.progMode  = ERROR_MODE;
+  setProgMode(objThreadCntrolBlock,ERROR_MODE);
   
 //  longjmp(e_buf, 1); /* return to save point */
 #if 0
@@ -3865,15 +3867,16 @@ void assign_global_var(struct thread_control_block * objThreadCntrolBlock, char 
 *************************************************/ 
 void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname, eval_value value)
 {
+	key_variable keyVar ;
     int iLineNum = 0 ;
-	char reg_name[256] ;
+	char array_name[256] ;
 	char *temp = NULL ;
 	
-	memset(reg_name, 0x00, 256);
-	temp = reg_name ;
+	memset(array_name, 0x00, 256);
+	temp = array_name ;
 	get_char_token(vname, temp);
 	// deal "pr;sr;r;mr;uf;tf;pl" except p
-    if(strstr(REGSITER_NAMES, reg_name) && (strcmp(reg_name, "p") != 0))
+    if(strstr(REGSITER_NAMES, array_name) && (strcmp(array_name, "p") != 0))
     {
 		if(strchr(vname, '['))
 		{
@@ -3899,7 +3902,9 @@ void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname,
 			}
 		}
     }
-	else if(strstr(IO_NAMES, reg_name))
+	else if(strstr(IO_NAMES, array_name)
+		&&(strlen(array_name) == 2)
+		&&((array_name[1] == 'i') || (array_name[1] == 'o')))
     {
 		if(strchr(vname, '['))
 		{
@@ -3911,7 +3916,7 @@ void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname,
 			}
 		}
     }
-	else if(strcmp(FORSIGHT_TIMER, reg_name) == 0)
+	else if(strcmp(FORSIGHT_TIMER, array_name) == 0)
     {
 		if(strchr(vname, '['))
 		{
@@ -3924,6 +3929,22 @@ void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname,
 			return ;
 		}
     }
+
+	// External Type
+	if(forgesight_find_external_resource(array_name, keyVar))
+	{
+		if(strchr(vname, '['))
+		{
+			FST_INFO("assign_external_resource vname = %s and value = (%f).",
+				vname, value.getFloatValue());
+			int iRet = forgesight_registers_manager_set_resource(
+				objThreadCntrolBlock, vname, keyVar, &value);
+			if(iRet == 0)
+			{
+				return ;
+			}
+		}
+	}
 
 	if(strcmp(FORSIGHT_TF_NO, vname) == 0)
     {
@@ -3955,13 +3976,13 @@ void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname,
     }
 	
 	// P register was saved in the local_var_stack
-	if(strcmp(reg_name, "p") == 0) // lvalue is P register
+	if(strcmp(array_name, "p") == 0) // lvalue is P register
 	{
 	    // Otherwise, try global vars.
 	    for(unsigned i=0; i < objThreadCntrolBlock->local_var_stack.size(); i++)
 	    {
 	        if(!strcmp(objThreadCntrolBlock->local_var_stack[i].var_name, vname)) {
-				set_var_value(objThreadCntrolBlock, reg_name, 
+				set_var_value(objThreadCntrolBlock, array_name, 
 					objThreadCntrolBlock->local_var_stack[i].value, value);
 	            return;
 	        }
@@ -3986,10 +4007,11 @@ void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname,
 eval_value find_var(struct thread_control_block * objThreadCntrolBlock, 
 					char *vname, int raise_unkown_error)
 {
+	key_variable keyVar ;
 	MoveCommandDestination movCmdDst ;
 	eval_value value ;
 	int        boolPulseValue;
-	char reg_name[256] ;
+	char array_name[256] ;
 	char *temp = NULL ;
 
     vector<var_type>::reverse_iterator it ;
@@ -4054,11 +4076,12 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 		return value ;
 	}
 	
-	memset(reg_name, 0x00, 256);
-	temp = reg_name ;
+	memset(array_name, 0x00, 256);
+	temp = array_name ;
 	get_char_token(vname, temp);
+	// Inner Type
 	// deal "pr;sr;r;mr;uf;tf;pl" except p
-    if(strstr(REGSITER_NAMES, reg_name) && (strcmp(reg_name, "p") != 0))
+    if(strstr(REGSITER_NAMES, array_name) && (strcmp(array_name, "p") != 0))
     {
 		if(strchr(vname, '['))
 		{
@@ -4076,13 +4099,29 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 			}
 		}
     }
-	else if(strstr(IO_NAMES, reg_name))
+	else if(strstr(IO_NAMES, array_name)
+		&&(strlen(array_name) == 2)
+		&&((array_name[1] == 'i') || (array_name[1] == 'o')))
     {
 		if(strchr(vname, '['))
 		{
 			// int iValue = -1;
 			value = forgesight_get_io_status(objThreadCntrolBlock, vname);
 			return value;
+		}
+	}
+
+	// External Type
+	if(forgesight_find_external_resource(array_name, keyVar))
+	{
+		if(strchr(vname, '['))
+		{
+			int iRet = forgesight_registers_manager_get_resource(
+				objThreadCntrolBlock, vname, keyVar, &value);
+			if(iRet == 0)
+			{
+				return value ;
+			}
 		}
 	}
 	

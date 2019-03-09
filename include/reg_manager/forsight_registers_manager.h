@@ -12,7 +12,7 @@ using namespace fst_ctrl ;
 
 #endif
 
-#define REGSITER_NAMES   "pr;sr;r;mr;mi;mh;uf;tf;pl"
+#define REGSITER_NAMES   "pr;sr;r;mr;uf;tf;pl"
 
 int forgesight_registers_manager_get_register(
 							struct thread_control_block* objThreadCntrolBlock, 
@@ -33,5 +33,15 @@ int forgesight_registers_manager_get_joint(Joint &joint);
 int forgesight_registers_manager_get_cart(PoseEuler &pos);
 int forgesight_registers_manager_cartToJoint(PoseEuler pos, Joint &joint);
 int forgesight_registers_manager_jointToCart(Joint joint, PoseEuler &pos);
+
+
+int forgesight_registers_manager_get_resource(
+							struct thread_control_block* objThreadCntrolBlock, 
+							char *name, key_variable keyVar, eval_value * value);
+
+int forgesight_registers_manager_set_resource(
+							struct thread_control_block* objThreadCntrolBlock, 
+							char *name, key_variable keyVar, eval_value * value);
+
 
 #endif

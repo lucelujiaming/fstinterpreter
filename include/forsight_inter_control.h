@@ -26,14 +26,21 @@
 #include "forsight_basint.h"
 #include "forsight_home_pose.h"
 
+#include "forsight_external_resource.h"
+
 // #define USE_WAITING_R
 
 void resetProgramNameAndLineNum(struct thread_control_block * objThdCtrlBlockPtr);
 
 char * getProgramName();
 void setProgramName(struct thread_control_block * objThdCtrlBlockPtr, char * program_name);
+
 InterpreterState getPrgmState();
 void setPrgmState(struct thread_control_block * objThdCtrlBlockPtr, InterpreterState state);
+
+ProgMode getProgMode(struct thread_control_block * objThdCtrlBlockPtr);
+void setProgMode(struct thread_control_block * objThdCtrlBlockPtr, ProgMode progMode);
+
 void setCurLine(struct thread_control_block * objThdCtrlBlockPtr, char * line, int lineNum);
 #ifdef WIN32
 void setWarning(__int64 warn);
@@ -57,6 +64,8 @@ void initInterpreter();
 void uninitInterpreter();
 void forgesight_load_programs_path();
 char * forgesight_get_programs_path();
+
+bool forgesight_find_external_resource(char *vname, key_variable& keyVar);
 
 void forgesight_load_wait_time_out_config();
 int forgesight_get_wait_time_out_config();

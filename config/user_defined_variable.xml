@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<prog>   
+<KeyWord>
+		<KeyName>MI</KeyName>
+		<BaseAddress>0x1000000</BaseAddress>
+		<Type>Double</Type>
+		<ByteSize>8</ByteSize>
+</KeyWord>
+<KeyWord>
+		<KeyName>MH</KeyName>
+		<BaseAddress>0x1100000</BaseAddress>
+		<Type>Double</Type>
+		<ByteSize>8</ByteSize>
+</KeyWord>
+</prog>

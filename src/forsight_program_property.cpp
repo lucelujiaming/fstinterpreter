@@ -98,6 +98,9 @@ int parse_home_pose_exp(char *valuestring, char * home_pose_exp)
     rootProg = xmlDocGetRootElement(doc);
 	
 	parseHomePose(rootProg, home_pose_exp);
+	
+	xmlFreeDoc(doc);
+//	xmlCleanupParser();
 	return 1 ;
 }
 

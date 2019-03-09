@@ -2279,7 +2279,7 @@ int parse_xml_file(char * file_name){
         return -1;
     }
     xmlFreeDoc(doc);
-	xmlCleanupParser();
+//	xmlCleanupParser();
     return 0;
 }
 
@@ -2456,7 +2456,7 @@ int parse_xml_file_wrapper(char * xml_file_name){
         return -1;
     }
 	xmlFreeDoc(doc);
-	xmlCleanupParser();
+//	xmlCleanupParser();
 	
 	memset(g_xml_file_name, 0x00, FILE_PATH_LEN);
 	strcpy(g_xml_file_name, xml_file_name);

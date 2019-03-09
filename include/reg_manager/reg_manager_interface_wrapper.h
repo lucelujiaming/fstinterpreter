@@ -13,10 +13,10 @@ extern fst_base::InterpreterServer* g_objInterpreterServer ;
 #endif
 #include "reg_manager/forsight_registers_manager.h"
 
-#define REGSITER_NAMES   "pr;sr;r;mr;mi;mh;uf;tf;pl"
+#define REGSITER_NAMES   "pr;sr;r;mr;uf;tf;pl"
 
 
-void load_register_data();
+bool load_register_data();
 
 /**********************
  ********* PR *********
@@ -119,35 +119,20 @@ bool reg_manager_interface_setCommentHr(char *ptr, uint16_t num);
 /**********************
  ********* MI **********
  **********************/
-bool reg_manager_interface_getMI(MiData *ptr, uint16_t num);
-bool reg_manager_interface_setMI(MiData *ptr, uint16_t num);
-bool reg_manager_interface_delMI(uint16_t num);
+bool reg_manager_interface_getMI(int *ptr, uint16_t num);
+bool reg_manager_interface_setMI(int *ptr, uint16_t num);
 
 bool reg_manager_interface_getValueMI(int *ptr, uint16_t num);
 bool reg_manager_interface_setValueMI(int *ptr, uint16_t num);
 
-bool reg_manager_interface_getIdMI(int *ptr, uint16_t num);
-bool reg_manager_interface_setIdMI(int *ptr, uint16_t num);
-
-bool reg_manager_interface_getCommentMI(char *ptr, uint16_t num);
-bool reg_manager_interface_setCommentMI(char *ptr, uint16_t num);
-
 /**********************
  ********* MH **********
  **********************/
-bool reg_manager_interface_getMH(MhData *ptr, uint16_t num);
-bool reg_manager_interface_setMH(MhData *ptr, uint16_t num);
-bool reg_manager_interface_delMH(uint16_t num);
+bool reg_manager_interface_getMH(int *ptr, uint16_t num);
+bool reg_manager_interface_setMH(int *ptr, uint16_t num);
 
 bool reg_manager_interface_getValueMH(int *ptr, uint16_t num);
 bool reg_manager_interface_setValueMH(int *ptr, uint16_t num);
-
-bool reg_manager_interface_getIdMH(int *ptr, uint16_t num);
-bool reg_manager_interface_setIdMH(int *ptr, uint16_t num);
-
-bool reg_manager_interface_getCommentMH(char *ptr, uint16_t num);
-bool reg_manager_interface_setCommentMH(char *ptr, uint16_t num);
-
 
 /**********************
  ********* UF *********

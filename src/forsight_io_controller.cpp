@@ -416,7 +416,8 @@ int get_io_interface_status(char *vname)
 	return iValue;
 }
 
-eval_value forgesight_get_io_status(char *name)
+eval_value forgesight_get_io_status(
+			struct thread_control_block* objThreadCntrolBlock, char *name)
 {	
 	eval_value value;
 	int  iValue = 0;
@@ -546,7 +547,8 @@ eval_value forgesight_get_io_status(char *name)
 	return get_io_status_from_io_mananger(name);
 }
 
-int forgesight_set_io_status(char *name, eval_value& valueStart)
+int forgesight_set_io_status(
+			struct thread_control_block* objThreadCntrolBlock, char *name, eval_value& valueStart)
 {
 	eval_value value;
 	int iValue;

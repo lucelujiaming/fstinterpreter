@@ -97,13 +97,6 @@ typedef enum _ExecuteDirection
     EXECUTE_BACKWARD
 }ExecuteDirection;
 
-typedef enum _ProgMode
-{
-    FULL_MODE = 0,
-    STEP_MODE,
-    ERROR_MODE,
-}ProgMode;
-
 struct sub_label {
 	SubLabelType  type ;
 	char name[LAB_LEN];

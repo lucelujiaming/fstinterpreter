@@ -137,9 +137,6 @@ int forgesight_registers_manager_get_register(
 	RRegData objRRegData ;
 	HrRegData objHrRegData ;
 
-	MiData    objMiData ;
-	MhData    objMhData ;
-
     int       iID ;
     char      cComment[MAX_REG_COMMENT_LENGTH];
     std::string    strComment;
@@ -684,6 +681,7 @@ int forgesight_registers_manager_get_register(
 	{
 		if(strlen(reg_member) == 0)
 		{
+			FST_INFO("getMR at %d", iRegIdx);
 			bRet = reg_manager_interface_getMr(&objMrRegData, iRegIdx);
 			// MrRegData * ptr = (MrRegData *)reg_content_buffer ;
 #ifndef WIN32
@@ -925,92 +923,6 @@ int forgesight_registers_manager_get_register(
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
 			bRet = reg_manager_interface_getCommentPr(cComment, iRegIdx);
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-			{
-				strComment = std::string(cComment);
-				value->setStringValue(strComment);
-			}
-		}
-	}
-	else if(!strcmp(reg_name, TXT_MI))
-	{
-	    FST_INFO("forgesight_registers_manager_get_register at TXT_MI ");
-		if(strlen(reg_member) == 0)
-		{
-	        FST_INFO("reg_manager_interface_getMI at TXT_MI ");
-            // Use TXT_REG_VALUE
-			bRet = reg_manager_interface_getMI(&objMiData, iRegIdx);
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-			    value->setMIDataValue(&objMiData);
-			// RRegData * ptr = (RRegData *)reg_content_buffer ;
-			// value->setFloatValue(ptr->value);
-		}
-		else if (!strcmp(reg_member, TXT_REG_VALUE))
-		{
-			bRet = reg_manager_interface_getValueMI(&iMrValue, iRegIdx);
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-				value->setFloatValue((float)iMrValue);
-		}
-		else if (!strcmp(reg_member, TXT_REG_ID))
-		{
-			bRet = reg_manager_interface_getIdMI(&iID, iRegIdx);
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-				value->setFloatValue(iID);
-		}
-		else if (!strcmp(reg_member, TXT_REG_COMMENT))
-		{
-			bRet = reg_manager_interface_getCommentMI(cComment, iRegIdx);
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-			{
-				strComment = std::string(cComment);
-				value->setStringValue(strComment);
-			}
-		}
-	}
-	else if(!strcmp(reg_name, TXT_MH))
-	{
-	    FST_INFO("forgesight_registers_manager_get_register at TXT_MH ");
-		if(strlen(reg_member) == 0)
-		{
-	        FST_INFO("reg_manager_interface_getMH at TXT_MH = %d", iRegIdx);
-            // Use TXT_REG_VALUE
-			bRet = reg_manager_interface_getMH(&objMhData, iRegIdx);
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-			    value->setMHDataValue(&objMhData);
-			// RRegData * ptr = (RRegData *)reg_content_buffer ;
-			// value->setFloatValue(ptr->value);
-		}
-		else if (!strcmp(reg_member, TXT_REG_VALUE))
-		{
-			bRet = reg_manager_interface_getValueMH(&iMrValue, iRegIdx);
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-				value->setFloatValue((float)iMrValue);
-		}
-		else if (!strcmp(reg_member, TXT_REG_ID))
-		{
-			bRet = reg_manager_interface_getIdMH(&iID, iRegIdx);
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-				value->setFloatValue(iID);
-		}
-		else if (!strcmp(reg_member, TXT_REG_COMMENT))
-		{
-			bRet = reg_manager_interface_getCommentMH(cComment, iRegIdx);
 			if(bRet == false)
 				serror(objThreadCntrolBlock, 4) ; 
 			else
@@ -2403,132 +2315,6 @@ int forgesight_registers_manager_set_register(
 	       	return 0 ;
 		}
 	}
-	else if(!strcmp(reg_name, TXT_MI))
-	{
-		if(strlen(reg_member) == 0)
-		{
-			if(valueStart->getType() == TYPE_FLOAT)
-			{    
-				int iValue = (int)valueStart->getFloatValue();
-			    reg_manager_interface_setValueMI(&iValue, iRegIdx);
-			}
-			else if(valueStart->getType() == (int)(TYPE_FLOAT | TYPE_MR))
-			{    
-				int iValue = (int)valueStart->getFloatValue();
-			    reg_manager_interface_setValueMI(&iValue, iRegIdx);
-			}
-			else if(valueStart->getType() == (int)(TYPE_FLOAT | TYPE_R))
-			{    
-				int iValue = (int)valueStart->getFloatValue();
-			    reg_manager_interface_setValueMI(&iValue, iRegIdx);
-			}
-			else if(valueStart->getType() == (int)(TYPE_STRING | TYPE_SR))
-			{
-				std::string strValue;
-				strValue = valueStart->getStringValue();
-				
-				int iValue = (int)atof(strValue.c_str());
-			    reg_manager_interface_setValueMI(&iValue, iRegIdx);
-			}
-			else if(valueStart->getType() == (int)(TYPE_FLOAT | TYPE_MI))
-			{    
-				int iValue = (int)valueStart->getFloatValue();
-			    reg_manager_interface_setValueMI(&iValue, iRegIdx);
-			}
-			else if(valueStart->getType() == (int)(TYPE_FLOAT | TYPE_MH))
-			{    
-				int iValue = (int)valueStart->getFloatValue();
-			    reg_manager_interface_setValueMI(&iValue, iRegIdx);
-			}
-	       	return 0 ;
-		}
-		else if (!strcmp(reg_member, TXT_REG_VALUE))
-		{
-			int iValue = (int)valueStart->getFloatValue();
-			FST_INFO("Set VALUE:(%f) to MI[%s]", iValue, reg_idx);
-			reg_manager_interface_setValueMI(&iValue, iRegIdx);
-	       	return 0 ;
-		}
-		else if (!strcmp(reg_member, TXT_REG_ID))
-		{
-			int iID = (int)valueStart->getFloatValue();
-			FST_INFO("Set ID:(%d) to MI[%s]", iID, reg_idx);
-			reg_manager_interface_setIdMI(&iID, iRegIdx);
-	       	return 0 ;
-		}
-		else if (!strcmp(reg_member, TXT_REG_COMMENT))
-		{
-			// get_token(objThreadCntrolBlock);
-			FST_INFO("Set COMMENT:(%s) to MI[%s]", 
-				objThreadCntrolBlock->token, reg_idx);
-			reg_manager_interface_setCommentMI(
-				(char *)valueStart->getStringValue().c_str(), iRegIdx);
-	       	return 0 ;
-		}
-	}
-	else if(!strcmp(reg_name, TXT_MH))
-	{
-		if(strlen(reg_member) == 0)
-		{
-			if(valueStart->getType() == TYPE_FLOAT)
-			{    
-				int iValue = (int)valueStart->getFloatValue();
-			    reg_manager_interface_setValueMH(&iValue, iRegIdx);
-			}
-			else if(valueStart->getType() == (int)(TYPE_FLOAT | TYPE_MR))
-			{    
-				int iValue = (int)valueStart->getFloatValue();
-			    reg_manager_interface_setValueMH(&iValue, iRegIdx);
-			}
-			else if(valueStart->getType() == (int)(TYPE_FLOAT | TYPE_R))
-			{    
-				int iValue = (int)(valueStart->getRRegDataValue().value);
-				reg_manager_interface_setValueMH(&iValue, iRegIdx);
-			}
-			else if(valueStart->getType() == (int)(TYPE_STRING | TYPE_SR))
-			{
-				std::string strValue;
-				strValue = valueStart->getStringValue();
-				
-				int iValue = (int)atof(strValue.c_str());
-			    reg_manager_interface_setValueMH(&iValue, iRegIdx);
-			}
-			else if(valueStart->getType() == (int)(TYPE_FLOAT | TYPE_MI))
-			{    
-				int iValue = (int)valueStart->getFloatValue();
-			    reg_manager_interface_setValueMH(&iValue, iRegIdx);
-			}
-			else if(valueStart->getType() == (int)(TYPE_FLOAT | TYPE_MH))
-			{    
-				int iValue = (int)valueStart->getFloatValue();
-			    reg_manager_interface_setValueMH(&iValue, iRegIdx);
-			}
-	       	return 0 ;
-		}
-		else if (!strcmp(reg_member, TXT_REG_VALUE))
-		{
-			int iValue = (int)valueStart->getFloatValue();
-			FST_INFO("Set VALUE:(%d) to MH[%s]", iValue, reg_idx);
-			reg_manager_interface_setValueMH(&iValue, iRegIdx);
-	       	return 0 ;
-		}
-		else if (!strcmp(reg_member, TXT_REG_ID))
-		{
-			int iID = (int)valueStart->getFloatValue();
-			FST_INFO("Set ID:(%d) to MH[%s]", iID, reg_idx);
-			reg_manager_interface_setIdMH(&iID, iRegIdx);
-	       	return 0 ;
-		}
-		else if (!strcmp(reg_member, TXT_REG_COMMENT))
-		{
-			// get_token(objThreadCntrolBlock);
-			FST_INFO("Set COMMENT:(%s) to MH[%s]", 
-				objThreadCntrolBlock->token, reg_idx);
-			reg_manager_interface_setCommentMH(
-				(char *)valueStart->getStringValue().c_str(), iRegIdx);
-	       	return 0 ;
-		}
-	}
 	else if(!strcmp(reg_name, TXT_UF))
 	{
 		if(strlen(reg_member) == 0)
@@ -2918,4 +2704,248 @@ int forgesight_registers_manager_jointToCart(Joint joint, PoseEuler &pos)
 {
 	return forgesight_registers_manager_jointToCart(joint, pos);
 }
+
+int forgesight_registers_manager_get_resource(
+							struct thread_control_block* objThreadCntrolBlock, 
+							char *name, key_variable keyVar, eval_value * value)
+{
+	int    iResValue ;
+//	float  fResValue ;
+	
+	bool bRet = false ;
+	char reg_name[16] ;
+	char reg_idx[16] ;
+	char reg_member[16] ;
+	int  iRegIdx = 0 ;
+	char * namePtr = name ;
+	char *temp = NULL ;
+	
+	memset(reg_name, 0x00, 16);
+	temp = reg_name ;
+	get_char_token(namePtr, temp);
+	
+	namePtr += strlen(reg_name) ;
+	if(namePtr[0] != '['){
+		return -1 ;
+	}
+	namePtr++ ;
+	
+	memset(reg_idx, 0x00, 16);
+	temp = reg_idx ;
+	get_num_token(namePtr, temp);
+	iRegIdx = atoi(reg_idx);
+	// namePtr += strlen(reg_idx) ;
+
+	namePtr += strlen(reg_idx) ;
+	if(namePtr[0] != ']'){
+		return -1 ;
+	}
+	namePtr++ ;
+
+	namePtr = strchr(namePtr, '.');
+	memset(reg_member, 0x00, 16);
+	if(namePtr)
+	{
+		namePtr++ ;
+		temp = reg_member ;
+		get_char_token(namePtr, temp);
+	}
+	// memset(reg_content_buffer, 0x00, sizeof(reg_content_buffer));
+ 
+	FST_INFO("forgesight_registers_manager_get_resource at %s[%d] ", reg_name, iRegIdx);
+	value->resetNoneValue();
+
+	if(!strcmp(reg_name, TXT_MI))
+	{
+	    FST_INFO("forgesight_registers_manager_get_resource at TXT_MI ");
+		if(strlen(reg_member) == 0)
+		{
+	        FST_INFO("forgesight_registers_manager_get_resource at TXT_MI ");
+            // Use TXT_REG_VALUE
+			bRet = reg_manager_interface_getMI(&iResValue, iRegIdx);
+			if(bRet == false)
+				serror(objThreadCntrolBlock, 4) ; 
+			else
+				value->setFloatValue((float)iResValue);
+			// RRegData * ptr = (RRegData *)reg_content_buffer ;
+			// value->setFloatValue(ptr->value);
+		}
+		else if (!strcmp(reg_member, TXT_REG_VALUE))
+		{
+			bRet = reg_manager_interface_getValueMI(&iResValue, iRegIdx);
+			if(bRet == false)
+				serror(objThreadCntrolBlock, 4) ; 
+			else
+				value->setFloatValue((float)iResValue);
+		}
+	}
+	else if(!strcmp(reg_name, TXT_MH))
+	{
+	    FST_INFO("forgesight_registers_manager_get_resource at TXT_MH ");
+		if(strlen(reg_member) == 0)
+		{
+	        FST_INFO("forgesight_registers_manager_get_resource at TXT_MH = %d", iRegIdx);
+            // Use TXT_REG_VALUE
+			bRet = reg_manager_interface_getMH(&iResValue, iRegIdx);
+			if(bRet == false)
+				serror(objThreadCntrolBlock, 4) ; 
+			else
+				value->setFloatValue((float)iResValue);
+			// RRegData * ptr = (RRegData *)reg_content_buffer ;
+			// value->setFloatValue(ptr->value);
+		}
+		else if (!strcmp(reg_member, TXT_REG_VALUE))
+		{
+			bRet = reg_manager_interface_getValueMH(&iResValue, iRegIdx);
+			if(bRet == false)
+				serror(objThreadCntrolBlock, 4) ; 
+			else
+				value->setFloatValue((float)iResValue);
+		}
+	}
+	else
+	{
+		if((keyVar.key_type == KEYTYPE_CHAR)
+			||(keyVar.key_type == KEYTYPE_INT16)
+			||(keyVar.key_type == KEYTYPE_INT32)
+			||(keyVar.key_type == KEYTYPE_INT64)
+			||(keyVar.key_type == KEYTYPE_DOUBLE))
+		{
+			value->setFloatValue(1.0);
+		}
+		else if(keyVar.key_type == KEYTYPE_BYTEARRAY)
+		{
+			std::string strVal = string("TEST KEYTYPE_BYTEARRAY");
+			value->setStringValue(strVal);
+		}
+	}
+	
+	return 0;
+}
+
+int forgesight_registers_manager_set_resource(
+							struct thread_control_block* objThreadCntrolBlock, 
+							char *name, key_variable keyVar, eval_value * valueStart)
+{
+	eval_value value;
+//	int boolValue;
+
+	char reg_name[16] ;
+	char reg_idx[16] ;
+	char reg_member[16] ;
+	int  iRegIdx = 0 ;
+	char * namePtr = name ;
+	char *temp = NULL ;
+	
+//	PrRegData objPrRegData ;
+//	HrRegData objHrRegData ;
+	
+//	PoseEuler pose ;
+//	Joint joint ;
+//	pl_t pltValue ;
+	
+	std::string strValue;
+	
+	memset(reg_name, 0x00, 16);
+	temp = reg_name ;
+	get_char_token(namePtr, temp);
+	if(name[strlen(reg_name)] != '['){
+		return -1 ;
+	}
+	namePtr += strlen(reg_name) ;
+	namePtr++ ;
+	
+	memset(reg_idx, 0x00, 16);
+	temp = reg_idx ;
+	get_num_token(namePtr, temp);
+	iRegIdx = atoi(reg_idx);
+	// namePtr += strlen(reg_idx) ;
+	
+	namePtr = strchr(namePtr, '.');
+	memset(reg_member, 0x00, 16);
+	if(namePtr)
+	{
+		namePtr++ ;
+		temp = reg_member ;
+		get_char_token(namePtr, temp);
+	}
+	
+	if(!strcmp(reg_name, TXT_MI))
+	{
+		if(strlen(reg_member) == 0)
+		{
+			if(valueStart->getType() == TYPE_FLOAT)
+			{    
+				int iValue = (int)valueStart->getFloatValue();
+			    reg_manager_interface_setValueMI(&iValue, iRegIdx);
+			}
+			else if(valueStart->getType() == (int)(TYPE_FLOAT | TYPE_MR))
+			{    
+				int iValue = (int)valueStart->getFloatValue();
+			    reg_manager_interface_setValueMI(&iValue, iRegIdx);
+			}
+			else if(valueStart->getType() == (int)(TYPE_FLOAT | TYPE_R))
+			{    
+				int iValue = (int)valueStart->getFloatValue();
+			    reg_manager_interface_setValueMI(&iValue, iRegIdx);
+			}
+			else if(valueStart->getType() == (int)(TYPE_STRING | TYPE_SR))
+			{
+				std::string strValue;
+				strValue = valueStart->getStringValue();
+				
+				int iValue = (int)atof(strValue.c_str());
+			    reg_manager_interface_setValueMI(&iValue, iRegIdx);
+			}
+	       	return 0 ;
+		}
+		else if (!strcmp(reg_member, TXT_REG_VALUE))
+		{
+			int iValue = (int)valueStart->getFloatValue();
+			FST_INFO("Set VALUE:(%f) to MI[%s]", iValue, reg_idx);
+			reg_manager_interface_setValueMI(&iValue, iRegIdx);
+	       	return 0 ;
+		}
+	}
+	else if(!strcmp(reg_name, TXT_MH))
+	{
+		if(strlen(reg_member) == 0)
+		{
+			if(valueStart->getType() == TYPE_FLOAT)
+			{    
+				int iValue = (int)valueStart->getFloatValue();
+			    reg_manager_interface_setValueMH(&iValue, iRegIdx);
+			}
+			else if(valueStart->getType() == (int)(TYPE_FLOAT | TYPE_MR))
+			{    
+				int iValue = (int)valueStart->getFloatValue();
+			    reg_manager_interface_setValueMH(&iValue, iRegIdx);
+			}
+			else if(valueStart->getType() == (int)(TYPE_FLOAT | TYPE_R))
+			{    
+				int iValue = (int)(valueStart->getRRegDataValue().value);
+				reg_manager_interface_setValueMH(&iValue, iRegIdx);
+			}
+			else if(valueStart->getType() == (int)(TYPE_STRING | TYPE_SR))
+			{
+				std::string strValue;
+				strValue = valueStart->getStringValue();
+				
+				int iValue = (int)atof(strValue.c_str());
+			    reg_manager_interface_setValueMH(&iValue, iRegIdx);
+			}
+	       	return 0 ;
+		}
+		else if (!strcmp(reg_member, TXT_REG_VALUE))
+		{
+			int iValue = (int)valueStart->getFloatValue();
+			FST_INFO("Set VALUE:(%d) to MH[%s]", iValue, reg_idx);
+			reg_manager_interface_setValueMH(&iValue, iRegIdx);
+	       	return 0 ;
+		}
+	}
+	return 0;
+}
+
+
 

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<prog>
+  <prog_body>
+    <function name="main">
+      <body>
+        <comment>测试IO</comment>
+        <assignment type="assignment">
+          <lvalue>
+            <element type="param">A[5]</element>
+          </lvalue>
+          <rvalue>
+              <element type="num">2</element>
+              <element type="operation">+</element>
+            <element type="param">A[7]</element>
+			<element type="operation">*</element>
+            <element type="param">7</element>
+
+          </rvalue>
+        </assignment>
+		<instruction type="wait">
+			   <argument name="timeout" type="num" unit="sec">1</argument>
+		</instruction>
+        <comment>测试结束</comment>
+        <end name="prog"/>
+      </body>
+    </function>
+  </prog_body>
+</prog>

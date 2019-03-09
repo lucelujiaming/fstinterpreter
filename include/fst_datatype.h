@@ -573,5 +573,4 @@ typedef enum
 
 }   // namespace fst_base
 
-
 #endif  // #ifndef FST_DATATYPE_H

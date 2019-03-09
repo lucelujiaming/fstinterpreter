@@ -113,6 +113,10 @@ SOURCE=.\src\forsight_cJSON.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\forsight_external_resource.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\forsight_home_pose.cpp
 # End Source File
 # Begin Source File
@@ -296,6 +300,10 @@ SOURCE=".\include\reg-shmi\forsight_err_shmi.h"
 # Begin Source File
 
 SOURCE=.\include\forsight_eval_type.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\forsight_external_resource.h
 # End Source File
 # Begin Source File
 

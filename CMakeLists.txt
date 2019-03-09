@@ -8,6 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
 #    motion_plan
     parameter_manager
 #    mem_share
+    motion_control
 )
 set(VERSION_MAJOR ?)
 set(VERSION_MINOR ?)
@@ -38,7 +39,6 @@ endif()
 set(catkin_INCLUDE_DIRS
     ${catkin_INCLUDE_DIRS}
 
-    ${depend_PATH_INC}/motion_plan/include
     ${depend_PATH_INC}/parameter_manager/include
     ${depend_PATH_INC}/log_manager/include
     ${depend_PATH_INC}/ioboard/include
@@ -51,13 +51,22 @@ set(catkin_INCLUDE_DIRS
     ${depend_PATH_INC}/thread_help/include 
     ${depend_PATH_INC}/common/
     ${depend_PATH_INC}/reg_manager/include 
+    ${depend_PATH_INC}/fst_io_device/include 
+    ${depend_PATH_INC}/base_device/include
     ${depend_PATH_INC}/process_comm/include 
+    ${depend_PATH_INC}/modbus_manager/include
+    ${depend_PATH_INC}/motion_control/include 
+    ${depend_PATH_INC}/io_mapping/include 
+    ${depend_PATH_INC}/basic_alg/include 
 )
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -fpermissive -O0")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wwrite-strings -fpermissive -O0")
 
 catkin_package(
 #    DEPENDS motion_plan 
+    DEPENDS fst_io_device 
+    DEPENDS motion_control 
+    DEPENDS basic_alg 
 )
  
 
@@ -71,35 +80,19 @@ include_directories(
 ## Build ##
 ###########
 add_executable(prg_interpreter
-#     #    src/reg-shmi/forsight_op_reg_shmi.cpp
-#     #    src/reg-shmi/forsight_registers.cpp
-#     #    src/reg-shmi/forsight_op_shmi.cpp
-#     #    src/reg-shmi/forsight_peterson.cpp
-#         src/reg_manager/r_reg.cpp
-#         src/reg_manager/base_reg.cpp
-#         src/reg_manager/pr_reg.cpp
-#         src/reg_manager/sr_reg.cpp
-#         src/reg_manager/mr_reg.cpp
-#         src/reg_manager/hr_reg.cpp
-#    src/reg_manager/reg_manager_interface.cpp
     src/reg_manager/reg_manager_interface_wrapper.cpp
     src/reg_manager/forsight_registers_manager.cpp
-    src/forsight_interpreter_shm.cpp
     src/forsight_innercmd.cpp
     src/forsight_xml_reader.cpp
     src/forsight_int_main.cpp
-    src/launch_code_mgr.cpp
-    src/forsight_launch_code_startup.cpp
-    src/macro_instr_mgr.cpp
-    src/forsight_macro_instr_startup.cpp
     src/forsight_basint.cpp
     src/forsight_innerfunc.cpp
-    src/base_thread.cpp
     src/forsight_inter_control.cpp
     src/forsight_io_controller.cpp
-    src/forsight_io_mapping.cpp
     src/forsight_program_property.cpp
     src/forsight_cJSON.cpp
+    src/launch_code_mgr.cpp
+    src/forsight_home_pose.cpp
 #   src/io_interface.cpp
 )
 
@@ -112,6 +105,9 @@ target_link_libraries(prg_interpreter
     process_comm 
     thread_help
     pthread
+    modbus_manager
+    logger
+    basic_alg
 )
 
 #############
@@ -129,27 +125,15 @@ install(FILES ${PROJECT_BINARY_DIR}/${PROJECT_NAME}_version
     DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/version
 )
 
-install(FILES config/mr_reg.yaml
-    DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/configuration/machine
-)
-
-install(FILES config/pr_reg.yaml
-    DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/configuration/machine
-)
-
-install(FILES config/hr_reg.yaml
-    DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/configuration/machine
-)
-
 install(FILES config/programs_path.yaml
     DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/configuration/machine
 )
 
-install(FILES config/r_reg.yaml
+install(FILES config/user_defined_variable.xml
     DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/configuration/machine
 )
 
-install(FILES config/sr_reg.yaml
+install(FILES config/prg_interpreter_config.yaml
     DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/configuration/machine
 )
 
