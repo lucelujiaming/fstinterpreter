@@ -1,14 +1,32 @@
 <?xml version='1.0' encoding='utf-8'?>
 <prog>   
 <KeyWord>
-		<KeyName>MI</KeyName>
+		<KeyName>R</KeyName>
 		<BaseAddress>0x1000000</BaseAddress>
 		<Type>Double</Type>
 		<ByteSize>8</ByteSize>
 </KeyWord>
 <KeyWord>
-		<KeyName>MH</KeyName>
+		<KeyName>MR</KeyName>
 		<BaseAddress>0x1100000</BaseAddress>
+		<Type>INT</Type>
+		<ByteSize>4</ByteSize>
+</KeyWord>
+<KeyWord>
+		<KeyName>SR</KeyName>
+		<BaseAddress>0x1200000</BaseAddress>
+		<Type>STRING</Type>
+		<ByteSize>1024</ByteSize>
+</KeyWord>
+<KeyWord>
+		<KeyName>MI</KeyName>
+		<BaseAddress>0x1300000</BaseAddress>
+		<Type>Double</Type>
+		<ByteSize>8</ByteSize>
+</KeyWord>
+<KeyWord>
+		<KeyName>MH</KeyName>
+		<BaseAddress>0x1400000</BaseAddress>
 		<Type>Double</Type>
 		<ByteSize>8</ByteSize>
 </KeyWord>

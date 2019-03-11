@@ -12,7 +12,7 @@ using namespace fst_ctrl ;
 
 #endif
 
-#define REGSITER_NAMES   "pr;sr;r;mr;uf;tf;pl"
+#define REGSITER_NAMES   "pr;sr;uf;tf;pl"
 
 int forgesight_registers_manager_get_register(
 							struct thread_control_block* objThreadCntrolBlock, 

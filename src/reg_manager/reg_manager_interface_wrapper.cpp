@@ -903,27 +903,25 @@ bool reg_manager_interface_setCommentSr(char *ptr, uint16_t num)
 	Ouput:			ptr        -  R register Data
 	Return: 		1 - success
 *************************************************/
-bool reg_manager_interface_getR(RRegData *ptr, uint16_t num)
+bool reg_manager_interface_getR(double *ptr, uint16_t num)
 {
 	bool bRet = false ;
-	ptr->id    = num ;
 #ifndef WIN32
 	if(g_objRegManagerInterface)
 	{
 		RRegDataIpc objRRegDataIpc ;
-		ptr->value = 0.0;
+		*ptr = 0.0;
 		bRet = g_objRegManagerInterface->getRReg(num, &objRRegDataIpc);
 		FST_INFO("getR: value = (%f) at %d with %s", 
 			objRRegDataIpc.value, num, bRet?"TRUE":"FALSE");
-		ptr->value = objRRegDataIpc.value;
+		*ptr = objRRegDataIpc.value;
 	}
 	else
 	{
 		FST_ERROR("g_objRegManagerInterface is NULL");
 	}
 #else
-	memset(ptr->comment, 0x00, MAX_REG_COMMENT_LENGTH);
-	ptr->value = 1 ;
+	*ptr = 1.0 ;
 	bRet = true ;
 #endif
 	return bRet ;
@@ -936,7 +934,7 @@ bool reg_manager_interface_getR(RRegData *ptr, uint16_t num)
 	Input:			ptr        -  R register Data
 	Return: 		1 - success
 *************************************************/
-bool reg_manager_interface_setR(RRegData *ptr, uint16_t num)
+bool reg_manager_interface_setR(double *ptr, uint16_t num)
 {
 	bool bRet = false ;
 #ifndef WIN32
@@ -944,7 +942,7 @@ bool reg_manager_interface_setR(RRegData *ptr, uint16_t num)
 	{
 		RRegDataIpc objRRegDataIpc ;
 		objRRegDataIpc.id    = num;
-		objRRegDataIpc.value = ptr->value;
+		objRRegDataIpc.value = *ptr;
 		// memcpy(&objRRegData, ptr, sizeof(objRRegData));
 		bRet = g_objRegManagerInterface->setRReg(&objRRegDataIpc);
 		FST_INFO("setR:(%f) at %d with %s", objRRegDataIpc.value, num, bRet?"TRUE":"FALSE");
@@ -953,32 +951,6 @@ bool reg_manager_interface_setR(RRegData *ptr, uint16_t num)
 		{
 			bRet = g_objRegManagerInterface->addRReg(objRRegDataIpc);
 		}
-#endif
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_delR
-	Description:	delete R.
-	Input:			num        -  Index of R
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_delR(uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		bRet = g_objRegManagerInterface->deleteRReg(num);
 #endif
 	}
 	else
@@ -1051,128 +1023,6 @@ bool reg_manager_interface_setValueR(double *ptr, uint16_t num)
 	return bRet ;
 }
 
-/************************************************* 
-	Function:		reg_manager_interface_getIdR
-	Description:	get Id info of R.
-	Input:			num        -  Index of R
-	Ouput:			ptr        -  Id info of R
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_getIdR(int *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		RRegDataIpc objRRegDataIpc ;
-		bRet = g_objRegManagerInterface->getRReg(num, &objRRegDataIpc);
-		if(bRet)
-		{
-		   *ptr = objRRegDataIpc.id;
-		}
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_setIdR
-	Description:	set Id info of R.
-	Input:			num        -  Index of R
-	Input:			ptr        -  Id info of R
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_setIdR(int *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		RRegDataIpc objRRegDataIpc ;
-	    objRRegDataIpc.id = *ptr;
-		bRet = g_objRegManagerInterface->setRReg(&objRRegDataIpc);
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_getCommentR
-	Description:	get Comment info of R.
-	Input:			num        -  Index of R
-	Ouput:			ptr        -  Comment info of R
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_getCommentR(char *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		RRegDataIpc objRRegDataIpc ;
-		bRet = g_objRegManagerInterface->getRReg(num, &objRRegDataIpc);
-		if(bRet)
-		{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		   memcpy(ptr, objRRegDataIpc.comment.c_str(), objRRegDataIpc.comment.length());
-#endif
-		}
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_setCommentR
-	Description:	set Comment info of R.
-	Input:			num        -  Index of R
-	Input:			ptr        -  Comment info of R
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_setCommentR(char *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		RRegDataIpc objRRegDataIpc ;
-		bRet = g_objRegManagerInterface->getRReg(num, &objRRegDataIpc);
-		if(bRet)
-		{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		    objRRegDataIpc.comment = string(ptr);
-			reg_manager_interface_setR(&objRRegDataIpc, num);
-#endif
-		}
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
 /**********************
  ********* MR *********
  **********************/
@@ -1184,27 +1034,25 @@ bool reg_manager_interface_setCommentR(char *ptr, uint16_t num)
 	Ouput:			ptr        -  MR register Data
 	Return: 		1 - success
 *************************************************/
-bool reg_manager_interface_getMr(MrRegData *ptr, uint16_t num)
+bool reg_manager_interface_getMr(int *ptr, uint16_t num)
 {
 	bool bRet = false ;
-	ptr->id    = num ;
 #ifndef WIN32
 	if(g_objRegManagerInterface)
 	{
 		MrRegDataIpc objMrRegDataIpc ;
-		ptr->value = 0.0;
+		*ptr = 0.0;
 		bRet = g_objRegManagerInterface->getMrReg(num, &objMrRegDataIpc);
 		FST_INFO("getMR: value = (%f) at %d with %s", 
 			objMrRegDataIpc.value, num, bRet?"TRUE":"FALSE");
-		ptr->value = objMrRegDataIpc.value ;
+		*ptr = objMrRegDataIpc.value ;
 	}
 	else
 	{
 		FST_ERROR("g_objRegManagerInterface is NULL");
 	}
 #else
-	memset(ptr->comment, 0x00, MAX_REG_COMMENT_LENGTH);
-	ptr->value = 1 ;
+	*ptr = 1 ;
 	bRet = true ;
 #endif
 	return bRet ;
@@ -1217,7 +1065,7 @@ bool reg_manager_interface_getMr(MrRegData *ptr, uint16_t num)
 	Input:			ptr        -  MR register Data
 	Return: 		1 - success
 *************************************************/
-bool reg_manager_interface_setMr(MrRegData *ptr, uint16_t num)
+bool reg_manager_interface_setMr(int *ptr, uint16_t num)
 {
 	bool bRet = false ;
 #ifndef WIN32
@@ -1225,7 +1073,7 @@ bool reg_manager_interface_setMr(MrRegData *ptr, uint16_t num)
 	{
 		MrRegDataIpc objMrRegDataIpc ;
 		objMrRegDataIpc.id = num ;
-		objMrRegDataIpc.value = ptr->value ;
+		objMrRegDataIpc.value = *ptr ;
 		FST_INFO("setR:(%f) at %d with %s", objMrRegDataIpc.value, num, bRet?"TRUE":"FALSE");
 		bRet = g_objRegManagerInterface->setMrReg(&objMrRegDataIpc);
 #ifdef USE_LOCAL_REG_MANAGER_INTERFACE
@@ -1245,32 +1093,6 @@ bool reg_manager_interface_setMr(MrRegData *ptr, uint16_t num)
 	return bRet ;
 }
  
-/************************************************* 
-	 Function:		 reg_manager_interface_delMr
-	 Description:	 delete MR.
-	 Input: 		 num		-  Index of MR
-	 Return:		 1 - success
- *************************************************/
-bool reg_manager_interface_delMr(uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		bRet = g_objRegManagerInterface->deleteMrReg(num);
-#endif
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
 /************************************************* 
 	Function:		reg_manager_interface_getValueMr
 	Description:	get number info of MR.
@@ -1319,135 +1141,6 @@ bool reg_manager_interface_setValueMr(int *ptr, uint16_t num)
 		objMrRegDataIpc.value = *ptr;
 		bRet = g_objRegManagerInterface->setMrReg(&objMrRegDataIpc);
 		FST_INFO("setValueMr:(%f) at %d with %s", objMrRegDataIpc.value, num, bRet?"TRUE":"FALSE");
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_getIdMr
-	Description:	get Id info of MR.
-	Input:			num        -  Index of MR
-	Ouput:			ptr        -  Id info of MR
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_getIdMr(int *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		MrRegDataIpc objMrRegDataIpc ;
-		bRet = g_objRegManagerInterface->getMrReg(num, &objMrRegDataIpc);
-		if(bRet)
-		{
-		   *ptr = objMrRegDataIpc.id;
-		}
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_setIdMr
-	Description:	set Id info of MR.
-	Input:			num        -  Index of MR
-	Input:			ptr        -  Id info of MR
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_setIdMr(int *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		MrRegDataIpc objMrRegDataIpc ;
-		bRet = g_objRegManagerInterface->getMrReg(num, &objMrRegDataIpc);
-		if(bRet)
-		{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		    objMrRegData.id = *ptr;
-			reg_manager_interface_setMr(&objMrRegData, num);
-#endif
-		}
-
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_getCommentMr
-	Description:	get Comment info of MR.
-	Input:			num        -  Index of MR
-	Ouput:			ptr        -  Comment info of MR
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_getCommentMr(char *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		MrRegDataIpc objMrRegDataIpc ;
-		bRet = g_objRegManagerInterface->getMrReg(num, &objMrRegDataIpc);
-		if(bRet)
-		{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		   memcpy(ptr, objMrRegDataIpc.comment.c_str(), objMrRegDataIpc.comment.length());
-#endif
-		}
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_setCommentMr
-	Description:	set Comment info of MR.
-	Input:			num        -  Index of MR
-	Input:			ptr        -  Comment info of MR
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_setCommentMr(char *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		MrRegDataIpc objMrRegDataIpc ;
-		bRet = g_objRegManagerInterface->getMrReg(num, &objMrRegDataIpc);
-		if(bRet)
-		{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		    objMrRegDataIpc.comment = string(ptr);
-			reg_manager_interface_setMr(&objMrRegDataIpc, num);
-#endif
-		}
 	}
 	else
 	{

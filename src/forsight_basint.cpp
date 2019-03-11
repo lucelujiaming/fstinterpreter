@@ -3876,7 +3876,9 @@ void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname,
 	temp = array_name ;
 	get_char_token(vname, temp);
 	// deal "pr;sr;r;mr;uf;tf;pl" except p
-    if(strstr(REGSITER_NAMES, array_name) && (strcmp(array_name, "p") != 0))
+    if(strstr(REGSITER_NAMES, array_name) 
+		&& (strcmp(array_name, "p") != 0) 
+		&& (strcmp(array_name, "r") != 0))
     {
 		if(strchr(vname, '['))
 		{
@@ -4081,7 +4083,9 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 	get_char_token(vname, temp);
 	// Inner Type
 	// deal "pr;sr;r;mr;uf;tf;pl" except p
-    if(strstr(REGSITER_NAMES, array_name) && (strcmp(array_name, "p") != 0))
+    if(strstr(REGSITER_NAMES, array_name) 
+		&& (strcmp(array_name, "p") != 0) 
+		&& (strcmp(array_name, "r") != 0))
     {
 		if(strchr(vname, '['))
 		{

@@ -13,7 +13,7 @@ extern fst_base::InterpreterServer* g_objInterpreterServer ;
 #endif
 #include "reg_manager/forsight_registers_manager.h"
 
-#define REGSITER_NAMES   "pr;sr;r;mr;uf;tf;pl"
+#define REGSITER_NAMES   "pr;sr;uf;tf;pl"
 
 
 bool load_register_data();
@@ -64,34 +64,20 @@ bool reg_manager_interface_setCommentSr(char *ptr, uint16_t num);
 /**********************
  ********* R **********
  **********************/
-bool reg_manager_interface_getR(RRegData *ptr, uint16_t num);
-bool reg_manager_interface_setR(RRegData *ptr, uint16_t num);
-bool reg_manager_interface_delR(uint16_t num);
+bool reg_manager_interface_getR(double *ptr, uint16_t num);
+bool reg_manager_interface_setR(double *ptr, uint16_t num);
 
 bool reg_manager_interface_getValueR(double *ptr, uint16_t num);
 bool reg_manager_interface_setValueR(double *ptr, uint16_t num);
 
-bool reg_manager_interface_getIdR(int *ptr, uint16_t num);
-bool reg_manager_interface_setIdR(int *ptr, uint16_t num);
-
-bool reg_manager_interface_getCommentR(char *ptr, uint16_t num);
-bool reg_manager_interface_setCommentR(char *ptr, uint16_t num);
-
 /**********************
  ********* MR *********
  **********************/
-bool reg_manager_interface_getMr(MrRegData *ptr, uint16_t num);
-bool reg_manager_interface_setMr(MrRegData *ptr, uint16_t num);
-bool reg_manager_interface_delMr(uint16_t num);
+bool reg_manager_interface_getMr(int *ptr, uint16_t num);
+bool reg_manager_interface_setMr(int *ptr, uint16_t num);
  
 bool reg_manager_interface_getValueMr(int *ptr, uint16_t num);
 bool reg_manager_interface_setValueMr(int *ptr, uint16_t num);
-
-bool reg_manager_interface_getIdMr(int *ptr, uint16_t num);
-bool reg_manager_interface_setIdMr(int *ptr, uint16_t num);
-
-bool reg_manager_interface_getCommentMr(char *ptr, uint16_t num);
-bool reg_manager_interface_setCommentMr(char *ptr, uint16_t num);
 
 /**********************
  ********* HR *********

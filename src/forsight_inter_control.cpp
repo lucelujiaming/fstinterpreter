@@ -1153,6 +1153,7 @@ bool forgesight_find_external_resource(char *vname, key_variable& keyVar)
 	// Otherwise, try global vars.
 	for(unsigned i=0; i < g_vecKeyVariables.size(); i++)
 	{
+	//	FST_INFO("forgesight_find_external_resource: %s .", g_vecKeyVariables[i].key_name);
 		if(!strcmp(g_vecKeyVariables[i].key_name, vname)) {
 			keyVar = g_vecKeyVariables[i] ;
 			return true;

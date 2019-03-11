@@ -33,9 +33,7 @@ typedef enum _EvalValueType
 	
 	TYPE_PR     = 0x40,
 	TYPE_SR     = 0x80,
-	TYPE_R      = 0x100,
-	TYPE_MR     = 0x200,
-	TYPE_HR     = 0x400,
+	TYPE_HR     = 0x100,
 	
 }EvalValueType;
 
@@ -339,42 +337,6 @@ public:
 			return srRegDataFake;
 		}
 	}
-	// TYPE_R
-	void setRRegDataValue(RRegData * rRegDataVal){
-		evalType |= TYPE_R ;
-		reg_r     = * rRegDataVal ;
-		evalType |= TYPE_FLOAT ;
-		fValue    = rRegDataVal->value ;
-	}
-	
-	RRegData getRRegDataValue(){
-		int iType = evalType & TYPE_R ;
-		if(iType != 0) {
-			return reg_r ;
-		}
-		else {
-			noticeErrorType(TYPE_R) ;
-			return rRegDataFake;
-		}
-	}
-	// TYPE_MR
-	void setMrRegDataValue(MrRegData * mrRegDataVal){
-		evalType  |= TYPE_MR ;
-		reg_mr     = * mrRegDataVal ;
-		evalType |= TYPE_FLOAT ;
-		fValue    = (float)mrRegDataVal->value ;
-	}
-	
-	MrRegData getMrRegDataValue(){
-		int iType = evalType & TYPE_MR ;
-		if(iType != 0) {
-			return reg_mr ;
-		}
-		else {
-			noticeErrorType(TYPE_MR) ;
-			return mrRegDataFake;
-		}
-	}
 	
 	// TYPE_HR
 	void setHrRegDataValue(HrRegData * hrRegDataVal){
@@ -541,44 +503,6 @@ public:
 			else {
 				noticeErrorType(operand->getType()) ;
 			}
-		}else if(evalType == (int)(TYPE_R | TYPE_FLOAT)){
-		    if(operand->getType() == TYPE_FLOAT)
-		    {
-				reg_r.value = reg_r.value + operand->getFloatValue();
-				fValue = fValue + operand->getFloatValue();
-		    }
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-		    {
-				reg_r.value = reg_r.value + operand->getRRegDataValue().value;
-				fValue = fValue + operand->getRRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-		    {
-				reg_r.value = reg_r.value + operand->getMrRegDataValue().value;
-				fValue = fValue + operand->getMrRegDataValue().value;
-		    }
-			else {
-				noticeErrorType(operand->getType()) ;
-			}
-		}else if(evalType == (int)(TYPE_MR | TYPE_FLOAT)){
-		    if(operand->getType() == TYPE_FLOAT)
-		    {
-				reg_mr.value = reg_mr.value + operand->getFloatValue();
-				fValue = fValue + operand->getFloatValue();
-		    }
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-		    {
-				reg_mr.value = reg_mr.value + operand->getRRegDataValue().value;
-				fValue = fValue + operand->getRRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-		    {
-				reg_mr.value = reg_mr.value + operand->getMrRegDataValue().value;
-				fValue = fValue + operand->getMrRegDataValue().value;
-		    }
-			else {
-				noticeErrorType(operand->getType()) ;
-			}
 		}else if(evalType == (int)(TYPE_SR | TYPE_STRING)){
 		    if(operand->getType() == TYPE_STRING)
 		    {
@@ -614,22 +538,6 @@ public:
 		    	sprintf(strTmp, "(%f, %f, %f, %f, %f, %f)", 
 					joint.j1_, joint.j2_, joint.j3_, joint.j4_, joint.j5_, joint.j6_);
 #endif
-				reg_sr.value += strTmp;
-				strContent   += strTmp;
-		    }
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-		    {
-		    	char strTmp[256];
-				memset(strTmp, 0x00, 256);
-		    	sprintf(strTmp, "%.3f", operand->getFloatValue());
-				reg_sr.value += strTmp;
-				strContent   += strTmp;
-		    }
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-		    {
-		    	char strTmp[256];
-				memset(strTmp, 0x00, 256);
-		    	sprintf(strTmp, "%d", (int)operand->getFloatValue());
 				reg_sr.value += strTmp;
 				strContent   += strTmp;
 		    }
@@ -766,46 +674,6 @@ public:
 				noticeErrorType(operand->getType()) ;
 				return ;
 			}
-		}else if(evalType == (int)(TYPE_R | TYPE_FLOAT)){
-		    if(operand->getType() == TYPE_FLOAT)
-		    {
-				reg_r.value = reg_r.value - operand->getFloatValue();
-				fValue = fValue - operand->getFloatValue();
-		    }
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-		    {
-				reg_r.value = reg_r.value - operand->getRRegDataValue().value;
-				fValue = fValue - operand->getRRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-		    {
-				reg_r.value = reg_r.value - operand->getMrRegDataValue().value;
-				fValue = fValue - operand->getMrRegDataValue().value;
-		    }
-			else {
-				noticeErrorType(operand->getType()) ;
-				return ;
-			}
-		}else if(evalType == (int)(TYPE_MR | TYPE_FLOAT)){
-		    if(operand->getType() == TYPE_FLOAT)
-		    {
-				reg_mr.value = reg_mr.value - (int)operand->getFloatValue();
-				fValue = fValue - operand->getFloatValue();
-		    }
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-		    {
-				reg_mr.value = reg_mr.value - operand->getRRegDataValue().value;
-				fValue = fValue - operand->getRRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-		    {
-				reg_mr.value = reg_mr.value - operand->getMrRegDataValue().value;
-				fValue = fValue - operand->getMrRegDataValue().value;
-		    }
-			else {
-				noticeErrorType(operand->getType()) ;
-				return ;
-			}
 		}else if(evalType == (int)(TYPE_SR | TYPE_STRING)){
 		    if(operand->getType() == TYPE_STRING)
 		    {
@@ -850,46 +718,6 @@ public:
 		}else if(evalType == TYPE_FLOAT){
 			fValue = fValue * operand->getFloatValue();
 			return ;
-		}else if(evalType == (int)(TYPE_R | TYPE_FLOAT)){
-		    if(operand->getType() == TYPE_FLOAT)
-		    {
-				reg_r.value = reg_r.value * operand->getFloatValue();
-				fValue = fValue * operand->getFloatValue();
-		    }
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-		    {
-				reg_r.value = reg_r.value * operand->getRRegDataValue().value;
-				fValue  = reg_r.value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-		    {
-				reg_r.value = reg_r.value * operand->getMrRegDataValue().value;
-				fValue = fValue * operand->getMrRegDataValue().value;
-		    }
-			else {
-				noticeErrorType(operand->getType()) ;
-				return ;
-			}
-		}else if(evalType == (int)(TYPE_MR | TYPE_FLOAT)){
-		    if(operand->getType() == TYPE_FLOAT)
-		    {
-				reg_mr.value = reg_mr.value * operand->getFloatValue();
-				fValue = fValue * operand->getFloatValue();
-		    }
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-		    {
-				reg_mr.value = reg_mr.value * operand->getRRegDataValue().value;
-				fValue = fValue * operand->getRRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-		    {
-				reg_mr.value = reg_mr.value * operand->getMrRegDataValue().value;
-				fValue = fValue * operand->getMrRegDataValue().value;
-		    }
-			else {
-				noticeErrorType(operand->getType()) ;
-				return ;
-			}
 		}else if(evalType == (int)(TYPE_SR | TYPE_STRING)){
 		    if(operand->getType() == TYPE_FLOAT)
 		    {
@@ -918,49 +746,6 @@ public:
 		}else if(evalType == TYPE_FLOAT){
 			fValue = fValue / operand->getFloatValue();
 			return ;
-		}else if(evalType == (int)(TYPE_R | TYPE_FLOAT)){
-		    if(operand->getType() == TYPE_FLOAT)
-		    {
-				reg_r.value = reg_r.value / operand->getFloatValue();
-				fValue = fValue / operand->getFloatValue();
-				
-			//	printf("RRegData: id = %d, comment = %s\n", reg_r.id, reg_r.comment.c_str());
-	        //	printf("reg_r.value = %f and operand = %f\n", reg_r.value, operand->getFloatValue());
-		    }
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-		    {
-				reg_r.value = reg_r.value / operand->getRRegDataValue().value;
-				fValue  = reg_r.value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-		    {
-				reg_r.value = reg_r.value / operand->getMrRegDataValue().value;
-				fValue = fValue / operand->getMrRegDataValue().value;
-		    }
-			else {
-				noticeErrorType(operand->getType()) ;
-				return ;
-			}
-		}else if(evalType == (int)(TYPE_MR | TYPE_FLOAT)){
-		    if(operand->getType() == TYPE_FLOAT)
-		    {
-				reg_mr.value = reg_mr.value / operand->getFloatValue();
-				fValue = fValue / operand->getFloatValue();
-		    }
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-		    {
-				reg_mr.value = reg_mr.value / operand->getRRegDataValue().value;
-				fValue = fValue / operand->getRRegDataValue().value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-		    {
-				reg_mr.value = reg_mr.value / operand->getMrRegDataValue().value;
-				fValue = fValue / operand->getMrRegDataValue().value;
-		    }
-			else {
-				noticeErrorType(operand->getType()) ;
-				return ;
-			}
 		}
 		else {
 			noticeErrorType(operand->getType()) ;
@@ -977,58 +762,6 @@ public:
 			fValue = fValue / operand->getFloatValue();
 			fValue = (int)fValue ;
 			return ;
-		}else if(evalType == (int)(TYPE_R | TYPE_FLOAT)){
-			if(operand->getType() == TYPE_FLOAT)
-			{
-				reg_r.value = reg_r.value / operand->getFloatValue();
-				fValue = fValue / operand->getFloatValue();
-				fValue = (int)fValue ;
-				
-				//	printf("RRegData: id = %d, comment = %s\n", reg_r.id, reg_r.comment.c_str());
-				//	printf("reg_r.value = %f and operand = %f\n", reg_r.value, operand->getFloatValue());
-			}
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-			{
-				reg_r.value = reg_r.value / operand->getRRegDataValue().value;
-				fValue  = reg_r.value;
-				fValue = (int)fValue ;
-			}
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-			{
-				reg_r.value = reg_r.value / operand->getMrRegDataValue().value;
-				fValue = fValue / operand->getMrRegDataValue().value;
-				fValue = (int)fValue ;
-			}
-			else {
-				noticeErrorType(operand->getType()) ;
-				return ;
-			}
-		}else if(evalType == (int)(TYPE_MR | TYPE_FLOAT)){
-			if(operand->getType() == TYPE_FLOAT)
-			{
-				reg_mr.value = reg_mr.value / operand->getFloatValue();
-				fValue = fValue / operand->getFloatValue();
-				fValue = (int)fValue ;
-				
-				//	printf("RRegData: id = %d, comment = %s\n", reg_r.id, reg_r.comment.c_str());
-				//	printf("reg_r.value = %f and operand = %f\n", reg_r.value, operand->getFloatValue());
-			}
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-			{
-				reg_mr.value = reg_mr.value / operand->getRRegDataValue().value;
-				fValue = fValue / operand->getRRegDataValue().value;
-				fValue = (int)fValue ;
-			}
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-			{
-				reg_mr.value = reg_mr.value / operand->getMrRegDataValue().value;
-				fValue = fValue / operand->getMrRegDataValue().value;
-				fValue = (int)fValue ;
-			}
-			else {
-				noticeErrorType(operand->getType()) ;
-				return ;
-			}
 		}
 		else {
 			noticeErrorType(operand->getType()) ;
@@ -1044,46 +777,6 @@ public:
 			iValue = iValue - (iTmp * operand->getIntValue());
 		}else if(evalType == TYPE_FLOAT){
 			fValue    = fmodf(fValue, operand->getFloatValue());
-		}else if(evalType == (int)(TYPE_R | TYPE_FLOAT)){
-		    if(operand->getType() == TYPE_FLOAT)
-		    {
-				reg_r.value  = fmodf(reg_r.value, operand->getFloatValue());
-				fValue  = reg_r.value;
-		    }
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-		    {
-				reg_r.value  = fmodf(reg_r.value, operand->getRRegDataValue().value);
-				fValue  = reg_r.value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-		    {
-				reg_r.value  = fmodf(reg_r.value, operand->getMrRegDataValue().value);
-				fValue  = reg_r.value;
-		    }
-			else {
-				noticeErrorType(operand->getType()) ;
-				return ;
-			}
-		}else if(evalType == (int)(TYPE_MR | TYPE_FLOAT)){
-		    if(operand->getType() == TYPE_FLOAT)
-		    {
-				reg_mr.value  = fmodf(reg_mr.value, operand->getFloatValue());
-				fValue  = reg_mr.value;
-		    }
-			else if(operand->getType() == (int)(TYPE_R | TYPE_FLOAT))
-		    {
-				reg_mr.value  = fmodf(reg_mr.value, operand->getRRegDataValue().value);
-				fValue  = reg_mr.value;
-		    }
-			else if(operand->getType() == (int)(TYPE_MR | TYPE_FLOAT))
-		    {
-				reg_mr.value  = fmodf(reg_mr.value, operand->getMrRegDataValue().value);
-				fValue  = reg_mr.value;
-		    }
-			else {
-				noticeErrorType(operand->getType()) ;
-				return ;
-			}
 		}
 		else {
 			noticeErrorType(operand->getType()) ;
@@ -1109,22 +802,6 @@ public:
 				for(t=ex-1; t>0; --t) 
 					fValue = (fValue) * ex;
 			}
-		}else if(evalType == (int)(TYPE_R | TYPE_FLOAT)){
-			if(ex == 0)
-				reg_r.value = 1 ;
-			else {
-				for(t=ex-1; t>0; --t) 
-					reg_r.value = (reg_r.value) * ex;
-			}
-			fValue  = reg_r.value;
-		}else if(evalType == (int)(TYPE_MR | TYPE_FLOAT)){
-			if(ex == 0)
-				reg_mr.value = 1 ;
-			else {
-				for(t=ex-1; t>0; --t) 
-					reg_mr.value = (reg_mr.value) * ex;
-			}
-			fValue  = reg_mr.value;
 		}
 		else {
 			noticeErrorType(operand->getType()) ;
@@ -1138,12 +815,6 @@ public:
 			iValue = -(iValue);
 		}else if(evalType == TYPE_FLOAT){
 			fValue = -(fValue);
-		}else if(evalType == (int)(TYPE_R | TYPE_FLOAT)){
-			reg_r.value = -(reg_r.value);
-			fValue  = reg_r.value;
-		}else if(evalType == (int)(TYPE_MR | TYPE_FLOAT)){
-			reg_mr.value = -(reg_mr.value);
-			fValue  = reg_mr.value;
 		}
 		else {
 			noticeErrorType(TYPE_FLOAT | TYPE_INT) ;
@@ -1204,12 +875,6 @@ private:
 		
         SrRegData reg_sr ;
 		SrRegData     srRegDataFake;
-		
-        RRegData  reg_r ;
-		RRegData     rRegDataFake;
-		
-        MrRegData reg_mr ;
-		MrRegData     mrRegDataFake;
 		
         HrRegData reg_hr ;
 		HrRegData     hrRegDataFake;

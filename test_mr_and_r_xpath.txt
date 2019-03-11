@@ -1,0 +1,6 @@
+001:test_mr_and_r:/prog/prog_body/function
+002:test_mr_and_r:/prog/prog_body/function/body/assignment[1]
+003:test_mr_and_r:/prog/prog_body/function/body/assignment[2]
+004:test_mr_and_r:/prog/prog_body/function/body/assignment[3]
+005:test_mr_and_r:/prog/prog_body/function/body/assignment[4]
+006:test_mr_and_r:/prog/prog_body/function
