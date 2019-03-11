@@ -80,29 +80,6 @@ bool reg_manager_interface_getValueMr(int *ptr, uint16_t num);
 bool reg_manager_interface_setValueMr(int *ptr, uint16_t num);
 
 /**********************
- ********* HR *********
- **********************/
-	
-bool reg_manager_interface_getHr(HrRegData *ptr, uint16_t num);
-bool reg_manager_interface_setHr(HrRegData *ptr, uint16_t num);
-bool reg_manager_interface_delHr(uint16_t num);
-
-/*
- * The operated object is an individual member of HR.
- */
-bool reg_manager_interface_getPoseHr(PoseEuler *ptr, uint16_t num);
-bool reg_manager_interface_setPoseHr(PoseEuler *ptr, uint16_t num);
-
-bool reg_manager_interface_getJointHr(Joint *ptr, uint16_t num);
-bool reg_manager_interface_setJointHr(Joint *ptr, uint16_t num);
-
-bool reg_manager_interface_getIdHr(int *ptr, uint16_t num);
-bool reg_manager_interface_setIdHr(int *ptr, uint16_t num);
-
-bool reg_manager_interface_getCommentHr(char *ptr, uint16_t num);
-bool reg_manager_interface_setCommentHr(char *ptr, uint16_t num);
-
-/**********************
  ********* MI **********
  **********************/
 bool reg_manager_interface_getMI(int *ptr, uint16_t num);

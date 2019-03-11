@@ -33,7 +33,6 @@ typedef enum _EvalValueType
 	
 	TYPE_PR     = 0x40,
 	TYPE_SR     = 0x80,
-	TYPE_HR     = 0x100,
 	
 }EvalValueType;
 
@@ -335,45 +334,6 @@ public:
 		else {
 			noticeErrorType(TYPE_SR) ;
 			return srRegDataFake;
-		}
-	}
-	
-	// TYPE_HR
-	void setHrRegDataValue(HrRegData * hrRegDataVal){
-		evalType  |= TYPE_HR ;
-		reg_hr     = * hrRegDataVal ;
-	}
-	
-	void setHrRegDataWithJointValue(Joint * jointVal){
-		evalType  |= TYPE_HR ;
-#ifdef WIN32
-		reg_hr.value.joint_pos[0] = jointVal->j1;
-		reg_hr.value.joint_pos[1] = jointVal->j2;
-		reg_hr.value.joint_pos[2] = jointVal->j3;
-		reg_hr.value.joint_pos[3] = jointVal->j4;
-		reg_hr.value.joint_pos[4] = jointVal->j5;
-		reg_hr.value.joint_pos[5] = jointVal->j6;
-#else
-		reg_hr.value.joint_pos[0] = jointVal->j1_;
-		reg_hr.value.joint_pos[1] = jointVal->j2_;
-		reg_hr.value.joint_pos[2] = jointVal->j3_;
-		reg_hr.value.joint_pos[3] = jointVal->j4_;
-		reg_hr.value.joint_pos[4] = jointVal->j5_;
-		reg_hr.value.joint_pos[5] = jointVal->j6_;
-		reg_hr.value.joint_pos[6] = jointVal->j7_;
-		reg_hr.value.joint_pos[7] = jointVal->j8_;
-		reg_hr.value.joint_pos[8] = jointVal->j9_;
-#endif
-	}
-	
-	HrRegData getHrRegDataValue(){
-		int iType = evalType & TYPE_HR ;
-		if(iType != 0) {
-			return reg_hr ;
-		}
-		else {
-			noticeErrorType(TYPE_HR) ;
-			return hrRegDataFake;
 		}
 	}
 	
@@ -876,8 +836,6 @@ private:
         SrRegData reg_sr ;
 		SrRegData     srRegDataFake;
 		
-        HrRegData reg_hr ;
-		HrRegData     hrRegDataFake;
 #endif
 	// };
 };
