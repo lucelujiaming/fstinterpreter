@@ -13,7 +13,7 @@ extern fst_base::InterpreterServer* g_objInterpreterServer ;
 #endif
 #include "reg_manager/forsight_registers_manager.h"
 
-#define REGSITER_NAMES   "pr;sr;uf;tf;pl"
+#define REGSITER_NAMES   "pr;uf;tf;pl"
 
 
 bool load_register_data();
@@ -48,18 +48,11 @@ bool reg_manager_interface_setCommentPr(char *ptr, uint16_t num);
  ********* SR *********
  **********************/
 
-bool reg_manager_interface_getSr(SrRegData *ptr, uint16_t num);
-bool reg_manager_interface_setSr(SrRegData *ptr, uint16_t num);
-bool reg_manager_interface_delSr(uint16_t num);
+bool reg_manager_interface_getSr(string &ptr, uint16_t num);
+bool reg_manager_interface_setSr(string &ptr, uint16_t num);
 
 bool reg_manager_interface_getValueSr(string &strVal, uint16_t num);
 bool reg_manager_interface_setValueSr(string &strVal, uint16_t num);
-
-bool reg_manager_interface_getIdSr(int *ptr, uint16_t num);
-bool reg_manager_interface_setIdSr(int *ptr, uint16_t num);
-
-bool reg_manager_interface_getCommentSr(char *ptr, uint16_t num);
-bool reg_manager_interface_setCommentSr(char *ptr, uint16_t num);
 
 /**********************
  ********* R **********

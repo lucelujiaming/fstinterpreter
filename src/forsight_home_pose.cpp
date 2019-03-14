@@ -307,10 +307,14 @@ int HomePoseMgr::readHomePoseFileList(char *basePath)
     char progName[256];
 	for(int i = 0 ; i < 10 ; i++)
 	{
-		memset(progName, 0x00, 256);
-		itoa(i, progName, 10);
-		sprintf(filename, "%s\\%d.json", basePath, i);
-		parseHomePoseFile(filename, progName);
+		memset(filename, 0x00, 256);
+		itoa(i, filename, 10);
+		sprintf(progName, "%s\\%d.json", basePath, i);
+		if((atoi(filename) != 0)
+			|| (strcmp(filename, "0") == 0))
+		{
+			parseHomePoseFile(progName, filename);
+		}
 	}
 #else
     char base[1000];
@@ -345,7 +349,12 @@ int HomePoseMgr::readHomePoseFileList(char *basePath)
 					strcpy(filename, ptr->d_name);
 					strExtPtr = strrchr(filename, '.');
 					strExtPtr[0] = '\0';
-					parseHomePoseFile(base, filename);
+				//	if(strcmp(filename, "index") != 0)
+					if((atoi(filename) != 0)
+						|| (strcmp(filename, "0") == 0))
+					{
+						parseHomePoseFile(base, filename);
+					}
 				}
 			}
         }

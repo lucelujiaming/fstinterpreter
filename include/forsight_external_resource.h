@@ -11,11 +11,14 @@ typedef enum _KeyVariableType
     KEYTYPE_INT32,
     KEYTYPE_INT64,
     KEYTYPE_DOUBLE,
+    KEYTYPE_STRING,
     KEYTYPE_BYTEARRAY,
 }KeyVariableType;
 
 typedef struct key_variable_t {
-    char             key_name[LAB_LEN];      // KeyName
+    char             key_name[LAB_LEN];      // Key Name
+    char             bas_name[LAB_LEN];      // Basic Name
+    char             xml_name[LAB_LEN];      // XML Tag Name
     long             base_address;  // BaseAddress
     KeyVariableType  key_type;      // Type
 	int              key_size;      // ByteSize

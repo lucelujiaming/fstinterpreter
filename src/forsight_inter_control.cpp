@@ -256,15 +256,8 @@ ProgMode getProgMode(struct thread_control_block * objThdCtrlBlockPtr)
 void setProgMode(struct thread_control_block * objThdCtrlBlockPtr, ProgMode progMode)
 {
     FST_INFO("setProgMode to %d at %d", (int)progMode, objThdCtrlBlockPtr->is_main_thread);
-	if(objThdCtrlBlockPtr->is_main_thread == MAIN_THREAD)
-	{
-	 	objThdCtrlBlockPtr->prog_mode   = progMode ;
-		g_interpreter_publish.progMode = progMode ;
-	}
-	else
-	{
-		FST_INFO("setProgMode Failed to %d", (int)progMode);
-	}
+ 	objThdCtrlBlockPtr->prog_mode   = progMode ;
+	g_interpreter_publish.progMode = progMode ;
 }
 
 
@@ -1155,6 +1148,28 @@ bool forgesight_find_external_resource(char *vname, key_variable& keyVar)
 	{
 	//	FST_INFO("forgesight_find_external_resource: %s .", g_vecKeyVariables[i].key_name);
 		if(!strcmp(g_vecKeyVariables[i].key_name, vname)) {
+			keyVar = g_vecKeyVariables[i] ;
+			return true;
+		}
+	}
+	return false;
+}
+
+
+/************************************************* 
+	Function:		forgesight_get_programs_path
+	Description:	get programs path
+	Input:			NULL
+	Return: 		programs path
+*************************************************/ 
+bool forgesight_find_external_resource_by_xmlname(
+					char *xml_name, key_variable& keyVar)
+{
+	// Otherwise, try global vars.
+	for(unsigned i=0; i < g_vecKeyVariables.size(); i++)
+	{
+	//	FST_INFO("forgesight_find_external_resource: %s .", g_vecKeyVariables[i].key_name);
+		if(!strcmp(g_vecKeyVariables[i].xml_name, xml_name)) {
 			keyVar = g_vecKeyVariables[i] ;
 			return true;
 		}

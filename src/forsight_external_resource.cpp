@@ -79,10 +79,15 @@ bool generateKeyWord(xmlNodePtr nodeHead, key_variable& objKeyVariable)
 		if(xmlStrcasecmp(nodeElement->name,BAD_CAST"KeyName")==0){ 
 			value = xmlNodeGetContent(nodeElement);
 			strcpy(objKeyVariable.key_name, (char *)value);
+			strcpy(objKeyVariable.bas_name, (char *)value);
 			char *p;
 			/* convert to lowercase */
 			p = objKeyVariable.key_name;
 			while(*p){ *p = tolower(*p); p++; }
+        }
+		else if(xmlStrcasecmp(nodeElement->name,BAD_CAST"XMLName")==0){ 
+			value = xmlNodeGetContent(nodeElement);
+			strcpy(objKeyVariable.xml_name, (char *)value);
         }
 		else if(xmlStrcasecmp(nodeElement->name,BAD_CAST"BaseAddress")==0){ 
 			value = xmlNodeGetContent(nodeElement);

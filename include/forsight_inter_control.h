@@ -66,6 +66,7 @@ void forgesight_load_programs_path();
 char * forgesight_get_programs_path();
 
 bool forgesight_find_external_resource(char *vname, key_variable& keyVar);
+bool forgesight_find_external_resource_by_xmlname(char *xml_name, key_variable& keyVar);
 
 void forgesight_load_wait_time_out_config();
 int forgesight_get_wait_time_out_config();

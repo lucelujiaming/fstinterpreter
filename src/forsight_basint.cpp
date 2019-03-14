@@ -13,6 +13,7 @@
 #include "error_code.h"
 #else
 #include "macro_instr_mgr.h"
+#include <io.h>
 #endif
 
 #ifdef USE_FORSIGHT_REGISTERS_MANAGER
@@ -592,6 +593,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	  while(objThreadCntrolBlock->tok == IMPORT)
 	  {
 		  exec_import(objThreadCntrolBlock);
+		  find_eol(objThreadCntrolBlock);
 		  get_token(objThreadCntrolBlock);
 	  }
       generateXPathVector(objThreadCntrolBlock, objThreadCntrolBlock->project_name);
@@ -1069,7 +1071,10 @@ int load_program(struct thread_control_block * objThreadCntrolBlock, char *p, ch
   // use bas directly 
   // if((access(fBASName,F_OK))==-1)
   // use XML directly 
-  parse_xml_file_wrapper(fXMLName);
+  if(_access(fXMLName, 4)==0)
+  {   
+      parse_xml_file_wrapper(fXMLName);
+  }
 #else
   sprintf(fXMLName, "%s/programs/%s.xml", forgesight_get_programs_path(), pname);
   sprintf(fBASName, "%s/programs/%s.bas", forgesight_get_programs_path(), pname);
@@ -2591,8 +2596,7 @@ bool call_inner_func(struct thread_control_block * objThreadCntrolBlock, eval_va
     // Process a comma-separated list of values.
     do {
         get_exp(objThreadCntrolBlock, &value, &boolValue);
-		if( (value.getType() == (int)(TYPE_STRING | TYPE_SR))
-		  ||(value.getType() == (int)(TYPE_STRING)))
+		if(value.getType() == TYPE_STRING)
 		{
 			sprintf(temp[count], "%s", value.getStringValue().c_str()); // save temporarily
 		}
@@ -3870,11 +3874,20 @@ void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname,
 	key_variable keyVar ;
     int iLineNum = 0 ;
 	char array_name[256] ;
-	char *temp = NULL ;
+	char reg_nomember_name[256] ;
+	char *temp = NULL , *namePtr = NULL;
 	
 	memset(array_name, 0x00, 256);
 	temp = array_name ;
 	get_char_token(vname, temp);
+	
+    namePtr = strchr(vname, '.');
+	memset(reg_nomember_name, 0x00, 256);
+	if(namePtr)
+	{
+		memcpy(reg_nomember_name, vname, namePtr - vname);
+	}
+
 	// deal "pr;sr;r;mr;uf;tf;pl" except p
     if(strstr(REGSITER_NAMES, array_name) 
 		&& (strcmp(array_name, "p") != 0) 
@@ -3980,14 +3993,20 @@ void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname,
 	// P register was saved in the local_var_stack
 	if(strcmp(array_name, "p") == 0) // lvalue is P register
 	{
-	    // Otherwise, try global vars.
-	    for(unsigned i=0; i < objThreadCntrolBlock->local_var_stack.size(); i++)
-	    {
-	        if(!strcmp(objThreadCntrolBlock->local_var_stack[i].var_name, vname)) {
+		// Otherwise, try global vars.
+		for(unsigned i=0; i < objThreadCntrolBlock->local_var_stack.size(); i++)
+		{
+			if(!strcmp(objThreadCntrolBlock->local_var_stack[i].var_name, vname)) {
 				set_var_value(objThreadCntrolBlock, array_name, 
 					objThreadCntrolBlock->local_var_stack[i].value, value);
-	            return;
-	        }
+				return;
+			}
+			else if(!strcmp(objThreadCntrolBlock->local_var_stack[i].var_name, reg_nomember_name))
+			{
+				int iRet = forgesight_registers_manager_set_point(
+					objThreadCntrolBlock, vname, &value);
+				return;
+			}
 		}
 		FST_ERROR("The %s does not exist", vname);
 	}
@@ -4081,6 +4100,7 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 	memset(array_name, 0x00, 256);
 	temp = array_name ;
 	get_char_token(vname, temp);
+
 	// Inner Type
 	// deal "pr;sr;r;mr;uf;tf;pl" except p
     if(strstr(REGSITER_NAMES, array_name) 
@@ -4147,6 +4167,22 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 	    if(!strcmp(it->var_name, vname))  {
 	        return it->value;
         }
+	}
+		
+	if(strstr(vname, ".") 
+		&& (strcmp(array_name, "p") == 0))
+	{
+		if(strchr(vname, '['))
+		{
+			FST_INFO("find_var vname = %s .", vname);
+			int iRet = forgesight_registers_manager_get_point(
+				objThreadCntrolBlock, vname, &value);
+			if(iRet == 0)
+			{
+				return value ;
+			}
+			
+		}
 	}
 
 	if (raise_unkown_error == 1)

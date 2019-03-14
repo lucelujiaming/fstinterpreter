@@ -12,7 +12,7 @@ using namespace fst_ctrl ;
 
 #endif
 
-#define REGSITER_NAMES   "pr;sr;uf;tf;pl"
+#define REGSITER_NAMES   "pr;uf;tf;pl"
 
 int forgesight_registers_manager_get_register(
 							struct thread_control_block* objThreadCntrolBlock, 
@@ -43,5 +43,11 @@ int forgesight_registers_manager_set_resource(
 							struct thread_control_block* objThreadCntrolBlock, 
 							char *name, key_variable keyVar, eval_value * value);
 
+int forgesight_registers_manager_get_point(
+							struct thread_control_block* objThreadCntrolBlock, 
+							char *name, eval_value * value);
+int forgesight_registers_manager_set_point(
+							struct thread_control_block* objThreadCntrolBlock, 
+							char *name, eval_value * value);
 
 #endif

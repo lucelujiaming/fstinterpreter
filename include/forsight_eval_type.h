@@ -32,7 +32,6 @@ typedef enum _EvalValueType
 	TYPE_PL     = 0x20,
 	
 	TYPE_PR     = 0x40,
-	TYPE_SR     = 0x80,
 	
 }EvalValueType;
 
@@ -318,24 +317,6 @@ public:
 			return prRegDataFake;
 		}
 	}
-	// TYPE_SR
-	void setSrRegDataValue(SrRegData * srRegDataVal){
-		evalType  |= TYPE_SR ;
-		reg_sr     = * srRegDataVal ;
-		evalType  |= TYPE_STRING ;
-		strContent = srRegDataVal->value ;
-	}
-	
-	SrRegData getSrRegDataValue(){
-		int iType = evalType & TYPE_SR ;
-		if(iType != 0) {
-			return reg_sr ;
-		}
-		else {
-			noticeErrorType(TYPE_SR) ;
-			return srRegDataFake;
-		}
-	}
 	
 public:
 	void calcAdd(eval_value * operand)
@@ -463,27 +444,18 @@ public:
 			else {
 				noticeErrorType(operand->getType()) ;
 			}
-		}else if(evalType == (int)(TYPE_SR | TYPE_STRING)){
+		}else if(evalType == TYPE_STRING){
 		    if(operand->getType() == TYPE_STRING)
 		    {
 		    	std::string strTmp;
 		    	strTmp = operand->getStringValue();
-				reg_sr.value += strTmp;
 				strContent   += strTmp;
 			}
-			else if(operand->getType() == (int)(TYPE_SR | TYPE_STRING))
-		    {
-		    	std::string strTmp;
-		    	strTmp = operand->getStringValue();
-				reg_sr.value += strTmp;
-				strContent   += strTmp;
-		    }
 			else if(operand->getType() == TYPE_FLOAT)
 		    {
 		    	char strTmp[256];
 				memset(strTmp, 0x00, 256);
 		    	sprintf(strTmp, "%.3f", operand->getFloatValue());
-				reg_sr.value += strTmp;
 				strContent   += strTmp;
 		    }
 			else if(operand->getType() == (int)(TYPE_PR | TYPE_FLOAT))
@@ -498,7 +470,6 @@ public:
 		    	sprintf(strTmp, "(%f, %f, %f, %f, %f, %f)", 
 					joint.j1_, joint.j2_, joint.j3_, joint.j4_, joint.j5_, joint.j6_);
 #endif
-				reg_sr.value += strTmp;
 				strContent   += strTmp;
 		    }
 			else {
@@ -634,7 +605,7 @@ public:
 				noticeErrorType(operand->getType()) ;
 				return ;
 			}
-		}else if(evalType == (int)(TYPE_SR | TYPE_STRING)){
+		}else if(evalType == TYPE_STRING){
 		    if(operand->getType() == TYPE_STRING)
 		    {
 		    	std::string testKey;
@@ -645,20 +616,7 @@ public:
 				{
 					strContent = strContent.substr(0, strContent.length() - testKey.length());
 				}
-				reg_sr.value = strContent;
 			}
-			else if(operand->getType() == (int)(TYPE_SR | TYPE_STRING))
-		    {
-		    	std::string testKey;
-		    	testKey = operand->getStringValue();
-				std::string testFind = std::string(strContent);
-				
-				if (strContent.rfind(testKey) != std::string::npos)
-				{
-					strContent = strContent.substr(0, strContent.length() - testKey.length());
-				}
-				reg_sr.value = strContent;
-		    }
 			else {
 				noticeErrorType(operand->getType()) ;
 				return ;
@@ -678,7 +636,7 @@ public:
 		}else if(evalType == TYPE_FLOAT){
 			fValue = fValue * operand->getFloatValue();
 			return ;
-		}else if(evalType == (int)(TYPE_SR | TYPE_STRING)){
+		}else if(evalType == TYPE_STRING){
 		    if(operand->getType() == TYPE_FLOAT)
 		    {
 		    	std::string strOpt;
@@ -689,7 +647,6 @@ public:
 				{
 					strContent += strOpt;	
 				}
-				reg_sr.value = strContent;
 			}
 		}
 		else {
@@ -832,10 +789,6 @@ private:
 		// All of register
         PrRegData reg_pr ;
 		PrRegData     prRegDataFake;
-		
-        SrRegData reg_sr ;
-		SrRegData     srRegDataFake;
-		
 #endif
 	// };
 };

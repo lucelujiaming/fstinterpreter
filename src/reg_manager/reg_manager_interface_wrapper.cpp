@@ -605,26 +605,24 @@ bool reg_manager_interface_setCommentPr(char *ptr, uint16_t num)
 	Ouput:			ptr        -  SR register Data
 	Return: 		1 - success
 *************************************************/
-bool reg_manager_interface_getSr(SrRegData *ptr, uint16_t num)
+bool reg_manager_interface_getSr(string &ptr, uint16_t num)
 {
 	bool bRet = false ;
-	ptr->id    = num ;
 #ifndef WIN32
 	if(g_objRegManagerInterface)
 	{
 		SrRegDataIpc objSrRegDataIpc ;
-		ptr->value = "";
+		ptr = "";
 		bRet = g_objRegManagerInterface->getSrReg(num, &objSrRegDataIpc);
-		ptr->value = string(objSrRegDataIpc.value) ;
-		FST_INFO("getSr[%d]:(%s) at %d with %s", num, ptr->value.c_str(), num, bRet?"TRUE":"FALSE");
+		ptr = string(objSrRegDataIpc.value) ;
+		FST_INFO("getSr[%d]:(%s) at %d with %s", num, ptr.c_str(), num, bRet?"TRUE":"FALSE");
 	}
 	else
 	{
 		FST_ERROR("g_objRegManagerInterface is NULL");
 	}
 #else
-	memset(ptr->comment, 0x00, MAX_REG_COMMENT_LENGTH);
-    ptr->value = string("Test");
+    ptr = string("Test");
 	bRet = true ;
 #endif
 	return bRet ;
@@ -637,7 +635,7 @@ bool reg_manager_interface_getSr(SrRegData *ptr, uint16_t num)
 	Input:			ptr        -  SR register Data
 	Return: 		1 - success
 *************************************************/
-bool reg_manager_interface_setSr(SrRegData *ptr, uint16_t num)
+bool reg_manager_interface_setSr(string &ptr, uint16_t num)
 {
 	bool bRet = false ;
 #ifndef WIN32
@@ -646,7 +644,7 @@ bool reg_manager_interface_setSr(SrRegData *ptr, uint16_t num)
 		SrRegDataIpc objSrRegDataIpc ;
 		// memcpy(&objSrRegData, ptr, sizeof(objSrRegData));
 		objSrRegDataIpc.id = num ;
-		strcpy(objSrRegDataIpc.value, ptr->value.c_str()) ;
+		strcpy(objSrRegDataIpc.value, ptr.c_str()) ;
 		FST_INFO("setSr:(%s) at %d with %s", objSrRegDataIpc.value, num, bRet?"TRUE":"FALSE");
 		
 		bRet = g_objRegManagerInterface->setSrReg(&objSrRegDataIpc);
@@ -655,32 +653,6 @@ bool reg_manager_interface_setSr(SrRegData *ptr, uint16_t num)
 		{
 			bRet = g_objRegManagerInterface->addSrReg(&objSrRegDataIpc);
 		}
-#endif
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_delSr
-	Description:	delete SR.
-	Input:			num        -  Index of SR
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_delSr(uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		bRet = g_objRegManagerInterface->deleteSrReg(num);
 #endif
 	}
 	else
@@ -742,132 +714,6 @@ bool reg_manager_interface_setValueSr(string &strVal, uint16_t num)
 		strcpy(objSrRegDataIpc.value, strVal.c_str());
 		FST_INFO("setValueSr:(%s)", objSrRegDataIpc.value);
 		bRet = g_objRegManagerInterface->setSrReg(&objSrRegDataIpc);
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_getIdSr
-	Description:	get Id info of SR.
-	Input:			num        -  Index of SR
-	Ouput:			ptr        -  Id info of SR
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_getIdSr(int *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		SrRegDataIpc objSrRegDataIpc ;
-		bRet = g_objRegManagerInterface->getSrReg(num, &objSrRegDataIpc);
-		if(bRet)
-		{
-		   *ptr = objSrRegDataIpc.id;
-		}
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_setIdSr
-	Description:	set Id info of SR.
-	Input:			num        -  Index of SR
-	Input:			ptr        -  Id info of SR
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_setIdSr(int *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		SrRegDataIpc objSrRegDataIpc ;
-		bRet = g_objRegManagerInterface->getSrReg(num, &objSrRegDataIpc);
-		if(bRet)
-		{
-		    objSrRegDataIpc.id = *ptr;
-			bRet = g_objRegManagerInterface->setSrReg(&objSrRegDataIpc);
-		}
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_getCommentSr
-	Description:	get Comment info of SR.
-	Input:			num        -  Index of SR
-	Ouput:			ptr        -  Comment info of SR
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_getCommentSr(char *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		SrRegDataIpc objSrRegDataIpc ;
-		bRet = g_objRegManagerInterface->getSrReg(num, &objSrRegDataIpc);
-		if(bRet)
-		{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		   memcpy(ptr, objSrRegDataIpc.comment.c_str(), objSrRegDataIpc.comment.length());
-#endif
-		}
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_setCommentPr
-	Description:	set Comment info of SR.
-	Input:			num        -  Index of SR
-	Input:			ptr        -  Comment info of SR
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_setCommentSr(char *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		SrRegDataIpc objSrRegDataIpc ;
-		bRet = g_objRegManagerInterface->getSrReg(num, &objSrRegDataIpc);
-		if(bRet)
-		{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		    objSrRegData.comment = string(ptr);
-			reg_manager_interface_setSr(&objSrRegDataIpc, num);
-#endif
-		}
 	}
 	else
 	{

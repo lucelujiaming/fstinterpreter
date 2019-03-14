@@ -18,6 +18,8 @@ enum {MAX_REG_COMMENT_LENGTH = 32,};
 #endif
 
 // Register name
+#define TXT_P    "p"
+
 #define TXT_PR    "pr"
 #define TXT_SR    "sr"
 #define TXT_R     "r"
@@ -63,13 +65,6 @@ enum {MAX_REG_COMMENT_LENGTH = 32,};
 #define TXT_PR_POSE_JOINT_J4   "pj4"
 #define TXT_PR_POSE_JOINT_J5   "pj5"
 #define TXT_PR_POSE_JOINT_J6   "pj6"
-
-#define TXT_HR_JOINT_J1   "hj1"
-#define TXT_HR_JOINT_J2   "hj2"
-#define TXT_HR_JOINT_J3   "hj3"
-#define TXT_HR_JOINT_J4   "hj4"
-#define TXT_HR_JOINT_J5   "hj5"
-#define TXT_HR_JOINT_J6   "hj6"
 
 // member name of UF/TF
 #define TXT_UF_TF_COORDINATE    "coordinate"
@@ -132,7 +127,6 @@ int forgesight_registers_manager_get_register(
 	// char reg_content_buffer[512] ;
 	
 	PrRegData objPrRegData ;
-	SrRegData objSrRegData ;
 
     int       iID ;
     char      cComment[MAX_REG_COMMENT_LENGTH];
@@ -573,53 +567,6 @@ int forgesight_registers_manager_get_register(
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
 			bRet = reg_manager_interface_getCommentPr(cComment, iRegIdx);
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-			{
-				strComment = std::string(cComment);
-				value->setStringValue(strComment);
-			}
-		}
-	}
-	else if(!strcmp(reg_name, TXT_SR))
-	{
-		if(strlen(reg_member) == 0)
-		{
-#ifndef WIN32
-			FST_INFO("TXT_SR at (%d), (%s), (%s) ", 
-				objSrRegData.id, objSrRegData.comment.c_str(), objSrRegData.value.c_str());
-#else
-			FST_INFO("TXT_SR at (%d), (%s), (%s) ", 
-				objSrRegData.id, objSrRegData.comment, objSrRegData.value.c_str());
-#endif
-			bRet = reg_manager_interface_getSr(&objSrRegData, iRegIdx);
-			// SrRegData * ptr = (SrRegData *)reg_content_buffer ;
-			// value->setStringValue(ptr->value);
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-				value->setSrRegDataValue(&objSrRegData);
-		}
-		else if (!strcmp(reg_member, TXT_REG_VALUE))
-		{
-			bRet = reg_manager_interface_getValueSr(strSrValue, iRegIdx);
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-				value->setStringValue(strSrValue);
-		}
-		else if (!strcmp(reg_member, TXT_REG_ID))
-		{
-			bRet = reg_manager_interface_getIdSr(&iID, iRegIdx);
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-				value->setFloatValue(iID);
-		}
-		else if (!strcmp(reg_member, TXT_REG_COMMENT))
-		{
-			bRet = reg_manager_interface_getCommentSr(cComment, iRegIdx);
 			if(bRet == false)
 				serror(objThreadCntrolBlock, 4) ; 
 			else
@@ -1562,60 +1509,6 @@ int forgesight_registers_manager_set_register(
 	       	return 0 ;
 		}
 	}
-	else if(!strcmp(reg_name, TXT_SR))
-	{
-		if(strlen(reg_member) == 0)
-		{
-			strValue = valueStart->getStringValue() ;
-			if(valueStart->getType() == TYPE_STRING)
-			{
-				FST_INFO("Set TYPE_STRING token:(%s) to %s", 
-						objThreadCntrolBlock->token, strValue.c_str());
-			   reg_manager_interface_setValueSr(strValue, iRegIdx);
-			}
-			else if(valueStart->getType() == (int)(TYPE_STRING | TYPE_SR))
-			{
-				FST_INFO("Set TYPE_SR token:(%s) to %s", 
-						objThreadCntrolBlock->token, strValue.c_str());
-				reg_manager_interface_setSr(&(valueStart->getSrRegDataValue()), iRegIdx);
-			}
-			else if(valueStart->getType() == TYPE_FLOAT)
-			{
-			    char cStringValue[64];
-			    sprintf(cStringValue, "%d", (int)valueStart->getFloatValue());
-				strValue = std::string(cStringValue);
-				FST_INFO("Set TYPE_STRING token:(%s) to %s", 
-						objThreadCntrolBlock->token, cStringValue);
-			    reg_manager_interface_setValueSr(strValue, iRegIdx);
-			}
-	       	return 0 ;
-		}
-		else if (!strcmp(reg_member, TXT_REG_VALUE))
-		{
-			get_token(objThreadCntrolBlock);
-			FST_INFO("Set VALUE:(%s) to SR[%s]", 
-				objThreadCntrolBlock->token, reg_idx);
-			strValue = std::string(objThreadCntrolBlock->token);
-			reg_manager_interface_setValueSr(strValue, iRegIdx);
-	       	return 0 ;
-		}
-		else if (!strcmp(reg_member, TXT_REG_ID))
-		{
-			int iID = (int)valueStart->getFloatValue();
-			FST_INFO("Set ID:(%d) to SR[%s]", iID, reg_idx);
-			reg_manager_interface_setIdSr(&iID, iRegIdx);
-	       	return 0 ;
-		}
-		else if (!strcmp(reg_member, TXT_REG_COMMENT))
-		{
-			// get_token(objThreadCntrolBlock);
-			FST_INFO("Set COMMENT:(%s) to SR[%s]", 
-				objThreadCntrolBlock->token, reg_idx);
-			reg_manager_interface_setCommentSr(
-				(char *)valueStart->getStringValue().c_str(), iRegIdx);
-	       	return 0 ;
-		}
-	}
 	else if(!strcmp(reg_name, TXT_UF))
 	{
 		if(strlen(reg_member) == 0)
@@ -2012,6 +1905,7 @@ int forgesight_registers_manager_get_resource(
 {
 	int    iResValue ;
 	double dResValue ;
+	string strResValue ;
 	
 	bool bRet = false ;
 	char reg_name[16] ;
@@ -2150,6 +2044,28 @@ int forgesight_registers_manager_get_resource(
 				value->setFloatValue((float)iResValue);
 		}
 	}
+	else if(!strcmp(reg_name, TXT_SR))
+	{
+		if(strlen(reg_member) == 0)
+		{
+			FST_INFO("TXT_SR at (%d) ", iRegIdx);
+			bRet = reg_manager_interface_getSr(strResValue, iRegIdx);
+			// SrRegData * ptr = (SrRegData *)reg_content_buffer ;
+			// value->setStringValue(ptr->value);
+			if(bRet == false)
+				serror(objThreadCntrolBlock, 4) ; 
+			else
+				value->setStringValue(strResValue);
+		}
+		else if (!strcmp(reg_member, TXT_REG_VALUE))
+		{
+			bRet = reg_manager_interface_getValueSr(strResValue, iRegIdx);
+			if(bRet == false)
+				serror(objThreadCntrolBlock, 4) ; 
+			else
+				value->setStringValue(strResValue);
+		}
+	}
 	else
 	{
 		if((keyVar.key_type == KEYTYPE_CHAR)
@@ -2226,7 +2142,7 @@ int forgesight_registers_manager_set_resource(
 				int iValue = (int)valueStart->getFloatValue();
 			    reg_manager_interface_setValueMI(&iValue, iRegIdx);
 			}
-			else if(valueStart->getType() == (int)(TYPE_STRING | TYPE_SR))
+			else if(valueStart->getType() == TYPE_STRING)
 			{
 				std::string strValue;
 				strValue = valueStart->getStringValue();
@@ -2253,7 +2169,7 @@ int forgesight_registers_manager_set_resource(
 				int iValue = (int)valueStart->getFloatValue();
 			    reg_manager_interface_setValueMH(&iValue, iRegIdx);
 			}
-			else if(valueStart->getType() == (int)(TYPE_STRING | TYPE_SR))
+			else if(valueStart->getType() == TYPE_STRING)
 			{
 				std::string strValue;
 				strValue = valueStart->getStringValue();
@@ -2281,7 +2197,7 @@ int forgesight_registers_manager_set_resource(
 				FST_INFO("Set FLOAT:(%f) to R[%s]", fValue, reg_idx);
 			    reg_manager_interface_setValueR(&fValue, iRegIdx);
 			}
-			else if(valueStart->getType() == (int)(TYPE_STRING | TYPE_SR))
+			else if(valueStart->getType() == TYPE_STRING)
 			{
 				std::string strValue;
 				strValue = valueStart->getStringValue();
@@ -2309,12 +2225,12 @@ int forgesight_registers_manager_set_resource(
 				int iValue = (int)valueStart->getFloatValue();
 			    reg_manager_interface_setValueMr(&iValue, iRegIdx);
 			}
-			else if(valueStart->getType() == (int)(TYPE_STRING | TYPE_SR))
+			else if(valueStart->getType() == TYPE_STRING)
 			{
 				std::string strValue;
 				strValue = valueStart->getStringValue();
 				
-				FST_INFO("Set TYPE_SR token:(%s) to %s", 
+				FST_INFO("Set MR token:(%s) to TYPE_STRING %s", 
 						objThreadCntrolBlock->token, strValue.c_str());
 				int iValue = (int)atof(strValue.c_str());
 			    reg_manager_interface_setValueMr(&iValue, iRegIdx);
@@ -2329,8 +2245,510 @@ int forgesight_registers_manager_set_resource(
 	       	return 0 ;
 		}
 	}
+	else if(!strcmp(reg_name, TXT_SR))
+	{
+		if(strlen(reg_member) == 0)
+		{
+			strValue = valueStart->getStringValue() ;
+			if(valueStart->getType() == TYPE_STRING)
+			{
+				FST_INFO("Set TYPE_STRING token:(%s) to %s", 
+						objThreadCntrolBlock->token, strValue.c_str());
+			   reg_manager_interface_setValueSr(strValue, iRegIdx);
+			}
+			else if(valueStart->getType() == TYPE_FLOAT)
+			{
+			    char cStringValue[64];
+			    sprintf(cStringValue, "%d", (int)valueStart->getFloatValue());
+				strValue = std::string(cStringValue);
+				FST_INFO("Set TYPE_STRING token:(%s) to %s", 
+						objThreadCntrolBlock->token, cStringValue);
+			    reg_manager_interface_setValueSr(strValue, iRegIdx);
+			}
+	       	return 0 ;
+		}
+		else if (!strcmp(reg_member, TXT_REG_VALUE))
+		{
+			get_token(objThreadCntrolBlock);
+			FST_INFO("Set VALUE:(%s) to SR[%s]", 
+				objThreadCntrolBlock->token, reg_idx);
+			strValue = std::string(objThreadCntrolBlock->token);
+			reg_manager_interface_setValueSr(strValue, iRegIdx);
+	       	return 0 ;
+		}
+	}
 	return 0;
 }
 
+
+/************************************************* 
+	Function:		forgesight_registers_manager_get_register
+	Description:	Get the register info from controller .
+	Input:			thread_control_block  - interpreter info
+	Input:			name             - register name, like PR[1]
+	Output:			value            - register value
+	Return: 		1 - success
+*************************************************/
+int forgesight_registers_manager_get_point(
+			struct thread_control_block* objThreadCntrolBlock, 
+							char *name, eval_value * valueStart)
+{	
+    vector<var_type>::reverse_iterator it ;
+	eval_value value;
+	
+	bool bRet = false ;
+	char reg_name[16] ;
+	char reg_idx[16] ;
+	char reg_member[16] ;
+	int  iRegIdx = 0 ;
+	char * namePtr = name ;
+	char *temp = NULL ;
+	
+	char reg_nomember_name[16] ;
+	
+	PoseEuler objPoseEuler ;
+    Joint     objJoint;
+//    int       iType ;
+	
+	memset(reg_name, 0x00, 16);
+	temp = reg_name ;
+	get_char_token(namePtr, temp);
+	
+	namePtr += strlen(reg_name) ;
+	if(namePtr[0] != '['){
+		return -1 ;
+	}
+	namePtr++ ;
+	
+	memset(reg_idx, 0x00, 16);
+	temp = reg_idx ;
+	get_num_token(namePtr, temp);
+	iRegIdx = atoi(reg_idx);
+	// namePtr += strlen(reg_idx) ;
+
+	namePtr += strlen(reg_idx) ;
+	if(namePtr[0] != ']'){
+		return -1 ;
+	}
+	namePtr++ ;
+
+	namePtr = strchr(namePtr, '.');
+	memset(reg_member, 0x00, 16);
+	if(namePtr)
+	{
+		namePtr++ ;
+		temp = reg_member ;
+		get_char_token(namePtr, temp);
+	}
+	// memset(reg_content_buffer, 0x00, sizeof(reg_content_buffer));
+ 
+	FST_INFO("forgesight_registers_manager_get_point at %s[%d] ", reg_name, iRegIdx);
+	value.resetNoneValue();
+	if(!strcmp(reg_name, TXT_P))
+	{
+		memset(reg_nomember_name, 0x00, 16);
+		sprintf(reg_nomember_name, "%s[%d]", reg_name, iRegIdx);
+		// Get P register
+		for(it
+			= objThreadCntrolBlock->local_var_stack.rbegin();
+		it != objThreadCntrolBlock->local_var_stack.rend(); ++it)
+		{
+			if(!strcmp(it->var_name, reg_nomember_name))  {
+				value = it->value;
+				break;
+			}
+		}
+			
+		if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J1))
+		{
+			if(TYPE_POSE == value.getType())
+			{
+				objPoseEuler = value.getPoseValue();
+#ifndef WIN32
+				valueStart->setFloatValue(objPoseEuler.point_.x_);
+#else
+				valueStart->setFloatValue(objPoseEuler.position.x);
+#endif
+			}
+			else if(TYPE_JOINT == value.getType())
+			{
+				objJoint = value.getJointValue();
+#ifndef WIN32
+				valueStart->setFloatValue(objJoint.j1_);
+#else
+				valueStart->setFloatValue(objJoint.j1);
+#endif
+			}
+		}
+		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J2))
+		{
+			if(TYPE_POSE == value.getType())
+			{
+				objPoseEuler = value.getPoseValue();
+#ifndef WIN32
+				valueStart->setFloatValue(objPoseEuler.point_.y_);
+#else
+				valueStart->setFloatValue(objPoseEuler.position.y);
+#endif
+			}
+			else if(TYPE_JOINT == value.getType())
+			{
+				objJoint = value.getJointValue();
+#ifndef WIN32
+				valueStart->setFloatValue(objJoint.j2_);
+#else
+				valueStart->setFloatValue(objJoint.j2);
+#endif
+			}
+		}
+		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J3))
+		{
+			if(TYPE_POSE == value.getType())
+			{
+				objPoseEuler = value.getPoseValue();
+#ifndef WIN32
+				valueStart->setFloatValue(objPoseEuler.point_.z_);
+#else
+				valueStart->setFloatValue(objPoseEuler.position.z);
+#endif
+			}
+			else if(TYPE_JOINT == value.getType())
+			{
+				objJoint = value.getJointValue();
+#ifndef WIN32
+				valueStart->setFloatValue(objJoint.j3_);
+#else
+				valueStart->setFloatValue(objJoint.j3);
+#endif
+			}
+		}
+		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J4))
+		{
+			if(TYPE_POSE == value.getType())
+			{
+				objPoseEuler = value.getPoseValue();
+#ifndef WIN32
+				valueStart->setFloatValue(objPoseEuler.euler_.a_);
+#else
+				valueStart->setFloatValue(objPoseEuler.orientation.a);
+#endif
+			}
+			else if(TYPE_JOINT == value.getType())
+			{
+				objJoint = value.getJointValue();
+#ifndef WIN32
+				valueStart->setFloatValue(objJoint.j4_);
+#else
+				valueStart->setFloatValue(objJoint.j4);
+#endif
+			}
+		}
+		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J5))
+		{
+			if(TYPE_POSE == value.getType())
+			{
+				objPoseEuler = value.getPoseValue();
+#ifndef WIN32
+				valueStart->setFloatValue(objPoseEuler.euler_.b_);
+#else
+				valueStart->setFloatValue(objPoseEuler.orientation.b);
+#endif
+			}
+			else if(TYPE_JOINT == value.getType())
+			{
+				objJoint = value.getJointValue();
+#ifndef WIN32
+				valueStart->setFloatValue(objJoint.j5_);
+#else
+				valueStart->setFloatValue(objJoint.j5);
+#endif
+			}
+		}
+		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J6))
+		{
+			if(TYPE_POSE == value.getType())
+			{
+				objPoseEuler = value.getPoseValue();
+#ifndef WIN32
+				valueStart->setFloatValue(objPoseEuler.euler_.c_);
+#else
+				valueStart->setFloatValue(objPoseEuler.orientation.c);
+#endif
+			}
+			else if(TYPE_JOINT == value.getType())
+			{
+				objJoint = value.getJointValue();
+#ifndef WIN32
+				valueStart->setFloatValue(objJoint.j6_);
+#else
+				valueStart->setFloatValue(objJoint.j6);
+#endif
+			}
+		}
+	}
+	return 0 ;
+}
+
+/************************************************* 
+	Function:		forgesight_registers_manager_set_register
+	Description:	Set the register info from controller .
+	Input:			thread_control_block  - interpreter info
+	Input:			name             - register name, like PR[1]
+	Input:			valueStart       - register value
+	Return: 		1 - success
+*************************************************/
+int forgesight_registers_manager_set_point(
+		struct thread_control_block* objThreadCntrolBlock, 
+		char *name, eval_value * valueStart)
+{
+    vector<var_type>::reverse_iterator it ;
+	eval_value value;
+//	int boolValue;
+
+	char reg_name[16] ;
+	char reg_idx[16] ;
+	char reg_member[16] ;
+	int  iRegIdx = 0 ;
+	char * namePtr = name ;
+	char *temp = NULL ;
+	
+	char reg_nomember_name[16] ;
+	
+	PoseEuler pose ;
+	Joint joint ;
+	
+	memset(reg_name, 0x00, 16);
+	temp = reg_name ;
+	get_char_token(namePtr, temp);
+	if(name[strlen(reg_name)] != '['){
+		return -1 ;
+	}
+	namePtr += strlen(reg_name) ;
+	namePtr++ ;
+	
+	memset(reg_idx, 0x00, 16);
+	temp = reg_idx ;
+	get_num_token(namePtr, temp);
+	iRegIdx = atoi(reg_idx);
+	// namePtr += strlen(reg_idx) ;
+	
+	namePtr = strchr(namePtr, '.');
+	memset(reg_member, 0x00, 16);
+	if(namePtr)
+	{
+		namePtr++ ;
+		temp = reg_member ;
+		get_char_token(namePtr, temp);
+	}
+
+	if(!strcmp(reg_name, TXT_P))
+	{
+		memset(reg_nomember_name, 0x00, 16);
+		sprintf(reg_nomember_name, "%s[%d]", reg_name, iRegIdx);
+		// Get P register
+		for(it
+			= objThreadCntrolBlock->local_var_stack.rbegin();
+		it != objThreadCntrolBlock->local_var_stack.rend(); ++it)
+		{
+			if(!strcmp(it->var_name, reg_nomember_name))  {
+				value = it->value;
+				break;
+			}
+		}
+		
+		if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J1))
+		{
+			double fValue = valueStart->getFloatValue();
+			
+			if(TYPE_POSE == value.getType())
+			{
+				pose = value.getPoseValue();
+#ifndef WIN32
+				pose.point_.x_ = fValue;
+#else
+				pose.position.x = fValue;
+#endif
+				value.setPoseValue(&pose);
+			}
+			else if(TYPE_JOINT == value.getType())
+			{
+				joint = value.getJointValue();
+#ifndef WIN32
+				joint.j1_ = fValue;
+#else
+				joint.j1  = fValue;
+#endif
+				value.setJointValue(&joint);
+			}
+			else
+			{
+	       		FST_ERROR("Set PJ1:(%f) P[%d].pos_type = %d ", 
+					fValue, iRegIdx, value.getType());
+			}
+		}
+		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J2))
+		{
+			double fValue = valueStart->getFloatValue();
+			
+			if(TYPE_POSE == value.getType())
+			{
+				pose = value.getPoseValue();
+#ifndef WIN32
+				pose.point_.y_ = fValue;
+#else
+				pose.position.y = fValue;
+#endif
+				value.setPoseValue(&pose);
+			}
+			else if(TYPE_JOINT == value.getType())
+			{
+				joint = value.getJointValue();
+#ifndef WIN32
+				joint.j2_ = fValue;
+#else
+				joint.j2  = fValue;
+#endif
+				value.setJointValue(&joint);
+			}
+			else
+			{
+	       		FST_ERROR("Set PJ1:(%f) P[%d].pos_type = %d ", 
+					fValue, iRegIdx, value.getType());
+			}
+		}
+		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J3))
+		{
+			double fValue = valueStart->getFloatValue();
+			
+			if(TYPE_POSE == value.getType())
+			{
+				pose = value.getPoseValue();
+#ifndef WIN32
+				pose.point_.z_ = fValue;
+#else
+				pose.position.z = fValue;
+#endif
+				value.setPoseValue(&pose);
+			}
+			else if(TYPE_JOINT == value.getType())
+			{
+				joint = value.getJointValue();
+#ifndef WIN32
+				joint.j3_ = fValue;
+#else
+				joint.j3  = fValue;
+#endif
+				value.setJointValue(&joint);
+			}
+			else
+			{
+	       		FST_ERROR("Set PJ1:(%f) P[%d].pos_type = %d ", 
+					fValue, iRegIdx, value.getType());
+			}
+		}
+		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J4))
+		{
+			double fValue = valueStart->getFloatValue();
+			
+			if(TYPE_POSE == value.getType())
+			{
+				pose = value.getPoseValue();
+#ifndef WIN32
+				pose.euler_.a_ = fValue;
+#else
+				pose.orientation.a = fValue;
+#endif
+				value.setPoseValue(&pose);
+			}
+			else if(TYPE_JOINT == value.getType())
+			{
+				joint = value.getJointValue();
+#ifndef WIN32
+				joint.j4_ = fValue;
+#else
+				joint.j4  = fValue;
+#endif
+				value.setJointValue(&joint);
+			}
+			else
+			{
+	       		FST_ERROR("Set PJ1:(%f) P[%d].pos_type = %d ", 
+					fValue, iRegIdx, value.getType());
+			}
+		}
+		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J5))
+		{
+			double fValue = valueStart->getFloatValue();
+			
+			if(TYPE_POSE == value.getType())
+			{
+				pose = value.getPoseValue();
+#ifndef WIN32
+				pose.euler_.b_ = fValue;
+#else
+				pose.orientation.b = fValue;
+#endif
+				value.setPoseValue(&pose);
+			}
+			else if(TYPE_JOINT == value.getType())
+			{
+				joint = value.getJointValue();
+#ifndef WIN32
+				joint.j5_ = fValue;
+#else
+				joint.j5  = fValue;
+#endif
+				value.setJointValue(&joint);
+			}
+			else
+			{
+	       		FST_ERROR("Set PJ1:(%f) P[%d].pos_type = %d ", 
+					fValue, iRegIdx, value.getType());
+			}
+		}
+		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J6))
+		{
+			double fValue = valueStart->getFloatValue();
+			
+			if(TYPE_POSE == value.getType())
+			{
+				pose = value.getPoseValue();
+#ifndef WIN32
+				pose.euler_.c_ = fValue;
+#else
+				pose.orientation.c = fValue;
+#endif
+				value.setPoseValue(&pose);
+			}
+			else if(TYPE_JOINT == value.getType())
+			{
+				joint = value.getJointValue();
+#ifndef WIN32
+				joint.j6_ = fValue;
+#else
+				joint.j6  = fValue;
+#endif
+				value.setJointValue(&joint);
+			}
+			else
+			{
+	       		FST_ERROR("Set PJ1:(%f) P[%d].pos_type = %d ", 
+					fValue, iRegIdx, value.getType());
+			}
+		}
+		
+		// Set P register
+		for(it
+			= objThreadCntrolBlock->local_var_stack.rbegin();
+		it != objThreadCntrolBlock->local_var_stack.rend(); ++it)
+		{
+			if(!strcmp(it->var_name, reg_nomember_name))  {
+			    it->value = value;
+				break;
+			}
+		}
+	}
+	return 0 ;
+}
 
 

@@ -32,7 +32,7 @@
 #define TXT_UI    "ui"
 #define TXT_UO    "uo"
 
-#define DEFAULT_IO_VALUE    0   //  SMLT_FLASE 
+#define DEFAULT_IO_VALUE    1   //  SMLT_FLASE 
 
 #define SMLT_TRUE    1
 #define SMLT_FLASE   0

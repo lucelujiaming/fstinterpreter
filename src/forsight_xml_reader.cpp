@@ -17,6 +17,8 @@ using namespace std;
 #include "forsight_basint.h"
 #include "forsight_xml_reader.h"
 
+#include "forsight_inter_control.h"
+
 #define PROG_HEAD         "head"
 #define LINE_LAB_LEN      256
 #define FILE_PATH_LEN     1024
@@ -188,6 +190,7 @@ void serializeFunctionParam(vector<Label> labels, char * result)
 *************************************************/ 
 int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char * label_str)
 {
+	key_variable keyVar ;
     char label_output[1024];
     char label_elemnt[128];
     Label labelParam ;
@@ -418,60 +421,8 @@ int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char *
 			else
 				sprintf(label_str, "%s].%s ", label_str, label_elemnt);
 		}
-		else if(xmlStrcasecmp(name, BAD_CAST"motion_register")==0){
-			sprintf(label_str, "%sMR[", label_str); 
-			for(nodeSubValueElement = nodeValueElement->children; 
-					nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
-				if(xmlStrcasecmp(nodeSubValueElement->name,BAD_CAST"element")==0){ 
-					//	value = xmlNodeGetContent(nodeSubValueElement);
-					memset(label_output, 0x00, 1024);
-					generateElementStr(nodeSubValueElement, objLineInfoTemp, label_output);
-					sprintf(label_str, "%s%s", label_str, (char*)label_output);
-				}
-			}
-			sprintf(label_str, "%s] ", label_str);
-		}
-		else if(xmlStrcasecmp(name, BAD_CAST"register")==0){ 
-			sprintf(label_str, "%sR[", label_str); 
-			for(nodeSubValueElement = nodeValueElement->children; 
-					nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
-				if(xmlStrcasecmp(nodeSubValueElement->name,BAD_CAST"element")==0){ 
-					//	value = xmlNodeGetContent(nodeSubValueElement);
-					memset(label_output, 0x00, 1024);
-					generateElementStr(nodeSubValueElement, objLineInfoTemp, label_output);
-					sprintf(label_str, "%s%s", label_str, (char*)label_output);
-				}
-			}
-			sprintf(label_str, "%s] ", label_str);
-		}
-		else if(xmlStrcasecmp(name, BAD_CAST"string_register")==0){
-			sprintf(label_str, "%sSR[", label_str); 
-			for(nodeSubValueElement = nodeValueElement->children; 
-					nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
-				if(xmlStrcasecmp(nodeSubValueElement->name,BAD_CAST"element")==0){ 
-					//	value = xmlNodeGetContent(nodeSubValueElement);
-					memset(label_output, 0x00, 1024);
-					generateElementStr(nodeSubValueElement, objLineInfoTemp, label_output);
-					sprintf(label_str, "%s%s", label_str, (char*)label_output);
-				}
-			}
-			sprintf(label_str, "%s] ", label_str);
-		}
-		else if(xmlStrcasecmp(name, BAD_CAST"modbus_input_register")==0){ 
-			sprintf(label_str, "%sMI[", label_str); 
-			for(nodeSubValueElement = nodeValueElement->children; 
-					nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
-				if(xmlStrcasecmp(nodeSubValueElement->name,BAD_CAST"element")==0){ 
-					//	value = xmlNodeGetContent(nodeSubValueElement);
-					memset(label_output, 0x00, 1024);
-					generateElementStr(nodeSubValueElement, objLineInfoTemp, label_output);
-					sprintf(label_str, "%s%s", label_str, (char*)label_output);
-				}
-			}
-			sprintf(label_str, "%s] ", label_str);
-		}
-		else if(xmlStrcasecmp(name, BAD_CAST"modbus_holding_register")==0){ 
-			sprintf(label_str, "%sMH[", label_str); 
+		else if(forgesight_find_external_resource_by_xmlname((char *)name, keyVar)){
+			sprintf(label_str, "%s%s[", label_str, keyVar.bas_name); 
 			for(nodeSubValueElement = nodeValueElement->children; 
 					nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
 				if(xmlStrcasecmp(nodeSubValueElement->name,BAD_CAST"element")==0){ 
@@ -638,124 +589,6 @@ int generatePoseElement(xmlNodePtr nodeInstructionParam, LineInfo objLineInfo)
 	}
     trim(label_params);
 	printBASCode(objLineInfo, "P[%s]", (char*)label_params);
-	return 1 ;
-}
-
-int generateElementOld(xmlNodePtr nodeValueElement, LineInfo objLineInfo)
-{
-    char label_params[1024];
-    Label labelParam ;
-	vector<Label> label_vector;
-
-	LineInfo objLineInfoTemp = objLineInfo;
-	// char currentChildPath[LAB_LEN];
-    xmlNodePtr nodeSubValueElement ;
-    xmlChar *name, *file, *value;
-	value = xmlNodeGetContent(nodeValueElement);
-			// FST_INFO("\t\t\t\t  --debug-- (nodeValueElement) %s = %s\n", 
-			//		(char*)nodeValueElement->name, (char *)value);
-		
-	if(xmlStrcasecmp(nodeValueElement->name, BAD_CAST"element")==0){ 
-	    name = xmlGetProp(nodeValueElement,BAD_CAST"type");
-		// FST_INFO("%s, ", (char*)nodeStatement->name);
-		if(xmlStrcasecmp(name, BAD_CAST"num")==0){ 
-			value = xmlNodeGetContent(nodeValueElement);
-			printBASCode(objLineInfo, "%s ", (char*)value);
-		}
-		else if(xmlStrcasecmp(name, BAD_CAST"operation")==0){ 
-			value = xmlNodeGetContent(nodeValueElement);
-			printBASCode(objLineInfo, "%s ", (char*)value);
-		}
-		else if(xmlStrcasecmp(name, BAD_CAST"boolean_operation")==0){ 
-			value = xmlNodeGetContent(nodeValueElement);
-			printBASCode(objLineInfo, "%s ", (char*)value);
-		}
-		else if(xmlStrcasecmp(name, BAD_CAST"bracket")==0){ 
-			value = xmlNodeGetContent(nodeValueElement);
-			printBASCode(objLineInfo, "( ", "");
-			
-			for(nodeSubValueElement = nodeValueElement->children; 
-				nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
-					objLineInfoTemp.indentValue = objLineInfo.indentValue ;
-					generateElement(nodeSubValueElement, objLineInfoTemp);
-			}
-			printBASCode(objLineInfo, ") ", "");
-		}
-		else if(xmlStrcasecmp(name, BAD_CAST"function")==0){ 
-			name = xmlGetProp(nodeValueElement,BAD_CAST"name");
-			value = xmlNodeGetContent(nodeValueElement);
-			printBASCode(objLineInfo, "%s( ", (char*)name);
-			
-			for(nodeSubValueElement = nodeValueElement->children; 
-				nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
-				generateElement(nodeSubValueElement, objLineInfoTemp);
-			}
-			printBASCode(objLineInfo, ") ", "");
-		}
-		else if(xmlStrcasecmp(name, BAD_CAST"subroutine")==0){ 
-			file = xmlGetProp(nodeValueElement, BAD_CAST"file");
-			name = xmlGetProp(nodeValueElement, BAD_CAST"name");
-
-			value = xmlNodeGetContent(nodeValueElement);
-			// printBASCode(objLineInfo, "%s( ", (char*)name);
-
-			if(xmlStrlen(file)==0){        // Inside function
-				memset(label_params, 0x00, 1024);
-				sprintf(label_params, "%s::%s", objLineInfo.fileName, (char*)name);
-				printBASCode(objLineInfo, "%s(", label_params);
-			}
-			else if(xmlStrlen(name)==0){   // Outside main
-				memset(label_params, 0x00, 1024);
-				sprintf(label_params, "%s::main", (char*)file);
-				printBASCode(objLineInfo, "%s(", label_params);
-			}
-			else {                            // Outside function
-				memset(label_params, 0x00, 1024);
-				sprintf(label_params, "%s::%s", (char*)file, (char*)name);
-				printBASCode(objLineInfo, "%s(", label_params);
-			}
-			
-			for(nodeSubValueElement = nodeValueElement->children; 
-			nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
-				// generateElement(nodeSubValueElement, objLineInfoTemp);
-				value = xmlNodeGetContent(nodeSubValueElement);
-				if(xmlStrcasecmp(nodeSubValueElement->name,BAD_CAST"element")==0){ 
-					memset(&labelParam, 0x00, sizeof(labelParam));
-					strcpy(labelParam.name, (char*)value);
-					label_vector.push_back(labelParam);
-				}
-			}
-			// printBASCode(objLineInfo, ") ", "");
-			memset(label_params, 0x00, 1024);
-			serializeFunctionParam(label_vector, label_params);
-			printBASCode(objLineInfo, "%s)", label_params);
-		}
-		else if(xmlStrcasecmp(name, BAD_CAST"register")==0){ 
-			for(nodeSubValueElement = nodeValueElement->children; 
-			nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
-				if(xmlStrcasecmp(nodeSubValueElement->name,BAD_CAST"element")==0){ 
-					value = xmlNodeGetContent(nodeSubValueElement);
-					printBASCode(objLineInfo, "R[%s] ", (char*)value);
-				}
-			}
-		}
-		else if(xmlStrcasecmp(name, BAD_CAST"di")==0){ 
-			for(nodeSubValueElement = nodeValueElement->children; 
-			nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
-				if(xmlStrcasecmp(nodeSubValueElement->name,BAD_CAST"element")==0){ 
-					value = xmlNodeGetContent(nodeSubValueElement);
-					printBASCode(objLineInfo, "DI[%s] ", (char*)value);
-				}
-			}
-		}
-		else if(xmlStrcasecmp(name, BAD_CAST"io_val")==0){ 
-			value = xmlNodeGetContent(nodeValueElement);
-			printBASCode(objLineInfo, "%s ", (char*)value);
-		}
-		else { 
-			FST_ERROR("Wrong Type (%s) in element. \n", (char *)name);
-		}
-	}
 	return 1 ;
 }
 
@@ -957,7 +790,7 @@ int generateOffsetCondExecute(xmlNodePtr nodeInstructionParam, LineInfo objLineI
 			if(xmlStrcasecmp(type, BAD_CAST"register")==0){
 				printBASCode(objLineInfo, " R[%s]", (char*)value);
 			}
-			else if(xmlStrcasecmp(type, BAD_CAST"number_register")==0){
+			else if(xmlStrcasecmp(type, BAD_CAST"motion_register")==0){
 				printBASCode(objLineInfo, " MR[%s]", (char*)value);
 			}
 			else {
@@ -1034,7 +867,7 @@ int generateWaitInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLin
 				if(xmlStrcasecmp(type, BAD_CAST"register")==0){
 					printBASCode(objLineInfo, " R[%s]", (char*)value);
 				}
-				else if(xmlStrcasecmp(type, BAD_CAST"number_register")==0){
+				else if(xmlStrcasecmp(type, BAD_CAST"motion_register")==0){
 					printBASCode(objLineInfo, " MR[%s]", (char*)value);
 				}
 				else {

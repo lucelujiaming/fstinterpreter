@@ -2,30 +2,35 @@
 <prog>   
 <KeyWord>
 		<KeyName>R</KeyName>
+		<XMLName>register</XMLName>
 		<BaseAddress>0x1000000</BaseAddress>
 		<Type>Double</Type>
 		<ByteSize>8</ByteSize>
 </KeyWord>
 <KeyWord>
 		<KeyName>MR</KeyName>
+		<XMLName>motion_register</XMLName>
 		<BaseAddress>0x1100000</BaseAddress>
 		<Type>INT</Type>
 		<ByteSize>4</ByteSize>
 </KeyWord>
 <KeyWord>
 		<KeyName>SR</KeyName>
+		<XMLName>string_register</XMLName>
 		<BaseAddress>0x1200000</BaseAddress>
 		<Type>STRING</Type>
 		<ByteSize>1024</ByteSize>
 </KeyWord>
 <KeyWord>
 		<KeyName>MI</KeyName>
+		<XMLName>modbus_input_register</XMLName>
 		<BaseAddress>0x1300000</BaseAddress>
 		<Type>Double</Type>
 		<ByteSize>8</ByteSize>
 </KeyWord>
 <KeyWord>
 		<KeyName>MH</KeyName>
+		<XMLName>modbus_holding_register</XMLName>
 		<BaseAddress>0x1400000</BaseAddress>
 		<Type>Double</Type>
 		<ByteSize>8</ByteSize>

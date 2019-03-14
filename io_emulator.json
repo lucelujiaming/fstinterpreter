@@ -158,5 +158,45 @@
 	"ro[2]":	{
 		"emltFlag":	true,
 		"value":	0
+	},
+	"do[8]":	{
+		"emltFlag":	true,
+		"value":	1
+	},
+	"do[9]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"do[501]":	{
+		"emltFlag":	true,
+		"value":	1
+	},
+	"do[502]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"do[503]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"do[504]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"do[505]":	{
+		"emltFlag":	true,
+		"value":	1
+	},
+	"do[506]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"do[507]":	{
+		"emltFlag":	true,
+		"value":	0
+	},
+	"do[605]":	{
+		"emltFlag":	true,
+		"value":	0
 	}
 }
