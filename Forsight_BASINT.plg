@@ -6,13 +6,13 @@
 --------------------Configuration: Forsight_BASINT - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\Users\jiaming.lu\AppData\Local\Temp\RSPB852.tmp" with contents
+Creating temporary file "C:\Users\jiaming.lu\AppData\Local\Temp\RSP4E70.tmp" with contents
 [
 /nologo /MTd /W3 /WX /Gm /GX /ZI /Od /I "INCLUDE INCLUDE\REG-SHMI ..\INCLUDE ..\INCLUDE\REG-SHMI" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FR"Debug/" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
-"C:\Users\jiaming.lu\Downloads\MiniCPlusPlus\Forsight_BASINT\src\forsight_home_pose.cpp"
+"C:\Users\jiaming.lu\Downloads\MiniCPlusPlus\Forsight_BASINT\src\forsight_basint.cpp"
 ]
-Creating command line "cl.exe @C:\Users\jiaming.lu\AppData\Local\Temp\RSPB852.tmp" 
-Creating temporary file "C:\Users\jiaming.lu\AppData\Local\Temp\RSPB853.tmp" with contents
+Creating command line "cl.exe @C:\Users\jiaming.lu\AppData\Local\Temp\RSP4E70.tmp" 
+Creating temporary file "C:\Users\jiaming.lu\AppData\Local\Temp\RSP4E80.tmp" with contents
 [
 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib libxml2.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/Forsight_BASINT.pdb" /debug /machine:I386 /out:"Debug/Forsight_BASINT.exe" /pdbtype:sept 
 .\Debug\forsight_basint.obj
@@ -36,12 +36,12 @@ kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32
 .\Debug\macro_instr_mgr.obj
 .\Debug\reg_manager_interface_wrapper.obj
 ]
-Creating command line "link.exe @C:\Users\jiaming.lu\AppData\Local\Temp\RSPB853.tmp"
+Creating command line "link.exe @C:\Users\jiaming.lu\AppData\Local\Temp\RSP4E80.tmp"
 <h3>Output Window</h3>
 Compiling...
-forsight_home_pose.cpp
+forsight_basint.cpp
 Linking...
-Creating temporary file "C:\Users\jiaming.lu\AppData\Local\Temp\RSPBF37.tmp" with contents
+Creating temporary file "C:\Users\jiaming.lu\AppData\Local\Temp\RSP5813.tmp" with contents
 [
 /nologo /o"Debug/Forsight_BASINT.bsc" 
 .\Debug\forsight_basint.sbr
@@ -64,7 +64,7 @@ Creating temporary file "C:\Users\jiaming.lu\AppData\Local\Temp\RSPBF37.tmp" wit
 .\Debug\launch_code_mgr.sbr
 .\Debug\macro_instr_mgr.sbr
 .\Debug\reg_manager_interface_wrapper.sbr]
-Creating command line "bscmake.exe @C:\Users\jiaming.lu\AppData\Local\Temp\RSPBF37.tmp"
+Creating command line "bscmake.exe @C:\Users\jiaming.lu\AppData\Local\Temp\RSP5813.tmp"
 Creating browse info file...
 <h3>Output Window</h3>
 

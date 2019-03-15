@@ -3329,7 +3329,12 @@ void putback(struct thread_control_block * objThreadCntrolBlock)
   char *t;
 
   t = objThreadCntrolBlock->token;
-  for(; *t; t++) objThreadCntrolBlock->prog--;
+  for(; *t; t++)
+  {
+	  // Revert \r\n to \n
+	  if(t[0] != '\r')
+	     objThreadCntrolBlock->prog--;
+  }
   if(objThreadCntrolBlock->token_type == QUOTE)
   {
 	  objThreadCntrolBlock->prog--; // put back left "
