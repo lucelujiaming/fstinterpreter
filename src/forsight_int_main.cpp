@@ -60,7 +60,6 @@ int main(int  argc, char *argv[])
 #else
 	intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_START ;
 	append_io_mapping();
-	forgesight_load_io_config();
 #endif
 	bool bRet = load_register_data();
 	if(bRet)

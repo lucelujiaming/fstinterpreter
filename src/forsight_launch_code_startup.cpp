@@ -54,7 +54,7 @@ void forgesight_simulate_launch_config_values(
 	eval_value value ;
 	value.setFloatValue(1.0);
 	// Pull down all of UIO
-	forgesight_reset_uio_config_values();
+	// forgesight_reset_uio_config_values();
 	// Pull up UI_SELECTION_STROBE
 	forgesight_set_io_status(objThreadCntrolBlock, UI_SELECTION_STROBE, value);
 	// Set UI_PROGRAM_SELECTION = 0b1101 = 13

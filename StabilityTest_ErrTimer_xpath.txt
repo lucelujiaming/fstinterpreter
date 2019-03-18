@@ -1,0 +1,14 @@
+000:Pick:/prog/head/include
+001:Pick:/prog/prog_body/function
+002:Pick:/prog/prog_body/function/body/instruction[1]
+003:Pick:/prog/prog_body/function/body/assignment[1]
+004:Pick:/prog/prog_body/function/body/assignment[2]
+005:Pick:/prog/prog_body/function/body/assignment[3]
+006:Pick:/prog/prog_body/function/body/assignment[4]
+007:Pick:/prog/prog_body/function/body/instruction[2]
+008:Pick:/prog/prog_body/function/body/call
+009:Pick:/prog/prog_body/function/body/end
+010:Pick:/prog/prog_body/function
+012:MarcuscTest:/prog/prog_body/function
+013:MarcuscTest:/prog/prog_body/function/body/end
+014:MarcuscTest:/prog/prog_body/function

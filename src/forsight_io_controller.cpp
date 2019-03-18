@@ -9,7 +9,6 @@
 #include "math.h"
 #include "ctype.h"
 #include "stdlib.h" 
-#include "forsight_io_mapping.h"
 #include "forsight_io_controller.h"
 #ifndef WIN32
 // #include "io_interface.h"
@@ -18,7 +17,13 @@
 #include<vector>
 #include<map>
 #endif
-#include "forsight_cJSON.h"
+
+#ifdef USE_FORSIGHT_REGISTERS_MANAGER
+#ifndef WIN32
+#include "reg_manager/reg_manager_interface_wrapper.h"
+using namespace fst_ctrl ;
+#endif
+#endif
 
 // Register name
 #define TXT_AI    "ai"
@@ -32,289 +37,7 @@
 #define TXT_UI    "ui"
 #define TXT_UO    "uo"
 
-#define DEFAULT_IO_VALUE    1   //  SMLT_FLASE 
-
-#define SMLT_TRUE    1
-#define SMLT_FLASE   0
-
-#ifdef WIN32
-#define IO_EMULATOR_JSON    "io_emulator.json"
-#else
-#define IO_EMULATOR_JSON    "share/configuration/configurable/io_emulator.json"
-#endif
-
-typedef struct  
-{
-	bool is_aio_emulated ;
-	bool is_dio_emulated ;
-	bool is_rio_emulated ;
-	bool is_sio_emulated ;
-	bool is_uio_emulated ;
-} io_emulate_config;
-
-cJSON * g_io_config_ = NULL;
-
-io_emulate_config     g_io_config_emulated ;
-
-void refresh_io_config_emulated();
-
-/* use for generating data for test */
-static void saveIOConfigToJsonFile(cJSON * ioConfig)
-{
-	FILE * pFile;
-	
-	char * cContent = cJSON_Print(ioConfig);
-    if((pFile = fopen (IO_EMULATOR_JSON, "w"))==NULL)
-    {
-        printf("cant open the file");
-        exit(0);
-    }
-	
-    if(fwrite(cContent,strlen(cContent),1, pFile)!=1)
-        printf("file write error\n");
-    fclose (pFile);
-}
-
-int addSingleConfig(string name, eval_value& value)
-{
-	if(g_io_config_)
-	{
-		cJSON*obj_config = cJSON_CreateObject();
-		cJSON* item=cJSON_CreateBool(1);
-		cJSON_AddItemToObject(obj_config,"emltFlag",item);
-		
-		item=cJSON_CreateNumber((int)value.getFloatValue());
-		cJSON_AddItemToObject(obj_config,"value",item);
-		
-		cJSON_AddItemToObject(g_io_config_, name.c_str(), obj_config);
-		saveIOConfigToJsonFile(g_io_config_);
-		return 1;
-	}
-	return 0;
-}
-
-int getSingleConfig(cJSON * item, string key, int& value)
-{
-	cJSON *child=item->child;
-	while(child)
-	{
-		switch ((child->type)&255)
-		{
-		case cJSON_True:	
-			// printf("cJSON_True"); 
-			if(strcmp(child->string, key.c_str()) == 0)
-			{
-				if(strcmp(child->string, "emltFlag") == 0)
-				{
-					value = child->valueint;
-					return 1;
-				}
-			}
-			break;
-		case cJSON_Number:
-			if(strcmp(child->string, key.c_str()) == 0)
-			{
-				if(strcmp(child->string, "value") == 0)
-				{
-					value = child->valuedouble;
-					return 1;
-				}
-			}
-			break;
-		case cJSON_String:
-			break;
-		case cJSON_Array:
-			break;
-		case cJSON_Object:	
-			// printf("cJSON_Object\n");
-			break;
-		}
-		child = child->next ;
-	}
-	return 0;
-}
-
-int setSingleConfig(cJSON * item, string key, int& value)
-{
-	cJSON *child=item->child;
-	while(child)
-	{
-		switch ((child->type)&255)
-		{
-		case cJSON_True:	
-			// printf("cJSON_True"); 
-			if(strcmp(child->string, key.c_str()) == 0)
-			{
-				if(strcmp(child->string, "emltFlag") == 0)
-				{
-					child->valueint = value;
-					saveIOConfigToJsonFile(g_io_config_);
-					return 1;
-				}
-			}
-			break;
-		case cJSON_Number:
-			if(strcmp(child->string, key.c_str()) == 0)
-			{
-				if(strcmp(child->string, "value") == 0)
-				{
-					child->valuedouble = value;
-					saveIOConfigToJsonFile(g_io_config_);
-					return 1;
-				}
-			}
-			break;
-		case cJSON_String:
-			break;
-		case cJSON_Array:
-			break;
-		case cJSON_Object:	
-			printf("cJSON_Object\n");
-			break;
-		}
-		child = child->next ;
-	}
-	return 0;
-}
-
-int forgesight_io_config_get_value(string name, string key, int& value)
-{
-	value = DEFAULT_IO_VALUE ;
-	if(g_io_config_)
-	{
-		cJSON *child=g_io_config_->child;
-		while(child)
-		{
-			switch ((child->type)&255)
-			{
-			case cJSON_True:	
-				// printf("cJSON_True"); 
-				break;
-			case cJSON_Number:
-				break;
-			case cJSON_String:
-				if(strcmp(child->string, key.c_str()) == 0)
-					value = child->valueint;
-				break;
-			case cJSON_Array:
-				break;
-			case cJSON_Object:	
-				// printf("cJSON_Object\n");
-				if(strcmp(child->string, name.c_str()) == 0)
-				{
-					getSingleConfig(child, key, value);
-					return 1;
-				}
-				break;
-			}
-			child = child->next ;
-		}
-	}
-	return 0;
-}
-
-int forgesight_io_config_set_value(string name, string key, eval_value& value)
-{
-	int iVal  = 0 ;
-	bool bIsFind = false ;
-	cJSON *child=g_io_config_->child;
-	while(child)
-	{
-		switch ((child->type)&255)
-		{
-		case cJSON_True:	
-			printf("cJSON_True"); break;
-		case cJSON_Number:
-			break;
-		case cJSON_String:
-			// printf("cJSON_String"); 
-			break;
-		case cJSON_Array:
-			// printf("cJSON_Array"); 
-			break;
-		case cJSON_Object:	
-			// printf("cJSON_Object\n");
-			if(strcmp(child->string, name.c_str()) == 0)
-			{
-				iVal = (int)value.getFloatValue();
-				setSingleConfig(child, key, iVal);
-				return 1;
-			}
-			break;
-		}
-		child = child->next ;
-	}
-
-	if(bIsFind == false)
-	{
-		addSingleConfig(name, value);
-	}
-	return 1;
-}
-
-int forgesight_reset_uio_config_values()
-{
-	char cTemp[32];
-	eval_value value ;
-	value.setFloatValue(0.0);
-
-	for (int i = 0 ; i<= UI_UO_NUM ;i++)
-	{
-		memset(cTemp, 0x00, 32);
-		sprintf(cTemp, "ui[%d]", i);
-		forgesight_io_config_set_value(cTemp, "value", value);
-		memset(cTemp, 0x00, 32);
-		sprintf(cTemp, "uo[%d]", i);
-		forgesight_io_config_set_value(cTemp, "value", value);
-	}
-	return 1;
-}
-
-void generate_fake_io_config()
-{
-	char cTemp[32];
-	eval_value value ;
-	value.setFloatValue(1.0);
-
-	addSingleConfig("aio_all", value);
-	addSingleConfig("dio_all", value);
-	addSingleConfig("rio_all", value);
-	addSingleConfig("sio_all", value);
-	addSingleConfig("uio_all", value);
-	for (int i = 0 ; i<= UI_UO_NUM ;i++)
-	{
-		memset(cTemp, 0x00, 32);
-		sprintf(cTemp, "ui[%d]", i);
-		addSingleConfig(cTemp, value);
-		memset(cTemp, 0x00, 32);
-		sprintf(cTemp, "uo[%d]", i);
-		addSingleConfig(cTemp, value);
-	}
-
-}
-
-int forgesight_load_io_config()
-{	
-//	int iCode = 0;
-	FILE *f;long len;char *data;
-	
-	f=fopen(IO_EMULATOR_JSON,"rb"); 
-	if(f)
-	{
-	    fseek(f,0,SEEK_END); len=ftell(f); fseek(f,0,SEEK_SET);
-	    data=(char*)malloc(len+1); fread(data,1,len,f); 
-		fclose(f);
-		g_io_config_ = cJSON_Parse(data);
-		if(g_io_config_ == NULL)
-		{
-			return -1;
-		}
-		// generate_fake_io_config();
-		free(data);
-	}
-	refresh_io_config_emulated();
-	return 1 ;
-}
+#define DEFAULT_IO_VALUE    0   //  SMLT_FLASE 
 
 /* Return true if c is a delimiter. */
 static int isdelim(char c)
@@ -344,88 +67,24 @@ static int get_num_token(char * src, char * dst)
 	return src - tmp ;
 }
 
-void refresh_io_config_emulated()
-{
-	int iValue ;
-	forgesight_io_config_get_value("aio_all", "emltFlag", iValue);
-	if (iValue == SMLT_TRUE)
-		g_io_config_emulated.is_aio_emulated = true ;
-	else
-		g_io_config_emulated.is_aio_emulated = false ;
-
-	forgesight_io_config_get_value("dio_all", "emltFlag", iValue);
-	if (iValue == SMLT_TRUE)
-		g_io_config_emulated.is_dio_emulated = true ;
-	else
-		g_io_config_emulated.is_dio_emulated = false ;
-	
-	forgesight_io_config_get_value("rio_all", "emltFlag", iValue);
-	if (iValue == SMLT_TRUE)
-		g_io_config_emulated.is_rio_emulated = true ;
-	else
-		g_io_config_emulated.is_rio_emulated = false ;
-	
-	forgesight_io_config_get_value("sio_all", "emltFlag", iValue);
-	if (iValue == SMLT_TRUE)
-		g_io_config_emulated.is_sio_emulated = true ;
-	else
-		g_io_config_emulated.is_sio_emulated = false ;
-	
-	forgesight_io_config_get_value("uio_all", "emltFlag", iValue);
-	if (iValue == SMLT_TRUE)
-		g_io_config_emulated.is_uio_emulated = true ;
-	else
-		g_io_config_emulated.is_uio_emulated = false ;
-#if 0	
-	printf("is_aio_emulated:: %s , is_dio_emulated:: %s , "
-		   "is_rio_emulated:: %s , is_sio_emulated:: %s , "
-		   "is_uio_emulated:: %s .\n", 
-		g_io_config_emulated.is_aio_emulated ? "true" : "false", 
-		g_io_config_emulated.is_dio_emulated ? "true" : "false", 
-		g_io_config_emulated.is_rio_emulated ? "true" : "false", 
-		g_io_config_emulated.is_sio_emulated ? "true" : "false", 
-		g_io_config_emulated.is_uio_emulated ? "true" : "false");
-#endif
-}
-
-#define TPI_SUCCESS				(0)
-int set_io_status_to_io_mananger(
-	char *vname, eval_value& value)
-{
-	char val = (char)value.getFloatValue();
-	return 1 ;
-}
-
-int set_io_interface_status(char *vname, char val)
-{
-	return 1 ;
-}
-
-eval_value get_io_status_from_io_mananger(
-		char *vname)
-{
-	eval_value value ;
-	int iValue = -1;
-	value.setFloatValue(iValue) ;
-	return value;
-}
-
-int get_io_interface_status(char *vname)
-{
-	int iValue = -1;
-	return iValue;
-}
-
+/************************************************* 
+	Function:		forgesight_get_io_status
+	Description:	get io status.
+	Input:			name  - io name
+	Output: 		NULL
+	Return: 		io value
+*************************************************/ 
 eval_value forgesight_get_io_status(
 			struct thread_control_block* objThreadCntrolBlock, char *name)
 {	
+	bool bRet = false ;
 	eval_value value;
-	int  iValue = 0;
+	uint32_t  iValue = 0;
 	char io_name[16] ;
 	char io_idx[16] ;
 	// char io_key_buffer[16] ;
 
-//	int  iIOIdx = 0 ;
+	int  iIOIdx = 0 ;
 	char * namePtr = name ;
 	char *temp = NULL ;
 	
@@ -444,7 +103,7 @@ eval_value forgesight_get_io_status(
 	memset(io_idx, 0x00, 16);
 	temp = io_idx ;
 	get_num_token(namePtr, temp);
-//	iIOIdx = atoi(io_idx);
+	iIOIdx = atoi(io_idx);
 	// namePtr += strlen(reg_idx) ;
 	
 	namePtr += strlen(io_idx) ;
@@ -453,105 +112,85 @@ eval_value forgesight_get_io_status(
 	}
 	namePtr++ ;
 
-	if((!strcmp(io_name, TXT_AI)) || (!strcmp(io_name, TXT_AO)))
+	FST_INFO("set_io status: %s:%d (%s).", io_name, iIOIdx, name);
+	if(!strcmp(io_name, TXT_AI))
 	{
-		if (g_io_config_emulated.is_aio_emulated == false)
-		{
-		//	memset(io_key_buffer, 0x00, 16);
-		//	sprintf(io_key_buffer, "%s.emltFlag", name);
-			forgesight_io_config_get_value(name, "emltFlag", iValue);
-		}
-		// Global emulation is on or single emulation is on
-		if ((iValue == 1) || (g_io_config_emulated.is_aio_emulated == true))
-		{
-		//	memset(io_key_buffer, 0x00, 16);
-		//	sprintf(io_key_buffer, "%s.value", name);
-			forgesight_io_config_get_value(name, "value", iValue);
-			value.setFloatValue(iValue);
-			return value;
-		}
+	//	bRet = g_objRegManagerInterface->getAi(iIOIdx, iValue);
 	}
-	else if((!strcmp(io_name, TXT_DI)) || (!strcmp(io_name, TXT_DO)))
+	else if(!strcmp(io_name, TXT_AO))
 	{
-		if (g_io_config_emulated.is_dio_emulated == false)
-		{
-		//	memset(io_key_buffer, 0x00, 16);
-		//	sprintf(io_key_buffer, "%s.emltFlag", name);
-			forgesight_io_config_get_value(name, "emltFlag", iValue);
-		}
-		// Global emulation is on or single emulation is on
-		if ((iValue == SMLT_TRUE) || (g_io_config_emulated.is_dio_emulated == true))
-		{
-		//	memset(io_key_buffer, 0x00, 16);
-		//	sprintf(io_key_buffer, "%s.value", name);
-			forgesight_io_config_get_value(name, "value", iValue);
-			value.setFloatValue(iValue);
-			return value;
-		}
+	//	bRet = g_objRegManagerInterface->getAo(iIOIdx, iValue);
 	}
-	else if((!strcmp(io_name, TXT_RI)) || (!strcmp(io_name, TXT_RO)))
+	else if(!strcmp(io_name, TXT_DI))
 	{
-		if (g_io_config_emulated.is_rio_emulated == false)
-		{
-		//	memset(io_key_buffer, 0x00, 16);
-		//	sprintf(io_key_buffer, "%s.emltFlag", name);
-			forgesight_io_config_get_value(name, "emltFlag", iValue);
-		}
-		// Global emulation is on or single emulation is on
-		if ((iValue == SMLT_TRUE) || (g_io_config_emulated.is_rio_emulated == true))
-		{
-		//	memset(io_key_buffer, 0x00, 16);
-		//	sprintf(io_key_buffer, "%s.value", name);
-			forgesight_io_config_get_value(name, "value", iValue);
-			value.setFloatValue(iValue);
-			return value;
-		}
+#ifdef WIN32
+		bRet = true;
+#else
+		bRet = g_objRegManagerInterface->getDi(iIOIdx, iValue);
+#endif
 	}
-	else if((!strcmp(io_name, TXT_SI)) || (!strcmp(io_name, TXT_SO)))
+	else if(!strcmp(io_name, TXT_DO))
 	{
-		if (g_io_config_emulated.is_rio_emulated == false)
-		{
-		//	memset(io_key_buffer, 0x00, 16);
-		//	sprintf(io_key_buffer, "%s.emltFlag", name);
-			forgesight_io_config_get_value(name, "emltFlag", iValue);
-		}
-		// Global emulation is on or single emulation is on
-		if ((iValue == SMLT_TRUE) || (g_io_config_emulated.is_rio_emulated == true))
-		{
-		//	memset(io_key_buffer, 0x00, 16);
-		//	sprintf(io_key_buffer, "%s.value", name);
-			forgesight_io_config_get_value(name, "value", iValue);
-			value.setFloatValue(iValue);
-			return value;
-		}
+#ifdef WIN32
+		bRet = true;
+#else
+		bRet = g_objRegManagerInterface->getDo(iIOIdx, iValue);
+#endif
 	}
-	else if((!strcmp(io_name, TXT_UI)) || (!strcmp(io_name, TXT_UO)))
+	else if(!strcmp(io_name, TXT_RI))
 	{
-		if (g_io_config_emulated.is_rio_emulated == false)
-		{
-		//	memset(io_key_buffer, 0x00, 16);
-		//	sprintf(io_key_buffer, "%s.emltFlag", name);
-			forgesight_io_config_get_value(name, "emltFlag", iValue);
-		}
-		// Global emulation is on or single emulation is on
-		if ((iValue == SMLT_TRUE) || (g_io_config_emulated.is_rio_emulated == true))
-		{
-		//	memset(io_key_buffer, 0x00, 16);
-		//	sprintf(io_key_buffer, "%s.value", name);
-			forgesight_io_config_get_value(name, "value", iValue);
-			value.setFloatValue(iValue);
-			return value;
-		}
+#ifdef WIN32
+		bRet = true;
+#else
+		bRet = g_objRegManagerInterface->getRi(iIOIdx, iValue);
+#endif
 	}
-	// Use actual value
-	return get_io_status_from_io_mananger(name);
+	else if(!strcmp(io_name, TXT_RO))
+	{
+#ifdef WIN32
+		bRet = true;
+#else
+		bRet = g_objRegManagerInterface->getRo(iIOIdx, iValue);
+#endif
+	}
+	else if(!strcmp(io_name, TXT_SI))
+	{
+	//	bRet = g_objRegManagerInterface->getSi(iIOIdx, iValue);
+	}
+	else if(!strcmp(io_name, TXT_SO))
+	{
+	//	bRet = g_objRegManagerInterface->getSo(iIOIdx, iValue);
+	}
+	else if(!strcmp(io_name, TXT_UI))
+	{
+	//	bRet = g_objRegManagerInterface->getUi(iIOIdx, iValue);
+	}
+	else if(!strcmp(io_name, TXT_UO))
+	{
+	//	bRet = g_objRegManagerInterface->getUo(iIOIdx, iValue);
+	}
+	
+	if(bRet != SUCCESS)
+	{
+		serror(objThreadCntrolBlock, 4) ; 
+	}
+	value.setFloatValue(iValue);
+	return value;
 }
 
+/************************************************* 
+	Function:		forgesight_set_io_status
+	Description:	set io status.
+	Input:			name  - io name
+	Input:			valueStart  - io value
+	Output: 		NULL
+	Return: 		0 - success , -1 - failed
+*************************************************/ 
 int forgesight_set_io_status(
-			struct thread_control_block* objThreadCntrolBlock, char *name, eval_value& valueStart)
+			struct thread_control_block* objThreadCntrolBlock,char *name, eval_value& valueStart)
 {
-	eval_value value;
-	int iValue;
+	bool bRet = false ;
+//	int iValue;
 	char io_name[16] ;
 	char io_idx[16] ;
 	// char io_key_buffer[16] ;
@@ -584,256 +223,70 @@ int forgesight_set_io_status(
 	}
 	namePtr++ ;
 	
-	if((!strcmp(io_name, TXT_AI)) || (!strcmp(io_name, TXT_AO)))
+	FST_INFO("set_io status: %s:%d (%s).", io_name, iIOIdx, name);
+	if(!strcmp(io_name, TXT_AI))
 	{
-		if (g_io_config_emulated.is_aio_emulated == false)
-		{
-		//	memset(io_key_buffer, 0x00, 16);
-		//	sprintf(io_key_buffer, "%s.emltFlag", name);
-			forgesight_io_config_get_value(name, "emltFlag", iValue);
-		}
-		// Global emulation is on or single emulation is on
-		if ((iValue == SMLT_TRUE) || (g_io_config_emulated.is_aio_emulated == true))
-		{
-		//	memset(io_key_buffer, 0x00, 16);
-		//	sprintf(io_key_buffer, "%s.value", name);
-			forgesight_io_config_set_value(name, "value", valueStart);
-			return 0;
-		}
+	//	bRet = g_objRegManagerInterface->setAi(iIOIdx, (int)valueStart.getFloatValue());
 	}
-	else if((!strcmp(io_name, TXT_DI)) || (!strcmp(io_name, TXT_DO)))
+	else if(!strcmp(io_name, TXT_AO))
 	{
-		printf("set_io status: %s:%d (%s).\n", 
-				io_name, iIOIdx, name);
-		if (g_io_config_emulated.is_dio_emulated == false)
-		{
-		//	memset(io_key_buffer, 0x00, 16);
-		//	sprintf(io_key_buffer, "%s.emltFlag", name);
-			forgesight_io_config_get_value(name, "emltFlag", iValue);
-		}
-		// Global emulation is on or single emulation is on
-		if ((iValue == SMLT_TRUE) || (g_io_config_emulated.is_dio_emulated == true))
-		{
-		//	memset(io_key_buffer, 0x00, 16);
-		//	sprintf(io_key_buffer, "%s.value", name);
-			forgesight_io_config_set_value(name, "value", valueStart);
-			return 0;
-		}
+	//	bRet = g_objRegManagerInterface->setAo(iIOIdx, (int)valueStart.getFloatValue());
 	}
-	else if((!strcmp(io_name, TXT_RI)) || (!strcmp(io_name, TXT_RO)))
+	else if(!strcmp(io_name, TXT_DI))
 	{
-		if (g_io_config_emulated.is_rio_emulated == false)
-		{
-		//	memset(io_key_buffer, 0x00, 16);
-		//	sprintf(io_key_buffer, "%s.emltFlag", name);
-			forgesight_io_config_get_value(name, "emltFlag", iValue);
-		}
-		// Global emulation is on or single emulation is on
-		if ((iValue == SMLT_TRUE) || (g_io_config_emulated.is_rio_emulated == true))
-		{
-		//	memset(io_key_buffer, 0x00, 16);
-		//	sprintf(io_key_buffer, "%s.value", name);
-			forgesight_io_config_set_value(name, "value", valueStart);
-			return 0;
-		}
+#ifdef WIN32
+		bRet = true;
+#else
+		bRet = g_objRegManagerInterface->setDi(iIOIdx, (int)valueStart.getFloatValue());
+#endif
 	}
-	else if((!strcmp(io_name, TXT_SI)) || (!strcmp(io_name, TXT_SO)))
+	else if(!strcmp(io_name, TXT_DO))
 	{
-		if (g_io_config_emulated.is_rio_emulated == false)
-		{
-		//	memset(io_key_buffer, 0x00, 16);
-		//	sprintf(io_key_buffer, "%s.emltFlag", name);
-			forgesight_io_config_get_value(name, "emltFlag", iValue);
-		}
-		// Global emulation is on or single emulation is on
-		if ((iValue == SMLT_TRUE) || (g_io_config_emulated.is_rio_emulated == true))
-		{
-		//	memset(io_key_buffer, 0x00, 16);
-		//	sprintf(io_key_buffer, "%s.value", name);
-			forgesight_io_config_set_value(name, "value", valueStart);
-			return 0;
-		}
+#ifdef WIN32
+		bRet = true;
+#else
+		bRet = g_objRegManagerInterface->setDo(iIOIdx, (int)valueStart.getFloatValue());
+#endif
 	}
-	else if((!strcmp(io_name, TXT_UI)) || (!strcmp(io_name, TXT_UO)))
+	else if(!strcmp(io_name, TXT_RI))
 	{
-		if (g_io_config_emulated.is_rio_emulated == false)
-		{
-		//	memset(io_key_buffer, 0x00, 16);
-		//	sprintf(io_key_buffer, "%s.emltFlag", name);
-			forgesight_io_config_get_value(name, "emltFlag", iValue);
-		}
-		// Global emulation is on or single emulation is on
-		if ((iValue == SMLT_TRUE) || (g_io_config_emulated.is_rio_emulated == true))
-		{
-		//	memset(io_key_buffer, 0x00, 16);
-		//	sprintf(io_key_buffer, "%s.value", name);
-			forgesight_io_config_set_value(name, "value", valueStart);
-			return 0;
-		}
+#ifdef WIN32
+		bRet = true;
+#else
+		bRet = g_objRegManagerInterface->setRi(iIOIdx, (int)valueStart.getFloatValue());
+#endif
 	}
-	// Use io_mananger
-	set_io_status_to_io_mananger(name, valueStart);
+	else if(!strcmp(io_name, TXT_RO))
+	{
+#ifdef WIN32
+		bRet = true;
+#else
+		bRet = g_objRegManagerInterface->setRo(iIOIdx, (int)valueStart.getFloatValue());
+#endif
+	}
+	else if(!strcmp(io_name, TXT_SI))
+	{
+	//	bRet = g_objRegManagerInterface->setSi(iIOIdx, (int)valueStart.getFloatValue());
+	}
+	else if(!strcmp(io_name, TXT_SO))
+	{
+	//	bRet = g_objRegManagerInterface->setSo(iIOIdx, (int)valueStart.getFloatValue());
+	}
+	else if(!strcmp(io_name, TXT_UI))
+	{
+	//	bRet = g_objRegManagerInterface->setUi(iIOIdx, (int)valueStart.getFloatValue());
+	}
+	else if(!strcmp(io_name, TXT_UO))
+	{
+	//	bRet = g_objRegManagerInterface->setUo(iIOIdx, (int)valueStart.getFloatValue());
+	}
+	
+	if(bRet != SUCCESS)
+	{
+		serror(objThreadCntrolBlock, 4) ; 
+	}
 	return 0;
 
-}
-
-int forgesight_read_io_emulate_status(char * name, int& value)
-{
-	char io_name[16] ;
-	char io_idx[16] ;
-	// char io_key_buffer[32] ;
-
-//	int  iIOIdx = 0 ;
-	char * namePtr = name ;
-	char *temp = NULL ;
-	
-	memset(io_name, 0x00, 16);
-	memset(io_idx, 0x00, 16);
-	
-	temp = io_name ;
-	get_char_token(namePtr, temp);
-	
-	namePtr += strlen(io_name) ;
-	
-	if(namePtr[0] == '_') {
-	//	memset(io_key_buffer, 0x00, 32);
-	//	sprintf(io_key_buffer, "%s.emltFlag", name);
-		forgesight_io_config_get_value(name, "emltFlag", value);
-	    printf("forgesight_read_io_emulate_status: %s.emltFlag:%d .\n", name, (int)value);
-		return 1 ;
-	}
-	else
-//	if(namePtr[0] != '_') 
-	{
-		if(namePtr[0] != '['){
-			return -1 ;
-		}
-		namePtr++ ;
-		
-		memset(io_idx, 0x00, 16);
-		temp = io_idx ;
-		get_num_token(namePtr, temp);
-//		iIOIdx = atoi(io_idx);
-		// namePtr += strlen(reg_idx) ;
-		
-		namePtr += strlen(io_idx) ;
-		if(namePtr[0] != ']'){
-			return -1 ;
-		}
-		namePtr++ ;
-	}
-	// memset(io_key_buffer, 0x00, 32);
-	// sprintf(io_key_buffer, "%s.emltFlag", name);
-	forgesight_io_config_get_value(name, "emltFlag", value);
-    printf("forgesight_read_io_emulate_status: %s.emltFlag:%d .\n", name, (int)value);
-	return 1;
-}
-
-int forgesight_mod_io_emulate_status(char * name, char value)
-{
-	eval_value valueSet;
-	char io_name[16] ;
-	char io_idx[16] ;
-	// char io_key_buffer[32] ;
-
-//	int  iIOIdx = 0 ;
-	char * namePtr = name ;
-	char *temp = NULL ;
-	
-	memset(io_name, 0x00, 16);
-	memset(io_idx, 0x00, 16);
-	
-	temp = io_name ;
-	get_char_token(namePtr, temp);
-	
-	namePtr += strlen(io_name) ;
-	
-	if(namePtr[0] == '_') {
-	//	memset(io_key_buffer, 0x00, 32);
-	//	sprintf(io_key_buffer, "%s.emltFlag", name);
-		valueSet.setFloatValue((int)value);
-		forgesight_io_config_set_value(name, "emltFlag", valueSet);
-	    printf("forgesight_mod_io_emulate_status: %s.emltFlag:%d .\n", name, (int)value);
-		refresh_io_config_emulated();
-		return 1 ;
-	}
-	else
-//	if(namePtr[0] != '_') 
-	{
-		if(namePtr[0] != '['){
-			return -1 ;
-		}
-		namePtr++ ;
-		
-		memset(io_idx, 0x00, 16);
-		temp = io_idx ;
-		get_num_token(namePtr, temp);
-//		iIOIdx = atoi(io_idx);
-		// namePtr += strlen(reg_idx) ;
-		
-		namePtr += strlen(io_idx) ;
-		if(namePtr[0] != ']'){
-			return -1 ;
-		}
-		namePtr++ ;
-	}
-	// memset(io_key_buffer, 0x00, 32);
-	// sprintf(io_key_buffer, "%s.emltFlag", name);
-	valueSet.setFloatValue((int)value);
-    printf("forgesight_mod_io_emulate_status: %s.emltFlag:%d .\n", name, (int)value);
-	forgesight_io_config_set_value(name, "emltFlag", valueSet);
-	return 1;
-}
-
-int forgesight_mod_io_emulate_value(char * name, char value)
-{
-	eval_value valueSet;
-	char io_name[16] ;
-	char io_idx[16] ;
-	// char io_key_buffer[32] ;
-
-//	int  iIOIdx = 0 ;
-	char * namePtr = name ;
-	char *temp = NULL ;
-	
-	memset(io_name, 0x00, 16);
-	memset(io_idx, 0x00, 16);
-	
-	temp = io_name ;
-	get_char_token(namePtr, temp);
-	
-	namePtr += strlen(io_name) ;
-	
-//	if(namePtr[0] == '_') {
-//		forgesight_io_config_get_value(name, "emltFlag", value);
-//		return 1 ;
-//	}
-//	else
-	if(namePtr[0] != '_') 
-	{
-		if(namePtr[0] != '['){
-			return -1 ;
-		}
-		namePtr++ ;
-		
-		memset(io_idx, 0x00, 16);
-		temp = io_idx ;
-		get_num_token(namePtr, temp);
-//		iIOIdx = atoi(io_idx);
-		// namePtr += strlen(reg_idx) ;
-		
-		namePtr += strlen(io_idx) ;
-		if(namePtr[0] != ']'){
-			return -1 ;
-		}
-		namePtr++ ;
-	}
-	// memset(io_key_buffer, 0x00, 32);
-	// sprintf(io_key_buffer, "%s.value", name);
-	valueSet.setFloatValue((int)value);
-    printf("forgesight_mod_io_emulate_value: %s.value:%d .\n", name, (int)value);
-	forgesight_io_config_set_value(name, "value", valueSet);
-	return 1;
 }
 
 

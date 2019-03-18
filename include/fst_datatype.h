@@ -10,6 +10,9 @@
 #ifndef FST_DATATYPE_H
 #define FST_DATATYPE_H
 
+#ifndef SUCCESS
+#define SUCCESS 0
+#endif
 
 #define FAIL_INTERPRETER_BASE                       (__int64)0x0001000900B50000   /*fail to dump parameter into a file*/
 #define FAIL_INTERPRETER_SYNTAX_ERROR               (__int64)0x0001000900B50001 
