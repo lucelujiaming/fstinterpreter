@@ -1,0 +1,14 @@
+001:home_pose_test:/prog/prog_body/function
+002:home_pose_test:/prog/prog_body/function/body/assignment[1]
+003:home_pose_test:/prog/prog_body/function/body/assignment[2]
+004:home_pose_test:/prog/prog_body/function/body/assignment[3]
+005:home_pose_test:/prog/prog_body/function/body/assignment[4]
+006:home_pose_test:/prog/prog_body/function/body/assignment[5]
+007:home_pose_test:/prog/prog_body/function/body/assignment[6]
+008:home_pose_test:/prog/prog_body/function/body/assignment[7]
+009:home_pose_test:/prog/prog_body/function/body/assignment[8]
+010:home_pose_test:/prog/prog_body/function/body/assignment[9]
+011:home_pose_test:/prog/prog_body/function/body/assignment[10]
+012:home_pose_test:/prog/prog_body/function/body/assignment[11]
+013:home_pose_test:/prog/prog_body/function/body/end
+014:home_pose_test:/prog/prog_body/function

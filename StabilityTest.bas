@@ -7,8 +7,6 @@ SUB main ()
         R[1]  = R[1]  + 1  
     WEND 
     R[1]  = 1  
-                    TF_NO. = 0  
-                    UF_NO. = 0 
     MOVEJ P[1], 100 CNT -1 
     WHILE R[1]  < 4 
         TIMER[1]  = START  

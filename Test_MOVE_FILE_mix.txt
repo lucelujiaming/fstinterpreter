@@ -1,0 +1,5 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(044)/prog/prog_body/function/body/instruction[1]                                                            MOVEL 250, 150, 310, 0, 0, 3.1415, 50 CNT -1 
+EXPORT: (003)(044)/prog/prog_body/function/body/instruction[2]                                                            WAIT  1
+EXPORT: (004)(044)/prog/prog_body/function/body/instruction[3]                                                            MOVEFILE point_file 
+EXPORT: (005)(024)/prog/prog_body/function                                                                            END SUB 

@@ -1,0 +1,9 @@
+000:MarcuscTest:/prog/prog_body/function
+001:MarcuscTest:/prog/prog_body/function/body/end
+002:MarcuscTest:/prog/prog_body/function
+004:MarcuscTest:/prog/prog_body/function
+005:MarcuscTest:/prog/prog_body/function/body/end
+006:MarcuscTest:/prog/prog_body/function
+007:MarcuscTest:/prog/prog_body/function
+008:MarcuscTest:/prog/prog_body/function/body/end
+009:MarcuscTest:/prog/prog_body/function

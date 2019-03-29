@@ -1,0 +1,5 @@
+001:Test_MOVFKG:/prog/prog_body/function
+002:Test_MOVFKG:/prog/prog_body/function/body/instruction[1]
+003:Test_MOVFKG:/prog/prog_body/function/body/instruction[2]
+004:Test_MOVFKG:/prog/prog_body/function/body/instruction[3]
+005:Test_MOVFKG:/prog/prog_body/function

@@ -58,6 +58,8 @@ set(catkin_INCLUDE_DIRS
     ${depend_PATH_INC}/motion_control/include 
     ${depend_PATH_INC}/io_mapping/include 
     ${depend_PATH_INC}/basic_alg/include 
+    ${depend_PATH_INC}/nvram/include
+    ${depend_PATH_INC}/fst_spi/include
 )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wwrite-strings -fpermissive -O0")
@@ -67,6 +69,8 @@ catkin_package(
     DEPENDS fst_io_device 
     DEPENDS motion_control 
     DEPENDS basic_alg 
+    DEPENDS nvram 
+    DEPENDS fst_spi 
 )
  
 

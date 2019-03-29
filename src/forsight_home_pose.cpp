@@ -60,11 +60,11 @@ int HomePoseMgr::parseJointValueAndFloat(
 		case cJSON_Number:	
 			if(strcmp(child->string, "value") == 0)
 			{
-				value = (int)child->valuedouble;
+				value = child->valuedouble;
 			}
 			else if(strcmp(child->string, "float") == 0)
 			{
-				floatValue = (int)child->valuedouble;
+				floatValue = child->valuedouble;
 			}
 			break;
 		case cJSON_String:	
@@ -101,7 +101,7 @@ int HomePoseMgr::parseAdditional(cJSON *jsonJoint, HomePose& homePos)
 			//		child->string, child->valuestring); 
 			break;
 		case cJSON_Object:	
-			if(strcmp(child->string, "j7") == 0)
+			if(strcmp(child->string, "e1") == 0)
 			{
 #ifndef WIN32
 				parseJointValueAndFloat(child, 
@@ -111,7 +111,7 @@ int HomePoseMgr::parseAdditional(cJSON *jsonJoint, HomePose& homePos)
 					homePos.joint.j7, homePos.jointFloat.j7);
 #endif
 			}
-			else if(strcmp(child->string, "j8") == 0)
+			else if(strcmp(child->string, "e2") == 0)
 			{
 #ifndef WIN32
 				parseJointValueAndFloat(child, 
@@ -121,7 +121,7 @@ int HomePoseMgr::parseAdditional(cJSON *jsonJoint, HomePose& homePos)
 					homePos.joint.j8, homePos.jointFloat.j8);
 #endif
 			}
-			else if(strcmp(child->string, "j9") == 0)
+			else if(strcmp(child->string, "e3") == 0)
 			{
 #ifndef WIN32
 				parseJointValueAndFloat(child, 
@@ -456,9 +456,23 @@ int HomePoseMgr::printHomePoseList()
 	{
 		// it->first;  // it->second;
 #ifndef WIN32
-		printf("\t HomePoseMgr: %d :: %f \n", it->first, it->second.joint.j1_);
+		printf("Get JOINT: %d :: (%f, %f, %f, %f, %f, %f, %f, %f, %f) \n", it->first, 
+			it->second.joint.j1_, it->second.joint.j2_, it->second.joint.j3_, 
+			it->second.joint.j4_, it->second.joint.j5_, it->second.joint.j6_,  
+			it->second.joint.j7_, it->second.joint.j8_, it->second.joint.j9_);
+		printf("with jointFloat:(%f, %f, %f, %f, %f, %f, %f, %f, %f) \n", 
+			it->second.jointFloat.j1_, it->second.jointFloat.j2_, it->second.jointFloat.j3_, 
+			it->second.jointFloat.j4_, it->second.jointFloat.j5_, it->second.jointFloat.j6_, 
+			it->second.jointFloat.j7_, it->second.jointFloat.j8_, it->second.jointFloat.j9_);
 #else
-		printf("\t HomePoseMgr: %d :: %f \n", it->first, it->second.joint.j1);
+		printf("Get JOINT: %d :: (%f, %f, %f, %f, %f, %f, %f, %f, %f) \n", it->first, 
+			it->second.joint.j1, it->second.joint.j2, it->second.joint.j3, 
+			it->second.joint.j4, it->second.joint.j5, it->second.joint.j6,  
+			it->second.joint.j7, it->second.joint.j8, it->second.joint.j9);
+		printf("with jointFloat:(%f, %f, %f, %f, %f, %f, %f, %f, %f) \n", 
+			it->second.jointFloat.j1, it->second.jointFloat.j2, it->second.jointFloat.j3, 
+			it->second.jointFloat.j4, it->second.jointFloat.j5, it->second.jointFloat.j6, 
+			it->second.jointFloat.j7, it->second.jointFloat.j8, it->second.jointFloat.j9);
 #endif
 		it++;         
 	}

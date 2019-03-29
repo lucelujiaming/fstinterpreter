@@ -1,0 +1,14 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(043)/prog/prog_body/function/body/assignment[1]                                                             SR[1]  = "sr1 test function "  
+EXPORT: (003)(043)/prog/prog_body/function/body/assignment[2]                                                             SR[2]  = "test"  
+EXPORT: (004)(043)/prog/prog_body/function/body/assignment[3]                                                             SR[3]  = SR[1]   
+EXPORT: (005)(043)/prog/prog_body/function/body/assignment[4]                                                             SR[4]  = SR[1]  + SR[1]   
+EXPORT: (006)(043)/prog/prog_body/function/body/assignment[5]                                                             SR[4]  = SR[1]  + R[1]   
+EXPORT: (007)(043)/prog/prog_body/function/body/assignment[6]                                                             SR[4]  = SR[1]  + MR[1]   
+EXPORT: (008)(043)/prog/prog_body/function/body/assignment[7]                                                             R[1]  = 1  
+EXPORT: (009)(043)/prog/prog_body/function/body/assignment[8]                                                             R[2]  = StrLen(SR[1] )  
+EXPORT: (010)(043)/prog/prog_body/function/body/assignment[9]                                                             R[3]  = FindStr(SR[1] , SR[2] )  
+EXPORT: (011)(044)/prog/prog_body/function/body/assignment[10]                                                            SR[5]  = SubStr(SR[3] , R[1] , R[2] )  
+EXPORT: (012)(044)/prog/prog_body/function/body/assignment[11]                                                            SR[6]  = "sr test function"  
+EXPORT: (013)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (014)(024)/prog/prog_body/function                                                                            END SUB 

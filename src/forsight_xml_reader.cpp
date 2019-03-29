@@ -1107,6 +1107,9 @@ int generateMoveInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLin
 	else if(xmlStrcasecmp(name,BAD_CAST"move_joint")==0){
 		exportBASCode(objLineInfo, (char *)"EXPORT: ", (char *)"%s ", (char *)"MOVEJ");
 	}
+	else if(xmlStrcasecmp(name,BAD_CAST"move_xpos")==0){
+		exportBASCode(objLineInfo, (char *)"EXPORT: ", (char *)"%s ", (char *)"MOVEX");
+	}
 
     for(nodeInstructionParam = nodeInstructionStatement->children; 
 		nodeInstructionParam; nodeInstructionParam = nodeInstructionParam->next){
@@ -1795,7 +1798,8 @@ int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
 			type = xmlGetProp(nodeStatement,BAD_CAST"type");
 			if((xmlStrcasecmp(type,BAD_CAST"move_line")==0)
 					||(xmlStrcasecmp(type,BAD_CAST"move_circle")==0)
-					||(xmlStrcasecmp(type,BAD_CAST"move_joint")==0)){
+					||(xmlStrcasecmp(type,BAD_CAST"move_joint")==0)
+					||(xmlStrcasecmp(type,BAD_CAST"move_xpos")==0)){
 				generateMoveInstruction(nodeStatement, objLineInfoTemp);
 			}
 			else if(xmlStrcasecmp(type,BAD_CAST"timer")==0){

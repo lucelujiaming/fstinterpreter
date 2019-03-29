@@ -189,7 +189,7 @@ void    level1(struct thread_control_block * objThreadCntrolBlock, eval_value *r
         level5(struct thread_control_block * objThreadCntrolBlock, eval_value *result, int* boolValue),
         level6(struct thread_control_block * objThreadCntrolBlock, eval_value *result, int* boolValue),
         level7(struct thread_control_block * objThreadCntrolBlock, eval_value *result, int* boolValue),
-        primitive(struct thread_control_block * objThreadCntrolBlock, eval_value *result);
+        primitive(struct thread_control_block * objThreadCntrolBlock, eval_value *result, int* boolValue);
 void unary(char, eval_value *r),
 	arith(struct thread_control_block * objThreadCntrolBlock, char o, eval_value *r, eval_value *h);
 
@@ -496,16 +496,23 @@ checkHomePoseResult check_home_pose(struct thread_control_block* objThreadCntrol
 
 	// 
 	objThreadCntrolBlock->prog = home_pose_exp ;
+	// strcpy(home_pose_exp, " 0 OR 0 ");
 	get_exp(objThreadCntrolBlock, &value, &boolValue);
 	// Restore prog to original program
 	objThreadCntrolBlock->prog     = proglabelsScan;
 
-	FST_INFO("check_home_pose: %s -> %s", 
-		objThreadCntrolBlock->home_pose_exp, home_pose_exp);
 	if(boolValue)
+	{
+		FST_INFO("WITHIN_CUR_POS:: check_home_pose: %s -> %s with %d ", 
+			objThreadCntrolBlock->home_pose_exp, home_pose_exp, boolValue);
 		return HOME_POSE_WITHIN_CUR_POS ;
+	}
 	else
+	{
+		FST_INFO("NOT_WITHIN_CUR_POS:: check_home_pose: %s -> %s with %d ", 
+			objThreadCntrolBlock->home_pose_exp, home_pose_exp, boolValue);
 		return HOME_POSE_NOT_WITHIN_CUR_POS ;
+	}
 }
 
 /************************************************* 
@@ -565,6 +572,17 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	  }
 	  // Call in the first time to load major P[*]
 	  forgesight_registers_manager_get_joint(objThreadCntrolBlock->currentJoint);
+#ifndef WIN32
+		printf("call_interpreter Get JOINT: (%f, %f, %f, %f, %f, %f, %f, %f, %f) \n", 
+			objThreadCntrolBlock->currentJoint.j1_, objThreadCntrolBlock->currentJoint.j2_, objThreadCntrolBlock->currentJoint.j3_, 
+			objThreadCntrolBlock->currentJoint.j4_, objThreadCntrolBlock->currentJoint.j5_, objThreadCntrolBlock->currentJoint.j6_,  
+			objThreadCntrolBlock->currentJoint.j7_, objThreadCntrolBlock->currentJoint.j8_, objThreadCntrolBlock->currentJoint.j9_);
+#else
+		printf("call_interpreter Get JOINT: (%f, %f, %f, %f, %f, %f, %f, %f, %f) \n", 
+			objThreadCntrolBlock->currentJoint.j1, objThreadCntrolBlock->currentJoint.j2, objThreadCntrolBlock->currentJoint.j3, 
+			objThreadCntrolBlock->currentJoint.j4, objThreadCntrolBlock->currentJoint.j5, objThreadCntrolBlock->currentJoint.j6,  
+			objThreadCntrolBlock->currentJoint.j7, objThreadCntrolBlock->currentJoint.j8, objThreadCntrolBlock->currentJoint.j9);
+#endif
 	  memset(objThreadCntrolBlock->home_pose_exp, 0x00, LAB_LEN);
   	  append_program_prop_mapper(objThreadCntrolBlock, objThreadCntrolBlock->project_name, true);
 	  checkHomePoseResult checkRet = check_home_pose(objThreadCntrolBlock) ;
@@ -3597,7 +3615,7 @@ void level7(struct thread_control_block * objThreadCntrolBlock, eval_value *resu
     get_token(objThreadCntrolBlock);
   }
   else
-    primitive(objThreadCntrolBlock, result);
+    primitive(objThreadCntrolBlock, result, boolValue);
 }
 
 /************************************************* 
@@ -3608,7 +3626,8 @@ void level7(struct thread_control_block * objThreadCntrolBlock, eval_value *resu
 	Ouput:			NULL
 	Return: 		NULL
 *************************************************/ 
-void primitive(struct thread_control_block * objThreadCntrolBlock, eval_value *result)
+void primitive(struct thread_control_block * objThreadCntrolBlock, 
+			   eval_value *result, int* boolValue)
 {
   std::string strValue ;
   char var[80];
@@ -3661,6 +3680,15 @@ void primitive(struct thread_control_block * objThreadCntrolBlock, eval_value *r
     return;
   case NUMBER:
     result->setFloatValue(atof(objThreadCntrolBlock->token));
+	// Deal single value
+	if(result->getFloatValue() != 0.0)
+	{
+		*boolValue = 1.0 ;
+	}
+	else
+	{
+		*boolValue = 0.0 ;
+	}
     get_token(objThreadCntrolBlock);
     return;
   case INSIDEFUNC:

@@ -469,7 +469,7 @@ int parseProgramProp(struct thread_control_block * objThreadCntrolBlock, char * 
 			}
 			else if(strcmp(child->string, "homePose") == 0)
 			{
-				memset(objThreadCntrolBlock->home_pose_exp, 0x00, STR_VALUE_SIZE);
+				memset(objThreadCntrolBlock->home_pose_exp, 0x00, LAB_LEN);
 
 				if(strlen(child->valuestring) < STR_VALUE_SIZE)
 				{

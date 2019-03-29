@@ -86,7 +86,7 @@ class HomePoseMgr
 	int parseJointValueAndFloat(
 			cJSON *jsonJoint, double& value, double& floatValue);
 	
-  private:
+  public:
     std::map<int, HomePose>  homePoseList; 
 	std::string program_path;
 };

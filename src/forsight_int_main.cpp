@@ -55,11 +55,9 @@ int main(int  argc, char *argv[])
 #endif
 	initInterpreter();
 	memset(&intprt_ctrl, 0x00, sizeof(intprt_ctrl));
-#ifndef WIN32
-	intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_START ;
-#else
-	intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_START ;
+#ifdef WIN32
 	append_io_mapping();
+	intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_LAUNCH ;
 #endif
 	bool bRet = load_register_data();
 	if(bRet)
@@ -96,8 +94,13 @@ int main(int  argc, char *argv[])
 				usleep(1000);
 			}
 #else
-			parseCtrlComand(intprt_ctrl, "wait_test_DO");
-			intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_LOAD ;
+			if (intprt_ctrl.cmd != fst_base::INTERPRETER_SERVER_CMD_LOAD)
+			{
+				parseCtrlComand(intprt_ctrl, "home_pose_test");
+				intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_RESUME ;
+				parseCtrlComand(intprt_ctrl, "");
+				intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_LOAD ;
+			}
 			Sleep(100);
 #endif
 		}

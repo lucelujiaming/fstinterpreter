@@ -245,6 +245,7 @@ enum MotionType {
     MOTION_JOINT,
     MOTION_LINE,
     MOTION_CIRCLE,
+    MOTION_XPOS,
 };
 
 // A flag indicating the smooth type between two motions
@@ -388,6 +389,7 @@ struct CircleTarget {
     PoseEuler pose2;
 };
 
+#define     PR_POS_LEN           128
 // target structure used in motion command
 struct MotionTarget {
     MotionType  type;
@@ -412,6 +414,7 @@ struct MotionTarget {
         PoseEuler       pose_target;
         Joint           joint_target;
         CircleTarget    circle_target;
+        int             prPos[PR_POS_LEN];
     };
 };
 
@@ -559,19 +562,17 @@ typedef enum
 {
     // used by interpretor
     INTERPRETER_SERVER_CMD_LOAD = 255,
-    // used by controller
-    INTERPRETER_SERVER_CMD_START = 0,
-    INTERPRETER_SERVER_CMD_DEBUG = 1,
-    INTERPRETER_SERVER_CMD_FORWARD = 2,
-    INTERPRETER_SERVER_CMD_BACKWARD = 3,
-    INTERPRETER_SERVER_CMD_JUMP = 4,
-    INTERPRETER_SERVER_CMD_PAUSE = 5,
-    INTERPRETER_SERVER_CMD_RESUME = 6,
-    INTERPRETER_SERVER_CMD_ABORT = 7,
-    INTERPRETER_SERVER_CMD_GET_NEXT_INSTRUCTION = 8,
-    INTERPRETER_SERVER_CMD_SET_AUTO_START_MODE = 9,
-    INTERPRETER_SERVER_CMD_SWITCH_STEP = 10,
-    INTERPRETER_SERVER_CMD_CODE_START  = 11,
+	// used by controller
+	INTERPRETER_SERVER_CMD_START                 = 0,
+	INTERPRETER_SERVER_CMD_LAUNCH                = 1,
+	INTERPRETER_SERVER_CMD_FORWARD               = 2,
+	INTERPRETER_SERVER_CMD_BACKWARD              = 3,
+	INTERPRETER_SERVER_CMD_JUMP                  = 4,
+	INTERPRETER_SERVER_CMD_PAUSE                 = 5,
+	INTERPRETER_SERVER_CMD_RESUME                = 6,
+	INTERPRETER_SERVER_CMD_ABORT                 = 7,
+	INTERPRETER_SERVER_CMD_GET_NEXT_INSTRUCTION  = 8,
+	INTERPRETER_SERVER_CMD_CODE_START            = 9,
 }InterpreterServerCmd;
 
 }   // namespace fst_base

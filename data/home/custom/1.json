@@ -1,17 +1,44 @@
 {
-  "name": "NEW",
-  "groupNumber": "1",
-  "joint": {
-    "j1": {"value": 11, "float": 111},
-    "j2": {"value": 22, "float": 222},
-    "j3": {"value": 33, "float": 333},
-    "j4": {"value": 44, "float": 444},
-    "j5": {"value": 55, "float": 555},
-    "j6": {"value": 66, "float": 666}
-  },
-  "additional":{
-    "j7": {"value": 7777, "float": 77777},
-    "j8": {"value": 8888, "float": 88888},
-    "j9": {"value": 9999, "float": 99999}
-  }
+    "additional": {
+        "e1": {
+            "float": 0,
+            "value": 0
+        },
+        "e2": {
+            "float": 0,
+            "value": 0
+        },
+        "e3": {
+            "float": 0,
+            "value": 0
+        }
+    },
+    "group": "1",
+    "joint": {
+        "j1": {
+            "float":  0.09,
+            "value": 0
+        },
+        "j2": {
+            "float":  0.09,
+            "value": 0
+        },
+        "j3": {
+            "float":  0.09,
+            "value": 0
+        },
+        "j4": {
+            "float":  0.09,
+            "value": 0
+        },
+        "j5": {
+            "float": 0.09,
+            "value": 0
+        },
+        "j6": {
+            "float":  0.09,
+            "value": 0
+        }
+    },
+    "name": "NEW"
 }

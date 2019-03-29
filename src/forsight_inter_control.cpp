@@ -148,12 +148,13 @@ void setProgramName(struct thread_control_block * objThdCtrlBlockPtr, char * pro
 	Input:			NULL
 	Return: 		a free thread_control_block object 
 *************************************************/ 
-struct thread_control_block *  getThreadControlBlock()
+struct thread_control_block *  getThreadControlBlock(bool isUploadError)
 {
 	if(getCurrentThreadSeq() < 0)
     {
         FST_ERROR("getThreadControlBlock failed from %d", getCurrentThreadSeq());
-		setWarning(INFO_INTERPRETER_THREAD_NOT_EXIST);
+		if(isUploadError)
+			setWarning(INFO_INTERPRETER_THREAD_NOT_EXIST);
 		return NULL;
 	}
 	else
@@ -169,10 +170,13 @@ struct thread_control_block *  getThreadControlBlock()
 	Input:			NULL
 	Return: 		a free thread_control_block object index
 *************************************************/ 
-int getCurrentThreadSeq()
+int getCurrentThreadSeq(bool isUploadError)
 {
 	if(g_iCurrentThreadSeq < 0)
-		setWarning(INFO_INTERPRETER_THREAD_NOT_EXIST);
+	{
+		if(isUploadError)
+			setWarning(INFO_INTERPRETER_THREAD_NOT_EXIST);
+	}
 	return g_iCurrentThreadSeq ;
 }
 
@@ -257,7 +261,6 @@ void setProgMode(struct thread_control_block * objThdCtrlBlockPtr, ProgMode prog
 {
     FST_INFO("setProgMode to %d at %d", (int)progMode, objThdCtrlBlockPtr->is_main_thread);
  	objThdCtrlBlockPtr->prog_mode   = progMode ;
-	g_interpreter_publish.progMode = progMode ;
 }
 
 
@@ -540,6 +543,7 @@ void startFile(struct thread_control_block * objThdCtrlBlockPtr,
 	// Refresh InterpreterPublish project_name
 	
 	setProgramName(objThdCtrlBlockPtr, proj_name); 
+	setCurLine(objThdCtrlBlockPtr, "", 0);
 	// Start thread
 	basic_thread_create(idx, objThdCtrlBlockPtr);
 	// intprt_ctrl.cmd = LOAD ;
@@ -668,7 +672,6 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 	static fst_base::InterpreterServerCmd lastCmd ;
 #endif
 //	UserOpMode userOpMode ;
-	AutoMode   autoMode ;
 	int        program_code ;
     thread_control_block * objThdCtrlBlockPtr = NULL;
 
@@ -685,7 +688,7 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
         case fst_base::INTERPRETER_SERVER_CMD_LOAD:
             // FST_INFO("load file_name");
             break;
-        case fst_base::INTERPRETER_SERVER_CMD_DEBUG:
+        case fst_base::INTERPRETER_SERVER_CMD_LAUNCH:
 			memcpy(intprt_ctrl.start_ctrl, requestDataPtr, 256);
             FST_INFO("start debug %s ...", intprt_ctrl.start_ctrl);
 			if(strcmp(getProgramName(), intprt_ctrl.start_ctrl) == 0)
@@ -701,8 +704,6 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 			// Clear last lineNum
 			setCurLine(objThdCtrlBlockPtr, (char *)"", 0);
 			
-       //     objThdCtrlBlockPtr->prog_mode = STEP_MODE;
-  	   //	  g_interpreter_publish.progMode  = STEP_MODE;
   			setProgMode(objThdCtrlBlockPtr, STEP_MODE);
 			objThdCtrlBlockPtr->execute_direction = EXECUTE_FORWARD ;
 			if(strlen(intprt_ctrl.start_ctrl) == 0)
@@ -785,24 +786,6 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 				setWarning(FAIL_INTERPRETER_ILLEGAL_LINE_NUMBER);
 			}
 			break;
-        case fst_base::INTERPRETER_SERVER_CMD_SWITCH_STEP:
-			memcpy(&intprt_ctrl.step_mode, requestDataPtr, sizeof(int));
-            FST_INFO("switch Step at %d with %d", 
-				getCurrentThreadSeq(), intprt_ctrl.step_mode);
-			if(getCurrentThreadSeq() < 0) break ;
-			if(g_basic_interpreter_handle[getCurrentThreadSeq()] == 0)
-			{
-            	FST_ERROR("Thread exits at %d ", getPrgmState());
-				break;
-			}
-			// objThdCtrlBlockPtr = &g_thread_control_block[getCurrentThreadSeq()];
-		    objThdCtrlBlockPtr = getThreadControlBlock();
-			if(objThdCtrlBlockPtr == NULL) break ;
-            FST_INFO("SWITCH_STEP with %d", intprt_ctrl.step_mode);
-            // objThdCtrlBlockPtr->prog_mode = (ProgMode)intprt_ctrl.step_mode;
-  			// g_interpreter_publish.progMode  = (ProgMode)intprt_ctrl.step_mode;
-  			setProgMode(objThdCtrlBlockPtr, (ProgMode)intprt_ctrl.step_mode);
-            break;
         case fst_base::INTERPRETER_SERVER_CMD_FORWARD:
             FST_INFO("step forward at %d ", getCurrentThreadSeq());
 			if(getCurrentThreadSeq() < 0) break ;
@@ -955,6 +938,7 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 				// Not Change program mode  
 				// objThdCtrlBlockPtr->prog_mode = FULL_MODE;
 	            setPrgmState(objThdCtrlBlockPtr, INTERPRETER_EXECUTE);
+  			    setProgMode(objThdCtrlBlockPtr, FULL_MODE);
 			}
 			else
 			    setWarning(FAIL_INTERPRETER_NOT_IN_PAUSE);
@@ -982,12 +966,13 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 //                objThdCtrlBlockPtr->prog_mode = STEP_MODE ;
 //            }
             setPrgmState(objThdCtrlBlockPtr, INTERPRETER_PAUSED); 
+  			setProgMode(objThdCtrlBlockPtr, STEP_MODE);
             break;
         case fst_base::INTERPRETER_SERVER_CMD_ABORT:
             FST_ERROR("abort motion");
-			if(getCurrentThreadSeq() < 0) break ;
+			if(getCurrentThreadSeq(false) < 0) break ;
 		    // objThdCtrlBlockPtr = &g_thread_control_block[getCurrentThreadSeq()];
-		    objThdCtrlBlockPtr = getThreadControlBlock();
+		    objThdCtrlBlockPtr = getThreadControlBlock(false);
 			if(objThdCtrlBlockPtr == NULL) break ;
 			
   			FST_INFO("set abort motion flag.");
@@ -1008,13 +993,6 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
   			FST_INFO("reset ProgramName And LineNum.");
 			
 			resetProgramNameAndLineNum(objThdCtrlBlockPtr);
-            break;
-        case fst_base::INTERPRETER_SERVER_CMD_SET_AUTO_START_MODE:
-			memcpy(&intprt_ctrl.autoMode, requestDataPtr, sizeof(AutoMode));
-			// intprt_ctrl.RegMap.
-			autoMode = intprt_ctrl.autoMode ;
-			// Move to Controller
-			// deal_auto_mode(autoMode);
             break;
         case fst_base::INTERPRETER_SERVER_CMD_CODE_START:
 			memcpy(&intprt_ctrl.program_code, requestDataPtr, sizeof(AutoMode));
@@ -1184,6 +1162,36 @@ void updateHomePoseMgr()
 
 checkHomePoseResult checkSingleHomePoseByCurrentJoint(int idx, Joint currentJoint)
 {
+	Joint joint      = g_home_pose_mgr_ptr->homePoseList[idx].joint ;
+	Joint jointFloat = g_home_pose_mgr_ptr->homePoseList[idx].jointFloat ;
+	
+#ifndef WIN32
+		printf("Get JOINT: %d :: (%f, %f, %f, %f, %f, %f, %f, %f, %f) \n", idx, 
+			joint.j1_, joint.j2_, joint.j3_, 
+			joint.j4_, joint.j5_, joint.j6_,  
+			joint.j7_, joint.j8_, joint.j9_);
+		printf("with jointFloat:(%f, %f, %f, %f, %f, %f, %f, %f, %f) \n", 
+			jointFloat.j1_, jointFloat.j2_, jointFloat.j3_, 
+			jointFloat.j4_, jointFloat.j5_, jointFloat.j6_, 
+			jointFloat.j7_, jointFloat.j8_, jointFloat.j9_);
+		printf("Get currentJoint: (%f, %f, %f, %f, %f, %f, %f, %f, %f) \n", 
+			currentJoint.j1_, currentJoint.j2_, currentJoint.j3_, 
+			currentJoint.j4_, currentJoint.j5_, currentJoint.j6_,  
+			currentJoint.j7_, currentJoint.j8_, currentJoint.j9_);
+#else
+		printf("Get JOINT: %d :: (%f, %f, %f, %f, %f, %f, %f, %f, %f) \n", idx, 
+			joint.j1, joint.j2, joint.j3, 
+			joint.j4, joint.j5, joint.j6,  
+			joint.j7, joint.j8, joint.j9);
+		printf("with jointFloat:(%f, %f, %f, %f, %f, %f, %f, %f, %f) \n", 
+			jointFloat.j1, jointFloat.j2, jointFloat.j3, 
+			jointFloat.j4, jointFloat.j5, jointFloat.j6, 
+			jointFloat.j7, jointFloat.j8, jointFloat.j9);
+		printf("Get currentJoint: (%f, %f, %f, %f, %f, %f, %f, %f, %f) \n", 
+			currentJoint.j1, currentJoint.j2, currentJoint.j3, 
+			currentJoint.j4, currentJoint.j5, currentJoint.j6,  
+			currentJoint.j7, currentJoint.j8, currentJoint.j9);
+#endif
 	return g_home_pose_mgr_ptr->checkSingleHomePoseByJoint(idx, currentJoint);
 }
 

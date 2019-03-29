@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<prog> 
+  <head/>  
+  <prog_body> 
+    <function name="main"> 
+      <body> 
+        <nop/>  
+			<instruction type="move_line">
+				<argument name="pose" type="num">
+					<element name="1" type="num">250</element>
+					<element name="2" type="num">150</element>
+					<element name="3" type="num">310</element>
+					<element name="4" type="num">0</element>
+					<element name="5" type="num">0</element>
+					<element name="6" type="num">3.1415</element>
+				</argument>
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+			</instruction>    
+			<instruction type="wait">
+			  <argument name="timeout" type="num" unit="sec">1</argument>
+			</instruction>
+			<instruction type="move_xpos">
+				<argument name="velocity" unit="%" type="num">50</argument>
+				<argument name="fine" type="num">-1</argument>
+				<argument name="acceleration" type="num" unit="%">100</argument>
+			</instruction>    
+      </body> 
+    </function> 
+  </prog_body> 
+</prog>

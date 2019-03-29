@@ -35,6 +35,8 @@ StopWatch g_structStopWatch[MAX_STOPWATCH_NUM];
 int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock);
 int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock);
 int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock);
+int call_MoveXPos(int iLineNum, struct thread_control_block* objThreadCntrolBlock);
+
 int call_Timer(int iLineNum, struct thread_control_block* objThreadCntrolBlock);
 int call_UserAlarm(int iLineNum, struct thread_control_block* objThreadCntrolBlock);
 int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock);
@@ -52,6 +54,7 @@ struct intern_cmd_type {
     (char *)"movel",      0, call_MoveL,
     (char *)"movej",      0, call_MoveJ,
     (char *)"movec",      0, call_MoveC,
+    (char *)"movex",      0, call_MoveXPos,
     // left
     (char *)"timer",      1, call_Timer,
     (char *)"useralarm",  1, call_UserAlarm,
@@ -1200,7 +1203,6 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 #endif	
 	}
 	
-	
 	get_token(objThreadCntrolBlock);
     get_exp(objThreadCntrolBlock, &value, &boolValue);
     instr.target.vel                  = value.getFloatValue();
@@ -1566,6 +1568,189 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
     return 1;     
 }
 
+
+/************************************************* 
+	Function:		call_MoveXPos
+	Description:	Execute MOVEL
+	                FORMAT: MOVEL P[1], 250 CNT -1  +¸½¼Ó²ÎÊý
+	Input:			iLineNum               - Line Number
+	Input:			thread_control_block   - interpreter info
+	Return: 		1        -    Success ;
+*************************************************/ 
+int call_MoveXPos(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
+{  
+    MoveCommandDestination movCmdDst ;
+	eval_value value;
+	int boolValue;
+	
+	char commandParam[1024];
+    Instruction instr;
+    char * commandParamptr = commandParam;
+	instr.type = MOTION ;
+	instr.target.type = MOTION_XPOS;
+#ifdef USE_XPATH
+	if(iLineNum < (int)objThreadCntrolBlock->vector_XPath.size())
+		sprintf(instr.line, "%s", objThreadCntrolBlock->vector_XPath[iLineNum].c_str());
+	else
+		sprintf(instr.line, "OutRange with %d", iLineNum);
+#else
+	FST_INFO("call_MoveJ XPATH at %d", iLineNum);
+	instr.line = iLineNum;
+#endif
+	// Save start position
+	// memset(&movCmdDst ,0x00, sizeof(MoveCommandDestination));
+	getMoveCommandDestination(movCmdDst);
+	if(iLineNum < (int)objThreadCntrolBlock->vector_XPath.size())
+	{
+	    FST_INFO("call_MoveL Run XPATH: %d: %s", iLineNum, objThreadCntrolBlock->vector_XPath[iLineNum].c_str());
+	    // FST_INFO("call_MoveL Run movCmdDst: %08X with(%08X, %08X, %08X, %08X)", 
+		//  	movCmdDst.type, MOTION_NONE, MOTION_JOINT, MOTION_LINE, MOTION_CIRCLE);
+		if(movCmdDst.type != MOTION_NONE)
+		{
+			if(objThreadCntrolBlock->start_mov_position.find(iLineNum)
+				==objThreadCntrolBlock->start_mov_position.end())
+			{
+			//    FST_INFO("move from POSE and insert:(%f, %f, %f, %f, %f, %f) in MovL", 
+			//		movCmdDst.pose_target.position.x,    movCmdDst.pose_target.position.y, 
+			//		movCmdDst.pose_target.position.z,    movCmdDst.pose_target.orientation.a, 
+			//		movCmdDst.pose_target.orientation.b, movCmdDst.pose_target.orientation.c);
+				try
+				{
+					objThreadCntrolBlock->start_mov_position.insert(
+						map<int, MoveCommandDestination>::value_type(iLineNum, 
+											movCmdDst));
+				}
+				catch (std::exception& e)
+				{
+				    std::cerr << "Exception catched : " << e.what() << std::endl;
+				}
+			}
+			else
+			{
+	            FST_INFO("call_MoveL Run XPATH: %s exists ", objThreadCntrolBlock->vector_XPath[iLineNum].c_str());
+			}
+		}
+		else
+		{
+			; // FST_INFO("call_MoveL XPATH without movCmdDst");
+		}
+	}
+	else
+	{
+		FST_ERROR("call_MoveL XPATH out of range at %d", iLineNum);
+	}
+	// FST_INFO("call_MoveL Run XPATH: %s", objThreadCntrolBlock->vector_XPath[iLineNum].c_str());
+	memset(&objThreadCntrolBlock->instrSet->target.prPos, 0x00, PR_POS_LEN * sizeof(int));
+	get_token(objThreadCntrolBlock);
+	int prPosIdx = 0 ;
+	while(strcmp(objThreadCntrolBlock->token, "pr") == 0)
+	{
+		get_token(objThreadCntrolBlock);
+		if(objThreadCntrolBlock->token[0] == '['){
+			get_exp(objThreadCntrolBlock, &value, &boolValue);
+			objThreadCntrolBlock->instrSet->target.prPos[prPosIdx] = (int)value.getFloatValue();
+			prPosIdx++;
+			get_token(objThreadCntrolBlock);
+			if(objThreadCntrolBlock->token[0] != ']'){
+				serror(objThreadCntrolBlock, 0);
+				break;
+			}
+			// Jump ","
+			get_token(objThreadCntrolBlock);
+			// Get next PR
+			get_token(objThreadCntrolBlock);
+		}
+		else{
+			serror(objThreadCntrolBlock, 0);
+			break;
+		}
+	}
+	
+	putback(objThreadCntrolBlock);
+	// Not set PR and use default 21 - 30
+	if(prPosIdx == 0)
+	{
+		for (prPosIdx = 0; prPosIdx < 10; prPosIdx++)
+		{
+			objThreadCntrolBlock->instrSet->target.prPos[prPosIdx] = 21 + prPosIdx;
+		}
+	}
+	// We had jump ","
+	// get_token(objThreadCntrolBlock);
+    get_exp(objThreadCntrolBlock, &value, &boolValue);
+    instr.target.vel                  = value.getFloatValue();
+	
+	get_token(objThreadCntrolBlock);
+	if(strcmp(objThreadCntrolBlock->token, "cnt") == 0)
+    {
+		get_exp(objThreadCntrolBlock, &value, &boolValue);
+		FST_INFO("instr.target.cnt = %f setInstruction.", value.getFloatValue());
+		if(objThreadCntrolBlock->prog_mode == STEP_MODE)
+		{
+			instr.target.cnt = -1;
+		}
+		else
+		{
+			if(value.getFloatValue() < 0) // == -1
+			{
+				instr.target.cnt = -1.0000;
+				FST_INFO("instr.target.cnt = %f in the FINE.", instr.target.cnt);
+			}
+			else 
+				instr.target.cnt = value.getFloatValue() / 100;
+		}
+    }
+    else
+    {
+		get_exp(objThreadCntrolBlock, &value, &boolValue);
+        instr.target.cnt = value.getFloatValue() / 100;
+    }
+	// instr.target.acc = -1 ;
+	// Set to instrSet
+	memcpy(objThreadCntrolBlock->instrSet, &instr, sizeof(Instruction));
+	
+	get_token(objThreadCntrolBlock);
+	// result.size() > MOVJ_COMMAND_PARAM_MIN
+	if(objThreadCntrolBlock->token_type == DELIMITER)
+	{
+		char * instrSetPtr = 
+			(char *)objThreadCntrolBlock->instrSet
+			+ sizeof(Instruction) - sizeof(char) ;
+		objThreadCntrolBlock->instrSet->is_additional = true ;
+		if(*(objThreadCntrolBlock->token) == ';')
+		{
+			objThreadCntrolBlock->instrSet->add_num    =  
+				getAditionalInfomation(objThreadCntrolBlock, instrSetPtr);
+		}
+		else
+		{
+			AdditionalInfomation additionalInfomation ;
+			additionalInfomation.type = ACC ;
+			additionalInfomation.acc_speed = 100 ;
+			memcpy(instrSetPtr, &additionalInfomation, sizeof(AdditionalInfomation));
+			
+			objThreadCntrolBlock->instrSet->add_num    = 1 ;
+		}
+	}
+	
+// 	#ifdef USE_XPATH
+// 		FST_INFO("setInstruction MOTION_CURVE at %s", instr.line);
+// 	#else
+// 		FST_INFO("setInstruction MOTION_CURVE at %d", instr.line);
+// 	#endif
+	bool bRet = setInstruction(objThreadCntrolBlock, objThreadCntrolBlock->instrSet);
+	while(bRet == false)
+	{
+		bRet = setInstruction(objThreadCntrolBlock, objThreadCntrolBlock->instrSet);
+#ifdef WIN32
+		Sleep(1);
+#else
+        usleep(1000);
+#endif
+	}
+    return 1;     
+}
+
 /************************************************* 
 	Function:		call_UserAlarm
 	Description:	Execute UserAlarm
@@ -1747,6 +1932,7 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	int boolValue;
 	time_t timeStart, now ;
 	int timeWaitSeconds ;
+	int timeWaitMicroSeconds ;   // us: 1s = 1,000,000 us
     int cond, outTime;
     struct select_and_cycle_stack wait_stack;
     
@@ -1781,13 +1967,19 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		while(now - timeStart < timeWaitSeconds)
 		{
 #ifdef WIN32
-			Sleep(100);
+			Sleep(1000);
 #else
 			sleep(1);
 #endif
 			now = time(0);
 		}
 	    FST_INFO("call_Wait timeWaitSeconds = %d at %lld.", timeWaitSeconds, time(NULL));
+		timeWaitMicroSeconds = (int)(value.getFloatValue() * 1000000 - timeWaitSeconds * 1000000);
+#ifdef WIN32
+		Sleep(timeWaitMicroSeconds/1000);
+#else
+		usleep(timeWaitMicroSeconds);
+#endif
 		find_eol(objThreadCntrolBlock);
     }
     else  // Deal wait with condition
@@ -2104,7 +2296,7 @@ void generateXPathVector(
 /************************************************* 
 	Function:		getLineNumFromXPathVector
 	Description:	get line number by XPath 
-	Input:			xPath                  - XPath
+	Input:			xPath                  - XPath (ProgramName:XPath)
 	Return: 		i                      - line number
 *************************************************/ 
 int getLineNumFromXPathVector(
@@ -2112,6 +2304,8 @@ int getLineNumFromXPathVector(
 {
     for(unsigned int i = 0; i < (int)objThreadCntrolBlock->vector_XPath.size(); ++i)  
     {  
+	//    FST_INFO("getLineNumFromXPathVector Try:: %s ", 
+	//		objThreadCntrolBlock->vector_XPath[i].c_str());
         if(objThreadCntrolBlock->vector_XPath[i] == string(xPath))
         	return i ;
     }

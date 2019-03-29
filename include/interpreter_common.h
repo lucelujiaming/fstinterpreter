@@ -352,7 +352,6 @@ typedef struct
     InterpreterState status;
     char program_name[256];
     char current_line_path[256];
-	ProgMode   progMode ;
 }InterpreterPublish;
 
 
