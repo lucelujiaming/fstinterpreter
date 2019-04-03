@@ -96,7 +96,7 @@ int main(int  argc, char *argv[])
 #else
 			if (intprt_ctrl.cmd != fst_base::INTERPRETER_SERVER_CMD_LOAD)
 			{
-				parseCtrlComand(intprt_ctrl, "home_pose_test");
+				parseCtrlComand(intprt_ctrl, "StabilityTest");
 				intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_RESUME ;
 				parseCtrlComand(intprt_ctrl, "");
 				intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_LOAD ;

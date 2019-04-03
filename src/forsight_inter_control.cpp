@@ -980,19 +980,21 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
             // Restore program pointer
   			FST_INFO("reset prog position.");
             objThdCtrlBlockPtr->prog = objThdCtrlBlockPtr->p_buf ;
-			
-		    setPrgmState(objThdCtrlBlockPtr, INTERPRETER_PAUSE_TO_IDLE);
+
+ 		    setPrgmState(objThdCtrlBlockPtr, INTERPRETER_PAUSE_TO_IDLE);
 #ifdef WIN32
-			Sleep(1);
+ 			Sleep(1);
 #else
 	        usleep(1000);
 #endif
-  			FST_INFO("setPrgmState(IDLE_R).");
+ 			FST_INFO("setPrgmState(IDLE_R).");
 		    setPrgmState(objThdCtrlBlockPtr, INTERPRETER_IDLE);
+
 		    // clear line path and ProgramName
   			FST_INFO("reset ProgramName And LineNum.");
-			
-			resetProgramNameAndLineNum(objThdCtrlBlockPtr);
+			// Keep LineNum and Line xPath
+			// resetProgramNameAndLineNum(objThdCtrlBlockPtr);
+			setProgramName(objThdCtrlBlockPtr, (char *)""); 
             break;
         case fst_base::INTERPRETER_SERVER_CMD_CODE_START:
 			memcpy(&intprt_ctrl.program_code, requestDataPtr, sizeof(AutoMode));
@@ -1030,13 +1032,13 @@ void forgesight_load_programs_path()
 	if(g_files_manager_data_path.length() == 0)
 	{
 	    fst_parameter::ParamGroup param_;
-	    param_.loadParamFile("/root/install/share/configuration/machine/programs_path.yaml");
+	    param_.loadParamFile("/root/install/share/runtime/component_param/programs_path.yaml");
 	    param_.getParam("file_manager/programs_path", g_files_manager_data_path);
 	}
 	else
 	{
 	    fst_parameter::ParamGroup param_;
-	    param_.loadParamFile("/root/install/share/configuration/machine/programs_path.yaml");
+	    param_.loadParamFile("/root/install/share/runtime/component_param/programs_path.yaml");
 	    param_.getParam("file_manager/data_path", data_path);
 		g_files_manager_data_path.append(data_path);
 	}
@@ -1068,7 +1070,7 @@ void forgesight_load_wait_time_out_config()
     g_wait_time_out_config = 10;
 #else
     fst_parameter::ParamGroup param_;
-    param_.loadParamFile("/root/install/share/configuration/machine/prg_interpreter_config.yaml");
+    param_.loadParamFile("/root/install/share/runtime/component_param/prg_interpreter_config.yaml");
     param_.getParam("wait_time/time_out", g_wait_time_out_config);
 	FST_INFO("forgesight_load_wait_time_out_config: %d .", g_wait_time_out_config);
 	
@@ -1108,7 +1110,7 @@ void initInterpreter()
 	import_external_resource("config\\user_defined_variable.xml", g_vecKeyVariables);
 #else
 	import_external_resource(
-		"/root/install/share/configuration/machine/user_defined_variable.xml", 
+		"/root/install/share/runtime/interpreter/user_defined_variable.xml", 
 		g_vecKeyVariables);
 #endif
 }

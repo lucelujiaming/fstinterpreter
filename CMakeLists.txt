@@ -131,18 +131,14 @@ install(FILES ${PROJECT_BINARY_DIR}/${PROJECT_NAME}_version
 )
 
 install(FILES config/programs_path.yaml
-    DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/configuration/machine
+    DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/runtime/component_param
 )
 
 install(FILES config/user_defined_variable.xml
-    DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/configuration/machine
+    DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/runtime/interpreter
 )
 
 install(FILES config/prg_interpreter_config.yaml
-    DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/configuration/machine
-)
-
-install(FILES config/io_emulator.json
-    DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/configuration/configurable
+    DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/runtime/component_param
 )
 
