@@ -193,7 +193,13 @@ struct PoseEuler {
     Euler orientation;
 };
 
-
+typedef struct
+{
+    int arm;    // 1: right arm, -1:left arm
+    int elbow;  // 1: elbow above wrist, -1:elbow below wrist
+    int wrist;  // 1: wrist down, -1: wrist up
+    int flip;   // 0: not flip wrist, 1: flip wrist
+}Posture;
 
 
 // Define the home position, upper limit and lower limit of a joint
@@ -383,11 +389,35 @@ struct DHGroup {
     CoordinateOffset j6;
 };
 
+enum CoordinateType
+{
+    COORDINATE_JOINT = 0,
+	COORDINATE_CARTESIAN = 1,
+};
+
+struct PoseAndPosture
+{
+    PoseEuler    pose;
+    Posture      posture;
+};
+
+struct TargetPoint
+{
+    CoordinateType  type;
+    
+    union
+    {
+        Joint    joint;
+        PoseAndPosture      pose;
+    };
+};
+
 // target poses of circle motion
 struct CircleTarget {
     PoseEuler pose1;
     PoseEuler pose2;
 };
+
 
 #define     PR_POS_LEN           128
 // target structure used in motion command
@@ -410,12 +440,9 @@ struct MotionTarget {
 	int user_frame_id;
     int tool_frame_id;
 
-    union {
-        PoseEuler       pose_target;
-        Joint           joint_target;
-        CircleTarget    circle_target;
-        int             prPos[PR_POS_LEN];
-    };
+     int             prPos[PR_POS_LEN];
+	TargetPoint target;  
+    TargetPoint via;     
 };
 
 // initial state of a line motion

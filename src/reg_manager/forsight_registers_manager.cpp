@@ -134,7 +134,7 @@ int forgesight_registers_manager_get_register(
 
 	PoseEuler objPoseEuler ;
     Joint     objJoint;
-    int       iType ;
+//    int       iType ;
     
     std::string    strSrValue;
 	
@@ -546,33 +546,6 @@ int forgesight_registers_manager_get_register(
 				else
 		       		FST_INFO("PR[%d].pos_type = %d ", 
 		       			iRegIdx, objPrRegData.value.pos_type);
-			}
-		}
-		else if (!strcmp(reg_member, TXT_REG_TYPE))
-		{
-			bRet = reg_manager_interface_getTypePr(&iType, iRegIdx);
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-				value->setFloatValue(iType);
-		}
-		else if (!strcmp(reg_member, TXT_REG_ID))
-		{
-			bRet = reg_manager_interface_getIdPr(&iID, iRegIdx);
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-				value->setFloatValue(iID);
-		}
-		else if (!strcmp(reg_member, TXT_REG_COMMENT))
-		{
-			bRet = reg_manager_interface_getCommentPr(cComment, iRegIdx);
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-			{
-				strComment = std::string(cComment);
-				value->setStringValue(strComment);
 			}
 		}
 	}
@@ -1483,29 +1456,6 @@ int forgesight_registers_manager_set_register(
 			{
 				FST_ERROR("Set PJ6:(%f) but PR[%d] not exist", fValue, iRegIdx);
 			}
-	       	return 0 ;
-		}
-		else if (!strcmp(reg_member, TXT_REG_TYPE))
-		{
-			int iType = (int)valueStart->getFloatValue();
-			FST_INFO("Set TYPE:(%d) to PR[%s]", iType, reg_idx);
-			reg_manager_interface_setTypePr(&iType, iRegIdx);
-	       	return 0 ;
-		}
-		else if (!strcmp(reg_member, TXT_REG_ID))
-		{
-			int iID = (int)valueStart->getFloatValue();
-			FST_INFO("Set ID:(%d) to PR[%s]", iID, reg_idx);
-			reg_manager_interface_setIdPr(&iID, iRegIdx);
-	       	return 0 ;
-		}
-		else if (!strcmp(reg_member, TXT_REG_COMMENT))
-		{
-			// get_token(objThreadCntrolBlock);
-			FST_INFO("Set COMMENT:(%s) to PR[%s]", 
-				objThreadCntrolBlock->token, reg_idx);
-			reg_manager_interface_setCommentPr(
-				(char *)valueStart->getStringValue().c_str(), iRegIdx);
 	       	return 0 ;
 		}
 	}

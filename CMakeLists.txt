@@ -9,6 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
     parameter_manager
 #    mem_share
     motion_control
+    kinematics_alg
 )
 set(VERSION_MAJOR ?)
 set(VERSION_MINOR ?)
@@ -60,6 +61,7 @@ set(catkin_INCLUDE_DIRS
     ${depend_PATH_INC}/basic_alg/include 
     ${depend_PATH_INC}/nvram/include
     ${depend_PATH_INC}/fst_spi/include
+    ${depend_PATH_INC}/kinematics_alg/include
 )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wwrite-strings -fpermissive -O0")
@@ -71,6 +73,7 @@ catkin_package(
     DEPENDS basic_alg 
     DEPENDS nvram 
     DEPENDS fst_spi 
+    DEPENDS kinematics_alg
 )
  
 
@@ -113,6 +116,7 @@ target_link_libraries(prg_interpreter
     modbus_manager
     logger
     basic_alg
+    kinematics_alg
 )
 
 #############

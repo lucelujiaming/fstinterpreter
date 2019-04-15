@@ -110,14 +110,14 @@ bool reg_manager_interface_getPr(PrRegData *ptr, uint16_t num)
 		ptr->value.pos[5] = 0.0;
 		ptr->value.pos_type = PR_REG_POS_TYPE_CARTESIAN ;
 		bRet = g_objRegManagerInterface->getPrReg(num, &objPrRegDataIpc);
-		ptr->value.pos[0] = objPrRegDataIpc.pos[0];
-		ptr->value.pos[1] = objPrRegDataIpc.pos[1];
-		ptr->value.pos[2] = objPrRegDataIpc.pos[2];
-		ptr->value.pos[3] = objPrRegDataIpc.pos[3];
-		ptr->value.pos[4] = objPrRegDataIpc.pos[4];
-		ptr->value.pos[5] = objPrRegDataIpc.pos[5];
+		ptr->value = objPrRegDataIpc.value;
 		
-		FST_INFO("getPr: id = (%f, %f, %f, %f, %f, %f) at %d with %s ", 
+		FST_INFO("getPrReg: id = (%f, %f, %f, %f, %f, %f) at %d with %s ", 
+			objPrRegDataIpc.value.pos[0], objPrRegDataIpc.value.pos[1], 
+			objPrRegDataIpc.value.pos[2], objPrRegDataIpc.value.pos[3], 
+			objPrRegDataIpc.value.pos[4], objPrRegDataIpc.value.pos[5], num, bRet?"TRUE":"FALSE");
+		
+		FST_INFO("getPrReg: id = (%f, %f, %f, %f, %f, %f) at %d with %s ", 
 			ptr->value.pos[0], ptr->value.pos[1], 
 			ptr->value.pos[2], ptr->value.pos[3], 
 			ptr->value.pos[4], ptr->value.pos[5], num, bRet?"TRUE":"FALSE");
@@ -155,21 +155,13 @@ bool reg_manager_interface_setPr(PrRegData *ptr, uint16_t num)
 	{
 		PrRegDataIpc objPrRegDataIpc ;
 		objPrRegDataIpc.id     = num;
-		objPrRegDataIpc.pos[0] = ptr->value.pos[0];
-		objPrRegDataIpc.pos[1] = ptr->value.pos[1];
-		objPrRegDataIpc.pos[2] = ptr->value.pos[2];
-		objPrRegDataIpc.pos[3] = ptr->value.pos[3];
-		objPrRegDataIpc.pos[4] = ptr->value.pos[4];
-		objPrRegDataIpc.pos[5] = ptr->value.pos[5];
-		objPrRegDataIpc.pos[6] = 0.0;
-		objPrRegDataIpc.pos[7] = 0.0;
-		objPrRegDataIpc.pos[8] = 0.0;
+		objPrRegDataIpc.value = ptr->value;
 		
 		bRet = g_objRegManagerInterface->setPrReg(&objPrRegDataIpc);
 		FST_INFO("setPr: id = %d (%f, %f, %f, %f, %f, %f) at %d with %s ", num, 
-			objPrRegDataIpc.pos[0], objPrRegDataIpc.pos[1], 
-			objPrRegDataIpc.pos[2], objPrRegDataIpc.pos[3], 
-			objPrRegDataIpc.pos[4], objPrRegDataIpc.pos[5], num, bRet?"TRUE":"FALSE");
+			objPrRegDataIpc.value.pos[0], objPrRegDataIpc.value.pos[1], 
+			objPrRegDataIpc.value.pos[2], objPrRegDataIpc.value.pos[3], 
+			objPrRegDataIpc.value.pos[4], objPrRegDataIpc.value.pos[5], num, bRet?"TRUE":"FALSE");
 		
 #ifdef USE_LOCAL_REG_MANAGER_INTERFACE
 		if(bRet == false)
@@ -232,19 +224,19 @@ bool reg_manager_interface_getPosePr(PoseEuler *ptr, uint16_t num)
 		if(bRet)
 		{
 #ifndef WIN32
-		   ptr->point_.x_    = objPrRegDataIpc.pos[0];
-		   ptr->point_.y_    = objPrRegDataIpc.pos[1];
-		   ptr->point_.z_    = objPrRegDataIpc.pos[2];
-		   ptr->euler_.a_    = objPrRegDataIpc.pos[3];
-		   ptr->euler_.b_    = objPrRegDataIpc.pos[4];
-		   ptr->euler_.c_    = objPrRegDataIpc.pos[5];
+		   ptr->point_.x_    = objPrRegDataIpc.value.pos[0];
+		   ptr->point_.y_    = objPrRegDataIpc.value.pos[1];
+		   ptr->point_.z_    = objPrRegDataIpc.value.pos[2];
+		   ptr->euler_.a_    = objPrRegDataIpc.value.pos[3];
+		   ptr->euler_.b_    = objPrRegDataIpc.value.pos[4];
+		   ptr->euler_.c_    = objPrRegDataIpc.value.pos[5];
 #else
-		   ptr->position.x    = objPrRegDataIpc.pos[0];
-		   ptr->position.y    = objPrRegDataIpc.pos[1];
-		   ptr->position.z    = objPrRegDataIpc.pos[2];
-		   ptr->orientation.a = objPrRegDataIpc.pos[3];
-		   ptr->orientation.b = objPrRegDataIpc.pos[4];
-		   ptr->orientation.c = objPrRegDataIpc.pos[5];
+		   ptr->position.x    = objPrRegDataIpc.value.pos[0];
+		   ptr->position.y    = objPrRegDataIpc.value.pos[1];
+		   ptr->position.z    = objPrRegDataIpc.value.pos[2];
+		   ptr->orientation.a = objPrRegDataIpc.value.pos[3];
+		   ptr->orientation.b = objPrRegDataIpc.value.pos[4];
+		   ptr->orientation.c = objPrRegDataIpc.value.pos[5];
 #endif
 		}
 	}
@@ -274,28 +266,28 @@ bool reg_manager_interface_setPosePr(PoseEuler *ptr, uint16_t num)
 		PrRegDataIpc objPrRegDataIpc ;
 		objPrRegDataIpc.id     = num ;
 #ifndef WIN32
-		objPrRegDataIpc.pos[0] = ptr->point_.x_   ;
-		objPrRegDataIpc.pos[1] = ptr->point_.y_   ;
-		objPrRegDataIpc.pos[2] = ptr->point_.z_   ;
-		objPrRegDataIpc.pos[3] = ptr->euler_.a_   ;
-		objPrRegDataIpc.pos[4] = ptr->euler_.b_   ;
-		objPrRegDataIpc.pos[5] = ptr->euler_.c_   ;
+		objPrRegDataIpc.value.pos[0] = ptr->point_.x_   ;
+		objPrRegDataIpc.value.pos[1] = ptr->point_.y_   ;
+		objPrRegDataIpc.value.pos[2] = ptr->point_.z_   ;
+		objPrRegDataIpc.value.pos[3] = ptr->euler_.a_   ;
+		objPrRegDataIpc.value.pos[4] = ptr->euler_.b_   ;
+		objPrRegDataIpc.value.pos[5] = ptr->euler_.c_   ;
 #else
-		objPrRegDataIpc.pos[0] = ptr->position.x   ;
-		objPrRegDataIpc.pos[1] = ptr->position.y   ;
-		objPrRegDataIpc.pos[2] = ptr->position.z   ;
-		objPrRegDataIpc.pos[3] = ptr->orientation.a;
-		objPrRegDataIpc.pos[4] = ptr->orientation.b;
-		objPrRegDataIpc.pos[5] = ptr->orientation.c;
+		objPrRegDataIpc.value.pos[0] = ptr->position.x   ;
+		objPrRegDataIpc.value.pos[1] = ptr->position.y   ;
+		objPrRegDataIpc.value.pos[2] = ptr->position.z   ;
+		objPrRegDataIpc.value.pos[3] = ptr->orientation.a;
+		objPrRegDataIpc.value.pos[4] = ptr->orientation.b;
+		objPrRegDataIpc.value.pos[5] = ptr->orientation.c;
 #endif
-		objPrRegDataIpc.pos[6] = 0.0;
-		objPrRegDataIpc.pos[7] = 0.0;
-		objPrRegDataIpc.pos[8] = 0.0;
+		objPrRegDataIpc.value.pos[6] = 0.0;
+		objPrRegDataIpc.value.pos[7] = 0.0;
+		objPrRegDataIpc.value.pos[8] = 0.0;
 		bRet = g_objRegManagerInterface->setPrReg(&objPrRegDataIpc);
 		FST_INFO("setPr: id = %d (%f, %f, %f, %f, %f, %f) at %d with %s ", num, 
-			objPrRegDataIpc.pos[0], objPrRegDataIpc.pos[1], 
-			objPrRegDataIpc.pos[2], objPrRegDataIpc.pos[3], 
-			objPrRegDataIpc.pos[4], objPrRegDataIpc.pos[5], num, bRet?"TRUE":"FALSE");
+			objPrRegDataIpc.value.pos[0], objPrRegDataIpc.value.pos[1], 
+			objPrRegDataIpc.value.pos[2], objPrRegDataIpc.value.pos[3], 
+			objPrRegDataIpc.value.pos[4], objPrRegDataIpc.value.pos[5], num, bRet?"TRUE":"FALSE");
 	}
 	else
 	{
@@ -325,19 +317,19 @@ bool reg_manager_interface_getJointPr(Joint *ptr, uint16_t num)
 		if(bRet)
 		{
 #ifndef WIN32
-		   ptr->j1_ = objPrRegDataIpc.pos[0];
-		   ptr->j2_ = objPrRegDataIpc.pos[1];
-		   ptr->j3_ = objPrRegDataIpc.pos[2];
-		   ptr->j4_ = objPrRegDataIpc.pos[3];
-		   ptr->j5_ = objPrRegDataIpc.pos[4];
-		   ptr->j6_ = objPrRegDataIpc.pos[5];   
+		   ptr->j1_ = objPrRegDataIpc.value.pos[0];
+		   ptr->j2_ = objPrRegDataIpc.value.pos[1];
+		   ptr->j3_ = objPrRegDataIpc.value.pos[2];
+		   ptr->j4_ = objPrRegDataIpc.value.pos[3];
+		   ptr->j5_ = objPrRegDataIpc.value.pos[4];
+		   ptr->j6_ = objPrRegDataIpc.value.pos[5];   
 #else
-		   ptr->j1 = objPrRegDataIpc.pos[0];
-		   ptr->j2 = objPrRegDataIpc.pos[1];
-		   ptr->j3 = objPrRegDataIpc.pos[2];
-		   ptr->j4 = objPrRegDataIpc.pos[3];
-		   ptr->j5 = objPrRegDataIpc.pos[4];
-		   ptr->j6 = objPrRegDataIpc.pos[5];   
+		   ptr->j1 = objPrRegDataIpc.value.pos[0];
+		   ptr->j2 = objPrRegDataIpc.value.pos[1];
+		   ptr->j3 = objPrRegDataIpc.value.pos[2];
+		   ptr->j4 = objPrRegDataIpc.value.pos[3];
+		   ptr->j5 = objPrRegDataIpc.value.pos[4];
+		   ptr->j6 = objPrRegDataIpc.value.pos[5];   
 #endif
 		}
 	}
@@ -369,219 +361,24 @@ bool reg_manager_interface_setJointPr(Joint *ptr, uint16_t num)
 		if(bRet)
 		{
 #ifndef WIN32 
-			objPrRegDataIpc.pos[0] = ptr->j1_;
-			objPrRegDataIpc.pos[1] = ptr->j2_;
-			objPrRegDataIpc.pos[2] = ptr->j3_;
-			objPrRegDataIpc.pos[3] = ptr->j4_;
-			objPrRegDataIpc.pos[4] = ptr->j5_;
-			objPrRegDataIpc.pos[5] = ptr->j6_;
+			objPrRegDataIpc.value.pos[0] = ptr->j1_;
+			objPrRegDataIpc.value.pos[1] = ptr->j2_;
+			objPrRegDataIpc.value.pos[2] = ptr->j3_;
+			objPrRegDataIpc.value.pos[3] = ptr->j4_;
+			objPrRegDataIpc.value.pos[4] = ptr->j5_;
+			objPrRegDataIpc.value.pos[5] = ptr->j6_;
 #else
-			objPrRegDataIpc.pos[0] = ptr->j1;
-			objPrRegDataIpc.pos[1] = ptr->j2;
-			objPrRegDataIpc.pos[2] = ptr->j3;
-			objPrRegDataIpc.pos[3] = ptr->j4;
-			objPrRegDataIpc.pos[4] = ptr->j5;
-			objPrRegDataIpc.pos[5] = ptr->j6; 
+			objPrRegDataIpc.value.pos[0] = ptr->j1;
+			objPrRegDataIpc.value.pos[1] = ptr->j2;
+			objPrRegDataIpc.value.pos[2] = ptr->j3;
+			objPrRegDataIpc.value.pos[3] = ptr->j4;
+			objPrRegDataIpc.value.pos[4] = ptr->j5;
+			objPrRegDataIpc.value.pos[5] = ptr->j6; 
 #endif
-			objPrRegDataIpc.pos[6] = 0.0;
-			objPrRegDataIpc.pos[7] = 0.0;
-			objPrRegDataIpc.pos[8] = 0.0;
+			objPrRegDataIpc.value.pos[6] = 0.0;
+			objPrRegDataIpc.value.pos[7] = 0.0;
+			objPrRegDataIpc.value.pos[8] = 0.0;
 			bRet = g_objRegManagerInterface->setPrReg(&objPrRegDataIpc);
-		}
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_getTypePr
-	Description:	get Type info of PR.
-	Input:			num        -  Index of PR
-	Ouput:			ptr        -  Type info of PR
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_getTypePr(int *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		PrRegDataIpc objPrRegDataIpc ;
-		bRet = g_objRegManagerInterface->getPrReg(num, &objPrRegDataIpc);
-		if(bRet)
-		{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		   *ptr = objPrRegDataIpc.value.pos_type;
-#endif
-		}
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_setTypePr
-	Description:	set Type info of PR.
-	Input:			num        -  Index of PR
-	Input:			ptr        -  Type info of PR
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_setTypePr(int *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		PrRegDataIpc objPrRegDataIpc ;
-		bRet = g_objRegManagerInterface->getPrReg(num, &objPrRegDataIpc);
-		if(bRet)
-		{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		    objPrRegDataIpc.value.pos_type = *ptr;
-			reg_manager_interface_setPr(&objPrRegDataIpc, num);
-#endif
-		}
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_getIdPr
-	Description:	get Id info of PR.
-	Input:			num        -  Index of PR
-	Ouput:			ptr        -  Id info of PR
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_getIdPr(int *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		PrRegDataIpc objPrRegDataIpc ;
-		bRet = g_objRegManagerInterface->getPrReg(num, &objPrRegDataIpc);
-		if(bRet)
-		{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		   *ptr = objPrRegDataIpc.id;
-#endif
-		}
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_setIdPr
-	Description:	set Id info of PR.
-	Input:			num        -  Index of PR
-	Input:			ptr        -  Id info of PR
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_setIdPr(int *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		PrRegDataIpc objPrRegDataIpc ;
-		bRet = g_objRegManagerInterface->getPrReg(num, &objPrRegDataIpc);
-		if(bRet)
-		{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		    objPrRegDataIpc.id = *ptr;
-			reg_manager_interface_setPr(&objPrRegDataIpc, num);
-#endif
-		}
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_getCommentPr
-	Description:	get Comment info of PR.
-	Input:			num        -  Index of PR
-	Ouput:			ptr        -  Comment info of PR
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_getCommentPr(char *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		PrRegDataIpc objPrRegDataIpc ;
-		bRet = g_objRegManagerInterface->getPrReg(num, &objPrRegDataIpc);
-		if(bRet)
-		{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		   memcpy(ptr, objPrRegDataIpc.comment.c_str(), objPrRegDataIpc.comment.length());
-#endif
-		}
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
-#else
-	bRet = true ;
-#endif
-	return bRet ;
-}
-
-/************************************************* 
-	Function:		reg_manager_interface_setCommentPr
-	Description:	set Comment info of PR.
-	Input:			num        -  Index of PR
-	Input:			ptr        -  Comment info of PR
-	Return: 		1 - success
-*************************************************/
-bool reg_manager_interface_setCommentPr(char *ptr, uint16_t num)
-{
-	bool bRet = false ;
-#ifndef WIN32
-	if(g_objRegManagerInterface)
-	{
-		PrRegDataIpc objPrRegDataIpc ;
-		bRet = g_objRegManagerInterface->getPrReg(num, &objPrRegDataIpc);
-		if(bRet)
-		{
-#ifdef USE_LOCAL_REG_MANAGER_INTERFACE
-		    objPrRegDataIpc.comment = string(ptr);
-			reg_manager_interface_setPr(&objPrRegDataIpc, num);
-#endif
 		}
 	}
 	else
@@ -876,7 +673,7 @@ bool reg_manager_interface_getMr(int *ptr, uint16_t num)
 		MrRegDataIpc objMrRegDataIpc ;
 		*ptr = 0.0;
 		bRet = g_objRegManagerInterface->getMrReg(num, &objMrRegDataIpc);
-		FST_INFO("getMR: value = (%f) at %d with %s", 
+		FST_INFO("getMR: value = (%d) at %d with %s", 
 			objMrRegDataIpc.value, num, bRet?"TRUE":"FALSE");
 		*ptr = objMrRegDataIpc.value ;
 	}
@@ -973,7 +770,7 @@ bool reg_manager_interface_setValueMr(int *ptr, uint16_t num)
 		objMrRegDataIpc.id    = num;
 		objMrRegDataIpc.value = *ptr;
 		bRet = g_objRegManagerInterface->setMrReg(&objMrRegDataIpc);
-		FST_INFO("setValueMr:(%f) at %d with %s", objMrRegDataIpc.value, num, bRet?"TRUE":"FALSE");
+		FST_INFO("setValueMr:(%d) at %d with %s", objMrRegDataIpc.value, num, bRet?"TRUE":"FALSE");
 	}
 	else
 	{

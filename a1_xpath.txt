@@ -1,0 +1,7 @@
+001:a1:/prog/prog_body/function
+002:a1:/prog/prog_body/function/body/instruction
+003:a1:/prog/prog_body/function/body/assignment[1]
+004:a1:/prog/prog_body/function/body/assignment[2]
+005:a1:/prog/prog_body/function/body/assignment[3]
+006:a1:/prog/prog_body/function/body/end
+007:a1:/prog/prog_body/function

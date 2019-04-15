@@ -1,4 +1,5 @@
 IMPORT MarcuscTest
+IMPORT MarcuscTest
 SUB main ()
     MOVEJ PR[1], 100 CNT -1 
     DO[1]  = ON   

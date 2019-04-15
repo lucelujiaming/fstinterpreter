@@ -1,0 +1,4 @@
+001:a_copy1:/prog/prog_body/function
+002:a_copy1:/prog/prog_body/function/body/assignment
+003:a_copy1:/prog/prog_body/function/body/end
+004:a_copy1:/prog/prog_body/function

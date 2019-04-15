@@ -1,0 +1,133 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(044)/prog/prog_body/function/body/instruction[1]                                                            MOVEL P[14], 4000 CNT -1 
+EXPORT: (003)(044)/prog/prog_body/function/body/instruction[2]                                                            MOVEL PR[*], MR[5] CNT -1 
+EXPORT: (004)(044)/prog/prog_body/function/body/instruction[3]                                                            MOVEL P[37], 4000 CNT -1 
+EXPORT: (005)(044)/prog/prog_body/function/body/instruction[4]                                                            MOVEL P[38], 4000 CNT -1 
+EXPORT: (006)(044)/prog/prog_body/function/body/instruction[5]                                                            MOVEL P[39], 4000 CNT -1 
+EXPORT: (007)(044)/prog/prog_body/function/body/instruction[6]                                                            MOVEL P[40], 4000 CNT -1 
+EXPORT: (008)(044)/prog/prog_body/function/body/instruction[7]                                                            MOVEL P[11], MR[8] CNT -1 
+EXPORT: (009)(044)/prog/prog_body/function/body/instruction[8]                                                            MOVEL P[41], 4000 CNT -1 
+EXPORT: (010)(044)/prog/prog_body/function/body/instruction[9]                                                            MOVEL P[43], 4000 CNT -1 
+EXPORT: (011)(045)/prog/prog_body/function/body/instruction[10]                                                           MOVEL P[50], 5 SD 9 
+EXPORT: (012)(045)/prog/prog_body/function/body/instruction[11]                                                           MOVEL P[45], 4000 CNT -1 
+EXPORT: (013)(045)/prog/prog_body/function/body/instruction[12]                                                           MOVEL P[46], 4000 CNT -1 
+EXPORT: (014)(045)/prog/prog_body/function/body/instruction[13]                                                           MOVEL P[47], 4000 CNT -1 
+EXPORT: (015)(045)/prog/prog_body/function/body/instruction[14]                                                           MOVEL P[48], 4000 CNT -1 
+EXPORT: (016)(045)/prog/prog_body/function/body/instruction[15]                                                           MOVEL P[49], 4000 CNT -1 
+EXPORT: (017)(045)/prog/prog_body/function/body/instruction[16]                                                           MOVEL P[34], 4000 CNT -1 
+EXPORT: (018)(045)/prog/prog_body/function/body/instruction[17]                                                           MOVEL P[35], 4000 CNT -1 
+EXPORT: (019)(043)/prog/prog_body/function/body/assignment[1]                                                             SR[*]  = "坚持到底"  
+EXPORT: (020)(050)/prog/prog_body/function/body/logical[1]/determine                                                      SELECT CASE  * 
+EXPORT: (021)(063)/prog/prog_body/function/body/logical[1]/vice_logical/determine                                             CASE  * 
+EXPORT: (022)(040)/prog/prog_body/function/body/logical[1]                                                                    BREAK 
+EXPORT: (023)(040)/prog/prog_body/function/body/logical[1]                                                                END SELECT 
+EXPORT: (024)(050)/prog/prog_body/function/body/logical[2]/determine                                                      IF R[1]  = 3 THEN 
+EXPORT: (025)(040)/prog/prog_body/function/body/logical[2]                                                                ENDIF 
+EXPORT: (026)(045)/prog/prog_body/function/body/instruction[19]                                                           MOVEL P[24], 4000 CNT -1 
+EXPORT: (027)(045)/prog/prog_body/function/body/instruction[20]                                                           MOVEL P[25], 4000 CNT -1 
+EXPORT: (028)(045)/prog/prog_body/function/body/instruction[21]                                                           MOVEL P[26], 4000 CNT -1 
+EXPORT: (029)(045)/prog/prog_body/function/body/instruction[22]                                                           MOVEL P[30], 4000 CNT -1 
+EXPORT: (030)(045)/prog/prog_body/function/body/instruction[23]                                                           MOVEL P[31], 4000 CNT -1 
+EXPORT: (031)(045)/prog/prog_body/function/body/instruction[24]                                                           MOVEL P[32], 4000 CNT -1 
+EXPORT: (032)(045)/prog/prog_body/function/body/instruction[25]                                                           MOVEL P[27], 4000 CNT -1 
+EXPORT: (033)(045)/prog/prog_body/function/body/instruction[26]                                                           MOVEL P[28], 4000 CNT -1 
+EXPORT: (034)(045)/prog/prog_body/function/body/instruction[27]                                                           MOVEL P[1], 4000 CNT -1 
+EXPORT: (035)(045)/prog/prog_body/function/body/instruction[28]                                                           MOVEL P[29], 4000 CNT -1 
+EXPORT: (036)(045)/prog/prog_body/function/body/instruction[29]                                                           MOVEL P[*], 4000 CNT -1 
+EXPORT: (037)(043)/prog/prog_body/function/body/assignment[2]                                                             DI[1]  = ON   
+EXPORT: (038)(043)/prog/prog_body/function/body/assignment[3]                                                             DI[1]  = ON   
+EXPORT: (039)(043)/prog/prog_body/function/body/assignment[4]                                                             DI[1]  = ON   
+EXPORT: (040)(043)/prog/prog_body/function/body/assignment[5]                                                             DI[1]  = ON   
+EXPORT: (041)(043)/prog/prog_body/function/body/assignment[6]                                                             DI[1]  = ON   
+EXPORT: (042)(043)/prog/prog_body/function/body/assignment[7]                                                             DI[1]  = ON   
+EXPORT: (043)(043)/prog/prog_body/function/body/assignment[8]                                                             DI[1]  = ON   
+EXPORT: (044)(045)/prog/prog_body/function/body/instruction[30]                                                           MOVEL P[1], 4000 CNT -1 
+EXPORT: (045)(043)/prog/prog_body/function/body/assignment[9]                                                             DI[1]  = ON   
+EXPORT: (046)(044)/prog/prog_body/function/body/assignment[10]                                                            DI[1]  = ON   
+EXPORT: (047)(044)/prog/prog_body/function/body/assignment[11]                                                            DI[1]  = ON   
+EXPORT: (048)(044)/prog/prog_body/function/body/assignment[12]                                                            DI[1]  = ON   
+EXPORT: (049)(044)/prog/prog_body/function/body/assignment[13]                                                            DI[1]  = ON   
+EXPORT: (050)(044)/prog/prog_body/function/body/assignment[14]                                                            DI[1]  = ON   
+EXPORT: (051)(044)/prog/prog_body/function/body/assignment[15]                                                            DI[1]  = ON   
+EXPORT: (052)(044)/prog/prog_body/function/body/assignment[16]                                                            DI[1]  = ON   
+EXPORT: (053)(044)/prog/prog_body/function/body/assignment[17]                                                            PAYLOAD_No. = 10  
+EXPORT: (054)(044)/prog/prog_body/function/body/assignment[18]                                                            DI[1]  = ON   
+EXPORT: (055)(044)/prog/prog_body/function/body/assignment[19]                                                            DI[1]  = ON   
+EXPORT: (056)(044)/prog/prog_body/function/body/assignment[20]                                                            DI[1]  = ON   
+EXPORT: (057)(044)/prog/prog_body/function/body/assignment[21]                                                            DI[1]  = ON   
+EXPORT: (058)(044)/prog/prog_body/function/body/assignment[22]                                                            DI[1]  = ON   
+EXPORT: (059)(044)/prog/prog_body/function/body/assignment[23]                                                            DI[1]  = ON   
+EXPORT: (060)(045)/prog/prog_body/function/body/instruction[31]                                                           MOVEL P[*], 4000 CNT -1 
+EXPORT: (061)(044)/prog/prog_body/function/body/assignment[24]                                                            DI[1]  = ON   
+EXPORT: (062)(044)/prog/prog_body/function/body/assignment[25]                                                            DI[1]  = ON   
+EXPORT: (063)(044)/prog/prog_body/function/body/assignment[26]                                                            DI[1]  = ON   
+EXPORT: (064)(044)/prog/prog_body/function/body/assignment[27]                                                            DI[1]  = ON   
+EXPORT: (065)(044)/prog/prog_body/function/body/assignment[28]                                                            DI[1]  = ON   
+EXPORT: (066)(044)/prog/prog_body/function/body/assignment[29]                                                            DI[1]  = ON   
+EXPORT: (067)(044)/prog/prog_body/function/body/assignment[30]                                                            DI[1]  = ON   
+EXPORT: (068)(044)/prog/prog_body/function/body/assignment[31]                                                            DI[1]  = ON   
+EXPORT: (069)(044)/prog/prog_body/function/body/assignment[32]                                                            DI[1]  = ON   
+EXPORT: (070)(044)/prog/prog_body/function/body/assignment[33]                                                            DI[1]  = ON   
+EXPORT: (071)(044)/prog/prog_body/function/body/assignment[34]                                                            DI[1]  = ON   
+EXPORT: (072)(044)/prog/prog_body/function/body/assignment[35]                                                            DI[1]  = ON   
+EXPORT: (073)(044)/prog/prog_body/function/body/assignment[36]                                                            DI[1]  = ON   
+EXPORT: (074)(044)/prog/prog_body/function/body/assignment[37]                                                            DI[1]  = ON   
+EXPORT: (075)(044)/prog/prog_body/function/body/assignment[38]                                                            DI[1]  = ON   
+EXPORT: (076)(044)/prog/prog_body/function/body/assignment[39]                                                            DI[1]  = ON   
+EXPORT: (077)(044)/prog/prog_body/function/body/assignment[40]                                                            DI[1]  = ON   
+EXPORT: (078)(044)/prog/prog_body/function/body/assignment[41]                                                            DI[1]  = ON   
+EXPORT: (079)(044)/prog/prog_body/function/body/assignment[42]                                                            DI[1]  = ON   
+EXPORT: (080)(044)/prog/prog_body/function/body/assignment[43]                                                            DI[1]  = ON   
+EXPORT: (081)(044)/prog/prog_body/function/body/assignment[44]                                                            DI[1]  = ON   
+EXPORT: (082)(044)/prog/prog_body/function/body/assignment[45]                                                            DI[1]  = ON   
+EXPORT: (083)(044)/prog/prog_body/function/body/assignment[46]                                                            DI[1]  = ON   
+EXPORT: (084)(044)/prog/prog_body/function/body/assignment[47]                                                            DI[1]  = ON   
+EXPORT: (085)(044)/prog/prog_body/function/body/assignment[48]                                                            DI[1]  = ON   
+EXPORT: (086)(044)/prog/prog_body/function/body/assignment[49]                                                            DI[1]  = ON   
+EXPORT: (087)(044)/prog/prog_body/function/body/assignment[50]                                                            DI[1]  = ON   
+EXPORT: (088)(044)/prog/prog_body/function/body/assignment[51]                                                            DI[1]  = ON   
+EXPORT: (089)(045)/prog/prog_body/function/body/instruction[32]                                                           MOVEL P[*], 4000 CNT -1 
+EXPORT: (090)(044)/prog/prog_body/function/body/assignment[52]                                                            DI[1]  = ON   
+EXPORT: (091)(044)/prog/prog_body/function/body/assignment[53]                                                            DI[1]  = ON   
+EXPORT: (092)(044)/prog/prog_body/function/body/assignment[54]                                                            DI[1]  = ON   
+EXPORT: (093)(044)/prog/prog_body/function/body/assignment[55]                                                            DI[1]  = ON   
+EXPORT: (094)(044)/prog/prog_body/function/body/assignment[56]                                                            DI[1]  = ON   
+EXPORT: (095)(044)/prog/prog_body/function/body/assignment[57]                                                            DI[4]  = 122222222  
+EXPORT: (096)(044)/prog/prog_body/function/body/assignment[58]                                                            DI[1]  = ON   
+EXPORT: (097)(044)/prog/prog_body/function/body/assignment[59]                                                            DI[1]  = ON   
+EXPORT: (098)(044)/prog/prog_body/function/body/assignment[60]                                                            DI[1]  = ON   
+EXPORT: (099)(044)/prog/prog_body/function/body/assignment[61]                                                            DI[1]  = ON   
+EXPORT: (100)(044)/prog/prog_body/function/body/assignment[62]                                                            DI[1]  = ON   
+EXPORT: (101)(044)/prog/prog_body/function/body/assignment[63]                                                            DI[1]  = ON   
+EXPORT: (102)(044)/prog/prog_body/function/body/assignment[64]                                                            DI[1]  = ON   
+EXPORT: (103)(044)/prog/prog_body/function/body/assignment[65]                                                            DI[1]  = ON   
+EXPORT: (104)(044)/prog/prog_body/function/body/assignment[66]                                                            DI[1]  = ON   
+EXPORT: (105)(044)/prog/prog_body/function/body/assignment[67]                                                            DI[1]  = ON   
+EXPORT: (106)(044)/prog/prog_body/function/body/assignment[68]                                                            DI[1]  = ON   
+EXPORT: (107)(044)/prog/prog_body/function/body/assignment[69]                                                            DI[1]  = ON   
+EXPORT: (108)(044)/prog/prog_body/function/body/assignment[70]                                                            DI[1]  = ON   
+EXPORT: (109)(044)/prog/prog_body/function/body/assignment[71]                                                            DI[1]  = ON   
+EXPORT: (110)(044)/prog/prog_body/function/body/assignment[72]                                                            DI[1]  = ON   
+EXPORT: (111)(044)/prog/prog_body/function/body/assignment[73]                                                            DI[1]  = ON   
+EXPORT: (112)(044)/prog/prog_body/function/body/assignment[74]                                                            DI[1]  = ON   
+EXPORT: (113)(044)/prog/prog_body/function/body/assignment[75]                                                            DI[1]  = ON   
+EXPORT: (114)(044)/prog/prog_body/function/body/assignment[76]                                                            DI[1]  = ON   
+EXPORT: (115)(044)/prog/prog_body/function/body/assignment[77]                                                            DI[1]  = ON   
+EXPORT: (116)(044)/prog/prog_body/function/body/assignment[78]                                                            DI[1]  = ON   
+EXPORT: (117)(044)/prog/prog_body/function/body/assignment[79]                                                            DI[1]  = ON   
+EXPORT: (118)(044)/prog/prog_body/function/body/assignment[80]                                                            DI[1]  = ON   
+EXPORT: (119)(044)/prog/prog_body/function/body/assignment[81]                                                            DI[1]  = ON   
+EXPORT: (120)(044)/prog/prog_body/function/body/assignment[82]                                                            DI[1]  = ON   
+EXPORT: (121)(044)/prog/prog_body/function/body/assignment[83]                                                            DI[1]  = ON   
+EXPORT: (122)(044)/prog/prog_body/function/body/assignment[84]                                                            DI[1]  = ON   
+EXPORT: (123)(044)/prog/prog_body/function/body/assignment[85]                                                            DI[1]  = ON   
+EXPORT: (124)(044)/prog/prog_body/function/body/assignment[86]                                                            DI[1]  = ON   
+EXPORT: (125)(044)/prog/prog_body/function/body/assignment[87]                                                            DI[1]  = ON   
+EXPORT: (126)(044)/prog/prog_body/function/body/assignment[88]                                                            DI[1]  = ON   
+EXPORT: (127)(044)/prog/prog_body/function/body/assignment[89]                                                            DI[1]  = ON   
+EXPORT: (128)(044)/prog/prog_body/function/body/assignment[90]                                                            DI[1]  = ON   
+EXPORT: (129)(044)/prog/prog_body/function/body/assignment[91]                                                            DI[1]  = 0  
+EXPORT: (130)(045)/prog/prog_body/function/body/instruction[33]                                                           MOVEL P[1], 4000 CNT -1 
+EXPORT: (131)(045)/prog/prog_body/function/body/instruction[34]                                                           MOVEL P[1], 4 CNT -1 
+EXPORT: (132)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (133)(024)/prog/prog_body/function                                                                            END SUB 

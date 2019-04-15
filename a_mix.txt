@@ -1,0 +1,8 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(040)/prog/prog_body/function/body/assignment                                                                R[5]  = 8  
+EXPORT: (003)(044)/prog/prog_body/function/body/instruction[1]                                                            WAIT  R[2]
+EXPORT: (004)(044)/prog/prog_body/function/body/instruction[2]                                                            WAIT  2
+EXPORT: (005)(044)/prog/prog_body/function/body/instruction[3]                                                            WAIT  2
+EXPORT: (006)(044)/prog/prog_body/function/body/instruction[4]                                                            WAIT  2
+EXPORT: (007)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (008)(024)/prog/prog_body/function                                                                            END SUB 

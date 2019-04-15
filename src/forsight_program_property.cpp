@@ -287,6 +287,49 @@ int parseAdditionalE(struct thread_control_block * objThreadCntrolBlock,
 }
 
 /************************************************* 
+	Function:		parsePosture
+	Description:	Analyze the Additional info in the properity json file .
+	Input:			thread_control_block  - interpreter info
+	Input:			jsonPosture           - cJSON object
+	Input:			posture               - Posture object
+	Output: 		NULL
+	Return: 		1 - success
+*************************************************/ 
+int parsePosture(struct thread_control_block * objThreadCntrolBlock, 
+			   cJSON *jsonPosture, Posture & posture)
+{
+	// int numentries=0,i=0,fail=0;
+	cJSON *child=jsonPosture->child;
+	int iIdx = 1 ;
+	while (child) //  && !fail)
+	{
+	//	FST_INFO("parsePosesContent: cJSON_Array %s", child->string);
+		switch ((child->type)&255)
+		{
+		case cJSON_Number:	
+			// FST_INFO("cJSON_Number %f", child->valuedouble); 
+			if(iIdx == 1)
+				posture.arm = child->valuedouble;
+			else if(iIdx == 2)
+				posture.elbow = child->valuedouble;
+			else if(iIdx == 3)
+				posture.wrist = child->valuedouble;
+			else if(iIdx == 4)
+				posture.flip = child->valuedouble;
+			iIdx++ ;
+			break;
+		case cJSON_String:	
+			FST_INFO("cJSON_String %s", child->valuestring); break;
+		case cJSON_Object:	
+			// FST_INFO("cJSON_Object"); 
+			break;
+		}
+		child=child->next;
+	}
+	return 1;
+}
+
+/************************************************* 
 	Function:		parsePoses
 	Description:	Analyze the P[*] in the properity json file .
 	Input:			thread_control_block  - interpreter info
@@ -301,6 +344,7 @@ int parsePosesContent(struct thread_control_block * objThreadCntrolBlock,
 	int iPoseType = POSE_NONE ;
 	Joint joint ;
 	PoseEuler cart ;
+	Posture posture ;
 	AdditionalE additionalE ;
 	char var[128];
 	eval_value value ;
@@ -349,6 +393,10 @@ int parsePosesContent(struct thread_control_block * objThreadCntrolBlock,
 			else if(strcmp(child->string, "additionalE") == 0)
 				parseAdditionalE(objThreadCntrolBlock, child, additionalE);
 			break;
+		case cJSON_Array:
+			if(strcmp(child->string, "posture") == 0)
+				parsePosture(objThreadCntrolBlock, child, posture);	
+			break;
 		}
 		child=child->next;
 	}
@@ -370,8 +418,10 @@ int parsePosesContent(struct thread_control_block * objThreadCntrolBlock,
 	else
 		return 0;
 	
-	value.setUFIndex(uf);   value.setTFIndex(tf);  
+	value.setUFIndex(uf);   value.setTFIndex(tf);
 	value.updateAdditionalE(additionalE);
+
+	value.setPosture(posture);
 	
 	// assign_var(objThreadCntrolBlock, var, value);
     var_type vt;

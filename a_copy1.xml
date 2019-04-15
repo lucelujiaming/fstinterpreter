@@ -1,0 +1,2 @@
+<?xml version='1.0' encoding='utf-8'?>
+<prog><head/><prog_body><function name="main"><body><nop/><assignment type="assignment"><lvalue><element type="register"><element type="num">5</element></element></lvalue><rvalue><element type="num">8</element></rvalue></assignment><skip/><skip/><end name="prog"/></body></function></prog_body></prog>

@@ -109,6 +109,8 @@ public:
 	   
 		tfIndex = -1 ;
 		ufIndex = -1 ;
+		postureFake.arm = postureFake.elbow =
+			postureFake.flip = postureFake.wrist = 0 ;
 		isPulse = false ;
 	}
 	// TYPE_FLOAT
@@ -224,6 +226,28 @@ public:
 		}
 	}
 	
+	void setPosture(Posture posture){
+		if((evalType == TYPE_JOINT) 
+			|| (evalType == TYPE_POSE)) {
+			postureInfo = posture ;
+		}
+		else {
+			noticeErrorType(TYPE_JOINT | TYPE_POSE) ;
+			return ;
+		}
+	}
+	
+	Posture getPosture(){
+		if((evalType == TYPE_JOINT) 
+			|| (evalType == TYPE_POSE)) {
+			return postureInfo ;
+		}
+		else {
+			noticeErrorType(TYPE_JOINT | TYPE_POSE) ;
+			return postureFake;
+		}
+	}
+
 	void setPulse(bool bValue){
 		isPulse = bValue;
 	}
@@ -775,6 +799,8 @@ private:
 		// tf Index & uf Index
 		int tfIndex ;
 		int ufIndex ;
+		Posture     postureInfo;
+		Posture     postureFake;
 		
 		bool isPulse ;
 #if 0

@@ -411,7 +411,7 @@ int getLinenum(
 	Output: 		NULL
 	Return: 		NULL
 *************************************************/ 
-void printCurrentLine(struct thread_control_block* objThreadCntrolBlock)
+void printCurrentLine(struct thread_control_block* objThreadCntrolBlock, int iIdx)
 {
 	char cLineContent[LINE_CONTENT_LEN];
 	char * cLineContentPtr = 0 ;
@@ -426,8 +426,11 @@ void printCurrentLine(struct thread_control_block* objThreadCntrolBlock)
 	{
 		*cLineContentPtr++=*cLineContentProgPtr++;
 	}
-	FST_INFO("\t(%d): (%s)",  // -(%08X), objThreadCntrolBlock->prog, 
-		objThreadCntrolBlock->iLineNum, cLineContent);
+	FST_INFO("\t(0X%08X - 0X%08X)(%d): (%s) at 0X%08X(%d)", 
+		objThreadCntrolBlock->prog_jmp_line[iIdx].start_prog_pos, 
+		objThreadCntrolBlock->prog_jmp_line[iIdx].end_prog_pos, 
+		objThreadCntrolBlock->iLineNum, cLineContent, 
+		objThreadCntrolBlock->prog, objThreadCntrolBlock->iThreadIdx);
 }
 
 /************************************************* 
@@ -448,7 +451,7 @@ void printProgJmpLine(struct thread_control_block* objThreadCntrolBlock)
 	{
 	    objThreadCntrolBlock->iLineNum = i; 
 		objThreadCntrolBlock->prog = objThreadCntrolBlock->prog_jmp_line[i].start_prog_pos;
-		printCurrentLine(objThreadCntrolBlock);
+		printCurrentLine(objThreadCntrolBlock, i);
 	}
 	objThreadCntrolBlock->iLineNum = iLineNumTemp;
 	objThreadCntrolBlock->prog     = proglabelsScan;
@@ -548,6 +551,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 		FST_ERROR("allocation failure");
 		exit(1);
 	  }
+	  FST_INFO("objThreadCntrolBlock->p_buf = %08X", objThreadCntrolBlock->p_buf);
 	  if(!(objThreadCntrolBlock->instrSet   
 		= (Instruction * )malloc(sizeof(Instruction) + 
 		  sizeof(AdditionalInfomation) * ADD_INFO_NUM))) {
@@ -574,12 +578,12 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	  // Call in the first time to load major P[*]
 	  forgesight_registers_manager_get_joint(objThreadCntrolBlock->currentJoint);
 #ifndef WIN32
-		printf("call_interpreter Get JOINT: (%f, %f, %f, %f, %f, %f, %f, %f, %f) \n", 
+		FST_INFO("call_interpreter Get JOINT: (%f, %f, %f, %f, %f, %f, %f, %f, %f) \n", 
 			objThreadCntrolBlock->currentJoint.j1_, objThreadCntrolBlock->currentJoint.j2_, objThreadCntrolBlock->currentJoint.j3_, 
 			objThreadCntrolBlock->currentJoint.j4_, objThreadCntrolBlock->currentJoint.j5_, objThreadCntrolBlock->currentJoint.j6_,  
 			objThreadCntrolBlock->currentJoint.j7_, objThreadCntrolBlock->currentJoint.j8_, objThreadCntrolBlock->currentJoint.j9_);
 #else
-		printf("call_interpreter Get JOINT: (%f, %f, %f, %f, %f, %f, %f, %f, %f) \n", 
+		FST_INFO("call_interpreter Get JOINT: (%f, %f, %f, %f, %f, %f, %f, %f, %f) \n", 
 			objThreadCntrolBlock->currentJoint.j1, objThreadCntrolBlock->currentJoint.j2, objThreadCntrolBlock->currentJoint.j3, 
 			objThreadCntrolBlock->currentJoint.j4, objThreadCntrolBlock->currentJoint.j5, objThreadCntrolBlock->currentJoint.j6,  
 			objThreadCntrolBlock->currentJoint.j7, objThreadCntrolBlock->currentJoint.j8, objThreadCntrolBlock->currentJoint.j9);
@@ -709,21 +713,12 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	// Wait Trajectory
 #ifndef WIN32
     ret = g_objRegManagerInterface->isNextInstructionNeeded();
-#else
-    ret = true;
-#endif
     while (ret == false)
     {
-#ifdef WIN32
-		Sleep(1);
-		break ;
-#else
         usleep(1000);
-#endif
-#ifndef WIN32
     	ret = g_objRegManagerInterface->isNextInstructionNeeded();
-#endif
     }
+#endif
   	if((objThreadCntrolBlock->prog_mode == STEP_MODE)
 		&& (isExecuteEmptyLine == 0)
 		&& (objThreadCntrolBlock->is_abort == false))
@@ -755,7 +750,12 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 			// setLinenum(objThreadCntrolBlock, iLinenum);
 			waitInterpreterStateleftPaused(objThreadCntrolBlock);
             FST_INFO("call_interpreter : Left  waitInterpreterStateleftPaused %d ", iLinenum);
-			
+			if(objThreadCntrolBlock->is_abort == true)
+			{
+				// setPrgmState(objThreadCntrolBlock, PAUSE_TO_IDLE_T) ;
+		  		FST_INFO("objThreadCntrolBlock->is_abort == true.");
+		        break ; // return 0 ; // NULL ;
+			}
 			// use the iLineNum which had been set in the BACKWARD/FORWARD/JUMP
 			iLinenum = getLinenum(objThreadCntrolBlock) ; // objThreadCntrolBlock->iLineNum ;
 			// 
@@ -799,7 +799,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	        usleep(1000);
 #endif
   			// FST_INFO("interpreterState : Line number(%d) ", iLinenum);
-  			printCurrentLine(objThreadCntrolBlock);
+  			printCurrentLine(objThreadCntrolBlock, iLinenum);
   			FST_INFO("setPrgmState(EXECUTE_R).");
 		    setPrgmState(objThreadCntrolBlock, INTERPRETER_EXECUTE);
 		}
@@ -878,7 +878,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 			// } 
     		FST_INFO("call_internal_cmd execution : %s at %d, iLineNum = %d", 
 						objThreadCntrolBlock->token, iIdx, iLineNum);
-			printCurrentLine(objThreadCntrolBlock);
+			printCurrentLine(objThreadCntrolBlock, iLineNum);
 			int iRet = call_internal_cmd(iIdx, iLineNum, 
 				objThreadCntrolBlock);
 			// find_eol(objThreadCntrolBlock);
@@ -1068,9 +1068,12 @@ int  jump_prog_from_line(struct thread_control_block * objThreadCntrolBlock, int
 *************************************************/ 
 int  calc_line_from_prog(struct thread_control_block * objThreadCntrolBlock)
 {
+	prog_line_info tmpProgLineInfo ;
 	for(int i = 0 ; i < (int)objThreadCntrolBlock->prog_jmp_line.size() ; i++)
 	{
-		if(objThreadCntrolBlock->prog < objThreadCntrolBlock->prog_jmp_line[i].end_prog_pos)
+		tmpProgLineInfo = objThreadCntrolBlock->prog_jmp_line[i] ;
+		if( (objThreadCntrolBlock->prog < objThreadCntrolBlock->prog_jmp_line[i].end_prog_pos)
+		  &&(objThreadCntrolBlock->prog >= objThreadCntrolBlock->prog_jmp_line[i].start_prog_pos))
 		{
 			prog_line_info tmpDbg = objThreadCntrolBlock->prog_jmp_line[i];
 			FST_INFO("calc_line_from_prog get %d at (%08X, %08X) ", 
@@ -1079,7 +1082,7 @@ int  calc_line_from_prog(struct thread_control_block * objThreadCntrolBlock)
 		//   FST_INFO("calc_line_from_prog get %d at (%08X, %08X) ", 
 		//   	    i, objThreadCntrolBlock->prog,
 		//   	    objThreadCntrolBlock->prog_jmp_line[i-1].start_prog_pos);
-		   printCurrentLine(objThreadCntrolBlock);
+		   printCurrentLine(objThreadCntrolBlock, i);
 		// When I found prog is less than end_prog_pos address of lineN in the first time
 		// We got the right line. we add one for the line_num starts from one .
 		   return i + 1;

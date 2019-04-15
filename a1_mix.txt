@@ -1,0 +1,7 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(041)/prog/prog_body/function/body/instruction                                                               WAIT COND R[1]  = R[1]  R[1]
+EXPORT: (003)(043)/prog/prog_body/function/body/assignment[1]                                                              =   
+EXPORT: (004)(043)/prog/prog_body/function/body/assignment[2]                                                              =   
+EXPORT: (005)(043)/prog/prog_body/function/body/assignment[3]                                                             R[1]  =   
+EXPORT: (006)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (007)(024)/prog/prog_body/function                                                                            END SUB 

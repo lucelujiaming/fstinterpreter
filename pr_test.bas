@@ -6,6 +6,6 @@ SUB main (param0, param1)
     PR[1].ID = 123  
     PR[1].TYPE = 123  
     PR[1].COMMENT = "lujiaming test for comment"  
-    PR[1].J1  = 7 + R[1]   
-    PR[1].PJ3  = 5 + R[1]   
+    PR[1].1J1  = 7 + R[1]   
+    PR[13]  = 5 + R[1]   
 END SUB 

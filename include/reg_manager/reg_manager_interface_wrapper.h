@@ -35,15 +35,6 @@ bool reg_manager_interface_setPosePr(PoseEuler *ptr, uint16_t num);
 bool reg_manager_interface_getJointPr(Joint *ptr, uint16_t num);
 bool reg_manager_interface_setJointPr(Joint *ptr, uint16_t num);
 
-bool reg_manager_interface_getTypePr(int *ptr, uint16_t num);
-bool reg_manager_interface_setTypePr(int *ptr, uint16_t num);
-
-bool reg_manager_interface_getIdPr(int *ptr, uint16_t num);
-bool reg_manager_interface_setIdPr(int *ptr, uint16_t num);
-
-bool reg_manager_interface_getCommentPr(char *ptr, uint16_t num);
-bool reg_manager_interface_setCommentPr(char *ptr, uint16_t num);
-
 /**********************
  ********* SR *********
  **********************/

@@ -1,0 +1,9 @@
+EXPORT: (001)(021)/prog/head/include[1]                                                                               IMPORT a
+EXPORT: (002)(021)/prog/head/include[2]                                                                               IMPORT a_copy1
+EXPORT: (003)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (004)(044)/prog/prog_body/function/body/instruction[1]                                                            WAIT  3
+EXPORT: (005)(044)/prog/prog_body/function/body/instruction[2]                                                            WAIT  3
+EXPORT: (006)(034)/prog/prog_body/function/body/call                                                                      CALL a::main () 
+EXPORT: (007)(044)/prog/prog_body/function/body/instruction[3]                                                            WAIT  3
+EXPORT: (008)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (009)(024)/prog/prog_body/function                                                                            END SUB 

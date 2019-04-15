@@ -785,95 +785,109 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	}
 	else if((value.getType() == TYPE_INT) || (value.getType() == TYPE_FLOAT))
 	{
+		instr.target.target.type      = COORDINATE_JOINT ;
 #ifndef WIN32
-		instr.target.joint_target.j1_ = value.getFloatValue();
+		instr.target.target.joint.j1_ = value.getFloatValue();
 #else
-		instr.target.joint_target.j1 = value.getFloatValue();
+		instr.target.target.joint.j1 = value.getFloatValue();
 #endif
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.joint_target.j2_ = value.getFloatValue();
+		instr.target.target.joint.j2_ = value.getFloatValue();
 #else
-		instr.target.joint_target.j2 = value.getFloatValue();
+		instr.target.target.joint.j2 = value.getFloatValue();
 #endif
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.joint_target.j3_ = value.getFloatValue();
+		instr.target.target.joint.j3_ = value.getFloatValue();
 #else
-		instr.target.joint_target.j3 = value.getFloatValue();
+		instr.target.target.joint.j3 = value.getFloatValue();
 #endif
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.joint_target.j4_ = value.getFloatValue();
+		instr.target.target.joint.j4_ = value.getFloatValue();
 #else
-		instr.target.joint_target.j4 = value.getFloatValue();
+		instr.target.target.joint.j4 = value.getFloatValue();
 #endif
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.joint_target.j5_ = value.getFloatValue();
+		instr.target.target.joint.j5_ = value.getFloatValue();
 #else
-		instr.target.joint_target.j5 = value.getFloatValue();
+		instr.target.target.joint.j5 = value.getFloatValue();
 #endif
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.joint_target.j6_ = value.getFloatValue();
+		instr.target.target.joint.j6_ = value.getFloatValue();
 #else
-		instr.target.joint_target.j6 = value.getFloatValue();
+		instr.target.target.joint.j6 = value.getFloatValue();
 #endif
 	}
 	else if(value.getType() == TYPE_POSE)
 	{
+		instr.target.target.type      = COORDINATE_CARTESIAN ;
+		instr.target.target.pose.pose = value.getPoseValue();
+		instr.target.user_frame_id = value.getUFIndex();
+		instr.target.tool_frame_id = value.getTFIndex();
+		instr.target.target.pose.posture = value.getPosture();
+		
 		// instr.target.pose_target = value.getPoseValue();
-	    FST_ERROR("value.getType() == TYPE_POSE in MovJ");
-		serror(objThreadCntrolBlock, 16);
-		find_eol(objThreadCntrolBlock);
+	    FST_INFO("value.getType() == TYPE_POSE in MovJ");
+	//	serror(objThreadCntrolBlock, 16);
+	//	find_eol(objThreadCntrolBlock);
     	return 0;
 	}
 	else if(value.getType() == TYPE_JOINT)
 	{
-		instr.target.joint_target = value.getJointValue();
+		instr.target.target.type      = COORDINATE_JOINT ;
+		instr.target.target.joint = value.getJointValue();
 		
 	    FST_INFO("Forward move to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ", 
 #ifndef WIN32
-			instr.target.joint_target.j1_, instr.target.joint_target.j2_, 
-			instr.target.joint_target.j3_, instr.target.joint_target.j4_, 
-			instr.target.joint_target.j5_, instr.target.joint_target.j6_);
+			instr.target.target.joint.j1_, instr.target.target.joint.j2_, 
+			instr.target.target.joint.j3_, instr.target.target.joint.j4_, 
+			instr.target.target.joint.j5_, instr.target.target.joint.j6_);
 #else
-			instr.target.joint_target.j1, instr.target.joint_target.j2, 
-			instr.target.joint_target.j3, instr.target.joint_target.j4, 
-			instr.target.joint_target.j5, instr.target.joint_target.j6);
+			instr.target.target.joint.j1, instr.target.target.joint.j2, 
+			instr.target.target.joint.j3, instr.target.target.joint.j4, 
+			instr.target.target.joint.j5, instr.target.target.joint.j6);
 #endif		
 	}
 	else if(value.getType() == TYPE_PR)
 	{
 #ifdef WIN32
-		instr.target.joint_target.j1 = value.getPrRegDataValue().value.joint_pos[0];
-		instr.target.joint_target.j2 = value.getPrRegDataValue().value.joint_pos[1];
-		instr.target.joint_target.j3 = value.getPrRegDataValue().value.joint_pos[2];
-		instr.target.joint_target.j4 = value.getPrRegDataValue().value.joint_pos[3];
-		instr.target.joint_target.j5 = value.getPrRegDataValue().value.joint_pos[4];
-		instr.target.joint_target.j6 = value.getPrRegDataValue().value.joint_pos[5];
+		instr.target.target.joint.j1 = value.getPrRegDataValue().value.joint_pos[0];
+		instr.target.target.joint.j2 = value.getPrRegDataValue().value.joint_pos[1];
+		instr.target.target.joint.j3 = value.getPrRegDataValue().value.joint_pos[2];
+		instr.target.target.joint.j4 = value.getPrRegDataValue().value.joint_pos[3];
+		instr.target.target.joint.j5 = value.getPrRegDataValue().value.joint_pos[4];
+		instr.target.target.joint.j6 = value.getPrRegDataValue().value.joint_pos[5];
 #else
-		instr.target.joint_target.j1_ = value.getPrRegDataValue().value.pos[0];
-		instr.target.joint_target.j2_ = value.getPrRegDataValue().value.pos[1];
-		instr.target.joint_target.j3_ = value.getPrRegDataValue().value.pos[2];
-		instr.target.joint_target.j4_ = value.getPrRegDataValue().value.pos[3];
-		instr.target.joint_target.j5_ = value.getPrRegDataValue().value.pos[4];
-		instr.target.joint_target.j6_ = value.getPrRegDataValue().value.pos[5];
+		instr.target.target.type      = value.getPrRegDataValue().value.pos_type ;
+		instr.target.target.joint.j1_ = value.getPrRegDataValue().value.pos[0];
+		instr.target.target.joint.j2_ = value.getPrRegDataValue().value.pos[1];
+		instr.target.target.joint.j3_ = value.getPrRegDataValue().value.pos[2];
+		instr.target.target.joint.j4_ = value.getPrRegDataValue().value.pos[3];
+		instr.target.target.joint.j5_ = value.getPrRegDataValue().value.pos[4];
+		instr.target.target.joint.j6_ = value.getPrRegDataValue().value.pos[5];
+		instr.target.target.pose.posture.arm   = value.getPrRegDataValue().value.posture[0];
+		instr.target.target.pose.posture.elbow = value.getPrRegDataValue().value.posture[1];
+		instr.target.target.pose.posture.wrist = value.getPrRegDataValue().value.posture[2];
+		instr.target.target.pose.posture.flip  = value.getPrRegDataValue().value.posture[3];
+		
 	    FST_INFO("TYPE_PR: Forward move to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ", 
-			instr.target.joint_target.j1_, instr.target.joint_target.j2_, 
-			instr.target.joint_target.j3_, instr.target.joint_target.j4_, 
-			instr.target.joint_target.j5_, instr.target.joint_target.j6_);
+			instr.target.target.joint.j1_, instr.target.target.joint.j2_, 
+			instr.target.target.joint.j3_, instr.target.target.joint.j4_, 
+			instr.target.target.joint.j5_, instr.target.target.joint.j6_);
 #endif		
 	}
 	// Use start point in revert mode  
@@ -887,7 +901,7 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			if(objThreadCntrolBlock->start_mov_position.find(iLineNum)
 				!=objThreadCntrolBlock->start_mov_position.end())
 			{
-			    instr.target.joint_target
+			    instr.target.target.joint
 				 	= objThreadCntrolBlock->start_mov_position[iLineNum].joint_target;
 			}
 			else
@@ -902,14 +916,14 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		 
 #ifndef WIN32
 	    FST_INFO("Backward move to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ", 
-			instr.target.joint_target.j1_, instr.target.joint_target.j2_, 
-			instr.target.joint_target.j3_, instr.target.joint_target.j4_, 
-			instr.target.joint_target.j5_, instr.target.joint_target.j6_);
+			instr.target.target.joint.j1_, instr.target.target.joint.j2_, 
+			instr.target.target.joint.j3_, instr.target.target.joint.j4_, 
+			instr.target.target.joint.j5_, instr.target.target.joint.j6_);
 #else
 	    FST_INFO("Backward move to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ", 
-			instr.target.joint_target.j1, instr.target.joint_target.j2, 
-			instr.target.joint_target.j3, instr.target.joint_target.j4, 
-			instr.target.joint_target.j5, instr.target.joint_target.j6);
+			instr.target.target.joint.j1, instr.target.target.joint.j2, 
+			instr.target.target.joint.j3, instr.target.target.joint.j4, 
+			instr.target.target.joint.j5, instr.target.target.joint.j6);
 #endif		
 	}
 	get_token(objThreadCntrolBlock);
@@ -1073,96 +1087,109 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	}
 	else if((value.getType() == TYPE_INT) || (value.getType() == TYPE_FLOAT))
 	{
+		instr.target.target.type      = COORDINATE_CARTESIAN ;
 #ifndef WIN32
-		instr.target.pose_target.point_.x_    = value.getFloatValue();
+		instr.target.target.pose.pose.point_.x_    = value.getFloatValue();
 #else
-		instr.target.pose_target.position.x    = value.getFloatValue();
+		instr.target.target.pose.pose.position.x    = value.getFloatValue();
 #endif
 		get_token(objThreadCntrolBlock);
 		
 		get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.pose_target.point_.y_    = value.getFloatValue();
+		instr.target.target.pose.pose.point_.y_    = value.getFloatValue();
 #else
-		instr.target.pose_target.position.y    = value.getFloatValue();
+		instr.target.target.pose.pose.position.y    = value.getFloatValue();
 #endif
 		get_token(objThreadCntrolBlock);
 		
 		get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.pose_target.point_.z_    = value.getFloatValue();
+		instr.target.target.pose.pose.point_.z_    = value.getFloatValue();
 #else
-		instr.target.pose_target.position.z    = value.getFloatValue();
+		instr.target.target.pose.pose.position.z    = value.getFloatValue();
 #endif
 		get_token(objThreadCntrolBlock);
 		
 		get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.pose_target.euler_.a_ = value.getFloatValue();
+		instr.target.target.pose.pose.euler_.a_ = value.getFloatValue();
 #else
-		instr.target.pose_target.orientation.a = value.getFloatValue();
+		instr.target.target.pose.pose.orientation.a = value.getFloatValue();
 #endif
 		get_token(objThreadCntrolBlock);
 		
 		get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.pose_target.euler_.b_ = value.getFloatValue();
+		instr.target.target.pose.pose.euler_.b_ = value.getFloatValue();
 #else
-		instr.target.pose_target.orientation.b = value.getFloatValue();
+		instr.target.target.pose.pose.orientation.b = value.getFloatValue();
 #endif
 		get_token(objThreadCntrolBlock);
 		
 		get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.pose_target.euler_.c_ = value.getFloatValue();
+		instr.target.target.pose.pose.euler_.c_ = value.getFloatValue();
 #else
-		instr.target.pose_target.orientation.c = value.getFloatValue();
+		instr.target.target.pose.pose.orientation.c = value.getFloatValue();
 #endif
 
 		instr.target.user_frame_id = instr.target.tool_frame_id = -1 ;
 	}
 	else if(value.getType() == TYPE_POSE)
 	{
-		instr.target.pose_target = value.getPoseValue();
+		instr.target.target.type      = COORDINATE_CARTESIAN ;
+		instr.target.target.pose.pose = value.getPoseValue();
 		instr.target.user_frame_id = value.getUFIndex();
 		instr.target.tool_frame_id = value.getTFIndex();
+		instr.target.target.pose.posture = value.getPosture();
 		
 #ifndef WIN32
 	    FST_INFO("Forward move to POSE:(%f, %f, %f, %f, %f, %f) in MovL", 
-			instr.target.pose_target.point_.x_, instr.target.pose_target.point_.y_, 
-			instr.target.pose_target.point_.z_, instr.target.pose_target.euler_.a_, 
-			instr.target.pose_target.euler_.b_, instr.target.pose_target.euler_.c_);
+			instr.target.target.pose.pose.point_.x_, instr.target.target.pose.pose.point_.y_, 
+			instr.target.target.pose.pose.point_.z_, instr.target.target.pose.pose.euler_.a_, 
+			instr.target.target.pose.pose.euler_.b_, instr.target.target.pose.pose.euler_.c_);
 #else
 	    FST_INFO("Forward move to POSE:(%f, %f, %f, %f, %f, %f) in MovL", 
-			instr.target.pose_target.position.x, instr.target.pose_target.position.y, 
-			instr.target.pose_target.position.z, instr.target.pose_target.orientation.a, 
-			instr.target.pose_target.orientation.b, instr.target.pose_target.orientation.c);
+			instr.target.target.pose.pose.position.x, instr.target.target.pose.pose.position.y, 
+			instr.target.target.pose.pose.position.z, instr.target.target.pose.pose.orientation.a, 
+			instr.target.target.pose.pose.orientation.b, instr.target.target.pose.pose.orientation.c);
 #endif
 	}
 	else if(value.getType() == TYPE_JOINT)
 	{
+		instr.target.target.type      = COORDINATE_JOINT ;
+		instr.target.target.joint     = value.getJointValue();
+		instr.target.user_frame_id = value.getUFIndex();
+		instr.target.tool_frame_id = value.getTFIndex();
 		// instr.target.joint_target = value.getJointValue();
-	    FST_ERROR("value.getType() == TYPE_JOINT in MovL");
-		serror(objThreadCntrolBlock, 15);
-		find_eol(objThreadCntrolBlock);
-    	return 0;
+	    FST_INFO("value.getType() == TYPE_JOINT in MovL");
+	//	serror(objThreadCntrolBlock, 15);
+	//	find_eol(objThreadCntrolBlock);
+    //	return 0;
 	}
 	else if(value.getType() == TYPE_PR)
 	{
 #ifdef WIN32
-		instr.target.pose_target.position    = value.getPrRegDataValue().value.cartesian_pos.position ;
-		instr.target.pose_target.orientation = value.getPrRegDataValue().value.cartesian_pos.orientation;
+		instr.target.target.pose.pose.position    = value.getPrRegDataValue().value.cartesian_pos.position ;
+		instr.target.target.pose.pose.orientation = value.getPrRegDataValue().value.cartesian_pos.orientation;
 #else
-		instr.target.pose_target.point_.x_    = value.getPrRegDataValue().value.pos[0];
-		instr.target.pose_target.point_.y_    = value.getPrRegDataValue().value.pos[1];
-		instr.target.pose_target.point_.z_    = value.getPrRegDataValue().value.pos[2];
-		instr.target.pose_target.euler_.a_    = value.getPrRegDataValue().value.pos[3];
-		instr.target.pose_target.euler_.b_    = value.getPrRegDataValue().value.pos[4];
-		instr.target.pose_target.euler_.c_    = value.getPrRegDataValue().value.pos[5];
+		instr.target.target.type      = value.getPrRegDataValue().value.pos_type ;
+		instr.target.target.pose.pose.point_.x_    = value.getPrRegDataValue().value.pos[0];
+		instr.target.target.pose.pose.point_.y_    = value.getPrRegDataValue().value.pos[1];
+		instr.target.target.pose.pose.point_.z_    = value.getPrRegDataValue().value.pos[2];
+		instr.target.target.pose.pose.euler_.a_    = value.getPrRegDataValue().value.pos[3];
+		instr.target.target.pose.pose.euler_.b_    = value.getPrRegDataValue().value.pos[4];
+		instr.target.target.pose.pose.euler_.c_    = value.getPrRegDataValue().value.pos[5];
+		
+		instr.target.target.pose.posture.arm       = value.getPrRegDataValue().value.posture[0];
+		instr.target.target.pose.posture.elbow     = value.getPrRegDataValue().value.posture[1];
+		instr.target.target.pose.posture.wrist     = value.getPrRegDataValue().value.posture[2];
+		instr.target.target.pose.posture.flip      = value.getPrRegDataValue().value.posture[3];
 	    FST_INFO("TYPE_PR: Forward move to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ",
-			instr.target.joint_target.j1_, instr.target.joint_target.j2_, 
-			instr.target.joint_target.j3_, instr.target.joint_target.j4_, 
-			instr.target.joint_target.j5_, instr.target.joint_target.j6_);
+			instr.target.target.pose.pose.point_.x_, instr.target.target.pose.pose.point_.y_, 
+			instr.target.target.pose.pose.point_.z_, instr.target.target.pose.pose.euler_.a_, 
+			instr.target.target.pose.pose.euler_.b_, instr.target.target.pose.pose.euler_.c_);
 #endif	
 	}
 	
@@ -1177,7 +1204,7 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			if(objThreadCntrolBlock->start_mov_position.find(iLineNum)
 				!=objThreadCntrolBlock->start_mov_position.end())
 			{
-			    instr.target.pose_target
+			    instr.target.target.pose.pose
 				 	= objThreadCntrolBlock->start_mov_position[iLineNum].pose_target;
 			}
 			else
@@ -1192,14 +1219,14 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		 
 #ifndef WIN32
 	    FST_INFO("Backward move to POSE:(%f, %f, %f, %f, %f, %f) in MovL", 
-			instr.target.pose_target.point_.x_, instr.target.pose_target.point_.y_, 
-			instr.target.pose_target.point_.z_, instr.target.pose_target.euler_.a_, 
-			instr.target.pose_target.euler_.b_, instr.target.pose_target.euler_.c_);
+			instr.target.target.pose.pose.point_.x_, instr.target.target.pose.pose.point_.y_, 
+			instr.target.target.pose.pose.point_.z_, instr.target.target.pose.pose.euler_.a_, 
+			instr.target.target.pose.pose.euler_.b_, instr.target.target.pose.pose.euler_.c_);
 #else
 	    FST_INFO("Backward move to POSE:(%f, %f, %f, %f, %f, %f) in MovL", 
-			instr.target.pose_target.position.x, instr.target.pose_target.position.y, 
-			instr.target.pose_target.position.z, instr.target.pose_target.orientation.a, 
-			instr.target.pose_target.orientation.b, instr.target.pose_target.orientation.c);
+			instr.target.target.pose.pose.position.x, instr.target.target.pose.pose.position.y, 
+			instr.target.target.pose.pose.position.z, instr.target.target.pose.pose.orientation.a, 
+			instr.target.target.pose.pose.orientation.b, instr.target.target.pose.pose.orientation.c);
 #endif	
 	}
 	
@@ -1357,74 +1384,107 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	}
 	else if((value.getType() == TYPE_INT) || (value.getType() == TYPE_FLOAT))
 	{
+		instr.target.target.type      = COORDINATE_CARTESIAN ;
 #ifndef WIN32
-		instr.target.circle_target.pose1.point_.x_    = value.getFloatValue();
+		instr.target.target.pose.pose.point_.x_    = value.getFloatValue();
 #else
-		instr.target.circle_target.pose1.position.x    = value.getFloatValue();
+		instr.target.target.pose.pose.position.x    = value.getFloatValue();
 #endif	
 		get_token(objThreadCntrolBlock);
 
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.circle_target.pose1.point_.y_    = value.getFloatValue();
+		instr.target.target.pose.pose.point_.y_    = value.getFloatValue();
 #else
-		instr.target.circle_target.pose1.position.y    = value.getFloatValue();
+		instr.target.target.pose.pose.position.y    = value.getFloatValue();
 #endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.circle_target.pose1.point_.z_    = value.getFloatValue();
+		instr.target.target.pose.pose.point_.z_    = value.getFloatValue();
 #else
-		instr.target.circle_target.pose1.position.z    = value.getFloatValue();
+		instr.target.target.pose.pose.position.z    = value.getFloatValue();
 #endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.circle_target.pose1.euler_.a_ = value.getFloatValue();
+		instr.target.target.pose.pose.euler_.a_ = value.getFloatValue();
 #else
-		instr.target.circle_target.pose1.orientation.a = value.getFloatValue();
+		instr.target.target.pose.pose.orientation.a = value.getFloatValue();
 #endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.circle_target.pose1.euler_.b_ = value.getFloatValue();
+		instr.target.target.pose.pose.euler_.b_ = value.getFloatValue();
 #else
-		instr.target.circle_target.pose1.orientation.b = value.getFloatValue();
+		instr.target.target.pose.pose.orientation.b = value.getFloatValue();
 #endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.circle_target.pose1.euler_.c_ = value.getFloatValue();
+		instr.target.target.pose.pose.euler_.c_ = value.getFloatValue();
 #else
-		instr.target.circle_target.pose1.orientation.c = value.getFloatValue();
+		instr.target.target.pose.pose.orientation.c = value.getFloatValue();
 #endif	
 	}
 	else if(value.getType() == TYPE_POSE)
 	{
-		instr.target.circle_target.pose1 = value.getPoseValue();
+		instr.target.target.type      = COORDINATE_CARTESIAN ;
+		instr.target.target.pose.pose = value.getPoseValue();
+		instr.target.target.pose.posture = value.getPosture();
+		
+		instr.target.user_frame_id = value.getUFIndex();
+		instr.target.tool_frame_id = value.getTFIndex();
 #ifndef WIN32
 	    FST_INFO("move to POSE:(%f, %f, %f, %f, %f, %f) in MovC", 
-			instr.target.circle_target.pose1.point_.x_, instr.target.circle_target.pose1.point_.y_, 
-			instr.target.circle_target.pose1.point_.z_, instr.target.circle_target.pose1.euler_.a_, 
-			instr.target.circle_target.pose1.euler_.b_, instr.target.circle_target.pose1.euler_.c_);
+			instr.target.target.pose.pose.point_.x_, instr.target.target.pose.pose.point_.y_, 
+			instr.target.target.pose.pose.point_.z_, instr.target.target.pose.pose.euler_.a_, 
+			instr.target.target.pose.pose.euler_.b_, instr.target.target.pose.pose.euler_.c_);
 #else
 	    FST_INFO("move to POSE:(%f, %f, %f, %f, %f, %f) in MovC", 
-			instr.target.circle_target.pose1.position.x, instr.target.circle_target.pose1.position.y, 
-			instr.target.circle_target.pose1.position.z, instr.target.circle_target.pose1.orientation.a, 
-			instr.target.circle_target.pose1.orientation.b, instr.target.circle_target.pose1.orientation.c);
+			instr.target.target.pose.pose.position.x, instr.target.target.pose.pose.position.y, 
+			instr.target.target.pose.pose.position.z, instr.target.target.pose.pose.orientation.a, 
+			instr.target.target.pose.pose.orientation.b, instr.target.target.pose.pose.orientation.c);
 #endif	
 	}
 	else if(value.getType() == TYPE_JOINT)
 	{
+		instr.target.target.type      = COORDINATE_JOINT ;
+		instr.target.target.joint     = value.getJointValue();
 		// instr.target.joint_target = value.getJointValue();
 	    FST_INFO("value.getType() == TYPE_JOINT in MovC");
-		find_eol(objThreadCntrolBlock);
-    	return 0;
+	//	find_eol(objThreadCntrolBlock);
+    //	return 0;
 	}
+	else if(value.getType() == TYPE_PR)
+	{
+#ifdef WIN32
+		instr.target.target.pose.pose.position    = value.getPrRegDataValue().value.cartesian_pos.position ;
+		instr.target.target.pose.pose.orientation = value.getPrRegDataValue().value.cartesian_pos.orientation;
+#else
+		instr.target.target.type      = value.getPrRegDataValue().value.pos_type ;
+		instr.target.target.pose.pose.point_.x_    = value.getPrRegDataValue().value.pos[0];
+		instr.target.target.pose.pose.point_.y_    = value.getPrRegDataValue().value.pos[1];
+		instr.target.target.pose.pose.point_.z_    = value.getPrRegDataValue().value.pos[2];
+		instr.target.target.pose.pose.euler_.a_    = value.getPrRegDataValue().value.pos[3];
+		instr.target.target.pose.pose.euler_.b_    = value.getPrRegDataValue().value.pos[4];
+		instr.target.target.pose.pose.euler_.c_    = value.getPrRegDataValue().value.pos[5];
+		
+		instr.target.target.pose.posture.arm       = value.getPrRegDataValue().value.posture[0];
+		instr.target.target.pose.posture.elbow     = value.getPrRegDataValue().value.posture[1];
+		instr.target.target.pose.posture.wrist     = value.getPrRegDataValue().value.posture[2];
+		instr.target.target.pose.posture.flip      = value.getPrRegDataValue().value.posture[3];
+	    FST_INFO("TYPE_PR: Forward move to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ",
+			instr.target.target.pose.pose.point_.x_, instr.target.target.pose.pose.point_.y_, 
+			instr.target.target.pose.pose.point_.z_, instr.target.target.pose.pose.euler_.a_, 
+			instr.target.target.pose.pose.euler_.b_, instr.target.target.pose.pose.euler_.c_);
+#endif	
+	}
+	
 	get_token(objThreadCntrolBlock);
 
     get_exp(objThreadCntrolBlock, &value, &boolValue);
@@ -1435,62 +1495,93 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	}
 	else if((value.getType() == TYPE_INT) || (value.getType() == TYPE_FLOAT))
 	{
+		instr.target.via.type      = COORDINATE_CARTESIAN ;
 #ifndef WIN32
-		instr.target.circle_target.pose2.point_.x_    = value.getFloatValue();
+		instr.target.via.pose.pose.point_.x_    = value.getFloatValue();
 #else
-		instr.target.circle_target.pose2.position.x    = value.getFloatValue();
+		instr.target.via.pose.pose.position.x    = value.getFloatValue();
 #endif	
 		get_token(objThreadCntrolBlock);
 
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.circle_target.pose2.point_.y_    = value.getFloatValue();
+		instr.target.via.pose.pose.point_.y_    = value.getFloatValue();
 #else
-		instr.target.circle_target.pose2.position.y    = value.getFloatValue();
+		instr.target.via.pose.pose.position.y    = value.getFloatValue();
 #endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.circle_target.pose2.point_.z_    = value.getFloatValue();
+		instr.target.via.pose.pose.point_.z_    = value.getFloatValue();
 #else
-		instr.target.circle_target.pose2.position.z    = value.getFloatValue();
+		instr.target.via.pose.pose.position.z    = value.getFloatValue();
 #endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.circle_target.pose2.euler_.a_ = value.getFloatValue();
+		instr.target.via.pose.pose.euler_.a_ = value.getFloatValue();
 #else
-		instr.target.circle_target.pose2.orientation.a = value.getFloatValue();
+		instr.target.via.pose.pose.orientation.a = value.getFloatValue();
 #endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.circle_target.pose2.euler_.b_ = value.getFloatValue();
+		instr.target.via.pose.pose.euler_.b_ = value.getFloatValue();
 #else
-		instr.target.circle_target.pose2.orientation.b = value.getFloatValue();
+		instr.target.via.pose.pose.orientation.b = value.getFloatValue();
 #endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.circle_target.pose2.euler_.c_ = value.getFloatValue();
+		instr.target.via.pose.pose.euler_.c_ = value.getFloatValue();
 #else
-		instr.target.circle_target.pose2.orientation.c = value.getFloatValue();
+		instr.target.via.pose.pose.orientation.c = value.getFloatValue();
 #endif	
 	}
 	else if(value.getType() == TYPE_POSE)
 	{
-		instr.target.circle_target.pose2 = value.getPoseValue();
+		instr.target.via.type      = COORDINATE_CARTESIAN ;
+		instr.target.via.pose.pose = value.getPoseValue();
+		
+		instr.target.via.pose.posture = value.getPosture();
 	}
 	else if(value.getType() == TYPE_JOINT)
 	{
-		// instr.target.joint_target = value.getJointValue();
-		find_eol(objThreadCntrolBlock);
-    	return 0;
+		instr.target.via.type      = COORDINATE_JOINT ;
+		instr.target.via.joint     = value.getJointValue();
+	//  instr.target.joint_target = value.getJointValue();
+	//	find_eol(objThreadCntrolBlock);
+    //	return 0;
 	}
+	else if(value.getType() == TYPE_PR)
+	{
+#ifdef WIN32
+		instr.target.via.pose.pose.position    = value.getPrRegDataValue().value.cartesian_pos.position ;
+		instr.target.via.pose.pose.orientation = value.getPrRegDataValue().value.cartesian_pos.orientation;
+#else
+		instr.target.via.type      = value.getPrRegDataValue().value.pos_type ;
+		instr.target.via.pose.pose.point_.x_    = value.getPrRegDataValue().value.pos[0];
+		instr.target.via.pose.pose.point_.y_    = value.getPrRegDataValue().value.pos[1];
+		instr.target.via.pose.pose.point_.z_    = value.getPrRegDataValue().value.pos[2];
+		instr.target.via.pose.pose.euler_.a_    = value.getPrRegDataValue().value.pos[3];
+		instr.target.via.pose.pose.euler_.b_    = value.getPrRegDataValue().value.pos[4];
+		instr.target.via.pose.pose.euler_.c_    = value.getPrRegDataValue().value.pos[5];
+		
+		instr.target.via.pose.posture.arm       = value.getPrRegDataValue().value.posture[0];
+		instr.target.via.pose.posture.elbow     = value.getPrRegDataValue().value.posture[1];
+		instr.target.via.pose.posture.wrist     = value.getPrRegDataValue().value.posture[2];
+		instr.target.via.pose.posture.flip      = value.getPrRegDataValue().value.posture[3];
+	    FST_INFO("TYPE_PR: Forward move to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ",
+			instr.target.via.pose.pose.point_.x_, instr.target.via.pose.pose.point_.y_, 
+			instr.target.via.pose.pose.point_.z_, instr.target.via.pose.pose.euler_.a_, 
+			instr.target.via.pose.pose.euler_.b_, instr.target.via.pose.pose.euler_.c_);
+#endif	
+	}
+	
 	// Use start point in revert mode  
 	if(objThreadCntrolBlock->execute_direction == EXECUTE_BACKWARD)
 	{
@@ -1969,9 +2060,13 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 #ifdef WIN32
 			Sleep(1000);
 #else
-			sleep(1);
+			usleep(200000);
 #endif
 			now = time(0);
+			if(objThreadCntrolBlock->is_abort == true)
+			{
+				break ;
+			}
 		}
 	    FST_INFO("call_Wait timeWaitSeconds = %d at %lld.", timeWaitSeconds, time(NULL));
 		timeWaitMicroSeconds = (int)(value.getFloatValue() * 1000000 - timeWaitSeconds * 1000000);
@@ -2000,7 +2095,7 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 #ifdef WIN32
 				Sleep(100);
 #else
-				sleep(1);
+			    usleep(200000);
 #endif
 			    now = time(0);
 
@@ -2008,6 +2103,11 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 				cond = calc_conditions(objThreadCntrolBlock);
 				while(now - timeStart > outTime)
 					break ;
+					
+				if(objThreadCntrolBlock->is_abort == true)
+				{
+					break ;
+				}
 			}
 		}
 		// with dealing method when timeout
@@ -2027,7 +2127,7 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 #ifdef WIN32
 				Sleep(100);
 #else
-				sleep(1);
+			    usleep(200000);
 #endif
 			    now = time(0);
 				objThreadCntrolBlock->prog = wait_stack.while_loc;
@@ -2035,6 +2135,10 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 				if(now - timeStart > outTime)
 				{
 	    			FST_INFO("cond Timeout.");
+					break ;
+				}
+				if(objThreadCntrolBlock->is_abort == true)
+				{
 					break ;
 				}
 			}
@@ -2126,6 +2230,7 @@ int call_Abort(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	setPrgmState(objThreadCntrolBlock, INTERPRETER_IDLE);
   // clear line path and ProgramName
 	resetProgramNameAndLineNum(objThreadCntrolBlock);
+    objThreadCntrolBlock->is_abort = true;
 #ifdef WIN32
 	Sleep(100);
     return 0; 
