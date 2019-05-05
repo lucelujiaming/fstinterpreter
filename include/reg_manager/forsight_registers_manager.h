@@ -33,7 +33,7 @@ int forgesight_registers_manager_get_joint(Joint &joint);
 int forgesight_registers_manager_get_cart(PoseEuler &pos);
 int forgesight_registers_manager_cartToJoint(PoseEuler pos, Joint &joint);
 int forgesight_registers_manager_jointToCart(Joint joint, PoseEuler &pos);
-
+int forgesight_registers_manager_get_user_opmode(int& mode);
 
 int forgesight_registers_manager_get_resource(
 							struct thread_control_block* objThreadCntrolBlock, 

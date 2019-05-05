@@ -28,11 +28,6 @@ enum {MAX_REG_COMMENT_LENGTH = 32,};
 #define TXT_MI    "mi"
 #define TXT_MH    "mh"
 
-#define TXT_UF    "uf"
-#define TXT_TF    "tf"
-
-#define TXT_PL    "pl"
-
 // member name of Register
 #define TXT_REG_TYPE    "type"
 #define TXT_REG_ID      "id"
@@ -128,8 +123,8 @@ int forgesight_registers_manager_get_register(
 	
 	PrRegData objPrRegData ;
 
-    int       iID ;
-    char      cComment[MAX_REG_COMMENT_LENGTH];
+//    int       iID ;
+//    char      cComment[MAX_REG_COMMENT_LENGTH];
     std::string    strComment;
 
 	PoseEuler objPoseEuler ;
@@ -138,8 +133,8 @@ int forgesight_registers_manager_get_register(
     
     std::string    strSrValue;
 	
-    int       iPlFlag ;
-	pl_t      pltValue ;
+//    int       iPlFlag ;
+//  	pl_t      pltValue ;
 	
 	memset(reg_name, 0x00, 16);
 	temp = reg_name ;
@@ -549,136 +544,6 @@ int forgesight_registers_manager_get_register(
 			}
 		}
 	}
-	else if(!strcmp(reg_name, TXT_UF))
-	{
-//		if(strlen(reg_member) == 0)
-//		{
-//            // Use TXT_UF_TF_COORDINATE
-//			reg_manager_interface_getUf(reg_content_buffer, iRegIdx);
-//			uf_shmi_t * ptr = (uf_shmi_t *)reg_content_buffer ;
-//			value->setPoseValue(&(ptr->c));
-//		}
-//		else 
-		if (!strcmp(reg_member, TXT_UF_TF_COORDINATE))
-		{
-			bRet = reg_manager_interface_getCoordinateUf(&objPoseEuler, iRegIdx);
-			// _PoseEuler * ptr = (_PoseEuler *)reg_content_buffer ;
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-				value->setPoseValue(&objPoseEuler);
-		}
-		else if (!strcmp(reg_member, TXT_REG_ID))
-		{
-			bRet = reg_manager_interface_getIdUf(&iID, iRegIdx);
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-				value->setFloatValue(iID);
-		}
-		else if (!strcmp(reg_member, TXT_REG_COMMENT))
-		{
-			bRet = reg_manager_interface_getCommentUf(cComment, iRegIdx);
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-			{
-				strComment = std::string(cComment);
-				value->setStringValue(strComment);
-			}
-		}
-	}
-	else if(!strcmp(reg_name, TXT_TF))
-	{
-//		if(strlen(reg_member) == 0)
-//		{
-//			reg_manager_interface_getTf(reg_content_buffer, iRegIdx);
-//			tf_shmi_t * ptr = (tf_shmi_t *)reg_content_buffer ;
-//			value->setPoseValue(&(ptr->c));
-//		}
-//		else 
-		if (!strcmp(reg_member, TXT_UF_TF_COORDINATE))
-		{
-			bRet = reg_manager_interface_getCoordinateTf(&objPoseEuler, iRegIdx);
-			// _PoseEuler * ptr = (_PoseEuler *)reg_content_buffer ;
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-				value->setPoseValue(&objPoseEuler);
-		}
-		else if (!strcmp(reg_member, TXT_REG_ID))
-		{
-			bRet = reg_manager_interface_getIdTf(&iID, iRegIdx);
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-				value->setFloatValue(iID);
-		}
-		else if (!strcmp(reg_member, TXT_REG_COMMENT))
-		{
-			bRet = reg_manager_interface_getCommentTf(cComment, iRegIdx);
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-			{
-				strComment = std::string(cComment);
-				value->setStringValue(strComment);
-			}
-		}
-	}
-	else if(!strcmp(reg_name, TXT_PL))
-	{
-//		if(strlen(reg_member) == 0)
-//		{
-//            // Use TXT_PL_POSE
-//			reg_manager_interface_getPl(reg_content_buffer, iRegIdx);
-//			pl_shmi_t * ptr = (pl_shmi_t *)reg_content_buffer ;
-//			value->setPLValue(&(ptr->pallet));
-//		}
-//		else 
-		if (!strcmp(reg_member, TXT_PL_POSE))
-		{
-			bRet = reg_manager_interface_getPalletPl(&pltValue, iRegIdx);
-			// _PoseEuler * ptr = (_PoseEuler *)reg_content_buffer ;
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-				value->setPoseValue(&objPoseEuler);
-		}
-//		else if (!strcmp(reg_member, TXT_PL_PALLET))
-//		{
-//			reg_manager_interface_getPalletPl(reg_content_buffer, iRegIdx);
-//			pl_t * ptr = (pl_t *)reg_content_buffer ;
-//			value->setPLValue(ptr);
-//		}
-		else if (!strcmp(reg_member, TXT_PL_FLAG))
-		{
-			bRet = reg_manager_interface_getFlagPl(&iPlFlag, iRegIdx);
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-				value->setFloatValue(iPlFlag);
-		}
-		else if (!strcmp(reg_member, TXT_REG_ID))
-		{
-			bRet = reg_manager_interface_getIdPl(&iID, iRegIdx);
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-				value->setFloatValue(iID);
-		}
-		else if (!strcmp(reg_member, TXT_REG_COMMENT))
-		{
-			bRet = reg_manager_interface_getCommentPl(cComment, iRegIdx);
-			if(bRet == false)
-				serror(objThreadCntrolBlock, 4) ; 
-			else
-			{
-				strComment = std::string(cComment);
-				value->setStringValue(strComment);
-			}
-		}
-	}
 	return 0 ;
 }
 
@@ -708,7 +573,7 @@ int forgesight_registers_manager_set_register(
 	
 	PoseEuler pose ;
 	Joint joint ;
-	pl_t pltValue ;
+//	pl_t pltValue ;
 	
 	std::string strValue;
 	
@@ -1459,313 +1324,6 @@ int forgesight_registers_manager_set_register(
 	       	return 0 ;
 		}
 	}
-	else if(!strcmp(reg_name, TXT_UF))
-	{
-		if(strlen(reg_member) == 0)
-		{
-			// reg_manager_interface_setUf(valueStart->getUFRegValue(), iRegIdx);
-	       	return 0 ;
-		}
-		else if (!strcmp(reg_member, TXT_UF_TF_COORDINATE))
-		{
-			if (valueStart->getType() == TYPE_FLOAT)
-			{
-				// pose.position.x = (double)(atof((char *)valueStart));
-#ifndef WIN32
-				pose.point_.x_ = (double)value.getFloatValue();
-#else
-				pose.position.x = (double)value.getFloatValue();
-#endif
-				
-				get_exp(objThreadCntrolBlock, &value, &boolValue);
-#ifndef WIN32
-				pose.point_.y_ = (double)value.getFloatValue();
-#else
-				pose.position.y = (double)value.getFloatValue();
-#endif
-		
-				get_exp(objThreadCntrolBlock, &value, &boolValue);
-#ifndef WIN32
-				pose.point_.z_ = (double)value.getFloatValue();
-#else
-				pose.position.z = (double)value.getFloatValue();
-#endif
-				
-				get_exp(objThreadCntrolBlock, &value, &boolValue);
-#ifndef WIN32
-				pose.point_.z_ = (double)value.getFloatValue();
-#else
-				pose.orientation.a = (double)value.getFloatValue();
-#endif
-				
-				get_exp(objThreadCntrolBlock, &value, &boolValue);
-#ifndef WIN32
-				pose.euler_.b_ = (double)value.getFloatValue();
-#else
-				pose.orientation.b = (double)value.getFloatValue();
-#endif
-				
-				get_exp(objThreadCntrolBlock, &value, &boolValue);
-#ifndef WIN32
-				pose.euler_.c_ = (double)value.getFloatValue();
-#else
-				pose.orientation.c = (double)value.getFloatValue();
-#endif
-				
-				FST_INFO("Set COORDINATE:(%f, %f, %f, %f, %f, %f) to UF[%s]", 
-#ifndef WIN32
-					pose.point_.x_, pose.point_.y_, pose.point_.z_, 
-					pose.euler_.a_, pose.euler_.b_, pose.euler_.c_,
-#else
-					pose.position.x, pose.position.y, pose.position.z, 
-					pose.orientation.a, pose.orientation.b, pose.orientation.c,
-#endif
-					reg_idx);
-				reg_manager_interface_setCoordinateUf(&pose, iRegIdx);
-	       		return 0 ;
-			}
-			else if (valueStart->getType() == TYPE_POSE)
-			{
-				pose = valueStart->getPoseValue();
-				FST_INFO("Set POSE->COORDINATE:(%f, %f, %f, %f, %f, %f) to PR[%s]",
-#ifndef WIN32 
-					pose.point_.x_, pose.point_.y_, pose.point_.z_, 
-					pose.euler_.a_, pose.euler_.b_, pose.euler_.c_,
-#else 
-					pose.position.x, pose.position.y, pose.position.z, 
-					pose.orientation.a, pose.orientation.b, pose.orientation.c,
-#endif
-					reg_idx);
-				reg_manager_interface_setCoordinateUf(&pose, iRegIdx);
-	        	return 0 ;
-			}
-		}
-		else if (!strcmp(reg_member, TXT_REG_ID))
-		{
-			int iID = (int)value.getFloatValue();
-			FST_INFO("Set ID:(%d) to MR[%s]", iID, reg_idx);
-			reg_manager_interface_setIdUf(&iID, iRegIdx);
-	        return 0 ;
-		}
-		else if (!strcmp(reg_member, TXT_REG_COMMENT))
-		{
-			// get_token(objThreadCntrolBlock);
-			FST_INFO("Set COMMENT:(%s) to MR[%s]", 
-				objThreadCntrolBlock->token, reg_idx);
-			reg_manager_interface_setCommentUf(
-				(char *)valueStart->getStringValue().c_str(), iRegIdx);
-	        return 0 ;
-		}
-	}
-	else if(!strcmp(reg_name, TXT_TF))
-	{
-		if(strlen(reg_member) == 0)
-		{
-			// reg_manager_interface_setTf(valueStart->getTFRegValue(), iRegIdx);
-	        return 0 ;
-		}
-		else if (!strcmp(reg_member, TXT_UF_TF_COORDINATE))
-		{
-			if (valueStart->getType() == TYPE_FLOAT)
-			{
-				// pose.position.x = (double)(atof((char *)valueStart));
-#ifndef WIN32
-				pose.point_.x_ = (double)value.getFloatValue();
-#else 
-				pose.position.x = (double)value.getFloatValue();
-#endif
-				
-				get_exp(objThreadCntrolBlock, &value, &boolValue);
-#ifndef WIN32
-				pose.point_.y_ = (double)value.getFloatValue();
-#else 
-				pose.position.y = (double)value.getFloatValue();
-#endif
-				
-				get_exp(objThreadCntrolBlock, &value, &boolValue);
-#ifndef WIN32
-				pose.point_.z_ = (double)value.getFloatValue();
-#else 
-				pose.position.z = (double)value.getFloatValue();
-#endif
-				
-				get_exp(objThreadCntrolBlock, &value, &boolValue);
-#ifndef WIN32
-				pose.euler_.a_ = (double)value.getFloatValue();
-#else 
-				pose.orientation.a = (double)value.getFloatValue();
-#endif
-				
-				get_exp(objThreadCntrolBlock, &value, &boolValue);
-#ifndef WIN32
-				pose.euler_.b_ = (double)value.getFloatValue();
-#else 
-				pose.orientation.b = (double)value.getFloatValue();
-#endif
-				
-				get_exp(objThreadCntrolBlock, &value, &boolValue);
-#ifndef WIN32
-				pose.euler_.c_ = (double)value.getFloatValue();
-#else 
-				pose.orientation.c = (double)value.getFloatValue();
-#endif
-				
-				FST_INFO("Set FLOAT->COORDINATE:(%f, %f, %f, %f, %f, %f) to TF[%s]", 
-#ifndef WIN32
-					pose.point_.x_, pose.point_.y_, pose.point_.z_, 
-					pose.euler_.a_, pose.euler_.b_, pose.euler_.c_,
-#else 
-					pose.position.x, pose.position.y, pose.position.z, 
-					pose.orientation.a, pose.orientation.b, pose.orientation.c,
-#endif
-					reg_idx);
-				reg_manager_interface_setCoordinateTf(&pose, iRegIdx);
-	        	return 0 ;
-			}
-			else if (valueStart->getType() == TYPE_POSE)
-			{
-				pose = valueStart->getPoseValue();
-				FST_INFO("Set POSE->COORDINATE:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
-#ifndef WIN32
-					pose.point_.x_, pose.point_.y_, pose.point_.z_, 
-					pose.euler_.a_, pose.euler_.b_, pose.euler_.c_,
-#else 
-					pose.position.x, pose.position.y, pose.position.z, 
-					pose.orientation.a, pose.orientation.b, pose.orientation.c,
-#endif
-					reg_idx);
-				reg_manager_interface_setCoordinateTf(&pose, iRegIdx);
-	        	return 0 ;
-			}
-		}
-		else if (!strcmp(reg_member, TXT_REG_ID))
-		{
-			int iID = (int)value.getFloatValue();
-			FST_INFO("Set ID:(%d) to MR[%s]", iID, reg_idx);
-			reg_manager_interface_setIdTf(&iID, iRegIdx);
-	        return 0 ;
-		}
-		else if (!strcmp(reg_member, TXT_REG_COMMENT))
-		{
-			// get_token(objThreadCntrolBlock);
-			FST_INFO("Set COMMENT:(%s) to MR[%s]", 
-				objThreadCntrolBlock->token, reg_idx);
-			reg_manager_interface_setCommentTf(
-				(char *)valueStart->getStringValue().c_str(), iRegIdx);
-	        return 0 ;
-		}
-	}
-	else if(!strcmp(reg_name, TXT_PL))
-	{
-		if(strlen(reg_member) == 0)
-		{
-			// reg_manager_interface_setPl(valueStart->getPLRegValue(), iRegIdx);
-	        return 0 ;
-		}
-		else if (!strcmp(reg_member, TXT_PL_POSE))
-		{
-			if (valueStart->getType() == TYPE_FLOAT)
-			{
-				// pose.position.x = (double)(atof((char *)valueStart));
-#ifndef WIN32
-				pose.point_.x_ = (double)value.getFloatValue();
-#else 
-				pose.position.x = (double)value.getFloatValue();
-#endif
-
-				get_exp(objThreadCntrolBlock, &value, &boolValue);
-#ifndef WIN32
-				pose.point_.y_ = (double)value.getFloatValue();
-#else 
-				pose.position.y = (double)value.getFloatValue();
-#endif
-				
-				get_exp(objThreadCntrolBlock, &value, &boolValue);
-#ifndef WIN32
-				pose.point_.z_ = (double)value.getFloatValue();
-#else 
-				pose.position.z = (double)value.getFloatValue();
-#endif
-				
-				get_exp(objThreadCntrolBlock, &value, &boolValue);
-#ifndef WIN32
-				pose.euler_.a_ = (double)value.getFloatValue();
-#else 
-				pose.orientation.a = (double)value.getFloatValue();
-#endif
-				
-				get_exp(objThreadCntrolBlock, &value, &boolValue);
-#ifndef WIN32
-				pose.euler_.b_ = (double)value.getFloatValue();
-#else 
-				pose.orientation.b = (double)value.getFloatValue();
-#endif
-				
-				get_exp(objThreadCntrolBlock, &value, &boolValue);
-#ifndef WIN32
-				pose.euler_.c_ = (double)value.getFloatValue();
-#else 
-				pose.orientation.c = (double)value.getFloatValue();
-#endif
-				
-				FST_INFO("Set FLOAT->PL_POSE:(%f, %f, %f, %f, %f, %f) to TF[%s]", 
-#ifndef WIN32
-					pose.point_.x_, pose.point_.y_, pose.point_.z_, 
-					pose.euler_.a_, pose.euler_.b_, pose.euler_.c_,
-#else 
-					pose.position.x, pose.position.y, pose.position.z, 
-					pose.orientation.a, pose.orientation.b, pose.orientation.c,
-#endif
-					reg_idx);
-				reg_manager_interface_setPosePl(&pose, iRegIdx);
-	        	return 0 ;
-			}
-			else if (valueStart->getType() == TYPE_POSE)
-			{
-				pose = valueStart->getPoseValue();
-				FST_INFO("Set POSE->PL_POSE:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
-#ifndef WIN32
-					pose.point_.x_, pose.point_.y_, pose.point_.z_, 
-					pose.euler_.a_, pose.euler_.b_, pose.euler_.c_,
-#else 
-					pose.position.x, pose.position.y, pose.position.z, 
-					pose.orientation.a, pose.orientation.b, pose.orientation.c,
-#endif
-					reg_idx);
-				reg_manager_interface_setPosePl(&pose, iRegIdx);
-	        	return 0 ;
-			}
-		}
-		else if (!strcmp(reg_member, TXT_PL_PALLET))
-		{
-			pltValue = valueStart->getPLValue();
-			reg_manager_interface_setPalletPl(&pltValue, iRegIdx);
-	        return 0 ;
-		}
-		else if (!strcmp(reg_member, TXT_PL_FLAG))
-		{
-			int iFlagPl = (int)value.getFloatValue();
-			FST_INFO("Set ID:(%d) to MR[%s]", iFlagPl, reg_idx);
-			reg_manager_interface_setFlagPl(&iFlagPl, iRegIdx);
-	        return 0 ;
-		}
-		else if (!strcmp(reg_member, TXT_REG_ID))
-		{
-			int iID = (int)value.getFloatValue();
-			FST_INFO("Set ID:(%d) to MR[%s]", iID, reg_idx);
-			reg_manager_interface_setIdPl(&iID, iRegIdx);
-	        return 0 ;
-		}
-		else if (!strcmp(reg_member, TXT_REG_COMMENT))
-		{
-			// get_token(objThreadCntrolBlock);
-			FST_INFO("Set COMMENT:(%s) to MR[%s]", 
-				objThreadCntrolBlock->token, reg_idx);
-			reg_manager_interface_setCommentPl(
-				(char *)valueStart->getStringValue().c_str(), iRegIdx);
-	        return 0 ;
-		}
-	}
 	return 0 ;
 }
 
@@ -1847,6 +1405,11 @@ int forgesight_registers_manager_cartToJoint(PoseEuler pos, Joint &joint)
 int forgesight_registers_manager_jointToCart(Joint joint, PoseEuler &pos)
 {
 	return forgesight_registers_manager_jointToCart(joint, pos);
+}
+
+int forgesight_registers_manager_get_user_opmode(int& mode)
+{
+	return reg_manager_interface_getUserOpMode(mode);
 }
 
 int forgesight_registers_manager_get_resource(

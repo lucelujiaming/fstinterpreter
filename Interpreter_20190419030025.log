@@ -1,0 +1,645 @@
+[ INFO][1555642825.527938]Log client initialize Success, ID=18, logging message...
+[ INFO][1555642825.541201]forgesight_load_programs_path: /root/robot_data .
+[ INFO][1555642825.544730]forgesight_load_wait_time_out_config: 30 .
+[ INFO][1555643214.852839]parseCtrlComand at 7 
+[ INFO][1555643214.860835]parseCtrlComand: 7
+[ERROR][1555643214.860933]abort motion
+[ INFO][1555643462.508370]parseCtrlComand at 7 
+[ INFO][1555643462.517805]parseCtrlComand: 7
+[ERROR][1555643462.517905]abort motion
+[ INFO][1555643487.992605]parseCtrlComand at 1 
+[ INFO][1555643488.  1337]parseCtrlComand: 1
+[ INFO][1555643488.  1556]start debug functiontest ...
+[ INFO][1555643488.  1584]getThreadControlBlock at 0
+[ INFO][1555643488.  1632]setCurLine Failed to 0
+[ INFO][1555643488.  1653]setProgMode to 1 at 0
+[ INFO][1555643488.  1671]setProgramName to functiontest at 1
+[ INFO][1555643488.  1824]setPrgmState to 2 at 1
+[ INFO][1555643488.  1889]Enter call_interpreter.
+[ INFO][1555643488.  2072]objThreadCntrolBlock->p_buf = 001FB6F8
+[ INFO][1555643488.115613]get_user_opmode = 1 before 
+[ INFO][1555643488.127263]get_user_opmode = 3 after 
+[ INFO][1555643488.127398]get_user_opmode = 3 and skip check_home_pose
+[ INFO][1555643488.128907]Execute call_interpreter begin at call_interpreter.
+[ INFO][1555643488.128948]calc_line_from_prog get 1 at (001FB6F8, 00000000) 
+[ INFO][1555643488.129048]	(0X001FB6F8 - 0X001FB704)(0): () at 0X001FB703(0)
+[ INFO][1555643488.129080]Start Interaptor : Line number = 1 
+[ INFO][1555643488.129126]interpreterState is PAUSED_R with 2.
+[ INFO][1555643489.130977]interpreterState is PAUSED_R with 2.
+[ INFO][1555643489.210216]parseCtrlComand at 6 
+[ INFO][1555643489.226241]parseCtrlComand: 6
+[ INFO][1555643489.226711]getThreadControlBlock at 0
+[ INFO][1555643489.226738]continue move..
+[ INFO][1555643489.226847]setPrgmState to 1 at 1
+[ INFO][1555643489.226865]setProgMode to 0 at 1
+[ INFO][1555643490.131361]interpreterState is PAUSED_R with 2.
+[ INFO][1555643491.151216]calc_line_from_prog get 2 at (001FB704, 001FB6F8) 
+[ INFO][1555643491.151649]	(0X001FB704 - 0X001FB715)(1): (    WHILE 1 = 1 ) at 0X001FB704(0)
+[ INFO][1555643491.151686]objThreadCntrolBlock->token_type = 1 at line 2 
+[ INFO][1555643491.151706]setLinenum : 2 at the 0th thread
+[ INFO][1555643491.151725]setLinenum: setCurLine (2) at functiontest:/prog/prog_body/function/body/logical/determine
+[ INFO][1555643491.161261]calc_line_from_prog get 2 at (001FB704, 001FB6F8) 
+[ INFO][1555643491.161352]	(0X001FB704 - 0X001FB715)(2): ( 1 = 1 ) at 0X001FB70D(0)
+[ INFO][1555643491.161427]objThreadCntrolBlock->token_type = 4 at line 2 
+[ INFO][1555643491.161447]setLinenum : 2 at the 0th thread
+[ INFO][1555643491.161466]setLinenum: setCurLine (2) at functiontest:/prog/prog_body/function/body/logical/determine
+[ INFO][1555643491.181320]calc_line_from_prog get 3 at (001FB715, 001FB704) 
+[ INFO][1555643491.181395]	(0X001FB715 - 0X001FB735)(2): ( P[1], 100 CNT -1 ) at 0X001FB722(0)
+[ INFO][1555643491.181426]objThreadCntrolBlock->token_type = 7 at line 3 
+[ INFO][1555643491.181446]setLinenum : 3 at the 0th thread
+[ INFO][1555643491.181465]setLinenum: setCurLine (3) at functiontest:/prog/prog_body/function/body/logical/logical_body/instruction[1]
+[ INFO][1555643491.181488]calc_line_from_prog get 3 at (001FB715, 001FB704) 
+[ INFO][1555643491.181509]	(0X001FB715 - 0X001FB735)(3): ( P[1], 100 CNT -1 ) at 0X001FB722(0)
+[ INFO][1555643491.181534]call_internal_cmd execution : movej at 1, iLineNum = 3
+[ INFO][1555643491.181554]	(0X001FB735 - 0X001FB755)(3): ( P[1], 100 CNT -1 ) at 0X001FB722(0)
+[ INFO][1555643491.406899]call_MoveJ Run XPATH: 3: functiontest:/prog/prog_body/function/body/logical/logical_body/instruction[1]
+[ INFO][1555643491.407096]call_MoveJ XPATH without movCmdDst
+[ERROR][1555643491.407241]not defined variable (p[1]).
+[ INFO][1555643491.407268]-----------------ERR:4----------------------
+[ INFO][1555643491.407296]	 NOTICE : 4 -  1000900aa0005(not a variable)
+[ INFO][1555643491.407338]-----------------ERR:4----------------------
+[ INFO][1555643491.407721]setProgMode to 2 at 1
+[ INFO][1555643491.407753]call_MoveJ value.getType() = 0
+[ INFO][1555643491.428465]calc_line_from_prog get 4 at (001FB735, 001FB715) 
+[ INFO][1555643491.428519]	(0X001FB735 - 0X001FB755)(3): (        MOVEJ P[2], 100 CNT -1 ) at 0X001FB735(0)
+[ERROR][1555643491.428548]objThreadCntrolBlock crash at line 4 
+[ INFO][1555643491.428567]Execute call_interpreter over at call_interpreter.
+[ INFO][1555643491.428585]free(objThreadCntrolBlock->p_buf);
+[ INFO][1555643491.428604]free(objThreadCntrolBlock->instrSet);
+[ INFO][1555643491.428620]free(objThreadCntrolBlock->instrSet);
+[ INFO][1555643491.428652]free(objThreadCntrolBlock->iSubProgNum);
+[ INFO][1555643491.428686]return 0
+[ INFO][1555643491.428705]Left  call_interpreter.
+[ INFO][1555643491.428723]setPrgmState to 0 at 1
+[ INFO][1555643491.428740]setProgramName to  at 1
+[ INFO][1555643491.428757]Enter pthread_join.
+[ INFO][1555643491.428797]Left  pthread_join.
+[ INFO][1555643491.429505]parseCtrlComand at 7 
+[ INFO][1555643491.442611]parseCtrlComand: 7
+[ERROR][1555643491.442728]abort motion
+[ INFO][1555643491.442748]getThreadControlBlock at 0
+[ INFO][1555643491.442767]set abort motion flag.
+[ INFO][1555643491.442964]reset prog position.
+[ INFO][1555643491.442988]setPrgmState to 103 at 1
+[ INFO][1555643491.444143]setPrgmState(IDLE_R).
+[ INFO][1555643491.444212]setPrgmState to 0 at 1
+[ INFO][1555643491.444254]reset ProgramName And LineNum.
+[ INFO][1555643501. 72382]parseCtrlComand at 1 
+[ INFO][1555643501. 81676]parseCtrlComand: 1
+[ INFO][1555643501. 81727]start debug functiontest ...
+[ INFO][1555643501. 81749]getThreadControlBlock at 1
+[ INFO][1555643501. 81767]setCurLine Failed to 0
+[ INFO][1555643501. 81784]setProgMode to 1 at 0
+[ INFO][1555643501. 81802]setProgramName to functiontest at 1
+[ INFO][1555643501. 81930]setPrgmState to 2 at 1
+[ INFO][1555643501. 81991]Enter call_interpreter.
+[ INFO][1555643501. 82074]objThreadCntrolBlock->p_buf = 001FB6F8
+[ INFO][1555643501.195271]get_user_opmode = 1 before 
+[ INFO][1555643501.201152]get_user_opmode = 3 after 
+[ INFO][1555643501.201305]get_user_opmode = 3 and skip check_home_pose
+[ INFO][1555643501.202263]Execute call_interpreter begin at call_interpreter.
+[ INFO][1555643501.202327]calc_line_from_prog get 1 at (001FB6F8, 00000003) 
+[ INFO][1555643501.202353]	(0X001FB6F8 - 0X001FB704)(0): () at 0X001FB703(1)
+[ INFO][1555643501.202379]Start Interaptor : Line number = 1 
+[ INFO][1555643501.202397]interpreterState is PAUSED_R with 2.
+[ INFO][1555643501.803385]parseCtrlComand at 6 
+[ INFO][1555643501.812680]parseCtrlComand: 6
+[ INFO][1555643501.812778]getThreadControlBlock at 1
+[ INFO][1555643501.812798]continue move..
+[ INFO][1555643501.812814]setPrgmState to 1 at 1
+[ INFO][1555643501.812846]setProgMode to 0 at 1
+[ INFO][1555643502.202459]interpreterState is PAUSED_R with 2.
+[ INFO][1555643503.263608]calc_line_from_prog get 2 at (001FB704, 001FB6F8) 
+[ INFO][1555643503.263938]	(0X001FB704 - 0X001FB715)(1): (    WHILE 1 = 1 ) at 0X001FB704(1)
+[ INFO][1555643503.263973]objThreadCntrolBlock->token_type = 1 at line 2 
+[ INFO][1555643503.264009]setLinenum : 2 at the 1th thread
+[ INFO][1555643503.264029]setLinenum: setCurLine (2) at functiontest:/prog/prog_body/function/body/logical/determine
+[ INFO][1555643503.273942]calc_line_from_prog get 2 at (001FB704, 001FB6F8) 
+[ INFO][1555643503.273987]	(0X001FB704 - 0X001FB715)(2): ( 1 = 1 ) at 0X001FB70D(1)
+[ INFO][1555643503.274014]objThreadCntrolBlock->token_type = 4 at line 2 
+[ INFO][1555643503.274033]setLinenum : 2 at the 1th thread
+[ INFO][1555643503.274070]setLinenum: setCurLine (2) at functiontest:/prog/prog_body/function/body/logical/determine
+[ INFO][1555643503.295183]calc_line_from_prog get 3 at (001FB715, 001FB704) 
+[ INFO][1555643503.295242]	(0X001FB715 - 0X001FB735)(2): ( P[1], 100 CNT -1 ) at 0X001FB722(1)
+[ INFO][1555643503.295269]objThreadCntrolBlock->token_type = 7 at line 3 
+[ INFO][1555643503.295288]setLinenum : 3 at the 1th thread
+[ INFO][1555643503.295306]setLinenum: setCurLine (3) at functiontest:/prog/prog_body/function/body/logical/logical_body/instruction[1]
+[ INFO][1555643503.295328]calc_line_from_prog get 3 at (001FB715, 001FB704) 
+[ INFO][1555643503.295349]	(0X001FB715 - 0X001FB735)(3): ( P[1], 100 CNT -1 ) at 0X001FB722(1)
+[ INFO][1555643503.295373]call_internal_cmd execution : movej at 1, iLineNum = 3
+[ INFO][1555643503.295392]	(0X001FB735 - 0X001FB755)(3): ( P[1], 100 CNT -1 ) at 0X001FB722(1)
+[ INFO][1555643503.315001]call_MoveJ Run XPATH: 3: functiontest:/prog/prog_body/function/body/logical/logical_body/instruction[1]
+[ INFO][1555643503.315051]call_MoveJ XPATH without movCmdDst
+[ERROR][1555643503.315163]not defined variable (p[1]).
+[ INFO][1555643503.315187]-----------------ERR:4----------------------
+[ INFO][1555643503.315205]	 NOTICE : 4 -  1000900aa0005(not a variable)
+[ INFO][1555643503.315246]-----------------ERR:4----------------------
+[ INFO][1555643503.315301]setProgMode to 2 at 1
+[ INFO][1555643503.315327]call_MoveJ value.getType() = 0
+[ INFO][1555643503.511429]calc_line_from_prog get 4 at (001FB735, 001FB715) 
+[ INFO][1555643503.511747]	(0X001FB735 - 0X001FB755)(3): (        MOVEJ P[2], 100 CNT -1 ) at 0X001FB735(1)
+[ERROR][1555643503.511782]objThreadCntrolBlock crash at line 4 
+[ INFO][1555643503.511801]Execute call_interpreter over at call_interpreter.
+[ INFO][1555643503.511820]free(objThreadCntrolBlock->p_buf);
+[ INFO][1555643503.511839]free(objThreadCntrolBlock->instrSet);
+[ INFO][1555643503.511855]free(objThreadCntrolBlock->instrSet);
+[ INFO][1555643503.511872]free(objThreadCntrolBlock->iSubProgNum);
+[ INFO][1555643503.511902]return 0
+[ INFO][1555643503.511932]Left  call_interpreter.
+[ INFO][1555643503.511952]setPrgmState to 0 at 1
+[ INFO][1555643503.511970]setProgramName to  at 1
+[ INFO][1555643503.511987]Enter pthread_join.
+[ INFO][1555643503.512004]Left  pthread_join.
+[ INFO][1555643503.523894]parseCtrlComand at 7 
+[ INFO][1555643503.533816]parseCtrlComand: 7
+[ERROR][1555643503.533860]abort motion
+[ INFO][1555643503.533998]getThreadControlBlock at 1
+[ INFO][1555643503.534020]set abort motion flag.
+[ INFO][1555643503.534065]reset prog position.
+[ INFO][1555643503.534083]setPrgmState to 103 at 1
+[ INFO][1555643503.535167]setPrgmState(IDLE_R).
+[ INFO][1555643503.535197]setPrgmState to 0 at 1
+[ INFO][1555643503.535231]reset ProgramName And LineNum.
+[ INFO][1555643531.247850]parseCtrlComand at 1 
+[ INFO][1555643531.256918]parseCtrlComand: 1
+[ INFO][1555643531.257031]start debug functiontest ...
+[ INFO][1555643531.257057]getThreadControlBlock at 2
+[ INFO][1555643531.257087]setCurLine Failed to 0
+[ INFO][1555643531.257107]setProgMode to 1 at 0
+[ INFO][1555643531.257125]setProgramName to functiontest at 1
+[ INFO][1555643531.257347]setPrgmState to 2 at 1
+[ INFO][1555643531.257455]Enter call_interpreter.
+[ INFO][1555643531.257555]objThreadCntrolBlock->p_buf = 001FB6F8
+[ INFO][1555643531.357838]get_user_opmode = 1 before 
+[ INFO][1555643531.372272]get_user_opmode = 3 after 
+[ INFO][1555643531.372386]get_user_opmode = 3 and skip check_home_pose
+[ INFO][1555643531.373404]Execute call_interpreter begin at call_interpreter.
+[ INFO][1555643531.373439]calc_line_from_prog get 1 at (001FB6F8, 001FB700) 
+[ INFO][1555643531.373463]	(0X001FB6F8 - 0X001FB704)(0): () at 0X001FB703(2)
+[ INFO][1555643531.373686]Start Interaptor : Line number = 1 
+[ INFO][1555643531.373709]interpreterState is PAUSED_R with 2.
+[ INFO][1555643532.373952]interpreterState is PAUSED_R with 2.
+[ INFO][1555643533.374467]interpreterState is PAUSED_R with 2.
+[ INFO][1555643534.374920]interpreterState is PAUSED_R with 2.
+[ INFO][1555643534.642244]parseCtrlComand at 2 
+[ INFO][1555643534.651194]parseCtrlComand: 2
+[ INFO][1555643534.651306]step forward at 2 
+[ INFO][1555643534.651341]getThreadControlBlock at 2
+[ INFO][1555643534.651362]calc_line_from_prog get 1 at (001FB6F8, 001FB700) 
+[ INFO][1555643534.651403]	(0X001FB6F8 - 0X001FB704)(1): () at 0X001FB703(2)
+[ INFO][1555643534.651431]setLinenum : 1 at the 2th thread
+[ INFO][1555643534.651450]setLinenum: setCurLine (1) at functiontest:/prog/prog_body/function
+[ INFO][1555643534.651470]step forward to 1 
+[ INFO][1555643534.651486]setPrgmState to 1 at 1
+[ INFO][1555643535.375389]interpreterState is PAUSED_R with 2.
+[ INFO][1555643536.378880]calc_line_from_prog get 2 at (001FB704, 001FB6F8) 
+[ INFO][1555643536.379020]	(0X001FB704 - 0X001FB715)(1): (    WHILE 1 = 1 ) at 0X001FB704(2)
+[ INFO][1555643536.379051]objThreadCntrolBlock->token_type = 1 at line 2 
+[ INFO][1555643536.379071]setLinenum : 2 at the 2th thread
+[ INFO][1555643536.379100]setLinenum: setCurLine (2) at functiontest:/prog/prog_body/function/body/logical/determine
+[ INFO][1555643536.389839]calc_line_from_prog get 2 at (001FB704, 001FB6F8) 
+[ INFO][1555643536.389885]	(0X001FB704 - 0X001FB715)(2): ( 1 = 1 ) at 0X001FB70D(2)
+[ INFO][1555643536.389929]objThreadCntrolBlock->token_type = 4 at line 2 
+[ INFO][1555643536.389951]setLinenum : 2 at the 2th thread
+[ INFO][1555643536.389970]setLinenum: setCurLine (2) at functiontest:/prog/prog_body/function/body/logical/determine
+[ INFO][1555643536.399618]PAUSED: Line number(        MOVEJ P[1], 100 CNT -1 ) at 2
+[ INFO][1555643536.399660]setPrgmState to 2 at 1
+[ INFO][1555643536.399679]call_interpreter : Enter waitInterpreterStateleftPaused 2 
+[ INFO][1555643537.881479]parseCtrlComand at 2 
+[ INFO][1555643537.891462]parseCtrlComand: 2
+[ INFO][1555643537.891588]step forward at 2 
+[ INFO][1555643537.891611]getThreadControlBlock at 2
+[ INFO][1555643537.891632]calc_line_from_prog get 3 at (001FB715, 001FB704) 
+[ INFO][1555643537.891656]	(0X001FB715 - 0X001FB735)(2): (        MOVEJ P[1], 100 CNT -1 ) at 0X001FB715(2)
+[ INFO][1555643537.891682]setLinenum : 3 at the 2th thread
+[ INFO][1555643537.891780]setLinenum: setCurLine (3) at functiontest:/prog/prog_body/function/body/logical/logical_body/instruction[1]
+[ INFO][1555643537.891810]step forward to 3 
+[ INFO][1555643537.891828]setPrgmState to 1 at 1
+[ INFO][1555643538.285053]parseCtrlComand at 2 
+[ INFO][1555643538.294705]parseCtrlComand: 2
+[ INFO][1555643538.294834]step forward at 2 
+[ INFO][1555643538.294934]getThreadControlBlock at 2
+[ERROR][1555643538.294961]Can not FORWARD in EXECUTE_R 
+[ INFO][1555643538.399858]call_interpreter : Left  waitInterpreterStateleftPaused 2 
+[ INFO][1555643538.400111]getLinenum : 3
+[ INFO][1555643538.400134]interpreterState : Line number(3) with 2
+[ INFO][1555643538.400153]objThreadCntrolBlock->prog : Line number(3) 
+[ INFO][1555643538.400190]setPrgmState(EXECUTE_TO_PAUSE_T).
+[ INFO][1555643538.400209]setPrgmState to 102 at 1
+[ INFO][1555643538.401298]	(0X001FB735 - 0X001FB755)(3): (        MOVEJ P[1], 100 CNT -1 ) at 0X001FB715(2)
+[ INFO][1555643538.401423]setPrgmState(EXECUTE_R).
+[ INFO][1555643538.401447]setPrgmState to 1 at 1
+[ INFO][1555643538.401478]calc_line_from_prog get 3 at (001FB715, 001FB704) 
+[ INFO][1555643538.401501]	(0X001FB715 - 0X001FB735)(3): ( P[1], 100 CNT -1 ) at 0X001FB722(2)
+[ INFO][1555643538.401525]objThreadCntrolBlock->token_type = 7 at line 3 
+[ INFO][1555643538.401543]setLinenum : 3 at the 2th thread
+[ INFO][1555643538.401610]setLinenum: setCurLine (3) at functiontest:/prog/prog_body/function/body/logical/logical_body/instruction[1]
+[ INFO][1555643538.401650]calc_line_from_prog get 3 at (001FB715, 001FB704) 
+[ INFO][1555643538.401673]	(0X001FB715 - 0X001FB735)(3): ( P[1], 100 CNT -1 ) at 0X001FB722(2)
+[ INFO][1555643538.401707]call_internal_cmd execution : movej at 1, iLineNum = 3
+[ INFO][1555643538.401729]	(0X001FB735 - 0X001FB755)(3): ( P[1], 100 CNT -1 ) at 0X001FB722(2)
+[ INFO][1555643538.430375]call_MoveJ Run XPATH: 3: functiontest:/prog/prog_body/function/body/logical/logical_body/instruction[1]
+[ INFO][1555643538.430426]call_MoveJ XPATH without movCmdDst
+[ERROR][1555643538.430636]not defined variable (p[1]).
+[ INFO][1555643538.430683]-----------------ERR:4----------------------
+[ INFO][1555643538.430705]	 NOTICE : 4 -  1000900aa0005(not a variable)
+[ INFO][1555643538.430728]-----------------ERR:4----------------------
+[ INFO][1555643538.430778]setProgMode to 2 at 1
+[ INFO][1555643538.430804]call_MoveJ value.getType() = 0
+[ INFO][1555643538.440848]calc_line_from_prog get 4 at (001FB735, 001FB715) 
+[ INFO][1555643538.440895]	(0X001FB735 - 0X001FB755)(3): (        MOVEJ P[2], 100 CNT -1 ) at 0X001FB735(2)
+[ERROR][1555643538.440924]objThreadCntrolBlock crash at line 4 
+[ INFO][1555643538.440942]Execute call_interpreter over at call_interpreter.
+[ INFO][1555643538.440960]free(objThreadCntrolBlock->p_buf);
+[ INFO][1555643538.440979]free(objThreadCntrolBlock->instrSet);
+[ INFO][1555643538.441228]free(objThreadCntrolBlock->instrSet);
+[ INFO][1555643538.441253]free(objThreadCntrolBlock->iSubProgNum);
+[ INFO][1555643538.441286]return 0
+[ INFO][1555643538.441318]Left  call_interpreter.
+[ INFO][1555643538.441337]setPrgmState to 0 at 1
+[ INFO][1555643538.441356]setProgramName to  at 1
+[ INFO][1555643538.441389]Enter pthread_join.
+[ INFO][1555643538.441407]Left  pthread_join.
+[ INFO][1555643538.452336]parseCtrlComand at 7 
+[ INFO][1555643538.474151]parseCtrlComand: 7
+[ERROR][1555643538.474205]abort motion
+[ INFO][1555643538.474797]getThreadControlBlock at 2
+[ INFO][1555643538.474823]set abort motion flag.
+[ INFO][1555643538.474840]reset prog position.
+[ INFO][1555643538.474889]setPrgmState to 103 at 1
+[ INFO][1555643538.478501]setPrgmState(IDLE_R).
+[ INFO][1555643538.478547]setPrgmState to 0 at 1
+[ INFO][1555643538.478803]reset ProgramName And LineNum.
+[ INFO][1555643686.391764]parseCtrlComand at 1 
+[ INFO][1555643686.400896]parseCtrlComand: 1
+[ INFO][1555643686.400976]start debug functiontest ...
+[ INFO][1555643686.401001]getThreadControlBlock at 3
+[ INFO][1555643686.401020]setCurLine Failed to 0
+[ INFO][1555643686.401037]setProgMode to 1 at 0
+[ INFO][1555643686.401054]setProgramName to functiontest at 1
+[ INFO][1555643686.401182]setPrgmState to 2 at 1
+[ INFO][1555643686.401242]Enter call_interpreter.
+[ INFO][1555643686.401319]objThreadCntrolBlock->p_buf = 001FB6F8
+[ INFO][1555643686.511682]get_user_opmode = 1 before 
+[ INFO][1555643686.515828]get_user_opmode = 3 after 
+[ INFO][1555643686.515874]get_user_opmode = 3 and skip check_home_pose
+[ INFO][1555643686.516792]Execute call_interpreter begin at call_interpreter.
+[ INFO][1555643686.516827]calc_line_from_prog get 1 at (001FB6F8, 6F697463) 
+[ INFO][1555643686.517366]	(0X001FB6F8 - 0X001FB704)(0): () at 0X001FB703(3)
+[ INFO][1555643686.517404]Start Interaptor : Line number = 1 
+[ INFO][1555643686.517440]interpreterState is PAUSED_R with 2.
+[ INFO][1555643687.272186]parseCtrlComand at 2 
+[ INFO][1555643687.282338]parseCtrlComand: 2
+[ INFO][1555643687.282545]step forward at 3 
+[ INFO][1555643687.282569]getThreadControlBlock at 3
+[ INFO][1555643687.282589]calc_line_from_prog get 1 at (001FB6F8, 6F697463) 
+[ INFO][1555643687.282612]	(0X001FB6F8 - 0X001FB704)(1): () at 0X001FB703(3)
+[ INFO][1555643687.282637]setLinenum : 1 at the 3th thread
+[ INFO][1555643687.282712]setLinenum: setCurLine (1) at functiontest:/prog/prog_body/function
+[ INFO][1555643687.282736]step forward to 1 
+[ INFO][1555643687.282754]setPrgmState to 1 at 1
+[ INFO][1555643687.304931]parseCtrlComand at 2 
+[ INFO][1555643687.338231]parseCtrlComand: 2
+[ INFO][1555643687.338485]step forward at 3 
+[ INFO][1555643687.338615]getThreadControlBlock at 3
+[ERROR][1555643687.338845]Can not FORWARD in EXECUTE_R 
+[ INFO][1555643687.517539]interpreterState is PAUSED_R with 2.
+[ INFO][1555643687.548347]parseCtrlComand at 2 
+[ INFO][1555643687.558625]parseCtrlComand: 2
+[ INFO][1555643687.558758]step forward at 3 
+[ INFO][1555643687.558782]getThreadControlBlock at 3
+[ERROR][1555643687.558801]Can not FORWARD in EXECUTE_R 
+[ INFO][1555643687.779951]parseCtrlComand at 2 
+[ INFO][1555643687.797997]parseCtrlComand: 2
+[ INFO][1555643687.798109]step forward at 3 
+[ INFO][1555643687.798174]getThreadControlBlock at 3
+[ERROR][1555643687.798199]Can not FORWARD in EXECUTE_R 
+[ INFO][1555643687.841805]parseCtrlComand at 2 
+[ INFO][1555643687.857908]parseCtrlComand: 2
+[ INFO][1555643687.858069]step forward at 3 
+[ INFO][1555643687.858093]getThreadControlBlock at 3
+[ERROR][1555643687.858401]Can not FORWARD in EXECUTE_R 
+[ INFO][1555643688. 53442]parseCtrlComand at 2 
+[ INFO][1555643688. 63432]parseCtrlComand: 2
+[ INFO][1555643688. 63771]step forward at 3 
+[ INFO][1555643688. 63795]getThreadControlBlock at 3
+[ERROR][1555643688. 63815]Can not FORWARD in EXECUTE_R 
+[ INFO][1555643688. 86009]parseCtrlComand at 2 
+[ INFO][1555643688.119126]parseCtrlComand: 2
+[ INFO][1555643688.119474]step forward at 3 
+[ INFO][1555643688.119498]getThreadControlBlock at 3
+[ERROR][1555643688.119517]Can not FORWARD in EXECUTE_R 
+[ INFO][1555643688.322307]parseCtrlComand at 2 
+[ INFO][1555643688.332019]parseCtrlComand: 2
+[ INFO][1555643688.332242]step forward at 3 
+[ INFO][1555643688.332266]getThreadControlBlock at 3
+[ERROR][1555643688.332284]Can not FORWARD in EXECUTE_R 
+[ INFO][1555643688.523210]calc_line_from_prog get 2 at (001FB704, 001FB6F8) 
+[ INFO][1555643688.524116]	(0X001FB704 - 0X001FB715)(1): (    WHILE 1 = 1 ) at 0X001FB704(3)
+[ INFO][1555643688.524185]objThreadCntrolBlock->token_type = 1 at line 2 
+[ INFO][1555643688.524208]setLinenum : 2 at the 3th thread
+[ INFO][1555643688.524228]setLinenum: setCurLine (2) at functiontest:/prog/prog_body/function/body/logical/determine
+[ INFO][1555643688.533242]calc_line_from_prog get 2 at (001FB704, 001FB6F8) 
+[ INFO][1555643688.533295]	(0X001FB704 - 0X001FB715)(2): ( 1 = 1 ) at 0X001FB70D(3)
+[ INFO][1555643688.533323]objThreadCntrolBlock->token_type = 4 at line 2 
+[ INFO][1555643688.533341]setLinenum : 2 at the 3th thread
+[ INFO][1555643688.533360]setLinenum: setCurLine (2) at functiontest:/prog/prog_body/function/body/logical/determine
+[ INFO][1555643688.544504]PAUSED: Line number(        MOVEJ P[1], 100 CNT -1 ) at 2
+[ INFO][1555643688.544569]setPrgmState to 2 at 1
+[ INFO][1555643688.544589]call_interpreter : Enter waitInterpreterStateleftPaused 2 
+[ INFO][1555643700.671814]parseCtrlComand at 6 
+[ INFO][1555643700.680628]parseCtrlComand: 6
+[ INFO][1555643700.680676]getThreadControlBlock at 3
+[ INFO][1555643700.680709]continue move..
+[ INFO][1555643700.680725]setPrgmState to 1 at 1
+[ INFO][1555643700.680742]setProgMode to 0 at 1
+[ INFO][1555643701.545830]call_interpreter : Left  waitInterpreterStateleftPaused 2 
+[ INFO][1555643701.546111]getLinenum : 2
+[ INFO][1555643701.546154]interpreterState : Line number(2) with 2
+[ INFO][1555643701.546176]objThreadCntrolBlock->prog : (001FB715) and start_prog_pos (001FB704) 
+[ INFO][1555643701.546198]objThreadCntrolBlock->prog : Line number(2) 
+[ INFO][1555643701.546214]setPrgmState(EXECUTE_TO_PAUSE_T).
+[ INFO][1555643701.546230]setPrgmState to 102 at 1
+[ INFO][1555643701.547314]	(0X001FB715 - 0X001FB735)(2): (    WHILE 1 = 1 ) at 0X001FB704(3)
+[ INFO][1555643701.547353]setPrgmState(EXECUTE_R).
+[ INFO][1555643701.547382]setPrgmState to 1 at 1
+[ INFO][1555643701.547411]calc_line_from_prog get 2 at (001FB704, 001FB6F8) 
+[ INFO][1555643701.547433]	(0X001FB704 - 0X001FB715)(2): ( 1 = 1 ) at 0X001FB70D(3)
+[ INFO][1555643701.547457]objThreadCntrolBlock->token_type = 4 at line 2 
+[ INFO][1555643701.547474]setLinenum : 2 at the 3th thread
+[ INFO][1555643701.547493]setLinenum: setCurLine (2) at functiontest:/prog/prog_body/function/body/logical/determine
+[ INFO][1555643701.553824]calc_line_from_prog get 3 at (001FB715, 001FB704) 
+[ INFO][1555643701.553870]	(0X001FB715 - 0X001FB735)(2): ( P[1], 100 CNT -1 ) at 0X001FB722(3)
+[ INFO][1555643701.553897]objThreadCntrolBlock->token_type = 7 at line 3 
+[ INFO][1555643701.553916]setLinenum : 3 at the 3th thread
+[ INFO][1555643701.553950]setLinenum: setCurLine (3) at functiontest:/prog/prog_body/function/body/logical/logical_body/instruction[1]
+[ INFO][1555643701.553988]calc_line_from_prog get 3 at (001FB715, 001FB704) 
+[ INFO][1555643701.554011]	(0X001FB715 - 0X001FB735)(3): ( P[1], 100 CNT -1 ) at 0X001FB722(3)
+[ INFO][1555643701.554035]call_internal_cmd execution : movej at 1, iLineNum = 3
+[ INFO][1555643701.554056]	(0X001FB735 - 0X001FB755)(3): ( P[1], 100 CNT -1 ) at 0X001FB722(3)
+[ INFO][1555643701.573798]call_MoveJ Run XPATH: 3: functiontest:/prog/prog_body/function/body/logical/logical_body/instruction[1]
+[ INFO][1555643701.573844]call_MoveJ XPATH without movCmdDst
+[ERROR][1555643701.573969]not defined variable (p[1]).
+[ INFO][1555643701.573994]-----------------ERR:4----------------------
+[ INFO][1555643701.574013]	 NOTICE : 4 -  1000900aa0005(not a variable)
+[ INFO][1555643701.574036]-----------------ERR:4----------------------
+[ INFO][1555643701.574096]setProgMode to 2 at 1
+[ INFO][1555643701.574123]call_MoveJ value.getType() = 0
+[ INFO][1555643701.584594]calc_line_from_prog get 4 at (001FB735, 001FB715) 
+[ INFO][1555643701.584648]	(0X001FB735 - 0X001FB755)(3): (        MOVEJ P[2], 100 CNT -1 ) at 0X001FB735(3)
+[ERROR][1555643701.584677]objThreadCntrolBlock crash at line 4 
+[ INFO][1555643701.584696]Execute call_interpreter over at call_interpreter.
+[ INFO][1555643701.584714]free(objThreadCntrolBlock->p_buf);
+[ INFO][1555643701.584733]free(objThreadCntrolBlock->instrSet);
+[ INFO][1555643701.584749]free(objThreadCntrolBlock->instrSet);
+[ INFO][1555643701.584766]free(objThreadCntrolBlock->iSubProgNum);
+[ INFO][1555643701.584796]return 0
+[ INFO][1555643701.584815]Left  call_interpreter.
+[ INFO][1555643701.584832]setPrgmState to 0 at 1
+[ INFO][1555643701.584849]setProgramName to  at 1
+[ INFO][1555643701.584866]Enter pthread_join.
+[ INFO][1555643701.584882]Left  pthread_join.
+[ INFO][1555643701.595312]parseCtrlComand at 7 
+[ INFO][1555643701.605457]parseCtrlComand: 7
+[ERROR][1555643701.605503]abort motion
+[ INFO][1555643701.605523]getThreadControlBlock at 3
+[ INFO][1555643701.605541]set abort motion flag.
+[ INFO][1555643701.605644]reset prog position.
+[ INFO][1555643701.605664]setPrgmState to 103 at 1
+[ INFO][1555643701.606777]setPrgmState(IDLE_R).
+[ INFO][1555643701.606804]setPrgmState to 0 at 1
+[ INFO][1555643701.606823]reset ProgramName And LineNum.
+[ INFO][1555643723.438740]parseCtrlComand at 1 
+[ INFO][1555643723.447817]parseCtrlComand: 1
+[ INFO][1555643723.447866]start debug functiontest ...
+[ INFO][1555643723.447887]getThreadControlBlock at 4
+[ INFO][1555643723.447906]setCurLine Failed to 0
+[ INFO][1555643723.447936]setProgMode to 1 at 0
+[ INFO][1555643723.447957]setProgramName to functiontest at 1
+[ INFO][1555643723.448083]setPrgmState to 2 at 1
+[ INFO][1555643723.448145]Enter call_interpreter.
+[ INFO][1555643723.448266]objThreadCntrolBlock->p_buf = 00216E78
+[ INFO][1555643723.556736]get_user_opmode = 1 before 
+[ INFO][1555643723.562905]get_user_opmode = 3 after 
+[ INFO][1555643723.563057]get_user_opmode = 3 and skip check_home_pose
+[ INFO][1555643723.564878]Execute call_interpreter begin at call_interpreter.
+[ INFO][1555643723.564920]calc_line_from_prog get 1 at (00216E78, 6F697463) 
+[ INFO][1555643723.564944]	(0X00216E78 - 0X00216E84)(0): () at 0X00216E83(4)
+[ INFO][1555643723.565007]Start Interaptor : Line number = 1 
+[ INFO][1555643723.565027]interpreterState is PAUSED_R with 2.
+[ INFO][1555643724.565149]interpreterState is PAUSED_R with 2.
+[ INFO][1555643724.768529]parseCtrlComand at 6 
+[ INFO][1555643724.777452]parseCtrlComand: 6
+[ INFO][1555643724.777500]getThreadControlBlock at 4
+[ INFO][1555643724.777520]continue move..
+[ INFO][1555643724.777600]setPrgmState to 1 at 1
+[ INFO][1555643724.777638]setProgMode to 0 at 1
+[ INFO][1555643725.565338]interpreterState is PAUSED_R with 2.
+[ INFO][1555643726.574723]calc_line_from_prog get 2 at (00216E84, 00216E78) 
+[ INFO][1555643726.574908]	(0X00216E84 - 0X00216E95)(1): (    WHILE 1 = 1 ) at 0X00216E84(4)
+[ INFO][1555643726.574992]objThreadCntrolBlock->token_type = 1 at line 2 
+[ INFO][1555643726.575025]setLinenum : 2 at the 4th thread
+[ INFO][1555643726.575046]setLinenum: setCurLine (2) at functiontest:/prog/prog_body/function/body/logical/determine
+[ INFO][1555643726.584509]calc_line_from_prog get 2 at (00216E84, 00216E78) 
+[ INFO][1555643726.584551]	(0X00216E84 - 0X00216E95)(2): ( 1 = 1 ) at 0X00216E8D(4)
+[ INFO][1555643726.584578]objThreadCntrolBlock->token_type = 4 at line 2 
+[ INFO][1555643726.584635]setLinenum : 2 at the 4th thread
+[ INFO][1555643726.584656]setLinenum: setCurLine (2) at functiontest:/prog/prog_body/function/body/logical/determine
+[ INFO][1555643726.595426]calc_line_from_prog get 3 at (00216E95, 00216E84) 
+[ INFO][1555643726.595470]	(0X00216E95 - 0X00216EB5)(2): ( P[1], 100 CNT -1 ) at 0X00216EA2(4)
+[ INFO][1555643726.595514]objThreadCntrolBlock->token_type = 7 at line 3 
+[ INFO][1555643726.595535]setLinenum : 3 at the 4th thread
+[ INFO][1555643726.595554]setLinenum: setCurLine (3) at functiontest:/prog/prog_body/function/body/logical/logical_body/instruction[1]
+[ INFO][1555643726.595576]calc_line_from_prog get 3 at (00216E95, 00216E84) 
+[ INFO][1555643726.595597]	(0X00216E95 - 0X00216EB5)(3): ( P[1], 100 CNT -1 ) at 0X00216EA2(4)
+[ INFO][1555643726.595700]call_internal_cmd execution : movej at 1, iLineNum = 3
+[ INFO][1555643726.595726]	(0X00216EB5 - 0X00216ED5)(3): ( P[1], 100 CNT -1 ) at 0X00216EA2(4)
+[ INFO][1555643726.616392]call_MoveJ Run XPATH: 3: functiontest:/prog/prog_body/function/body/logical/logical_body/instruction[1]
+[ INFO][1555643726.616515]call_MoveJ XPATH without movCmdDst
+[ERROR][1555643726.616624]not defined variable (p[1]).
+[ INFO][1555643726.616760]-----------------ERR:4----------------------
+[ INFO][1555643726.616780]	 NOTICE : 4 -  1000900aa0005(not a variable)
+[ INFO][1555643726.616802]-----------------ERR:4----------------------
+[ INFO][1555643726.616862]setProgMode to 2 at 1
+[ INFO][1555643726.616891]call_MoveJ value.getType() = 0
+[ INFO][1555643726.626602]calc_line_from_prog get 4 at (00216EB5, 00216E95) 
+[ INFO][1555643726.626656]	(0X00216EB5 - 0X00216ED5)(3): (        MOVEJ P[2], 100 CNT -1 ) at 0X00216EB5(4)
+[ERROR][1555643726.626686]objThreadCntrolBlock crash at line 4 
+[ INFO][1555643726.626705]Execute call_interpreter over at call_interpreter.
+[ INFO][1555643726.626774]free(objThreadCntrolBlock->p_buf);
+[ INFO][1555643726.626847]free(objThreadCntrolBlock->instrSet);
+[ INFO][1555643726.626865]free(objThreadCntrolBlock->instrSet);
+[ INFO][1555643726.626882]free(objThreadCntrolBlock->iSubProgNum);
+[ INFO][1555643726.626914]return 0
+[ INFO][1555643726.626933]Left  call_interpreter.
+[ INFO][1555643726.626950]setPrgmState to 0 at 1
+[ INFO][1555643726.626968]setProgramName to  at 1
+[ INFO][1555643726.626985]Enter pthread_join.
+[ INFO][1555643726.627001]Left  pthread_join.
+[ INFO][1555643726.637226]parseCtrlComand at 7 
+[ INFO][1555643726.646101]parseCtrlComand: 7
+[ERROR][1555643726.646148]abort motion
+[ INFO][1555643726.646168]getThreadControlBlock at 4
+[ INFO][1555643726.646185]set abort motion flag.
+[ INFO][1555643726.646201]reset prog position.
+[ INFO][1555643726.646229]setPrgmState to 103 at 1
+[ INFO][1555643726.647325]setPrgmState(IDLE_R).
+[ INFO][1555643726.647353]setPrgmState to 0 at 1
+[ INFO][1555643726.647372]reset ProgramName And LineNum.
+[ INFO][1555643735.197242]parseCtrlComand at 1 
+[ INFO][1555643735.206469]parseCtrlComand: 1
+[ INFO][1555643735.206587]start debug functiontest ...
+[ INFO][1555643735.206611]getThreadControlBlock at 5
+[ INFO][1555643735.206785]setCurLine Failed to 0
+[ INFO][1555643735.206877]setProgMode to 1 at 0
+[ INFO][1555643735.206901]setProgramName to functiontest at 1
+[ INFO][1555643735.207200]setPrgmState to 2 at 1
+[ INFO][1555643735.207252]Enter call_interpreter.
+[ INFO][1555643735.207305]objThreadCntrolBlock->p_buf = 00216E78
+[ INFO][1555643735.321451]get_user_opmode = 1 before 
+[ INFO][1555643735.333262]get_user_opmode = 3 after 
+[ INFO][1555643735.333441]get_user_opmode = 3 and skip check_home_pose
+[ INFO][1555643735.334493]Execute call_interpreter begin at call_interpreter.
+[ INFO][1555643735.334557]calc_line_from_prog get 1 at (00216E78, 00216E80) 
+[ INFO][1555643735.334584]	(0X00216E78 - 0X00216E84)(0): () at 0X00216E83(5)
+[ INFO][1555643735.334700]Start Interaptor : Line number = 1 
+[ INFO][1555643735.334719]interpreterState is PAUSED_R with 2.
+[ INFO][1555643735.874653]parseCtrlComand at 6 
+[ INFO][1555643735.883501]parseCtrlComand: 6
+[ INFO][1555643735.883630]getThreadControlBlock at 5
+[ INFO][1555643735.883663]continue move..
+[ INFO][1555643735.883682]setPrgmState to 1 at 1
+[ INFO][1555643735.883699]setProgMode to 0 at 1
+[ INFO][1555643736.334821]interpreterState is PAUSED_R with 2.
+[ INFO][1555643737.354338]calc_line_from_prog get 2 at (00216E84, 00216E78) 
+[ INFO][1555643737.354407]	(0X00216E84 - 0X00216E95)(1): (    WHILE 1 = 1 ) at 0X00216E84(5)
+[ INFO][1555643737.354437]objThreadCntrolBlock->token_type = 1 at line 2 
+[ INFO][1555643737.354456]setLinenum : 2 at the 5th thread
+[ INFO][1555643737.354475]setLinenum: setCurLine (2) at functiontest:/prog/prog_body/function/body/logical/determine
+[ INFO][1555643737.568218]calc_line_from_prog get 2 at (00216E84, 00216E78) 
+[ INFO][1555643737.568493]	(0X00216E84 - 0X00216E95)(2): ( 1 = 1 ) at 0X00216E8D(5)
+[ INFO][1555643737.568526]objThreadCntrolBlock->token_type = 4 at line 2 
+[ INFO][1555643737.568546]setLinenum : 2 at the 5th thread
+[ INFO][1555643737.568565]setLinenum: setCurLine (2) at functiontest:/prog/prog_body/function/body/logical/determine
+[ INFO][1555643737.578419]calc_line_from_prog get 3 at (00216E95, 00216E84) 
+[ INFO][1555643737.578617]	(0X00216E95 - 0X00216EB5)(2): ( P[1], 100 CNT -1 ) at 0X00216EA2(5)
+[ INFO][1555643737.578651]objThreadCntrolBlock->token_type = 7 at line 3 
+[ INFO][1555643737.578686]setLinenum : 3 at the 5th thread
+[ INFO][1555643737.578706]setLinenum: setCurLine (3) at functiontest:/prog/prog_body/function/body/logical/logical_body/instruction[1]
+[ INFO][1555643737.578729]calc_line_from_prog get 3 at (00216E95, 00216E84) 
+[ INFO][1555643737.578751]	(0X00216E95 - 0X00216EB5)(3): ( P[1], 100 CNT -1 ) at 0X00216EA2(5)
+[ INFO][1555643737.578970]call_internal_cmd execution : movej at 1, iLineNum = 3
+[ INFO][1555643737.578999]	(0X00216EB5 - 0X00216ED5)(3): ( P[1], 100 CNT -1 ) at 0X00216EA2(5)
+[ INFO][1555643737.811288]call_MoveJ Run XPATH: 3: functiontest:/prog/prog_body/function/body/logical/logical_body/instruction[1]
+[ INFO][1555643737.811762]call_MoveJ XPATH without movCmdDst
+[ERROR][1555643737.811897]not defined variable (p[1]).
+[ INFO][1555643737.811923]-----------------ERR:4----------------------
+[ INFO][1555643737.811942]	 NOTICE : 4 -  1000900aa0005(not a variable)
+[ INFO][1555643737.811965]-----------------ERR:4----------------------
+[ INFO][1555643737.812016]setProgMode to 2 at 1
+[ INFO][1555643737.812042]call_MoveJ value.getType() = 0
+[ INFO][1555643737.821541]calc_line_from_prog get 4 at (00216EB5, 00216E95) 
+[ INFO][1555643737.821586]	(0X00216EB5 - 0X00216ED5)(3): (        MOVEJ P[2], 100 CNT -1 ) at 0X00216EB5(5)
+[ERROR][1555643737.821615]objThreadCntrolBlock crash at line 4 
+[ INFO][1555643737.821633]Execute call_interpreter over at call_interpreter.
+[ INFO][1555643737.821707]free(objThreadCntrolBlock->p_buf);
+[ INFO][1555643737.821731]free(objThreadCntrolBlock->instrSet);
+[ INFO][1555643737.821749]free(objThreadCntrolBlock->instrSet);
+[ INFO][1555643737.821766]free(objThreadCntrolBlock->iSubProgNum);
+[ INFO][1555643737.821798]return 0
+[ INFO][1555643737.821837]Left  call_interpreter.
+[ INFO][1555643737.821857]setPrgmState to 0 at 1
+[ INFO][1555643737.821874]setProgramName to  at 1
+[ INFO][1555643737.821892]Enter pthread_join.
+[ INFO][1555643737.821908]Left  pthread_join.
+[ INFO][1555643737.833009]parseCtrlComand at 7 
+[ INFO][1555643737.843218]parseCtrlComand: 7
+[ERROR][1555643737.843266]abort motion
+[ INFO][1555643737.843285]getThreadControlBlock at 5
+[ INFO][1555643737.843333]set abort motion flag.
+[ INFO][1555643737.843432]reset prog position.
+[ INFO][1555643737.843455]setPrgmState to 103 at 1
+[ INFO][1555643737.844600]setPrgmState(IDLE_R).
+[ INFO][1555643737.844668]setPrgmState to 0 at 1
+[ INFO][1555643737.844689]reset ProgramName And LineNum.
+[ INFO][1555643800. 79991]parseCtrlComand at 1 
+[ INFO][1555643800. 88902]parseCtrlComand: 1
+[ INFO][1555643800. 89018]start debug functiontest ...
+[ INFO][1555643800. 89040]getThreadControlBlock at 6
+[ INFO][1555643800. 89235]setCurLine Failed to 0
+[ INFO][1555643800. 89271]setProgMode to 1 at 0
+[ INFO][1555643800. 89291]setProgramName to functiontest at 1
+[ INFO][1555643800. 89517]setPrgmState to 2 at 1
+[ INFO][1555643800. 89569]Enter call_interpreter.
+[ INFO][1555643800.109588]objThreadCntrolBlock->p_buf = 00216E78
+[ INFO][1555643800.199635]get_user_opmode = 1 before 
+[ INFO][1555643800.212676]get_user_opmode = 3 after 
+[ INFO][1555643800.212925]get_user_opmode = 3 and skip check_home_pose
+[ INFO][1555643800.219332]Execute call_interpreter begin at call_interpreter.
+[ INFO][1555643800.219382]calc_line_from_prog get 1 at (00216E78, 00216E80) 
+[ INFO][1555643800.219948]	(0X00216E78 - 0X00216E84)(0): () at 0X00216E83(6)
+[ INFO][1555643800.219978]Start Interaptor : Line number = 1 
+[ INFO][1555643800.219997]interpreterState is PAUSED_R with 2.
+[ INFO][1555643801.105883]parseCtrlComand at 6 
+[ INFO][1555643801.114990]parseCtrlComand: 6
+[ INFO][1555643801.115037]getThreadControlBlock at 6
+[ INFO][1555643801.115056]continue move..
+[ INFO][1555643801.115073]setPrgmState to 1 at 1
+[ INFO][1555643801.115089]setProgMode to 0 at 1
+[ INFO][1555643801.232962]interpreterState is PAUSED_R with 2.
+[ INFO][1555643802.337361]calc_line_from_prog get 2 at (00216E84, 00216E78) 
+[ INFO][1555643802.337986]	(0X00216E84 - 0X00216E95)(1): (    WHILE 1 = 1 ) at 0X00216E84(6)
+[ INFO][1555643802.338024]objThreadCntrolBlock->token_type = 1 at line 2 
+[ INFO][1555643802.338044]setLinenum : 2 at the 6th thread
+[ INFO][1555643802.338063]setLinenum: setCurLine (2) at functiontest:/prog/prog_body/function/body/logical/determine
+[ INFO][1555643802.347559]calc_line_from_prog get 2 at (00216E84, 00216E78) 
+[ INFO][1555643802.347697]	(0X00216E84 - 0X00216E95)(2): ( 1 = 1 ) at 0X00216E8D(6)
+[ INFO][1555643802.347731]objThreadCntrolBlock->token_type = 4 at line 2 
+[ INFO][1555643802.347896]setLinenum : 2 at the 6th thread
+[ INFO][1555643802.347916]setLinenum: setCurLine (2) at functiontest:/prog/prog_body/function/body/logical/determine
+[ INFO][1555643802.368101]calc_line_from_prog get 3 at (00216E95, 00216E84) 
+[ INFO][1555643802.368156]	(0X00216E95 - 0X00216EB6)(2): ( PR[1], 100 CNT -1 ) at 0X00216EA2(6)
+[ INFO][1555643802.368183]objThreadCntrolBlock->token_type = 7 at line 3 
+[ INFO][1555643802.368203]setLinenum : 3 at the 6th thread
+[ INFO][1555643802.368221]setLinenum: setCurLine (3) at functiontest:/prog/prog_body/function/body/logical/logical_body/instruction[1]
+[ INFO][1555643802.368243]calc_line_from_prog get 3 at (00216E95, 00216E84) 
+[ INFO][1555643802.368337]	(0X00216E95 - 0X00216EB6)(3): ( PR[1], 100 CNT -1 ) at 0X00216EA2(6)
+[ INFO][1555643802.368366]call_internal_cmd execution : movej at 1, iLineNum = 3
+[ INFO][1555643802.368387]	(0X00216EB6 - 0X00216ED7)(3): ( PR[1], 100 CNT -1 ) at 0X00216EA2(6)
+[ INFO][1555643802.593768]call_MoveJ Run XPATH: 3: functiontest:/prog/prog_body/function/body/logical/logical_body/instruction[1]
+[ INFO][1555643802.593807]call_MoveJ XPATH without movCmdDst
+[ INFO][1555643802.593936]find_var vname = pr[1] .
+[ INFO][1555643802.593964]forgesight_registers_manager_get_register at pr[1] 
+[ INFO][1555643802.615751]getPrReg: id = (419.591842, -15.593196, 690.101144, 0.243132, -0.885640, 2.951907) at 1 with TRUE 
+[ INFO][1555643802.615830]getPrReg: id = (419.591842, -15.593196, 690.101144, 0.243132, -0.885640, 2.951907) at 1 with TRUE 
+[ INFO][1555643802.615914]call_MoveJ value.getType() = 64
+[ INFO][1555643802.616043]TYPE_PR: Forward move to JOINT:(419.591842, -15.593196, 690.101144, 0.243132, -0.885640, 2.951907) in MovJ
+[ INFO][1555643802.616128]get_token =  '100.000000'
+[ INFO][1555643802.616174]instr.target.cnt = -1.000000 in the FINE.
+[ INFO][1555643802.616204]call_MoveJ instr.target.cnt = -1.000000 setInstruction.
+[ INFO][1555643802.616226]setInstruction:: instr.target.cnt = -1.000000 .
+[ INFO][1555643802.842730]parseCtrlComand at 7 
+[ INFO][1555643802.853012]parseCtrlComand: 7
+[ERROR][1555643802.853060]abort motion
+[ INFO][1555643802.853079]getThreadControlBlock at 6
+[ INFO][1555643802.853097]set abort motion flag.
+[ INFO][1555643802.853113]reset prog position.
+[ INFO][1555643802.853128]setPrgmState to 103 at 1
+[ INFO][1555643802.854252]setPrgmState(IDLE_R).
+[ INFO][1555643802.854301]setPrgmState to 0 at 1
+[ INFO][1555643802.854351]reset ProgramName And LineNum.
+[ INFO][1555643802.865943]wait ctrl_status.is_permitted == false
+[ INFO][1555643802.865992]ctrl_status.is_permitted == true
+[ INFO][1555643802.877037]objThreadCntrolBlock->is_abort == true.
+[ INFO][1555643802.877080]call_interpreter execution over
+[ INFO][1555643802.877098]Execute call_interpreter over at call_interpreter.
+[ INFO][1555643802.877117]free(objThreadCntrolBlock->p_buf);
+[ INFO][1555643802.877154]free(objThreadCntrolBlock->instrSet);
+[ INFO][1555643802.877172]free(objThreadCntrolBlock->instrSet);
+[ INFO][1555643802.877189]free(objThreadCntrolBlock->iSubProgNum);
+[ INFO][1555643802.877221]return 0
+[ INFO][1555643802.877239]Left  call_interpreter.
+[ INFO][1555643802.877256]setPrgmState to 0 at 1
+[ INFO][1555643802.877293]setProgramName to  at 1
+[ INFO][1555643802.877312]Enter pthread_join.
+[ INFO][1555643802.877330]Left  pthread_join.

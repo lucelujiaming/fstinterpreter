@@ -81,57 +81,6 @@ bool reg_manager_interface_setMH(int *ptr, uint16_t num);
 bool reg_manager_interface_getValueMH(int *ptr, uint16_t num);
 bool reg_manager_interface_setValueMH(int *ptr, uint16_t num);
 
-/**********************
- ********* UF *********
- **********************/
-bool reg_manager_interface_getUf(void *ptr, uint16_t num);
-bool reg_manager_interface_setUf(void *ptr, uint16_t num);
-
-bool reg_manager_interface_getCoordinateUf(void *ptr, uint16_t num);
-bool reg_manager_interface_setCoordinateUf(void *ptr, uint16_t num);
-
-bool reg_manager_interface_getIdUf(int *ptr, uint16_t num);
-bool reg_manager_interface_setIdUf(int *ptr, uint16_t num);
-
-bool reg_manager_interface_getCommentUf(char *ptr, uint16_t num);
-bool reg_manager_interface_setCommentUf(char *ptr, uint16_t num);
-
-/**********************
- ********* TF *********
- **********************/
-bool reg_manager_interface_getTf(void *ptr, uint16_t num);
-bool reg_manager_interface_setTf(void *ptr, uint16_t num);
-
-bool reg_manager_interface_getCoordinateTf(void *ptr, uint16_t num);
-bool reg_manager_interface_setCoordinateTf(void *ptr, uint16_t num);
-
-bool reg_manager_interface_getIdTf(int *ptr, uint16_t num);
-bool reg_manager_interface_setIdTf(int *ptr, uint16_t num);
-
-bool reg_manager_interface_getCommentTf(char *ptr, uint16_t num);
-bool reg_manager_interface_setCommentTf(char *ptr, uint16_t num);
-
-/**********************
- ********* PL *********
- **********************/
-bool reg_manager_interface_getPl(void *ptr, uint16_t num);
-bool reg_manager_interface_setPl(void *ptr, uint16_t num);
-
-bool reg_manager_interface_getPosePl(PoseEuler* pose, int index);
-bool reg_manager_interface_setPosePl(PoseEuler* pose, int index);
-
-bool reg_manager_interface_getPalletPl(pl_t *ptr, uint16_t num);
-bool reg_manager_interface_setPalletPl(pl_t *ptr, uint16_t num);
-
-bool reg_manager_interface_getFlagPl(int *ptr, uint16_t num);
-bool reg_manager_interface_setFlagPl(int *ptr, uint16_t num);
-
-bool reg_manager_interface_getIdPl(int *ptr, uint16_t num);
-bool reg_manager_interface_setIdPl(int *ptr, uint16_t num);
-
-bool reg_manager_interface_getCommentPl(char *ptr, uint16_t num);
-bool reg_manager_interface_setCommentPl(char *ptr, uint16_t num);
-
 std::vector<BaseRegData> reg_manager_interface_read_valid_pr_lst(int start_id, int size);
 std::vector<BaseRegData> reg_manager_interface_read_valid_sr_lst(int start_id, int size);
 std::vector<BaseRegData> reg_manager_interface_read_valid_r_lst(int start_id, int size);
@@ -142,5 +91,6 @@ bool reg_manager_interface_getJoint(Joint &joint);
 bool reg_manager_interface_getCart(PoseEuler &pos);
 bool reg_manager_interface_cartToJoint(PoseEuler pos, Joint &joint);
 bool reg_manager_interface_jointToCart(Joint joint, PoseEuler &pos);
+bool reg_manager_interface_getUserOpMode(int& mode);
 
 #endif

@@ -265,6 +265,7 @@ bool reg_manager_interface_setPosePr(PoseEuler *ptr, uint16_t num)
 	{
 		PrRegDataIpc objPrRegDataIpc ;
 		objPrRegDataIpc.id     = num ;
+        objPrRegDataIpc.value.pos_type     = PR_REG_POS_TYPE_CARTESIAN ;
 #ifndef WIN32
 		objPrRegDataIpc.value.pos[0] = ptr->point_.x_   ;
 		objPrRegDataIpc.value.pos[1] = ptr->point_.y_   ;
@@ -360,6 +361,7 @@ bool reg_manager_interface_setJointPr(Joint *ptr, uint16_t num)
 		bRet = g_objRegManagerInterface->getPrReg(num, &objPrRegDataIpc);
 		if(bRet)
 		{
+            objPrRegDataIpc.value.pos_type     = PR_REG_POS_TYPE_JOINT;
 #ifndef WIN32 
 			objPrRegDataIpc.value.pos[0] = ptr->j1_;
 			objPrRegDataIpc.value.pos[1] = ptr->j2_;
@@ -1083,155 +1085,6 @@ bool reg_manager_interface_setValueMH(int *ptr, uint16_t num)
 	return bRet ;
 }
 
-/**********************
- ********* UF *********
- **********************/
-bool reg_manager_interface_getUf(void *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_setUf(void *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_getCoordinateUf(void *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_setCoordinateUf(void *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_getIdUf(int *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_setIdUf(int *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_getCommentUf(char *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_setCommentUf(char *ptr, uint16_t num)
-{
-	return true ;
-}
-
-/**********************
- ********* TF *********
- **********************/
-bool reg_manager_interface_getTf(void *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_setTf(void *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_getCoordinateTf(void *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_setCoordinateTf(void *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_getIdTf(int *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_setIdTf(int *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_getCommentTf(char *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_setCommentTf(char *ptr, uint16_t num)
-{
-	return true ;
-}
-
-/**********************
- ********* PL *********
- **********************/
-bool reg_manager_interface_getPl(void *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_setPl(void *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_getPosePl(PoseEuler* pose, int index)
-{
-	return true ;
-}
-
-bool reg_manager_interface_setPosePl(PoseEuler* pose, int index)
-{
-	return true ;
-}
-
-bool reg_manager_interface_getPalletPl(pl_t *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_setPalletPl(pl_t *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_getFlagPl(int *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_setFlagPl(int *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_getIdPl(int *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_setIdPl(int *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_getCommentPl(char *ptr, uint16_t num)
-{
-	return true ;
-}
-
-bool reg_manager_interface_setCommentPl(char *ptr, uint16_t num)
-{
-	return true ;
-}
-
 std::vector<BaseRegData> reg_manager_interface_read_valid_pr_lst(int start_id, int size)
 {
     std::vector<BaseRegData> vecRet ;
@@ -1407,6 +1260,28 @@ bool reg_manager_interface_jointToCart(Joint joint, PoseEuler &pos)
 	if(g_objRegManagerInterface)
 	{
 		bRet = g_objRegManagerInterface->jointToCart(joint, pos);
+		if(bRet)
+		{
+			return bRet ;
+		}
+	}
+	else
+	{
+		FST_ERROR("g_objRegManagerInterface is NULL");
+	}
+#else
+	bRet = true ;
+#endif
+	return true ;
+}
+
+bool reg_manager_interface_getUserOpMode(int& mode)
+{
+	bool bRet = false ;
+#ifndef WIN32
+	if(g_objRegManagerInterface)
+	{
+		bRet = g_objRegManagerInterface->getUserOpMode(mode);
 		if(bRet)
 		{
 			return bRet ;

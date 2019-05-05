@@ -1,0 +1,7 @@
+001:MvL:/prog/prog_body/function
+002:MvL:/prog/prog_body/function/body/instruction[1]
+003:MvL:/prog/prog_body/function/body/instruction[2]
+004:MvL:/prog/prog_body/function/body/instruction[3]
+005:MvL:/prog/prog_body/function/body/instruction[4]
+006:MvL:/prog/prog_body/function/body/end
+007:MvL:/prog/prog_body/function

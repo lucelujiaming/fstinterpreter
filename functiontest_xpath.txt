@@ -1,0 +1,8 @@
+001:functiontest:/prog/prog_body/function
+002:functiontest:/prog/prog_body/function/body/logical/determine
+003:functiontest:/prog/prog_body/function/body/logical/logical_body/instruction[1]
+004:functiontest:/prog/prog_body/function/body/logical/logical_body/instruction[2]
+005:functiontest:/prog/prog_body/function/body/logical/logical_body/instruction[3]
+006:functiontest:/prog/prog_body/function/body/logical
+007:functiontest:/prog/prog_body/function/body/end
+008:functiontest:/prog/prog_body/function

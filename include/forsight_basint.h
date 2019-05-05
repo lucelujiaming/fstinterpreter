@@ -141,7 +141,7 @@ struct thread_control_block {
 	vector<var_type> local_var_stack;
 	
 	// Stack for managing function scope.
-	stack<int> func_call_stack;
+	std::stack<int> func_call_stack;
 	
 	int g_variable_error ; // = 0 ;
 	char *p_buf;		// program buffer

@@ -1,0 +1,19 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(044)/prog/prog_body/function/body/instruction[1]                                                            MOVEJ P[1], 100 CNT -1 
+EXPORT: (003)(044)/prog/prog_body/function/body/instruction[2]                                                            MOVEJ P[2], 2 CNT -1 
+EXPORT: (004)(044)/prog/prog_body/function/body/instruction[3]                                                            MOVEJ P[3], 100 CNT -1 
+EXPORT: (005)(044)/prog/prog_body/function/body/instruction[4]                                                            MOVEJ P[4], 1 CNT -1 
+EXPORT: (006)(044)/prog/prog_body/function/body/instruction[5]                                                            MOVEJ P[5], 100 CNT -1 
+EXPORT: (007)(044)/prog/prog_body/function/body/instruction[6]                                                            MOVEL P[1], 2000 CNT -1 
+EXPORT: (008)(044)/prog/prog_body/function/body/instruction[7]                                                            MOVEL P[2], 5 CNT -1 
+EXPORT: (009)(044)/prog/prog_body/function/body/instruction[8]                                                            MOVEL P[3], 2000 CNT -1 
+EXPORT: (010)(044)/prog/prog_body/function/body/instruction[9]                                                            MOVEL P[4], 3 CNT -1 
+EXPORT: (011)(045)/prog/prog_body/function/body/instruction[10]                                                           MOVEL P[5], 2000 CNT -1 
+EXPORT: (012)(045)/prog/prog_body/function/body/instruction[11]                                                           MOVEJ P[6], 100 CNT -1 
+EXPORT: (013)(045)/prog/prog_body/function/body/instruction[12]                                                           MOVEC P[7], P[8], 2000 CNT -1 
+EXPORT: (014)(045)/prog/prog_body/function/body/instruction[13]                                                           MOVEC P[9], P[6], 3 CNT -1 
+EXPORT: (015)(045)/prog/prog_body/function/body/instruction[14]                                                           MOVEL P[10], 4000 CNT -1 
+EXPORT: (016)(045)/prog/prog_body/function/body/instruction[15]                                                           MOVEC P[11], P[12], 3 CNT -1 
+EXPORT: (017)(045)/prog/prog_body/function/body/instruction[16]                                                           MOVEC P[9], P[11], 1000 CNT -1 
+EXPORT: (018)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (019)(024)/prog/prog_body/function                                                                            END SUB 

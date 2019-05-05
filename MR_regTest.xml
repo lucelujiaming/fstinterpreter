@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<prog>
+  <head/>
+  <prog_body>
+    <function name="main">
+      <body>
+        <comment>MR[x] calculation test</comment>
+        <assignment type="assignment">
+          <lvalue>
+            <element type="motion_register">
+              <element type="num">1</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="num">11</element>
+          </rvalue>
+        </assignment>
+        <assignment type="assignment">
+          <lvalue>
+            <element type="motion_register">
+              <element type="num">2</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="string">66.66running</element>
+          </rvalue>
+        </assignment>
+        <assignment type="assignment">
+          <lvalue>
+            <element type="motion_register">
+              <element type="num">3</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="register">
+              <element type="num">1</element>
+            </element>
+          </rvalue>
+        </assignment>
+        <end name="prog"/>
+      </body>
+    </function>
+  </prog_body>
+</prog>

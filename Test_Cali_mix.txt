@@ -1,0 +1,103 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(044)/prog/prog_body/function/body/instruction[1]                                                            MOVEJ P[100], 50 CNT -1 
+EXPORT: (003)(044)/prog/prog_body/function/body/instruction[2]                                                            WAIT  R[3]
+EXPORT: (004)(044)/prog/prog_body/function/body/instruction[3]                                                            MOVEJ P[101], 50 CNT -1 
+EXPORT: (005)(044)/prog/prog_body/function/body/instruction[4]                                                            WAIT  R[3]
+EXPORT: (006)(044)/prog/prog_body/function/body/instruction[5]                                                            MOVEJ P[102], 50 CNT -1 
+EXPORT: (007)(044)/prog/prog_body/function/body/instruction[6]                                                            WAIT  R[3]
+EXPORT: (008)(044)/prog/prog_body/function/body/instruction[7]                                                            MOVEJ P[103], 50 CNT -1 
+EXPORT: (009)(044)/prog/prog_body/function/body/instruction[8]                                                            WAIT  R[3]
+EXPORT: (010)(044)/prog/prog_body/function/body/instruction[9]                                                            MOVEJ P[104], 50 CNT -1 
+EXPORT: (011)(045)/prog/prog_body/function/body/instruction[10]                                                           WAIT  R[3]
+EXPORT: (012)(045)/prog/prog_body/function/body/instruction[11]                                                           MOVEJ P[105], 50 CNT -1 
+EXPORT: (013)(045)/prog/prog_body/function/body/instruction[12]                                                           WAIT  R[3]
+EXPORT: (014)(045)/prog/prog_body/function/body/instruction[13]                                                           MOVEJ P[106], 50 CNT -1 
+EXPORT: (015)(045)/prog/prog_body/function/body/instruction[14]                                                           WAIT  R[3]
+EXPORT: (016)(045)/prog/prog_body/function/body/instruction[15]                                                           MOVEJ P[107], 50 CNT -1 
+EXPORT: (017)(045)/prog/prog_body/function/body/instruction[16]                                                           WAIT  R[3]
+EXPORT: (018)(045)/prog/prog_body/function/body/instruction[17]                                                           MOVEJ P[108], 50 CNT -1 
+EXPORT: (019)(045)/prog/prog_body/function/body/instruction[18]                                                           WAIT  R[3]
+EXPORT: (020)(045)/prog/prog_body/function/body/instruction[19]                                                           MOVEJ P[109], 50 CNT -1 
+EXPORT: (021)(045)/prog/prog_body/function/body/instruction[20]                                                           WAIT  R[3]
+EXPORT: (022)(045)/prog/prog_body/function/body/instruction[21]                                                           MOVEJ P[110], 50 CNT -1 
+EXPORT: (023)(045)/prog/prog_body/function/body/instruction[22]                                                           WAIT  R[3]
+EXPORT: (024)(045)/prog/prog_body/function/body/instruction[23]                                                           MOVEJ P[111], 50 CNT -1 
+EXPORT: (025)(045)/prog/prog_body/function/body/instruction[24]                                                           WAIT  R[3]
+EXPORT: (026)(045)/prog/prog_body/function/body/instruction[25]                                                           MOVEJ P[112], 50 CNT -1 
+EXPORT: (027)(045)/prog/prog_body/function/body/instruction[26]                                                           WAIT  R[3]
+EXPORT: (028)(045)/prog/prog_body/function/body/instruction[27]                                                           MOVEJ P[113], 50 CNT -1 
+EXPORT: (029)(045)/prog/prog_body/function/body/instruction[28]                                                           WAIT  R[3]
+EXPORT: (030)(045)/prog/prog_body/function/body/instruction[29]                                                           MOVEJ P[114], 50 CNT -1 
+EXPORT: (031)(045)/prog/prog_body/function/body/instruction[30]                                                           WAIT  R[3]
+EXPORT: (032)(045)/prog/prog_body/function/body/instruction[31]                                                           MOVEJ P[115], 50 CNT -1 
+EXPORT: (033)(045)/prog/prog_body/function/body/instruction[32]                                                           WAIT  R[3]
+EXPORT: (034)(045)/prog/prog_body/function/body/instruction[33]                                                           MOVEJ P[116], 50 CNT -1 
+EXPORT: (035)(045)/prog/prog_body/function/body/instruction[34]                                                           WAIT  R[3]
+EXPORT: (036)(045)/prog/prog_body/function/body/instruction[35]                                                           MOVEJ P[117], 50 CNT -1 
+EXPORT: (037)(045)/prog/prog_body/function/body/instruction[36]                                                           WAIT  R[3]
+EXPORT: (038)(045)/prog/prog_body/function/body/instruction[37]                                                           MOVEJ P[118], 50 CNT -1 
+EXPORT: (039)(045)/prog/prog_body/function/body/instruction[38]                                                           WAIT  R[3]
+EXPORT: (040)(045)/prog/prog_body/function/body/instruction[39]                                                           MOVEJ P[119], 50 CNT -1 
+EXPORT: (041)(045)/prog/prog_body/function/body/instruction[40]                                                           WAIT  R[3]
+EXPORT: (042)(045)/prog/prog_body/function/body/instruction[41]                                                           MOVEJ P[120], 50 CNT -1 
+EXPORT: (043)(045)/prog/prog_body/function/body/instruction[42]                                                           WAIT  R[3]
+EXPORT: (044)(045)/prog/prog_body/function/body/instruction[43]                                                           MOVEJ P[121], 50 CNT -1 
+EXPORT: (045)(045)/prog/prog_body/function/body/instruction[44]                                                           WAIT  R[3]
+EXPORT: (046)(045)/prog/prog_body/function/body/instruction[45]                                                           MOVEJ P[122], 50 CNT -1 
+EXPORT: (047)(045)/prog/prog_body/function/body/instruction[46]                                                           WAIT  R[3]
+EXPORT: (048)(045)/prog/prog_body/function/body/instruction[47]                                                           MOVEJ P[123], 50 CNT -1 
+EXPORT: (049)(045)/prog/prog_body/function/body/instruction[48]                                                           WAIT  R[3]
+EXPORT: (050)(045)/prog/prog_body/function/body/instruction[49]                                                           MOVEJ P[124], 50 CNT -1 
+EXPORT: (051)(045)/prog/prog_body/function/body/instruction[50]                                                           WAIT  R[3]
+EXPORT: (052)(045)/prog/prog_body/function/body/instruction[51]                                                           MOVEJ P[125], 50 CNT -1 
+EXPORT: (053)(045)/prog/prog_body/function/body/instruction[52]                                                           WAIT  R[3]
+EXPORT: (054)(045)/prog/prog_body/function/body/instruction[53]                                                           MOVEJ P[126], 50 CNT -1 
+EXPORT: (055)(045)/prog/prog_body/function/body/instruction[54]                                                           WAIT  R[3]
+EXPORT: (056)(045)/prog/prog_body/function/body/instruction[55]                                                           MOVEJ P[127], 50 CNT -1 
+EXPORT: (057)(045)/prog/prog_body/function/body/instruction[56]                                                           WAIT  R[3]
+EXPORT: (058)(045)/prog/prog_body/function/body/instruction[57]                                                           MOVEJ P[128], 50 CNT -1 
+EXPORT: (059)(045)/prog/prog_body/function/body/instruction[58]                                                           WAIT  R[3]
+EXPORT: (060)(045)/prog/prog_body/function/body/instruction[59]                                                           MOVEJ P[129], 50 CNT -1 
+EXPORT: (061)(045)/prog/prog_body/function/body/instruction[60]                                                           WAIT  R[3]
+EXPORT: (062)(045)/prog/prog_body/function/body/instruction[61]                                                           MOVEJ P[130], 50 CNT -1 
+EXPORT: (063)(045)/prog/prog_body/function/body/instruction[62]                                                           WAIT  R[3]
+EXPORT: (064)(045)/prog/prog_body/function/body/instruction[63]                                                           MOVEJ P[131], 50 CNT -1 
+EXPORT: (065)(045)/prog/prog_body/function/body/instruction[64]                                                           WAIT  R[3]
+EXPORT: (066)(045)/prog/prog_body/function/body/instruction[65]                                                           MOVEJ P[132], 50 CNT -1 
+EXPORT: (067)(045)/prog/prog_body/function/body/instruction[66]                                                           WAIT  R[3]
+EXPORT: (068)(045)/prog/prog_body/function/body/instruction[67]                                                           MOVEJ P[133], 50 CNT -1 
+EXPORT: (069)(045)/prog/prog_body/function/body/instruction[68]                                                           WAIT  R[3]
+EXPORT: (070)(045)/prog/prog_body/function/body/instruction[69]                                                           MOVEJ P[134], 50 CNT -1 
+EXPORT: (071)(045)/prog/prog_body/function/body/instruction[70]                                                           WAIT  R[3]
+EXPORT: (072)(045)/prog/prog_body/function/body/instruction[71]                                                           MOVEJ P[135], 50 CNT -1 
+EXPORT: (073)(045)/prog/prog_body/function/body/instruction[72]                                                           WAIT  R[3]
+EXPORT: (074)(045)/prog/prog_body/function/body/instruction[73]                                                           MOVEJ P[136], 50 CNT -1 
+EXPORT: (075)(045)/prog/prog_body/function/body/instruction[74]                                                           WAIT  R[3]
+EXPORT: (076)(045)/prog/prog_body/function/body/instruction[75]                                                           MOVEJ P[137], 50 CNT -1 
+EXPORT: (077)(045)/prog/prog_body/function/body/instruction[76]                                                           WAIT  R[3]
+EXPORT: (078)(045)/prog/prog_body/function/body/instruction[77]                                                           MOVEJ P[138], 50 CNT -1 
+EXPORT: (079)(045)/prog/prog_body/function/body/instruction[78]                                                           WAIT  R[3]
+EXPORT: (080)(045)/prog/prog_body/function/body/instruction[79]                                                           MOVEJ P[139], 50 CNT -1 
+EXPORT: (081)(045)/prog/prog_body/function/body/instruction[80]                                                           WAIT  R[3]
+EXPORT: (082)(045)/prog/prog_body/function/body/instruction[81]                                                           MOVEJ P[140], 50 CNT -1 
+EXPORT: (083)(045)/prog/prog_body/function/body/instruction[82]                                                           WAIT  R[3]
+EXPORT: (084)(045)/prog/prog_body/function/body/instruction[83]                                                           MOVEJ P[141], 50 CNT -1 
+EXPORT: (085)(045)/prog/prog_body/function/body/instruction[84]                                                           WAIT  R[3]
+EXPORT: (086)(045)/prog/prog_body/function/body/instruction[85]                                                           MOVEJ P[142], 50 CNT -1 
+EXPORT: (087)(045)/prog/prog_body/function/body/instruction[86]                                                           WAIT  R[3]
+EXPORT: (088)(045)/prog/prog_body/function/body/instruction[87]                                                           MOVEJ P[143], 50 CNT -1 
+EXPORT: (089)(045)/prog/prog_body/function/body/instruction[88]                                                           WAIT  R[3]
+EXPORT: (090)(045)/prog/prog_body/function/body/instruction[89]                                                           MOVEJ P[144], 50 CNT -1 
+EXPORT: (091)(045)/prog/prog_body/function/body/instruction[90]                                                           WAIT  R[3]
+EXPORT: (092)(045)/prog/prog_body/function/body/instruction[91]                                                           MOVEJ P[145], 50 CNT -1 
+EXPORT: (093)(045)/prog/prog_body/function/body/instruction[92]                                                           WAIT  R[3]
+EXPORT: (094)(045)/prog/prog_body/function/body/instruction[93]                                                           MOVEJ P[146], 50 CNT -1 
+EXPORT: (095)(045)/prog/prog_body/function/body/instruction[94]                                                           WAIT  R[3]
+EXPORT: (096)(045)/prog/prog_body/function/body/instruction[95]                                                           MOVEJ P[147], 50 CNT -1 
+EXPORT: (097)(045)/prog/prog_body/function/body/instruction[96]                                                           WAIT  R[3]
+EXPORT: (098)(045)/prog/prog_body/function/body/instruction[97]                                                           MOVEJ P[148], 50 CNT -1 
+EXPORT: (099)(045)/prog/prog_body/function/body/instruction[98]                                                           WAIT  R[3]
+EXPORT: (100)(045)/prog/prog_body/function/body/instruction[99]                                                           MOVEJ P[149], 50 CNT -1 
+EXPORT: (101)(046)/prog/prog_body/function/body/instruction[100]                                                          WAIT  R[3]
+EXPORT: (102)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (103)(024)/prog/prog_body/function                                                                            END SUB 

@@ -1,0 +1,25 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(043)/prog/prog_body/function/body/assignment[1]                                                             PR[1]  = P[1]   
+EXPORT: (003)(043)/prog/prog_body/function/body/assignment[2]                                                             PR[2]  = J_POS  
+EXPORT: (004)(043)/prog/prog_body/function/body/assignment[3]                                                             PR[3]  = L_POS  
+EXPORT: (005)(043)/prog/prog_body/function/body/assignment[4]                                                             PR[6]  = PR[1]  + PR[2]   
+EXPORT: (006)(043)/prog/prog_body/function/body/assignment[5]                                                             PR[7]  = PR[1]  - PR[2]   
+EXPORT: (007)(043)/prog/prog_body/function/body/assignment[6]                                                             PR[8]  = PR[R[1] ]   
+EXPORT: (008)(043)/prog/prog_body/function/body/assignment[7]                                                             R[10]  = 10  
+EXPORT: (009)(043)/prog/prog_body/function/body/assignment[8]                                                             R[9]  = 1  
+EXPORT: (010)(043)/prog/prog_body/function/body/assignment[9]                                                             PR[R[10] ].PJ1  = R[1]   
+EXPORT: (011)(044)/prog/prog_body/function/body/assignment[10]                                                            PR[5].PJ6  = 400.68 - R[1]   
+EXPORT: (012)(044)/prog/prog_body/function/body/instruction[1]                                                            MOVEJ PR[1], 100 CNT -1 
+EXPORT: (013)(044)/prog/prog_body/function/body/instruction[2]                                                            MOVEJ PR[2], 5 CNT -1 
+EXPORT: (014)(044)/prog/prog_body/function/body/instruction[3]                                                            MOVEJ PR[1], 5 SV 50 
+EXPORT: (015)(044)/prog/prog_body/function/body/instruction[4]                                                            MOVEJ PR[2], 100 SD 100 
+EXPORT: (016)(044)/prog/prog_body/function/body/instruction[5]                                                            MOVEL PR[3], 1000 CNT -1 
+EXPORT: (017)(044)/prog/prog_body/function/body/instruction[6]                                                            MOVEL PR[4], 8 CNT -1 
+EXPORT: (018)(044)/prog/prog_body/function/body/instruction[7]                                                            MOVEL PR[3], 3 SV 100 
+EXPORT: (019)(044)/prog/prog_body/function/body/instruction[8]                                                            MOVEL PR[4], 2000 SD 75 
+EXPORT: (020)(044)/prog/prog_body/function/body/instruction[9]                                                            MOVEC PR[2], PR[3], 1000 CNT -1 
+EXPORT: (021)(045)/prog/prog_body/function/body/instruction[10]                                                           MOVEC PR[6], PR[7], 10 CNT -1 
+EXPORT: (022)(045)/prog/prog_body/function/body/instruction[11]                                                           MOVEC PR[3], PR[2], 1000 SD 100 
+EXPORT: (023)(045)/prog/prog_body/function/body/instruction[12]                                                           MOVEC PR[6], PR[7], 10 SV 50 
+EXPORT: (024)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (025)(024)/prog/prog_body/function                                                                            END SUB 

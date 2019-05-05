@@ -463,8 +463,9 @@ int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char *
 			for(nodeSubValueElement = nodeValueElement->children; 
 			nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
 				if(xmlStrcasecmp(nodeSubValueElement->name,BAD_CAST"element")==0){ 
-					value = xmlNodeGetContent(nodeSubValueElement);
-					sprintf(label_str, "%s%s[%s] ", label_str, name, (char*)value);
+					memset(label_output, 0x00, 1024);
+					generateElementStr(nodeSubValueElement, objLineInfoTemp, label_output);
+					sprintf(label_str, "%s %s[%s]", label_str, name, (char*)label_output);
 					// toupper
 					string strRet = string(label_str);
 					transform(strRet.begin(), strRet.end(), strRet.begin(), ::toupper);  

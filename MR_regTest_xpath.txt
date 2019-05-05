@@ -1,0 +1,6 @@
+001:MR_regTest:/prog/prog_body/function
+002:MR_regTest:/prog/prog_body/function/body/assignment[1]
+003:MR_regTest:/prog/prog_body/function/body/assignment[2]
+004:MR_regTest:/prog/prog_body/function/body/assignment[3]
+005:MR_regTest:/prog/prog_body/function/body/end
+006:MR_regTest:/prog/prog_body/function

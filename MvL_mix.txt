@@ -1,0 +1,7 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(044)/prog/prog_body/function/body/instruction[1]                                                            MOVEL P[1], 1000 CNT -1 
+EXPORT: (003)(044)/prog/prog_body/function/body/instruction[2]                                                            MOVEL P[2], 200 SD 100 
+EXPORT: (004)(044)/prog/prog_body/function/body/instruction[3]                                                            MOVEL PR[3], 1000 SD 150 
+EXPORT: (005)(044)/prog/prog_body/function/body/instruction[4]                                                            MOVEJ PR[1], 100 CNT -1 
+EXPORT: (006)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (007)(024)/prog/prog_body/function                                                                            END SUB 
