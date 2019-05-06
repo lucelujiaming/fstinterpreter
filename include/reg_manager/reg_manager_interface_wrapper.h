@@ -30,10 +30,10 @@ bool reg_manager_interface_delPr(uint16_t num);
  * The operated object is an individual member of PR.
  */
 bool reg_manager_interface_getPosePr(PoseEuler *ptr, uint16_t num);
-bool reg_manager_interface_setPosePr(PoseEuler *ptr, uint16_t num);
+bool reg_manager_interface_setPosePr(PoseEuler *ptr, Posture *posture, uint16_t num);
 
 bool reg_manager_interface_getJointPr(Joint *ptr, uint16_t num);
-bool reg_manager_interface_setJointPr(Joint *ptr, uint16_t num);
+bool reg_manager_interface_setJointPr(Joint *ptr, Posture *posture, uint16_t num);
 
 /**********************
  ********* SR *********

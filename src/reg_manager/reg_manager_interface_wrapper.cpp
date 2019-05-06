@@ -257,7 +257,7 @@ bool reg_manager_interface_getPosePr(PoseEuler *ptr, uint16_t num)
 	Input:			ptr        -  PoseEuler Data of PR
 	Return: 		1 - success
 *************************************************/
-bool reg_manager_interface_setPosePr(PoseEuler *ptr, uint16_t num)
+bool reg_manager_interface_setPosePr(PoseEuler *ptr, Posture *posture, uint16_t num)
 {
 	bool bRet = false ;
 #ifndef WIN32
@@ -284,6 +284,12 @@ bool reg_manager_interface_setPosePr(PoseEuler *ptr, uint16_t num)
 		objPrRegDataIpc.value.pos[6] = 0.0;
 		objPrRegDataIpc.value.pos[7] = 0.0;
 		objPrRegDataIpc.value.pos[8] = 0.0;
+		
+		objPrRegDataIpc.value.posture[0] = posture->arm ;
+		objPrRegDataIpc.value.posture[1] = posture->elbow ;
+		objPrRegDataIpc.value.posture[2] = posture->wrist ;
+		objPrRegDataIpc.value.posture[3] = posture->flip  ;
+		
 		bRet = g_objRegManagerInterface->setPrReg(&objPrRegDataIpc);
 		FST_INFO("setPr: id = %d (%f, %f, %f, %f, %f, %f) at %d with %s ", num, 
 			objPrRegDataIpc.value.pos[0], objPrRegDataIpc.value.pos[1], 
@@ -351,7 +357,7 @@ bool reg_manager_interface_getJointPr(Joint *ptr, uint16_t num)
 	Input:			ptr        -  Joint Data of PR
 	Return: 		1 - success
 *************************************************/
-bool reg_manager_interface_setJointPr(Joint *ptr, uint16_t num)
+bool reg_manager_interface_setJointPr(Joint *ptr, Posture *posture, uint16_t num)
 {
 	bool bRet = false ;
 #ifndef WIN32
@@ -380,6 +386,12 @@ bool reg_manager_interface_setJointPr(Joint *ptr, uint16_t num)
 			objPrRegDataIpc.value.pos[6] = 0.0;
 			objPrRegDataIpc.value.pos[7] = 0.0;
 			objPrRegDataIpc.value.pos[8] = 0.0;
+			
+			objPrRegDataIpc.value.posture[0] = posture->arm ;
+			objPrRegDataIpc.value.posture[1] = posture->elbow ;
+			objPrRegDataIpc.value.posture[2] = posture->wrist ;
+			objPrRegDataIpc.value.posture[3] = posture->flip  ;
+		
 			bRet = g_objRegManagerInterface->setPrReg(&objPrRegDataIpc);
 		}
 	}

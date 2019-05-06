@@ -573,6 +573,7 @@ int forgesight_registers_manager_set_register(
 	
 	PoseEuler pose ;
 	Joint joint ;
+	Posture posture = {1, 1, -1, 0};
 //	pl_t pltValue ;
 	
 	std::string strValue;
@@ -611,7 +612,8 @@ int forgesight_registers_manager_set_register(
 			}
 			else if (valueStart->getType() == TYPE_POSE)
 			{
-				pose = valueStart->getPoseValue();
+				pose    = valueStart->getPoseValue();
+				posture = valueStart->getPosture();
 				FST_INFO("Set POSE->PR:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
 #ifndef WIN32
 					pose.point_.x_, pose.point_.y_, pose.point_.z_, 
@@ -621,12 +623,13 @@ int forgesight_registers_manager_set_register(
 					pose.orientation.a, pose.orientation.b, pose.orientation.c,
 #endif
 					reg_idx);
-				reg_manager_interface_setPosePr(&pose, iRegIdx);
+				reg_manager_interface_setPosePr(&pose, &posture, iRegIdx);
 				return 0 ;
 			}
 			else if (valueStart->getType() == TYPE_JOINT)
 			{
 				joint = valueStart->getJointValue();
+				posture = valueStart->getPosture();
 				FST_INFO("Set JOINT->PR:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
 #ifndef WIN32
 					joint.j1_, joint.j2_, joint.j3_, joint.j4_, joint.j5_, joint.j6_, 
@@ -634,7 +637,7 @@ int forgesight_registers_manager_set_register(
 					joint.j1, joint.j2, joint.j3, joint.j4, joint.j5, joint.j6, 
 #endif
 					reg_idx);
-				reg_manager_interface_setJointPr(&joint, iRegIdx);
+				reg_manager_interface_setJointPr(&joint, &posture, iRegIdx);
 				return 0 ;
 			}
 	       	return 0 ;
@@ -693,12 +696,13 @@ int forgesight_registers_manager_set_register(
 					pose.orientation.a, pose.orientation.b, pose.orientation.c,
 #endif
 					reg_idx);
-				reg_manager_interface_setPosePr(&pose, iRegIdx);
+				reg_manager_interface_setPosePr(&pose, &posture, iRegIdx);
 	 	      	return 0 ;
 			}
 			else if (valueStart->getType() == TYPE_POSE)
 			{
 				pose = valueStart->getPoseValue();
+				posture = valueStart->getPosture();
 				FST_INFO("Set POSE->POSE:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
 #ifndef WIN32
 					pose.point_.x_, pose.point_.y_, pose.point_.z_, 
@@ -708,7 +712,7 @@ int forgesight_registers_manager_set_register(
 					pose.orientation.a, pose.orientation.b, pose.orientation.c,
 #endif
 					reg_idx);
-				reg_manager_interface_setPosePr(&pose, iRegIdx);
+				reg_manager_interface_setPosePr(&pose, &posture, iRegIdx);
 	    	   	return 0 ;
 			}
 		}
@@ -926,7 +930,7 @@ int forgesight_registers_manager_set_register(
 					joint.j1, joint.j2, joint.j3, joint.j4, joint.j5, joint.j6, 
 #endif
 					reg_idx);
-				reg_manager_interface_setJointPr(&joint, iRegIdx);
+				reg_manager_interface_setJointPr(&joint, &posture, iRegIdx);
 	    	   	return 0 ;
 			}
 			else if (valueStart->getType() == TYPE_JOINT)
@@ -939,7 +943,7 @@ int forgesight_registers_manager_set_register(
 					joint.j1, joint.j2, joint.j3, joint.j4, joint.j5, joint.j6, 
 #endif
 					reg_idx);
-				reg_manager_interface_setJointPr(&joint, iRegIdx);
+				reg_manager_interface_setJointPr(&joint, &posture, iRegIdx);
 	    	  	return 0 ;
 			}
 			

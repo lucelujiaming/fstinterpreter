@@ -3854,6 +3854,7 @@ static int get_char_token(char * src, char * dst)
 void set_var_value(struct thread_control_block * objThreadCntrolBlock, 
 				   char *dst_reg_name, eval_value& valueDst, eval_value& valueSrc)
 {
+	Posture posture = {1, 1, -1, 0};
 	FST_INFO("set_var_value = %s with %04X and %04X", dst_reg_name, valueSrc.getType(), valueDst.getType());
 	if(strcmp(dst_reg_name, "p") == 0) // lvalue is P register
 	{
@@ -3872,6 +3873,11 @@ void set_var_value(struct thread_control_block * objThreadCntrolBlock,
 				pointEulerVal.euler_.a_ = valueSrc.getPrRegDataValue().value.pos[3];
 				pointEulerVal.euler_.b_ = valueSrc.getPrRegDataValue().value.pos[4];
 				pointEulerVal.euler_.c_ = valueSrc.getPrRegDataValue().value.pos[5];
+
+				posture.arm   = valueSrc.getPrRegDataValue().value.posture[0];
+				posture.elbow = valueSrc.getPrRegDataValue().value.posture[1];
+				posture.wrist = valueSrc.getPrRegDataValue().value.posture[2];
+				posture.flip  = valueSrc.getPrRegDataValue().value.posture[3];
 				
 				FST_INFO("set_var_value: id = (%f, %f, %f, %f, %f, %f) ", 
 					valueSrc.getPrRegDataValue().value.pos[0], valueSrc.getPrRegDataValue().value.pos[1], 
@@ -3880,6 +3886,7 @@ void set_var_value(struct thread_control_block * objThreadCntrolBlock,
 #endif
 				//	vt.value = value;
 				valueDst.setPoseValue(&pointEulerVal);
+				valueDst.setPosture(posture);
 			}
 			else if (valueDst.getType() == TYPE_JOINT)
 			{
@@ -3898,18 +3905,26 @@ void set_var_value(struct thread_control_block * objThreadCntrolBlock,
 				jointVal.j4_ = valueSrc.getPrRegDataValue().value.pos[3];
 				jointVal.j5_ = valueSrc.getPrRegDataValue().value.pos[4];
 				jointVal.j6_ = valueSrc.getPrRegDataValue().value.pos[5];
+				
+				posture.arm   = valueSrc.getPrRegDataValue().value.posture[0];
+				posture.elbow = valueSrc.getPrRegDataValue().value.posture[1];
+				posture.wrist = valueSrc.getPrRegDataValue().value.posture[2];
+				posture.flip  = valueSrc.getPrRegDataValue().value.posture[3];
 #endif
 				//	vt.value = value;
 				valueDst.setJointValue(&jointVal);
+				valueDst.setPosture(posture);
 			}
 		}
 		else if (valueSrc.getType() == TYPE_POSE)
 		{
 			valueDst.setPoseValue(&valueSrc.getPoseValue());
+			valueDst.setPosture(valueSrc.getPosture());
 		}
 		else if (valueSrc.getType() == TYPE_JOINT)
 		{
 			valueDst.setJointValue(&valueSrc.getJointValue());
+			valueDst.setPosture(valueSrc.getPosture());
 		}
 	}
 	else
@@ -4136,7 +4151,8 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 	if(!strcmp(vname, FORSIGHT_CURRENT_JOINT))
 	{
 		getMoveCommandDestination(movCmdDst);
-	        value.setJointValue(&movCmdDst.joint_target);
+	    value.setJointValue(&movCmdDst.joint_target);
+	    value.setPosture(movCmdDst.posture);
 		
        //	value.setPrRegDataWithJointValue(&movCmdDst.joint_target);
 		return value ;
@@ -4145,6 +4161,7 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 	{
 		getMoveCommandDestination(movCmdDst);
 		value.setPoseValue(&movCmdDst.pose_target);
+	    value.setPosture(movCmdDst.posture);
 		
 	//	value.setPrRegDataWithPoseEulerValue(&movCmdDst.pose_target);
 		return value ;

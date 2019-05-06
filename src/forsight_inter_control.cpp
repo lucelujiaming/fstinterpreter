@@ -95,17 +95,19 @@ vector<string> split(string str,string pattern)
 *************************************************/ 
 void getMoveCommandDestination(MoveCommandDestination& movCmdDst)
 {
+	  movCmdDst.posture = {1, 1, -1, 0};
 	  forgesight_registers_manager_get_joint(movCmdDst.joint_target);
 	  forgesight_registers_manager_get_cart(movCmdDst.pose_target);
-
-	    FST_INFO("getMoveCommandDestination: Forward movej to TYPE_PR:(%f, %f, %f, %f, %f, %f) ", 
-			movCmdDst.joint_target.j1_, movCmdDst.joint_target.j2_, 
-			movCmdDst.joint_target.j3_, movCmdDst.joint_target.j4_, 
-			movCmdDst.joint_target.j5_, movCmdDst.joint_target.j6_);
-	    FST_INFO("getMoveCommandDestination: Forward movel to POSE:(%f, %f, %f, %f, %f, %f) in MovL", 
-			movCmdDst.pose_target.point_.x_, movCmdDst.pose_target.point_.y_, 
-			movCmdDst.pose_target.point_.z_, movCmdDst.pose_target.euler_.a_, 
+#ifndef WIN32
+	  FST_INFO("getMoveCommandDestination: Forward movej to TYPE_PR:(%f, %f, %f, %f, %f, %f) ", 
+		  movCmdDst.joint_target.j1_, movCmdDst.joint_target.j2_, 
+		  movCmdDst.joint_target.j3_, movCmdDst.joint_target.j4_, 
+		  movCmdDst.joint_target.j5_, movCmdDst.joint_target.j6_);
+	  FST_INFO("getMoveCommandDestination: Forward movel to POSE:(%f, %f, %f, %f, %f, %f) in MovL", 
+		  movCmdDst.pose_target.point_.x_, movCmdDst.pose_target.point_.y_, 
+		  movCmdDst.pose_target.point_.z_, movCmdDst.pose_target.euler_.a_, 
 			movCmdDst.pose_target.euler_.b_, movCmdDst.pose_target.euler_.c_);
+#endif 
 //    readShm(SHM_INTPRT_DST, 0, (void*)&movCmdDst, sizeof(movCmdDst));
 }
 
