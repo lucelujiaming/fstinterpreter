@@ -95,7 +95,9 @@ vector<string> split(string str,string pattern)
 *************************************************/ 
 void getMoveCommandDestination(MoveCommandDestination& movCmdDst)
 {
+#ifndef WIN32
 	  movCmdDst.posture = {1, 1, -1, 0};
+#endif 
 	  forgesight_registers_manager_get_joint(movCmdDst.joint_target);
 	  forgesight_registers_manager_get_cart(movCmdDst.pose_target);
 #ifndef WIN32
@@ -170,6 +172,13 @@ struct thread_control_block *  getThreadControlBlock(bool isUploadError)
 	}
 	else
     {
+    	if(g_basic_interpreter_handle[getCurrentThreadSeq()] != NULL)
+    	{
+        	FST_ERROR("g_basic_interpreter_handle[%d] != NULL", getCurrentThreadSeq());
+			if(isUploadError)
+				setWarning(FAIL_INTERPRETER_DUPLICATE_EXEC_MACRO);
+			return NULL;
+    	}
     	FST_INFO("getThreadControlBlock at %d", getCurrentThreadSeq());
 		return &g_thread_control_block[getCurrentThreadSeq()] ;
 	}
@@ -203,19 +212,6 @@ void incCurrentThreadSeq()
 		g_iCurrentThreadSeq++ ;
 	else
 		g_iCurrentThreadSeq = 0 ;
-}
-
-/************************************************* 
-	Function:		decCurrentThreadSeq
-	Description:	decrement current running thread_control_block index
-	Input:			NULL
-	Return: 		NULL
-*************************************************/ 
-void decCurrentThreadSeq()
-{
-	if(g_iCurrentThreadSeq == 0)
-    	FST_ERROR("g_iCurrentThreadSeq == 0");
-	g_iCurrentThreadSeq-- ;
 }
 
 /************************************************* 
@@ -1116,6 +1112,10 @@ void initInterpreter()
 		"/root/install/share/runtime/interpreter/user_defined_variable.xml", 
 		g_vecKeyVariables);
 #endif
+	for(int iIdx = 0; iIdx < NUM_THREAD + 1; iIdx++)
+	{
+		g_basic_interpreter_handle[iIdx] = NULL;
+	}
 }
 
 /************************************************* 

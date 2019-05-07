@@ -89,7 +89,6 @@ void getMoveCommandDestination(MoveCommandDestination& movCmdDst);
 struct thread_control_block *  getThreadControlBlock(bool isUploadError = true);
 int  getCurrentThreadSeq(bool isUploadError = true);
 void incCurrentThreadSeq();
-void decCurrentThreadSeq();
 
 void updateHomePoseMgr();
 checkHomePoseResult checkSingleHomePoseByCurrentJoint(int idx, Joint currentJoint);
