@@ -33,11 +33,6 @@ using namespace std;
 #define MAX_WAIT_SECOND     30
 
 // bool is_backward= false;
-// InterpreterState prgm_state = INTERPRETER_IDLE;
-// static IntprtStatus intprt_status;
-// static Instruction instruction;
-// static CtrlStatus ctrl_status;
-
 
 // extern jmp_buf e_buf; /* hold environment for longjmp() */
 extern struct thread_control_block g_thread_control_block[NUM_THREAD + 1];
@@ -281,17 +276,6 @@ void setProgMode(struct thread_control_block * objThdCtrlBlockPtr, ProgMode prog
 *************************************************/ 
 void setCurLine(struct thread_control_block * objThdCtrlBlockPtr, char * line, int lineNum)
 {
-// #ifdef WIN32
-//  	Instruction temp,  * tempPtr = &temp;
-//      int offset = (int)&(tempPtr->line) - (int)tempPtr ;
-// #else
-//   // int offset = (int)&intprt_status.line - (int)&intprt_status;
-//      int offset = (int)&((Instruction*)0)->line;   
-// #endif  
-//     FST_INFO("setCurLine %s(%d) at %d", line, strlen(line), offset);
-//  //    writeShm(SHM_INTPRT_STATUS, offset, (void*)&line, sizeof(line));
-//  	writeShm(SHM_INTPRT_STATUS, offset, (void*)line, strlen(line) + 1); 
-
 	if(objThdCtrlBlockPtr->is_main_thread == MAIN_THREAD)
 	{
 		if(objThdCtrlBlockPtr->is_in_macro == false)
@@ -322,11 +306,7 @@ void setWarning(__int64 warn)
 void setWarning(long long int warn)
 #endif  
 {
-#ifdef WIN32
-	IntprtStatus temp,  * tempPtr = &temp;
-    int offset = (int)&(tempPtr->warn) - (int)tempPtr ;
-    writeShm(SHM_INTPRT_STATUS, offset, (void*)&warn, sizeof(warn));
-#else
+#ifndef WIN32
 	g_objInterpreterServer->sendEvent(INTERPRETER_EVENT_TYPE_ERROR, &warn);
 #endif  
 }
@@ -339,32 +319,10 @@ void setWarning(long long int warn)
 *************************************************/ 
 void setMessage(int warn)
 {
-#ifdef WIN32
-	IntprtStatus temp,  * tempPtr = &temp;
-    int offset = (int)&(tempPtr->warn) - (int)tempPtr ;
-    writeShm(SHM_INTPRT_STATUS, offset, (void*)&warn, sizeof(warn));
-#else
+#ifndef WIN32
 	g_objInterpreterServer->sendEvent(INTERPRETER_EVENT_TYPE_MESSAGE, &warn);
 #endif  
 }
-
-/************************************************* 
-	Function:		getUserOpMode (Legacy)
-	Description:	get User Opration Mode
-	Input:			NULL
-	Return: 		User Opration Mode
-*************************************************/ 
-// 	UserOpMode getUserOpMode()
-// 	{
-// 	#ifdef WIN32
-// 		CtrlStatus temp,  * tempPtr = &temp;
-// 		int offset = (int)&(tempPtr->user_op_mode) - (int)tempPtr ;
-// 		readShm(SHM_CTRL_STATUS, offset, (void*)&ctrl_status.user_op_mode, sizeof(ctrl_status.user_op_mode));
-// 	#else
-// 		int offset = (int)&((CtrlStatus*)0)->user_op_mode;
-// 	#endif  
-// 
-// 		return ctrl_status.user_op_mode;
 
 /************************************************* 
 	Function:		setInstruction
@@ -382,43 +340,22 @@ bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instructio
     {
         return false;
     }
-	// Speed up at 0930
-//    ret = g_objRegManagerInterface->isNextInstructionNeeded();
-//    if (ret == false)
- //   {
- //       FST_INFO("not permitted");
- //       return false;
- //   }
-//	// setSendPermission(false);
-	
-//    int count = 0;
-    //FST_INFO("cur state:%d", prgm_state);
-//    if (objThdCtrlBlockPtr->prog_mode == STEP_MODE) 
-//	//	&& (prgm_state == INTERPRETER_EXECUTE_TO_PAUSE))
-//    {
-//		// FST_INFO("cur state:%d in STEP_MODE ", prgm_state);
-//        return false;
-//    }
 
+#ifndef WIN32
     do
     {
 		if (instruction->is_additional == false)
 		{
 	     	FST_INFO("setInstruction:: instr.target.cnt = %f .", instruction->target.cnt);
-#ifndef WIN32
 			ret = g_objRegManagerInterface->setInstruction(instruction);
-#endif
 		}
 		else
 		{
 	     	FST_INFO("setInstruction:: instr.target.cnt = %f .", instruction->target.cnt);
-#ifndef WIN32
 			ret = g_objRegManagerInterface->setInstruction(instruction);
-#endif
 		}
-#ifndef WIN32
+		
 	    if (ret)
-#endif
 	    {
 //	        if (is_backward)
 //	        {
@@ -441,19 +378,11 @@ bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instructio
 	            // setPrgmState(objThreadCntrolBlock, INTERPRETER_EXECUTE_TO_PAUSE);   //wait until this Instruction end
             }
 	    }
-
-#ifdef WIN32
-		Sleep(1);
-		break ;
-#else
         usleep(1000);
-#endif
      //   if (count++ > 500)
      //       return false;
     }while(!ret);
-
-    // Wait until finish 
-#ifndef WIN32
+	
     ret = g_objRegManagerInterface->isNextInstructionNeeded();
     FST_INFO("wait ctrl_status.is_permitted == false");
     while (ret == false)
@@ -466,19 +395,6 @@ bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instructio
 
     return true;
 }
-
-/*
-bool getIntprtCtrl(InterpreterControl& intprt_ctrl)
-{
-    bool iRet = tryRead(SHM_CTRL_CMD, 0, (void*)&intprt_ctrl, sizeof(intprt_ctrl));
-	if(g_lastcmd != intprt_ctrl.cmd)
-    {
-       FST_INFO("getIntprtCtrl = %d", intprt_ctrl.cmd);
-	   g_lastcmd = (fst_base::InterpreterServerCmd)intprt_ctrl.cmd ;
-	}
-	return iRet ;
-}
-*/
 	
 void dealCodeStart(int program_code)
 {
@@ -546,50 +462,6 @@ void startFile(struct thread_control_block * objThdCtrlBlockPtr,
 	basic_thread_create(idx, objThdCtrlBlockPtr);
 	// intprt_ctrl.cmd = LOAD ;
 }
-
-/*
-void waitInterpreterStateleftWaiting(
-	struct thread_control_block * objThdCtrlBlockPtr)
-{
-	InterpreterState interpreterState  = getPrgmState();
-	while(interpreterState == WAITING_R)
-	{
-#ifdef WIN32
-		Sleep(100);
-		interpreterState = EXECUTE_R ;
-#else
-		sleep(1);
-		interpreterState = getPrgmState();
-		if(objThdCtrlBlockPtr->is_abort == true)
-		{
-			// setPrgmState(objThreadCntrolBlock, INTERPRETER_PAUSE_TO_IDLE) ;
-			break;
-		}
-#endif
-	}
-}
-
-void waitInterpreterStateToWaiting(
-	struct thread_control_block * objThdCtrlBlockPtr)
-{
-	InterpreterState interpreterState  = getPrgmState();
-	while(interpreterState != WAITING_R)
-	{
-#ifdef WIN32
-		Sleep(100);
-		// interpreterState = EXECUTE_R ;
-#else
-		sleep(1);
-		interpreterState = getPrgmState();
-		if(objThdCtrlBlockPtr->is_abort == true)
-		{
-			// setPrgmState(objThreadCntrolBlock, INTERPRETER_PAUSE_TO_IDLE) ;
-			break;
-		}
-#endif
-	}
-}	
-*/
 
 /************************************************* 
 	Function:		waitInterpreterStateleftPaused
@@ -676,7 +548,7 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 	g_launch_code_mgr_ptr->updateAll();
 #ifndef WIN32
 //	RegMap reg ;
-	IOPathInfo  dioPathInfo ;
+//	IOPathInfo  dioPathInfo ;
 	// if(intprt_ctrl.cmd != UPDATE_IO_DEV_ERROR)
 	if(intprt_ctrl.cmd != fst_base::INTERPRETER_SERVER_CMD_LOAD)
         FST_INFO("parseCtrlComand: %d", intprt_ctrl.cmd);

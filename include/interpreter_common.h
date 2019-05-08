@@ -89,21 +89,6 @@ typedef enum _ProgMode
     ERROR_MODE,
 }ProgMode;
 
-typedef enum _RegDIOType
-{
-    NOTDEFINE = 0,
-    REG = 1,
-    DIO = 2,
-}RegDIOType;
-
-
-typedef enum _DIOType
-{
-    UNDEFINE = 0,
-    DI = 1,
-    DO = 2,
-}DIOType;
-
 typedef enum _RegOperateType
 {
     POSE_REG           = 101,
@@ -154,33 +139,6 @@ typedef enum _RegOperateType
 
 #define REG_TYPE_NUM    32
 
-/*
-typedef struct _DIOMap
-{
-    int     card_seq;
-    DIOType type;
-    int     port_seq;
-    bool has_value;
-    int     value;
-}DIOMap;
-*/
-
-typedef struct _IOMapPortInfo
-{
-    uint32_t    msg_id;
-    uint32_t    dev_id;
-    int         port_type;
-    int         port_index;
-    int         bytes_len;
-    char        value;
-}IOMapPortInfo;
-
-typedef struct _IOPathInfo
-{
-    char        dio_path[128];
-    char        value;
-}IOPathInfo;
-
 typedef struct _Reg
 {
     RegOperateType type;
@@ -225,29 +183,6 @@ typedef struct _InterpreterControl
         int            program_code;    // CODE_START
     };
 }InterpreterControl;
-
-
-typedef struct _CtrlStatus
-{
-    bool        is_permitted;  //if sending next move command is permitted
-    UserOpMode  user_op_mode;
-    bool        is_data_ready;  //if sending next move command is permitted
-}CtrlStatus;
-
-typedef struct _IntprtStatus
-{
-#ifdef USE_XPATH
-    char            line[TP_XPATH_LEN];
-#else
-    int             line;
-#endif
-    InterpreterState    state;
-#ifdef WIN32
-	__int64         warn;
-#else
-    long long int   warn;
-#endif
-}IntprtStatus;
 
 typedef struct _AdditionalOffsetInfomation
 {
@@ -316,36 +251,6 @@ typedef struct _MoveCommandDestination
     Joint           joint_target;
 	Posture         posture ;
 } MoveCommandDestination;
-
-
-typedef struct _RegChgList
-{
-    int  command;
-    int             count;
-#ifdef WIN32
-    char additional; //malloc other memory
-#else
-    char additional[0]; //malloc other memory
-#endif
-}RegChgList;
-
-typedef struct _ChgFrameSimple
-{
-	int id;
-	char comment[32];
-} ChgFrameSimple;
-
-// This is output info.
-typedef struct _IODeviceInfoShm
-{
-    char path[128];
-    unsigned int id;
-    char communication_type[128];
-    int device_number;
-    int    device_type;
-    unsigned int input;
-    unsigned int output;
-} IODeviceInfoShm;
 
 typedef struct
 {
