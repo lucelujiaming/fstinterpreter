@@ -75,6 +75,7 @@ enum double_ops {
 	NE,      // value <> partial_value
 	AND,     // value AND partial_value
 	OR ,     // value OR  partial_value
+	XOR,     // value XOR  partial_value
 };
 
 typedef enum _LineNumState

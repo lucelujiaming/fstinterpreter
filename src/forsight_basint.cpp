@@ -86,8 +86,9 @@ enum var_inner_type { FORSIGHT_CHAR, FORSIGHT_INT, FORSIGHT_FLOAT };
 #define FORSIGHT_OVC      "ovc."
 #define FORSIGHT_OAC      "oac."
 
-#define STR_AND   "and"
-#define STR_OR    "or"
+#define STR_AND    "and"
+#define STR_OR     "or"
+#define STR_XOR    "xor"
 
 // Enumeration of two-character operators, such as <=.
 
@@ -1118,6 +1119,7 @@ int  calc_line_from_prog(struct thread_control_block * objThreadCntrolBlock)
 	Output: 		NULL
 	Return: 		INT 
 *************************************************/ 
+#define   ACCESS_READ_PERMISSION     4
 int load_program(struct thread_control_block * objThreadCntrolBlock, char *p, char *pname)
 {
   char fXMLName[128];
@@ -1130,7 +1132,7 @@ int load_program(struct thread_control_block * objThreadCntrolBlock, char *p, ch
   // use bas directly 
   // if((access(fBASName,F_OK))==-1)
   // use XML directly 
-  if(_access(fXMLName, 4)==0)
+  if(_access(fXMLName, ACCESS_READ_PERMISSION)==0)
   {   
       parse_xml_file_wrapper(fXMLName);
   }
@@ -3367,6 +3369,14 @@ int get_token(struct thread_control_block * objThreadCntrolBlock)
 	   objThreadCntrolBlock->token[1] = '\0';
 	   objThreadCntrolBlock->token_type = DELIMITER;
     }
+	// Support XOR
+	else if(!strcmp(objThreadCntrolBlock->token, STR_XOR))
+    {
+       memset(objThreadCntrolBlock->token, 0x00, 80);
+	   objThreadCntrolBlock->token[0] = XOR;
+	   objThreadCntrolBlock->token[1] = '\0';
+	   objThreadCntrolBlock->token_type = DELIMITER;
+    }
 	else
 	{
 	   objThreadCntrolBlock->token_type = VARIABLE;
@@ -3477,7 +3487,7 @@ void level1(struct thread_control_block * objThreadCntrolBlock, eval_value *valu
     int   another_bool_value = 1; // true
     char op;
     char relops[] = {
-        AND, OR, 0
+        AND, OR, XOR, 0
     };
 
     level2(objThreadCntrolBlock, value, boolValue);
@@ -3493,6 +3503,9 @@ void level1(struct thread_control_block * objThreadCntrolBlock, eval_value *valu
 			    break;
 			case OR:
 			    *boolValue = (*boolValue || another_bool_value);
+			    break;
+			case XOR:
+			    *boolValue = (*boolValue ^ another_bool_value);
 			    break;
         }
     }

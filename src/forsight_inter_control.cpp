@@ -167,13 +167,15 @@ struct thread_control_block *  getThreadControlBlock(bool isUploadError)
 	}
 	else
     {
+#ifndef WIN32
     	if(g_basic_interpreter_handle[getCurrentThreadSeq()] != NULL)
     	{
         	FST_ERROR("g_basic_interpreter_handle[%d] != NULL", getCurrentThreadSeq());
 			if(isUploadError)
 				setWarning(FAIL_INTERPRETER_DUPLICATE_EXEC_MACRO);
 			return NULL;
-    	}
+		}
+#endif 
     	FST_INFO("getThreadControlBlock at %d", getCurrentThreadSeq());
 		return &g_thread_control_block[getCurrentThreadSeq()] ;
 	}

@@ -67,6 +67,10 @@ int parseHomePose(xmlNodePtr nodeRoot, char * home_pose_exp)
 				{
 					sprintf(home_pose_exp, "%s OR", home_pose_exp);
 				}
+				else if(xmlStrcasecmp(value, BAD_CAST"XOR")==0)
+				{
+					sprintf(home_pose_exp, "%s XOR", home_pose_exp);
+				}
 			}
 			else if(xmlStrcasecmp(type, BAD_CAST"bracket")==0)
 			{
