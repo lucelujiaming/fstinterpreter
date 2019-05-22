@@ -1,5 +1,5 @@
 EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
-EXPORT: (002)(043)/prog/prog_body/function/body/assignment[1]                                                             MR[1]  = 11  
+EXPORT: (002)(043)/prog/prog_body/function/body/assignment[1]                                                             MR[1]  = 56 + "1234"  
 EXPORT: (003)(043)/prog/prog_body/function/body/assignment[2]                                                             MR[2]  = "66.66running"  
 EXPORT: (004)(043)/prog/prog_body/function/body/assignment[3]                                                             MR[3]  = R[1]   
 EXPORT: (005)(033)/prog/prog_body/function/body/end                                                                       END 

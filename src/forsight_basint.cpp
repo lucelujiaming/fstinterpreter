@@ -3162,7 +3162,11 @@ void serror(struct thread_control_block * objThreadCntrolBlock, int error)
 		INFO_INTERPRETER_UNKNOWN_ARITHM     	  , 	"Unknown Arithm",		       // 25
 		INFO_INTERPRETER_WAIT_TIMEOUT        	  , 	"Wait Timeout",		           // 26
 		INFO_INTERPRETER_OVERRUN_HOME_POSE   	  , 	"Overrun home pose",           // 27
-		INFO_INTERPRETER_HOME_POSE_NOT_EXIST   	  , 	"Home pose not exist"          // 28
+		INFO_INTERPRETER_HOME_POSE_NOT_EXIST   	  , 	"Home pose not exist",         // 28
+		FAIL_INTERPRETER_DUPLICATE_START   	      , 	"Duplicate START is executing",          // 29
+		FAIL_INTERPRETER_DUPLICATE_LAUNCH   	  , 	"Duplicate LAUNCH is executing",         // 30
+		INFO_INTERPRETER_BACK_TO_LOGIC   	      , 	"reverted executing to logic statement", // 31
+		INFO_INTERPRETER_XML_WRONG_ELEMENT   	  , 	"Wrong Command in FunctionBody"          // 32
   };
   if(error > (int)(sizeof(errInfo)/sizeof(ErrInfo))) {
   	FST_ERROR("\t NOTICE : Error out of range %d ", error);
@@ -3766,6 +3770,8 @@ void primitive(struct thread_control_block * objThreadCntrolBlock,
   case QUOTE:
   	strValue = std::string(objThreadCntrolBlock->token);
 	result->setStringValue(strValue);
+	// Save number data
+	result->setFloatValue(atoi(strValue.c_str()));
     get_token(objThreadCntrolBlock);
     return;
   default:

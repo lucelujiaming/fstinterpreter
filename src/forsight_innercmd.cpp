@@ -17,6 +17,12 @@
 #include <execinfo.h>
 #endif
 
+#ifdef USE_FORSIGHT_REGISTERS_MANAGER
+#include "reg_manager/forsight_registers_manager.h"
+#else
+#include "reg-shmi/forsight_registers.h"
+#endif
+
 #define FILE_PATH_LEN       1024
 #define MAX_STOPWATCH_NUM   128
 
@@ -42,6 +48,7 @@ int call_UserAlarm(int iLineNum, struct thread_control_block* objThreadCntrolBlo
 int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock);
 int call_Pause(int iLineNum, struct thread_control_block* objThreadCntrolBlock);
 int call_Abort(int iLineNum, struct thread_control_block* objThreadCntrolBlock);
+int call_BLDC_CTRL(int iLineNum, struct thread_control_block* objThreadCntrolBlock);
 
 // This structure links a library function name   
 // with a pointer to that function.   
@@ -61,6 +68,7 @@ struct intern_cmd_type {
     (char *)"wait",       1, call_Wait,
     (char *)"pause",      1, call_Pause,
     (char *)"abort",      1, call_Abort,
+    (char *)"bldc_ctrl",  1, call_BLDC_CTRL,
     (char *)"", 0  // null terminate the list   
 };
 
@@ -1753,7 +1761,7 @@ int call_MoveXPos(int iLineNum, struct thread_control_block* objThreadCntrolBloc
 		FST_INFO("call_MoveXPos XPATH out of range at %d", iLineNum);
 	}
 	// FST_INFO("call_MoveL Run XPATH: %s", objThreadCntrolBlock->vector_XPath[iLineNum].c_str());
-	memset(&objThreadCntrolBlock->instrSet->target.prPos, 0x00, PR_POS_LEN * sizeof(int));
+	memset(&instr.target.prPos, 0x00, PR_POS_LEN * sizeof(int));
 	get_token(objThreadCntrolBlock);
 	int prPosIdx = 0 ;
 	while(strcmp(objThreadCntrolBlock->token, "pr") == 0)
@@ -1761,7 +1769,7 @@ int call_MoveXPos(int iLineNum, struct thread_control_block* objThreadCntrolBloc
 		get_token(objThreadCntrolBlock);
 		if(objThreadCntrolBlock->token[0] == '['){
 			get_exp(objThreadCntrolBlock, &value, &boolValue);
-			objThreadCntrolBlock->instrSet->target.prPos[prPosIdx] = (int)value.getFloatValue();
+			instr.target.prPos[prPosIdx] = (int)value.getFloatValue();
 			prPosIdx++;
 			get_token(objThreadCntrolBlock);
 			if(objThreadCntrolBlock->token[0] != ']'){
@@ -1785,13 +1793,13 @@ int call_MoveXPos(int iLineNum, struct thread_control_block* objThreadCntrolBloc
 	{
 		for (prPosIdx = 0; prPosIdx < 10; prPosIdx++)
 		{
-			objThreadCntrolBlock->instrSet->target.prPos[prPosIdx] = 21 + prPosIdx;
+			instr.target.prPos[prPosIdx] = 21 + prPosIdx;
 		}
 	}
 	// We had jump ","
 	// get_token(objThreadCntrolBlock);
     get_exp(objThreadCntrolBlock, &value, &boolValue);
-    instr.target.vel                  = value.getFloatValue();
+    instr.target.vel                  = value.getFloatValue() / 100;
 	
 	get_token(objThreadCntrolBlock);
 	if(strcmp(objThreadCntrolBlock->token, "cnt") == 0)
@@ -1845,6 +1853,11 @@ int call_MoveXPos(int iLineNum, struct thread_control_block* objThreadCntrolBloc
 			objThreadCntrolBlock->instrSet->add_num    = 1 ;
 		}
 	}
+	FST_INFO("prPos = {%d, %d, %d, %d }.", 
+		objThreadCntrolBlock->instrSet->target.prPos[0], 
+		objThreadCntrolBlock->instrSet->target.prPos[1], 
+		objThreadCntrolBlock->instrSet->target.prPos[2], 
+		objThreadCntrolBlock->instrSet->target.prPos[3]);
 	
 // 	#ifdef USE_XPATH
 // 		FST_INFO("setInstruction MOTION_CURVE at %s", instr.line);
@@ -2258,6 +2271,65 @@ int call_Abort(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
     return 0; 
 #else
 	sleep(1);
+    return END_COMMND_RET;   
+#endif
+}
+
+/************************************************* 
+	Function:		call_BLDC_CTRL
+	Description:	Execute Abort
+	                FORMAT: ABORT
+	Input:			iLineNum               - Line Number
+	Input:			thread_control_block   - interpreter info
+	Return: 		1        -    Success ;
+*************************************************/ 
+int call_BLDC_CTRL(int iLineNum, struct thread_control_block* objThreadCntrolBlock) 
+{  
+	bool bRet = false ;
+	eval_value value;
+	int boolValue;
+	uint8_t iDir = 0, iVel = 0 ;
+	get_token(objThreadCntrolBlock);
+	if(strcmp(objThreadCntrolBlock->token, "dir") == 0)
+	{
+		/* get the equals sign */
+		get_token(objThreadCntrolBlock);
+		if(*(objThreadCntrolBlock->token)!=EQ) {
+			serror(objThreadCntrolBlock, 3);
+			return false;
+		}
+		get_exp(objThreadCntrolBlock, &value, &boolValue);
+		iDir = (int)value.getFloatValue() ;
+	}
+
+	get_token(objThreadCntrolBlock);
+	if(strcmp(objThreadCntrolBlock->token, "vel") == 0)
+	{
+		/* get the equals sign */
+		get_token(objThreadCntrolBlock);
+		if(*(objThreadCntrolBlock->token)!=EQ) {
+			serror(objThreadCntrolBlock, 3);
+			return false;
+		}
+		get_exp(objThreadCntrolBlock, &value, &boolValue);
+		iVel = (int)value.getFloatValue() ;
+	}
+	iVel = iDir * 128 + iVel ;
+#ifdef WIN32
+    return 0; 
+#else
+	if(g_objRegManagerInterface)
+	{
+		bRet = g_objRegManagerInterface->setBLDC(iVel);
+		if(bRet)
+		{
+			return bRet ;
+		}
+	}
+	else
+	{
+		FST_ERROR("g_objRegManagerInterface is NULL");
+	}
     return END_COMMND_RET;   
 #endif
 }

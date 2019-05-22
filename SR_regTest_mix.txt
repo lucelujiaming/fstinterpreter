@@ -1,0 +1,12 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(043)/prog/prog_body/function/body/assignment[1]                                                             R[1]  = 1234  
+EXPORT: (003)(043)/prog/prog_body/function/body/assignment[2]                                                             SR[1]  = R[1]   
+EXPORT: (004)(043)/prog/prog_body/function/body/assignment[3]                                                             R[1]  = 56.78  
+EXPORT: (005)(043)/prog/prog_body/function/body/assignment[4]                                                             SR[2]  = R[1]   
+EXPORT: (006)(043)/prog/prog_body/function/body/assignment[5]                                                             SR[3]  = "Hello, World"  
+EXPORT: (007)(043)/prog/prog_body/function/body/assignment[6]                                                             SR[4]  = "llo"  
+EXPORT: (008)(043)/prog/prog_body/function/body/assignment[7]                                                             R[2]  = StrLen(SR[3] )  
+EXPORT: (009)(043)/prog/prog_body/function/body/assignment[8]                                                             R[3]  = FindStr(SR[4] , SR[3] )  
+EXPORT: (010)(043)/prog/prog_body/function/body/assignment[9]                                                             R[4]  = SubStr(SR[2] , 2, 7)  
+EXPORT: (011)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (012)(024)/prog/prog_body/function                                                                            END SUB 

@@ -6,33 +6,6 @@
     <function name="main">
       <body>
         <comment>R[x] calculation test</comment>
-		
-		<assignment type="reg_assignment">
-			<lvalue>
-			  <element type="register">
-				<element type="num">8</element>
-			  </element>
-			</lvalue>
-			<rvalue>
-              <element type="num">1.5</element>
-			  <element type="operation">%</element>
-              <element type="num">2</element>
-			</rvalue>
-		</assignment>
-
-		<assignment type="reg_assignment">
-			<lvalue>
-			  <element type="register">
-				<element type="num">8</element>
-			  </element>
-			</lvalue>
-			<rvalue>
-              <element type="num">-0.0005</element>
-			  <element type="operation">/</element>
-              <element type="num">-0.0705</element>
-			</rvalue>
-		</assignment>
-		
         <assignment type="assignment">
           <lvalue>
             <element type="register">
@@ -129,7 +102,7 @@
                       <element type="register">
                         <element type="num">3</element>
                       </element>
-                      <element type="boolean_operation">AND</element>
+                      <element type="boolean_operation">XOR</element>
                       <element type="register">
                         <element type="num">1</element>
                       </element>

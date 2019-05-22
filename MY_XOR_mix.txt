@@ -1,0 +1,25 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(043)/prog/prog_body/function/body/assignment[1]                                                             R[1]  = 11  
+EXPORT: (003)(047)/prog/prog_body/function/body/logical/determine                                                         IF R[2]  <> R[1]  THEN 
+EXPORT: (004)(061)/prog/prog_body/function/body/logical/logical_body/assignment                                               R[2]  = R[1]   
+EXPORT: (005)(060)/prog/prog_body/function/body/logical/vice_logical/determine                                            ELSE 
+EXPORT: (006)(082)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/assignment[1]                          TIMER[1]  = START  
+EXPORT: (007)(080)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/instruction                            WAIT  1
+EXPORT: (008)(082)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/assignment[2]                          TIMER[1]  = STOP  
+EXPORT: (009)(086)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/logical/determine                      IF R[2]  = 10 THEN 
+EXPORT: (010)(103)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/logical/logical_body/assignment[1]             DO[1] = ON   
+EXPORT: (011)(103)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/logical/logical_body/assignment[2]            R[3]  =  DO[1]  
+EXPORT: (012)(107)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/logical/logical_body/logical/determine            IF R[3]  XOR R[1]  THEN 
+EXPORT: (013)(124)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/logical/logical_body/logical/logical_body/assignment[1]                R[4]  = PR[1].PJ2   
+EXPORT: (014)(124)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/logical/logical_body/logical/logical_body/assignment[2]                R[5]  = R[1]  + R[4]   
+EXPORT: (015)(124)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/logical/logical_body/logical/logical_body/assignment[3]                R[6]  = R[1]  - R[4]   
+EXPORT: (016)(124)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/logical/logical_body/logical/logical_body/assignment[4]                R[7]  = R[1]  * R[4]   
+EXPORT: (017)(124)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/logical/logical_body/logical/logical_body/assignment[5]                R[8]  = R[1]  / R[4]   
+EXPORT: (018)(097)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/logical/logical_body/logical               ENDIF 
+EXPORT: (019)(101)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/logical/logical_body/instruction            WAIT COND  DI[2] = ON 
+EXPORT: (020)(076)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/logical                                ENDIF 
+EXPORT: (021)(037)/prog/prog_body/function/body/logical                                                                   ENDIF 
+EXPORT: (022)(043)/prog/prog_body/function/body/assignment[2]                                                             SR[1]  = "66.66running"  
+EXPORT: (023)(043)/prog/prog_body/function/body/assignment[3]                                                             R[9]  = SR[1]   
+EXPORT: (024)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (025)(024)/prog/prog_body/function                                                                            END SUB 

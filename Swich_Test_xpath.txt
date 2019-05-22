@@ -1,0 +1,8 @@
+001:Swich_Test:/prog/prog_body/function
+002:Swich_Test:/prog/prog_body/function/body/logical/determine
+003:Swich_Test:/prog/prog_body/function/body/logical/logical_body/assignment
+004:Swich_Test:/prog/prog_body/function/body/logical/logical_body/logical[1]/determine
+005:Swich_Test:/prog/prog_body/function/body/logical/logical_body/logical[1]/vice_logical[1]/determine
+006:Swich_Test:/prog/prog_body/function/body/logical/logical_body/logical[1]/vice_logical[1]/vice_logical_body/instruction
+007:Swich_Test:/prog/prog_body/function/body/logical/logical_body/logical[1]
+008:Swich_Test:/prog/prog_body/function/body/logical/logical_body/logical[1]/vice_logical[2]/determine

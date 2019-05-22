@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<prog>
+  <head>
+    <include>AG60</include>
+  </head>
+  <prog_body>
+    <function name="main">
+      <body>
+        <nop/>
+        <assignment type="assignment">
+          <lvalue>
+            <element type="register">
+              <element type="num">1</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element name="SIN" type="function">
+              <element type="argument">
+                <element type="num">1.046</element>
+              </element>
+            </element>
+          </rvalue>
+        </assignment>
+        <assignment type="reg_assignment">
+          <lvalue>
+            <element type="register">
+              <element type="num">2</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element name="COS" type="function">
+              <element type="argument">
+                <element type="num">3.14159</element>
+              </element>
+            </element>
+          </rvalue>
+        </assignment>
+        <assignment type="reg_assignment">
+          <lvalue>
+            <element type="register">
+              <element type="num">3</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element name="TAN" type="function">
+              <element type="argument">
+                <element type="num">0.785</element>
+              </element>
+            </element>
+          </rvalue>
+        </assignment>
+        <assignment type="reg_assignment">
+          <lvalue>
+            <element type="register">
+              <element type="num">5</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element name="ABS" type="function">
+              <element type="argument">
+                <element type="num">-120.58</element>
+              </element>
+            </element>
+          </rvalue>
+        </assignment>
+        <skip>
+          <call file="AG60"/>
+        </skip>
+        <call name="Ag60" type="macro"/>
+        <end name="prog"/>
+      </body>
+    </function>
+  </prog_body>
+</prog>

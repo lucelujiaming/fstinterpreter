@@ -13,7 +13,9 @@
             </element>
           </lvalue>
           <rvalue>
-            <element type="num">11</element>
+            <element type="num">56</element>
+            <element type="operation">+</element>
+            <element type="string">1234</element>
           </rvalue>
         </assignment>
         <assignment type="assignment">

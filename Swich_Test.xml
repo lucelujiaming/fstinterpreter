@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<prog>
+  <head/>
+  <prog_body>
+    <function name="main">
+      <body>
+        <nop/>
+        <logical type="while">
+          <determine>
+            <element type="num">1</element>
+            <element type="boolean_operation">=</element>
+            <element type="num">1</element>
+          </determine>
+          <logical_body>
+            <nop/>
+            <assignment type="reg_assignment">
+              <lvalue>
+                <element type="register">
+                  <element type="num">1</element>
+                </element>
+              </lvalue>
+              <rvalue>
+                <element type="register">
+                  <element type="num">1</element>
+                </element>
+                <element type="operation">+</element>
+                <element type="num">1</element>
+              </rvalue>
+            </assignment>
+            <logical type="switch">
+              <determine>
+                <element type="register">
+                  <element type="num">1</element>
+                </element>
+              </determine>
+              <vice_logical type="case">
+                <determine>
+                  <element type="num">1</element>
+                </determine>
+                <vice_logical_body>
+                  <nop/>
+                  <instruction type="wait">
+                    <argument name="timeout" type="num" unit="sec">5</argument>
+                  </instruction>
+                </vice_logical_body>
+              </vice_logical>
+              <vice_logical type="case">
+                <determine>
+                  <element type="num">2</element>
+                </determine>
+                <vice_logical_body>
+                  <vice_logical type="case">
+                    <determine>
+                      <element type="num">1</element>
+                    </determine>
+                    <vice_logical_body>
+                      <nop/>
+                      <instruction type="wait">
+                        <argument name="timeout" type="num" unit="sec">5</argument>
+                      </instruction>
+                    </vice_logical_body>
+                  </vice_logical>
+                  <vice_logical type="case">
+                    <determine>
+                      <element type="num">2</element>
+                    </determine>
+                    <vice_logical_body>
+                      <nop/>
+                      <instruction type="wait">
+                        <argument name="timeout" type="num" unit="sec">5</argument>
+                      </instruction>
+                    </vice_logical_body>
+                  </vice_logical>
+                  <nop/>
+                  <instruction type="wait">
+                    <argument name="timeout" type="num" unit="sec">5</argument>
+                  </instruction>
+                  <vice_logical type="case">
+                    <determine>
+                      <element type="num">2</element>
+                    </determine>
+                    <vice_logical_body>
+                      <nop/>
+                      <instruction type="wait">
+                        <argument name="timeout" type="num" unit="sec">5</argument>
+                      </instruction>
+                    </vice_logical_body>
+                  </vice_logical>
+                </vice_logical_body>
+                <vice_logical type="case">
+                  <determine>
+                    <element type="num">3</element>
+                  </determine>
+                  <vice_logical_body>
+                    <nop/>
+                    <instruction type="wait">
+                      <argument name="timeout" type="num" unit="sec">5</argument>
+                    </instruction>
+                  </vice_logical_body>
+                </vice_logical>
+              </vice_logical>
+              <vice_logical type="default">
+                <determine/>
+                <vice_logical_body>
+                  <nop/>
+                  <instruction type="wait">
+                    <argument name="timeout" type="num" unit="sec">0</argument>
+                  </instruction>
+                </vice_logical_body>
+              </vice_logical>
+            </logical>
+            <logical type="if">
+              <determine>
+                <element type="register">
+                  <element type="num">1</element>
+                </element>
+                <element type="boolean_operation">=</element>
+                <element type="num">4</element>
+              </determine>
+              <logical_body>
+                <assignment type="reg_assignment">
+                  <lvalue>
+                    <element type="register">
+                      <element type="num">1</element>
+                    </element>
+                  </lvalue>
+                  <rvalue>
+                    <element type="num">0</element>
+                  </rvalue>
+                </assignment>
+                <nop/>
+              </logical_body>
+            </logical>
+          </logical_body>
+        </logical>
+        <end name="prog"/>
+      </body>
+    </function>
+  </prog_body>
+</prog>

@@ -96,7 +96,7 @@ int main(int  argc, char *argv[])
 #else
 			if (intprt_ctrl.cmd != fst_base::INTERPRETER_SERVER_CMD_LOAD)
 			{
-				parseCtrlComand(intprt_ctrl, "Test_XOR");
+				parseCtrlComand(intprt_ctrl, "Swich_Test");
 				Sleep(1);
 				intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_RESUME ;
 				parseCtrlComand(intprt_ctrl, "");

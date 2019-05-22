@@ -1,0 +1,8 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(047)/prog/prog_body/function/body/logical/determine                                                         WHILE 1 = 1 
+EXPORT: (003)(061)/prog/prog_body/function/body/logical/logical_body/assignment                                               R[1]  = R[1]  + 1  
+EXPORT: (004)(071)/prog/prog_body/function/body/logical/logical_body/logical[1]/determine                                     SELECT CASE  R[1]  
+EXPORT: (005)(087)/prog/prog_body/function/body/logical/logical_body/logical[1]/vice_logical[1]/determine                         CASE  1 
+EXPORT: (006)(107)/prog/prog_body/function/body/logical/logical_body/logical[1]/vice_logical[1]/vice_logical_body/instruction                WAIT  5
+EXPORT: (007)(061)/prog/prog_body/function/body/logical/logical_body/logical[1]                                                   BREAK 
+EXPORT: (008)(087)/prog/prog_body/function/body/logical/logical_body/logical[1]/vice_logical[2]/determine                         CASE  2 

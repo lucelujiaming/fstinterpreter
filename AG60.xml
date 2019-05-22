@@ -1,0 +1,253 @@
+<?xml version='1.0' encoding='utf-8'?>
+<prog>
+
+    <head/>
+    <prog_body>
+        <function name="main">
+
+            <body>
+                <nop/>
+                <assignment type="assignment"><lvalue><element type="system">Overall_Velocity_Coefficient</element></lvalue><rvalue><element type="num">30</element></rvalue></assignment>
+                <assignment type="reg_assignment">
+                    <lvalue>
+                        <element type="register">
+                            <element type="num">1</element>
+                        </element>
+                    </lvalue>
+                    <rvalue>
+                        <element type="num">1</element>
+                    </rvalue>
+                </assignment>
+                <logical type="while">
+                    <determine>
+                        <element type="num">1</element>
+                        <element type="boolean_operation">=</element>
+                        <element type="num">1</element>
+                    </determine>
+                    <logical_body>
+                        <nop/>
+                        <assignment type="reg_assignment">
+                            <lvalue>
+                                <element type="register">
+                                    <element type="num">2</element>
+                                </element>
+                            </lvalue>
+                            <rvalue>
+                                <element type="num">0</element>
+                            </rvalue>
+                        </assignment>
+                                <instruction type="move_joint">
+                                    <argument name="pose" type="pose">
+                                        <element type="num">4</element>
+                                    </argument>
+                                    <argument name="velocity" unit="%" type="num">100</argument>
+                                    <argument name="fine" type="num">-1</argument>
+                                </instruction>
+                                <instruction type="move_joint">
+                                    <argument name="pose" type="pose">
+                                        <element type="num">5</element>
+                                    </argument>
+                                    <argument name="velocity" unit="%" type="num">100</argument>
+                                    <argument name="fine" type="num">-1</argument>
+                                </instruction>
+                                <instruction type="move_joint">
+                                    <argument name="pose" type="pose">
+                                        <element type="num">6</element>
+                                    </argument>
+                                    <argument name="velocity" unit="%" type="num">100</argument>
+                                    <argument name="fine" type="num">-1</argument>
+                                </instruction>
+                                <instruction type="move_joint">
+                                    <argument name="pose" type="pose">
+                                        <element type="num">7</element>
+                                    </argument>
+                                    <argument name="velocity" unit="%" type="num">100</argument>
+                                    <argument name="fine" type="num">-1</argument>
+                                </instruction>
+                                <instruction type="move_joint">
+                                    <argument name="pose" type="pose">
+                                        <element type="num">8</element>
+                                    </argument>
+                                    <argument name="velocity" unit="%" type="num">100</argument>
+                                    <argument name="fine" type="num">-1</argument>
+                                </instruction>
+                                <instruction type="move_joint">
+                                    <argument name="pose" type="pose">
+                                        <element type="num">9</element>
+                                    </argument>
+                                    <argument name="velocity" unit="%" type="num">100</argument>
+                                    <argument name="fine" type="num">-1</argument>
+                                </instruction>
+                                <instruction type="move_joint">
+                                    <argument name="pose" type="pose">
+                                        <element type="num">10</element>
+                                    </argument>
+                                    <argument name="velocity" unit="%" type="num">100</argument>
+                                    <argument name="fine" type="num">-1</argument>
+                                </instruction>
+                                <instruction type="move_joint">
+                                    <argument name="pose" type="pose">
+                                        <element type="num">11</element>
+                                    </argument>
+                                    <argument name="velocity" unit="%" type="num">100</argument>
+                                    <argument name="fine" type="num">-1</argument>
+                                </instruction>
+                                <instruction type="move_joint">
+                                    <argument name="pose" type="pose">
+                                        <element type="num">12</element>
+                                    </argument>
+                                    <argument name="velocity" unit="%" type="num">100</argument>
+                                    <argument name="fine" type="num">-1</argument>
+                                </instruction>
+                                <instruction type="move_joint">
+                                    <argument name="pose" type="pose">
+                                        <element type="num">13</element>
+                                    </argument>
+                                    <argument name="velocity" unit="%" type="num">100</argument>
+                                    <argument name="fine" type="num">-1</argument>
+                                </instruction>
+                                <instruction type="move_joint">
+                                    <argument name="pose" type="pose">
+                                        <element type="num">14</element>
+                                    </argument>
+                                    <argument name="velocity" unit="%" type="num">100</argument>
+                                    <argument name="fine" type="num">-1</argument>
+                                </instruction>
+                                <instruction type="move_joint">
+                                    <argument name="pose" type="pose">
+                                        <element type="num">15</element>
+                                    </argument>
+                                    <argument name="velocity" unit="%" type="num">100</argument>
+                                    <argument name="fine" type="num">-1</argument>
+                                </instruction>
+                                <instruction type="move_joint">
+                                    <argument name="pose" type="pose">
+                                        <element type="num">16</element>
+                                    </argument>
+                                    <argument name="velocity" unit="%" type="num">100</argument>
+                                    <argument name="fine" type="num">-1</argument>
+                                </instruction>
+                                <instruction type="move_joint">
+                                    <argument name="pose" type="pose">
+                                        <element type="num">17</element>
+                                    </argument>
+                                    <argument name="velocity" unit="%" type="num">100</argument>
+                                    <argument name="fine" type="num">-1</argument>
+                                </instruction>
+                                <instruction type="move_joint">
+                                    <argument name="pose" type="pose">
+                                        <element type="num">18</element>
+                                    </argument>
+                                    <argument name="velocity" unit="%" type="num">100</argument>
+                                    <argument name="fine" type="num">-1</argument>
+                                </instruction>
+                                <instruction type="move_joint">
+                                    <argument name="pose" type="pose">
+                                        <element type="num">18</element>
+                                    </argument>
+                                    <argument name="velocity" unit="%" type="num">100</argument>
+                                    <argument name="fine" type="num">-1</argument>
+                                </instruction>
+
+<skip><instruction type="move_joint"><argument name="pose" type="pose"><element type="num">20</element></argument><argument name="velocity" unit="%" type="num">100</argument><argument name="fine" type="num">-1</argument></instruction>
+                            </skip>
+                            <skip><instruction type="move_line">
+                                <argument name="pose" type="pose">
+                                    <element type="num">21</element>
+                                </argument>
+                                <argument name="velocity" unit="mm/s" type="num">4000</argument>
+                                <argument name="fine" type="num"/>
+                            </instruction>
+                            </skip>
+                            <skip><instruction type="move_line">
+                                <argument name="pose" type="pose">
+                                    <element type="num">22</element>
+                                </argument>
+                                <argument name="velocity" unit="mm/s" type="num">4000</argument>
+                                <argument name="fine" type="num"/>
+                            </instruction>
+                            </skip>
+                            <skip><instruction type="move_line">
+                                <argument name="pose" type="pose">
+                                    <element type="num">23</element>
+                                </argument>
+                                <argument name="velocity" unit="mm/s" type="num">4000</argument>
+                                <argument name="fine" type="num"/>
+                            </instruction>
+                            </skip>
+                            <skip><instruction type="move_line">
+                                <argument name="pose" type="pose">
+                                    <element type="num">24</element>
+                                </argument>
+                                <argument name="velocity" unit="mm/s" type="num">4000</argument>
+                                <argument name="fine" type="num"/>
+                            </instruction>
+                            </skip>
+                            <skip><instruction type="move_joint">
+                                <argument name="pose" type="pose">
+                                    <element type="num">25</element>
+                                </argument>
+                                <argument name="velocity" unit="%" type="num">100</argument>
+                                <argument name="fine" type="num"/>
+                            </instruction>
+                            </skip>
+                            <skip><instruction type="move_line">
+                                <argument name="pose" type="pose">
+                                    <element type="num">26</element>
+                                </argument>
+                                <argument name="velocity" unit="mm/s" type="num">1000</argument>
+                                <argument name="fine" type="num"/>
+                            </instruction>
+                            </skip>
+                            <instruction type="wait">
+                            <argument name="timeout" type="num" unit="sec">1</argument>
+                        </instruction>
+
+                                <skip><instruction type="move_line">
+                    <argument name="pose" type="pose">
+                        <element type="num">30</element>
+                    </argument>
+                    <argument name="velocity" unit="mm/s" type="num">4000</argument>
+                    <argument name="fine" type="num">-1</argument>
+                </instruction>
+                </skip>
+                <skip><instruction type="move_line">
+                    <argument name="pose" type="pose">
+                        <element type="num">31</element>
+                    </argument>
+                    <argument name="velocity" unit="mm/s" type="num">4000</argument>
+                    <argument name="fine" type="num">-1</argument>
+                </instruction>
+                </skip>
+                <skip><instruction type="move_line">
+                    <argument name="pose" type="pose">
+                        <element type="num">32</element>
+                    </argument>
+                    <argument name="velocity" unit="mm/s" type="num">4000</argument>
+                    <argument name="fine" type="num">-1</argument>
+                </instruction>
+                </skip>
+                <skip><instruction type="move_line">
+                    <argument name="pose" type="pose">
+                        <element type="num">33</element>
+                    </argument>
+                    <argument name="velocity" unit="mm/s" type="num">4000</argument>
+                    <argument name="fine" type="num">-1</argument>
+                </instruction>
+                </skip>
+                <nop/>
+                <skip><instruction type="move_line">
+                    <argument name="pose" type="pose">
+                        <element type="num">30</element>
+                    </argument>
+                    <argument name="velocity" unit="mm/s" type="num">4000</argument>
+                    <argument name="fine" type="num">-1</argument>
+                </instruction>
+                    </skip>
+                    </logical_body>
+                </logical>
+                <end name="prog"/>
+            </body>
+        </function>
+    </prog_body>
+</prog>

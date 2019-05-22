@@ -1,0 +1,9 @@
+EXPORT: (001)(018)/prog/head/include                                                                                  IMPORT AG60
+EXPORT: (002)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (003)(043)/prog/prog_body/function/body/assignment[1]                                                             R[1]  = SIN(1.046)  
+EXPORT: (004)(043)/prog/prog_body/function/body/assignment[2]                                                             R[2]  = COS(3.14159)  
+EXPORT: (005)(043)/prog/prog_body/function/body/assignment[3]                                                             R[3]  = TAN(0.785)  
+EXPORT: (006)(043)/prog/prog_body/function/body/assignment[4]                                                             R[5]  = ABS(-120.58)  
+EXPORT: (007)(034)/prog/prog_body/function/body/call                                                                      CALLMACRO Ag60::main () 
+EXPORT: (008)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (009)(024)/prog/prog_body/function                                                                            END SUB 

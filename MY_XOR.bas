@@ -1,6 +1,4 @@
 SUB main ()
-    R[8]  = 1.5 % 2  
-    R[8]  = -0.0005 / -0.0705  
     R[1]  = 11  
     IF R[2]  <> R[1]  THEN 
         R[2]  = R[1]   
@@ -11,7 +9,7 @@ SUB main ()
         IF R[2]  = 10 THEN 
              DO[1] = ON   
             R[3]  =  DO[1]  
-            IF R[3]  AND R[1]  THEN 
+            IF R[3]  XOR R[1]  THEN 
                 R[4]  = PR[1].PJ2   
                 R[5]  = R[1]  + R[4]   
                 R[6]  = R[1]  - R[4]   

@@ -1597,24 +1597,31 @@ int generateFunctionCall(xmlNodePtr nodeFunctionCall, LineInfo objLineInfo)
 	memset(label_instr, 0x00, 32);
 	if(xmlStrcasecmp(typeProp,BAD_CAST"macro")==0){
         sprintf(label_instr, "CALLMACRO");
+		// Special logic
+		if(xmlStrlen(fileProp)==0){        // Inside function
+			memset(label_params, 0x00, 1024);
+	        sprintf(label_params, "%s %s::main", label_instr, (char*)nameProp);
+			printBASCode(objLineInfo, "%s (", label_params);
+		}
 	}
 	else {
         sprintf(label_instr, "CALL");
-	}
-	if(xmlStrlen(fileProp)==0){        // Inside function
-		memset(label_params, 0x00, 1024);
-        sprintf(label_params, "%s %s::%s", label_instr, objLineInfo.fileName, (char*)nameProp);
-		printBASCode(objLineInfo, "%s (", label_params);
-	}
-	else if(xmlStrlen(nameProp)==0){   // Outside main
-		memset(label_params, 0x00, 1024);
-        sprintf(label_params, "%s %s::main", label_instr, (char*)fileProp);
-		printBASCode(objLineInfo, "%s (", label_params);
-	}
-	else {                            // Outside function
-		memset(label_params, 0x00, 1024);
-        sprintf(label_params, "%s %s::%s", label_instr, (char*)fileProp, (char*)nameProp);
-		printBASCode(objLineInfo, "%s (", label_params);
+		
+		if(xmlStrlen(fileProp)==0){        // Inside function
+			memset(label_params, 0x00, 1024);
+	        sprintf(label_params, "%s %s::%s", label_instr, objLineInfo.fileName, (char*)nameProp);
+			printBASCode(objLineInfo, "%s (", label_params);
+		}
+		else if(xmlStrlen(nameProp)==0){   // Outside main
+			memset(label_params, 0x00, 1024);
+	        sprintf(label_params, "%s %s::main", label_instr, (char*)fileProp);
+			printBASCode(objLineInfo, "%s (", label_params);
+		}
+		else {                            // Outside function
+			memset(label_params, 0x00, 1024);
+	        sprintf(label_params, "%s %s::%s", label_instr, (char*)fileProp, (char*)nameProp);
+			printBASCode(objLineInfo, "%s (", label_params);
+		}
 	}
     for(nodeFunctionCallParam = nodeFunctionCall->children; 
 		nodeFunctionCallParam; nodeFunctionCallParam = nodeFunctionCallParam->next){
@@ -1853,6 +1860,7 @@ int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
 			}
 			else { 
 				FST_ERROR("Wrong Command (%s) in logical Command. \n", (char *)name);
+				setWarning(INFO_INTERPRETER_XML_WRONG_ELEMENT);
 			}
         }
 		else if(xmlStrcasecmp(nodeStatement->name,BAD_CAST"comment")==0){ 
@@ -1918,6 +1926,7 @@ int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
 		}
 		else { 
 			FST_ERROR("Wrong Command (%s) in FunctionBody. \n", (char *)nodeStatement->name);
+			setWarning(INFO_INTERPRETER_XML_WRONG_ELEMENT);
 		}
 	}
 	return 1 ;

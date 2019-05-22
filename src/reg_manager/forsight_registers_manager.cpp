@@ -1776,7 +1776,7 @@ int forgesight_registers_manager_set_resource(
 			else if(valueStart->getType() == TYPE_FLOAT)
 			{
 			    char cStringValue[64];
-			    sprintf(cStringValue, "%d", (int)valueStart->getFloatValue());
+			    sprintf(cStringValue, "%f", valueStart->getFloatValue());
 				strValue = std::string(cStringValue);
 				FST_INFO("Set TYPE_STRING token:(%s) to %s", 
 						objThreadCntrolBlock->token, cStringValue);
