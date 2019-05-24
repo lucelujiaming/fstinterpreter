@@ -1,0 +1,13 @@
+001:MoveJ:/prog/prog_body/function
+002:MoveJ:/prog/prog_body/function/body/logical/determine
+003:MoveJ:/prog/prog_body/function/body/logical/logical_body/instruction[1]
+004:MoveJ:/prog/prog_body/function/body/logical/logical_body/instruction[2]
+005:MoveJ:/prog/prog_body/function/body/logical/logical_body/instruction[3]
+006:MoveJ:/prog/prog_body/function/body/logical/logical_body/instruction[4]
+007:MoveJ:/prog/prog_body/function/body/logical/logical_body/instruction[5]
+008:MoveJ:/prog/prog_body/function/body/logical/logical_body/instruction[6]
+009:MoveJ:/prog/prog_body/function/body/logical/logical_body/instruction[7]
+010:MoveJ:/prog/prog_body/function/body/logical/logical_body/instruction[8]
+011:MoveJ:/prog/prog_body/function/body/logical
+012:MoveJ:/prog/prog_body/function/body/end
+013:MoveJ:/prog/prog_body/function

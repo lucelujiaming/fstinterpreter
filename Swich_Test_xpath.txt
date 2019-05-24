@@ -6,3 +6,15 @@
 006:Swich_Test:/prog/prog_body/function/body/logical/logical_body/logical[1]/vice_logical[1]/vice_logical_body/instruction
 007:Swich_Test:/prog/prog_body/function/body/logical/logical_body/logical[1]
 008:Swich_Test:/prog/prog_body/function/body/logical/logical_body/logical[1]/vice_logical[2]/determine
+009:Swich_Test:/prog/prog_body/function/body/logical/logical_body/logical[1]/vice_logical[2]/vice_logical_body/instruction
+010:Swich_Test:/prog/prog_body/function/body/logical/logical_body/logical[1]
+011:Swich_Test:/prog/prog_body/function/body/logical/logical_body/logical[1]/vice_logical[3]/determine
+012:Swich_Test:/prog/prog_body/function/body/logical/logical_body/logical[1]/vice_logical[3]/vice_logical_body/instruction
+013:Swich_Test:/prog/prog_body/function/body/logical/logical_body/logical[1]
+014:Swich_Test:/prog/prog_body/function/body/logical/logical_body/logical[1]
+015:Swich_Test:/prog/prog_body/function/body/logical/logical_body/logical[2]/determine
+016:Swich_Test:/prog/prog_body/function/body/logical/logical_body/logical[2]/logical_body/assignment
+017:Swich_Test:/prog/prog_body/function/body/logical/logical_body/logical[2]
+018:Swich_Test:/prog/prog_body/function/body/logical
+019:Swich_Test:/prog/prog_body/function/body/end
+020:Swich_Test:/prog/prog_body/function

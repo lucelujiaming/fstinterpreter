@@ -557,8 +557,19 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 			if(strcmp(getProgramName(), intprt_ctrl.start_ctrl) == 0)
             {
             	FST_INFO("Duplicate to LAUNCH %s ...", intprt_ctrl.start_ctrl);
-				setWarning(FAIL_INTERPRETER_DUPLICATE_LAUNCH) ; 
-            	break;
+				if(getPrgmState() == INTERPRETER_IDLE)
+				{
+            		FST_INFO("Duplicate to LAUNCH %s at INTERPRETER_IDLE ...", 
+						intprt_ctrl.start_ctrl);
+					strcpy(g_interpreter_publish.program_name, ""); 
+				}
+				else
+				{
+            		FST_INFO("Duplicate to LAUNCH %s at %d ...", 
+						intprt_ctrl.start_ctrl, (int)getPrgmState());
+				    setWarning(FAIL_INTERPRETER_DUPLICATE_LAUNCH) ; 
+            		break;
+				}
 			}
 			incCurrentThreadSeq();
 		    // objThdCtrlBlockPtr = &g_thread_control_block[getCurrentThreadSeq()];
@@ -584,8 +595,21 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 			if(strcmp(getProgramName(), intprt_ctrl.start_ctrl) == 0)
             {
             	FST_INFO("Duplicate to START %s ...", intprt_ctrl.start_ctrl);
-				setWarning(FAIL_INTERPRETER_DUPLICATE_START) ;
-            	break;
+				
+            	FST_INFO("Duplicate to LAUNCH %s ...", intprt_ctrl.start_ctrl);
+				if(getPrgmState() == INTERPRETER_IDLE)
+				{
+            		FST_INFO("Duplicate to LAUNCH %s at INTERPRETER_IDLE ...", 
+						intprt_ctrl.start_ctrl);
+					strcpy(g_interpreter_publish.program_name, ""); 
+				}
+				else
+				{
+            		FST_INFO("Duplicate to LAUNCH %s at %d ...", 
+						intprt_ctrl.start_ctrl, (int)getPrgmState());
+				    setWarning(FAIL_INTERPRETER_DUPLICATE_START) ; 
+            		break;
+				}
 			}
 			incCurrentThreadSeq();
 		    // objThdCtrlBlockPtr = &g_thread_control_block[getCurrentThreadSeq()];

@@ -1,6 +1,6 @@
 EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
 EXPORT: (002)(043)/prog/prog_body/function/body/assignment[1]                                                             R[8]  = 1.5 % 2  
-EXPORT: (003)(043)/prog/prog_body/function/body/assignment[2]                                                             R[8]  = -0.0005 / -0.0705  
+EXPORT: (003)(043)/prog/prog_body/function/body/assignment[2]                                                             R[8]  = -0.0005 × -0.0705  
 EXPORT: (004)(043)/prog/prog_body/function/body/assignment[3]                                                             R[1]  = 11  
 EXPORT: (005)(047)/prog/prog_body/function/body/logical/determine                                                         IF R[2]  <> R[1]  THEN 
 EXPORT: (006)(061)/prog/prog_body/function/body/logical/logical_body/assignment                                               R[2]  = R[1]   
@@ -15,7 +15,7 @@ EXPORT: (014)(107)/prog/prog_body/function/body/logical/vice_logical/vice_logica
 EXPORT: (015)(124)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/logical/logical_body/logical/logical_body/assignment[1]                R[4]  = PR[1].PJ2   
 EXPORT: (016)(124)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/logical/logical_body/logical/logical_body/assignment[2]                R[5]  = R[1]  + R[4]   
 EXPORT: (017)(124)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/logical/logical_body/logical/logical_body/assignment[3]                R[6]  = R[1]  - R[4]   
-EXPORT: (018)(124)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/logical/logical_body/logical/logical_body/assignment[4]                R[7]  = R[1]  * R[4]   
+EXPORT: (018)(124)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/logical/logical_body/logical/logical_body/assignment[4]                R[7]  = R[1]  × R[4]   
 EXPORT: (019)(124)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/logical/logical_body/logical/logical_body/assignment[5]                R[8]  = R[1]  / R[4]   
 EXPORT: (020)(097)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/logical/logical_body/logical               ENDIF 
 EXPORT: (021)(101)/prog/prog_body/function/body/logical/vice_logical/vice_logical_body/logical/logical_body/instruction            WAIT COND  DI[2] = ON 

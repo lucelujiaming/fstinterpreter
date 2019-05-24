@@ -6,3 +6,15 @@ SUB main ()
                 WAIT  5
             BREAK 
             CASE  2 
+                WAIT  5
+            BREAK 
+            DEFAULT   
+                WAIT  0
+            BREAK 
+        END SELECT 
+        IF R[1]  = 4 THEN 
+            R[1]  = 0  
+        ENDIF 
+    WEND 
+    END 
+END SUB 

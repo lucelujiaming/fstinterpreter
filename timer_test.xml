@@ -16,6 +16,18 @@
 			<instruction type="wait">
 			  <argument name="timeout" type="num" unit="sec">1</argument>
 			</instruction>
+			<assignment type="reg_assignment">
+			  <lvalue>
+				<element type="register">
+				  <element type="num">3</element>
+				</element>
+			  </lvalue>
+			  <rvalue>
+				<element type="timer">
+				  <element type="num">1</element>
+				</element>
+			  </rvalue>
+			</assignment>
 			<assignment type="timer">
 			  <lvalue>
 				<element type="timer">
@@ -29,6 +41,18 @@
 			<instruction type="wait">
 			  <argument name="timeout" type="num" unit="sec">3</argument>
 			</instruction>
+			<assignment type="reg_assignment">
+			  <lvalue>
+				<element type="register">
+				  <element type="num">3</element>
+				</element>
+			  </lvalue>
+			  <rvalue>
+				<element type="timer">
+				  <element type="num">1</element>
+				</element>
+			  </rvalue>
+			</assignment>
 			<assignment type="timer">
 			  <lvalue>
 				<element type="timer">

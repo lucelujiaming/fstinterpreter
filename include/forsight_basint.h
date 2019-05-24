@@ -66,6 +66,8 @@ using namespace std;
 #define MONITOR_THREAD     0
 #define MAIN_THREAD        1
 
+#define FORSIGHT_TIMER          "timer"
+
 enum double_ops {
 	LT=1,    // value < partial_value
 	LE,      // value <= partial_value

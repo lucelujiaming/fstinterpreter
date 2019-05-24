@@ -434,7 +434,7 @@ int generateElementStr(xmlNodePtr nodeValueElement, LineInfo objLineInfo, char *
 			}
 			sprintf(label_str, "%s] ", label_str);
 		}
-		else if(xmlStrcasecmp(name, BAD_CAST"timer")==0){  
+		else if(xmlStrcasecmp(name, BAD_CAST(FORSIGHT_TIMER))==0){  
 			for(nodeSubValueElement = nodeValueElement->children; 
 			nodeSubValueElement; nodeSubValueElement = nodeSubValueElement->next){
 				if(xmlStrcasecmp(nodeSubValueElement->name,BAD_CAST"element")==0){ 
@@ -1067,7 +1067,7 @@ int generateTimerInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLi
 			name = xmlGetProp(nodeInstructionParam, BAD_CAST"name");
 			// All of parameters should have spaces after them . 
 			// Without the space, it would cause the expression analyzer work failed
-			if(xmlStrcasecmp(name, BAD_CAST"timer")==0){
+			if(xmlStrcasecmp(name, BAD_CAST(FORSIGHT_TIMER))==0){
 				printBASCode(objLineInfo, "%s ", (char*)value);
 			}
 			else if(xmlStrcasecmp(name, BAD_CAST"timer_status")==0){
@@ -1211,7 +1211,7 @@ int generateMoveInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLin
 	              ||(xmlStrcasecmp(name, BAD_CAST"DB")==0)){
 				generateOffsetCondExecute(nodeInstructionParam, objLineInfo);
 			}
-			else if(xmlStrcasecmp(name, BAD_CAST"timer")==0){
+			else if(xmlStrcasecmp(name, BAD_CAST(FORSIGHT_TIMER))==0){
 				printBASCode(objLineInfo, "%s ", (char*)value);
 			}
 			else if(xmlStrcasecmp(name, BAD_CAST"timer_status")==0){
@@ -1810,7 +1810,7 @@ int generateFunctionBody(xmlNodePtr nodeFunctionBody, LineInfo objLineInfo)
 					||(xmlStrcasecmp(type,BAD_CAST"move_xpos")==0)){
 				generateMoveInstruction(nodeStatement, objLineInfoTemp);
 			}
-			else if(xmlStrcasecmp(type,BAD_CAST"timer")==0){
+			else if(xmlStrcasecmp(type,BAD_CAST(FORSIGHT_TIMER))==0){
 				generateTimerInstruction(nodeStatement, objLineInfoTemp);
 			}
 			else if(xmlStrcasecmp(type,BAD_CAST"useralarm")==0){

@@ -2,7 +2,9 @@
 002:timer_test:/prog/prog_body/function/body/assignment[1]
 003:timer_test:/prog/prog_body/function/body/instruction[1]
 004:timer_test:/prog/prog_body/function/body/assignment[2]
-005:timer_test:/prog/prog_body/function/body/instruction[2]
-006:timer_test:/prog/prog_body/function/body/assignment[3]
+005:timer_test:/prog/prog_body/function/body/assignment[3]
+006:timer_test:/prog/prog_body/function/body/instruction[2]
 007:timer_test:/prog/prog_body/function/body/assignment[4]
-008:timer_test:/prog/prog_body/function
+008:timer_test:/prog/prog_body/function/body/assignment[5]
+009:timer_test:/prog/prog_body/function/body/assignment[6]
+010:timer_test:/prog/prog_body/function

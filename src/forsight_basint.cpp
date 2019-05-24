@@ -9,6 +9,7 @@
 #include "forsight_io_controller.h"
 #include "forsight_program_property.h"
 
+#include "time.h"
 #ifndef WIN32
 #include "error_code.h"
 #else
@@ -71,7 +72,6 @@ enum var_inner_type { FORSIGHT_CHAR, FORSIGHT_INT, FORSIGHT_FLOAT };
 #define FORSIGHT_REGISTER_ON    "on"
 #define FORSIGHT_REGISTER_OFF   "off"
 
-#define FORSIGHT_TIMER          "timer"
 #define FORSIGHT_TIMER_START    "start"
 #define FORSIGHT_TIMER_STOP     "stop"
 #define FORSIGHT_TIMER_RESET    "reset"
@@ -254,7 +254,7 @@ void* basic_interpreter(void* arg)
   	setProgramName(objThreadCntrolBlock, (char *)""); 
 
 	// free(objThreadCntrolBlock->instrSet);
-	objThreadCntrolBlock->instrSet = 0 ;
+	// objThreadCntrolBlock->instrSet = 0 ;
 
 	// iIdx = g_thread_control_block[0].iThreadIdx ;
 	iIdx = objThreadCntrolBlock->iThreadIdx ;
@@ -1713,6 +1713,10 @@ static int jumpout_one_block_in_loc(struct thread_control_block * objThreadCntro
 			}
 			return JUMP_OUT_OK ;
 	    }
+		else
+		{
+			return JUMP_OUT_RANGE ;
+		}
 
 		if(objThreadCntrolBlock->prog > loc)
 		{
@@ -3166,7 +3170,8 @@ void serror(struct thread_control_block * objThreadCntrolBlock, int error)
 		FAIL_INTERPRETER_DUPLICATE_START   	      , 	"Duplicate START is executing",          // 29
 		FAIL_INTERPRETER_DUPLICATE_LAUNCH   	  , 	"Duplicate LAUNCH is executing",         // 30
 		INFO_INTERPRETER_BACK_TO_LOGIC   	      , 	"reverted executing to logic statement", // 31
-		INFO_INTERPRETER_XML_WRONG_ELEMENT   	  , 	"Wrong Command in FunctionBody"          // 32
+		INFO_INTERPRETER_XML_WRONG_ELEMENT   	  , 	"Wrong Command in FunctionBody",         // 32
+		FAIL_INTERPRETER_SPECIAL_CHARACTER   	  , 	"Finding special character"              // 33
   };
   if(error > (int)(sizeof(errInfo)/sizeof(ErrInfo))) {
   	FST_ERROR("\t NOTICE : Error out of range %d ", error);
@@ -3385,6 +3390,11 @@ int get_token(struct thread_control_block * objThreadCntrolBlock)
 	{
 	   objThreadCntrolBlock->token_type = VARIABLE;
 	}
+  }
+  else
+  {
+	  FST_ERROR("get_token error :: objThreadCntrolBlock->prog =  '%s'", objThreadCntrolBlock->prog);
+	  serror(objThreadCntrolBlock, 33);
   }
   return objThreadCntrolBlock->token_type;
 }
@@ -3694,7 +3704,7 @@ void primitive(struct thread_control_block * objThreadCntrolBlock,
   switch(objThreadCntrolBlock->token_type) {
   case INNERCMD:
     // Timer
-	if(strcmp(objThreadCntrolBlock->token, "timer") != 0)
+	if(strcmp(objThreadCntrolBlock->token, FORSIGHT_TIMER) != 0)
     {
 		result->setFloatValue(1.0);
 		get_token(objThreadCntrolBlock);
@@ -3869,6 +3879,15 @@ static int get_char_token(char * src, char * dst)
 	return tmp - src ;
 }
 
+static int get_num_token(char * src, char * dst)
+{
+	char * tmp = src ;
+	if(isdigit(*src)) { /* var or command */
+		while(!isdelim(*(src))) 
+			*dst++=*(src)++;
+	}
+	return src - tmp ;
+}
 
 void set_var_value(struct thread_control_block * objThreadCntrolBlock, 
 				   char *dst_reg_name, eval_value& valueDst, eval_value& valueSrc)
@@ -4140,7 +4159,10 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 	MoveCommandDestination movCmdDst ;
 	eval_value value ;
 	int        boolPulseValue;
-	char array_name[256] ;
+	char reg_name[16] ;
+	char reg_idx[16] ;
+	int  iRegIdx = 0 ;
+	char * namePtr = vname ;
 	char *temp = NULL ;
 
     vector<var_type>::reverse_iterator it ;
@@ -4207,15 +4229,32 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 		return value ;
 	}
 	
-	memset(array_name, 0x00, 256);
-	temp = array_name ;
+	memset(reg_name, 0x00, 256);
+	temp = reg_name ;
 	get_char_token(vname, temp);
+	
+	namePtr += strlen(reg_name) ;
+	if(namePtr[0] == '['){
+		namePtr++ ;
+		
+		memset(reg_idx, 0x00, 16);
+		temp = reg_idx ;
+		get_num_token(namePtr, temp);
+		iRegIdx = atoi(reg_idx);
+		// namePtr += strlen(reg_idx) ;
+		
+		namePtr += strlen(reg_idx) ;
+	//	if(namePtr[0] != ']'){
+	//		return -1 ;
+	//	}
+		namePtr++ ;
+	}
 
 	// Inner Type
 	// deal "pr;sr;r;mr;uf;tf;pl" except p
-    if(strstr(REGSITER_NAMES, array_name) 
-		&& (strcmp(array_name, "p") != 0) 
-		&& (strcmp(array_name, "r") != 0))
+    if(strstr(REGSITER_NAMES, reg_name) 
+		&& (strcmp(reg_name, "p") != 0) 
+		&& (strcmp(reg_name, "r") != 0))
     {
 		if(strchr(vname, '['))
 		{
@@ -4233,9 +4272,9 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 			}
 		}
     }
-	else if(strstr(IO_NAMES, array_name)
-		&&(strlen(array_name) == 2)
-		&&((array_name[1] == 'i') || (array_name[1] == 'o')))
+	else if(strstr(IO_NAMES, reg_name)
+		&&(strlen(reg_name) == 2)
+		&&((reg_name[1] == 'i') || (reg_name[1] == 'o')))
     {
 		if(strchr(vname, '['))
 		{
@@ -4246,7 +4285,7 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 	}
 
 	// External Type
-	if(forgesight_find_external_resource(array_name, keyVar))
+	if(forgesight_find_external_resource(reg_name, keyVar))
 	{
 		if(strchr(vname, '['))
 		{
@@ -4275,12 +4314,33 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 		it != objThreadCntrolBlock->global_vars.rend(); ++it)
 	{
 	    if(!strcmp(it->var_name, vname))  {
-	        return it->value;
+			if(!strcmp(reg_name, FORSIGHT_TIMER))
+			{
+				value = it->value ;
+				if(it->value.getFloatValue() == TIMER_START_VALUE)
+				{
+					value.setFloatValue(time(0) - get_timer_start_time(iRegIdx));
+					return value;
+				}
+				else if(value.getFloatValue() == TIMER_RESET_VALUE)
+				{
+					value.setFloatValue(time(0) - get_timer_start_time(iRegIdx));
+					return value;
+				}
+				else
+				{
+					return it->value;
+				}
+			}
+			else
+			{
+				return it->value;
+			}
         }
 	}
 		
 	if(strstr(vname, ".") 
-		&& (strcmp(array_name, "p") == 0))
+		&& (strcmp(reg_name, "p") == 0))
 	{
 		if(strchr(vname, '['))
 		{

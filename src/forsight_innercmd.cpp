@@ -58,17 +58,16 @@ struct intern_cmd_type {
     int (*p)(int , struct thread_control_block* );   // pointer to the function   
 } intern_cmd[] = {   
     // move on the top
-    (char *)"movel",      0, call_MoveL,
-    (char *)"movej",      0, call_MoveJ,
-    (char *)"movec",      0, call_MoveC,
-    (char *)"movex",      0, call_MoveXPos,
+    (char *)"movel",          0, call_MoveL,
+    (char *)"movej",          0, call_MoveJ,
+    (char *)"movec",          0, call_MoveC,
+    (char *)"movex",          0, call_MoveXPos,
     // left
-    (char *)"timer",      1, call_Timer,
-    (char *)"useralarm",  1, call_UserAlarm,
-    (char *)"wait",       1, call_Wait,
-    (char *)"pause",      1, call_Pause,
-    (char *)"abort",      1, call_Abort,
-    (char *)"bldc_ctrl",  1, call_BLDC_CTRL,
+    (char *)FORSIGHT_TIMER,   1, call_Timer,
+    (char *)"useralarm",      1, call_UserAlarm,
+    (char *)"wait",           1, call_Wait,
+    (char *)"pause",          1, call_Pause,
+    (char *)"abort",          1, call_Abort,
     (char *)"", 0  // null terminate the list   
 };
 
@@ -128,6 +127,13 @@ static char * get_cmd_param(char * prog, char* temp)
   return prog;
 }
 
+time_t get_timer_start_time(int iIdx)
+{
+	if(iIdx >= MAX_STOPWATCH_NUM)
+		return time(0);
+	else
+		return g_structStopWatch[iIdx].start_time;
+}
 /************************************************* 
 	Function:		find_internal_cmd
 	Description:	find internal cmd in the intern_cmd.
@@ -839,6 +845,7 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 #else
 		instr.target.target.joint.j6 = value.getFloatValue();
 #endif
+		instr.target.user_frame_id = instr.target.tool_frame_id = -1 ;
 	}
 	else if(value.getType() == TYPE_POSE)
 	{
@@ -1450,6 +1457,7 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 #else
 		instr.target.via.pose.pose.orientation.c = value.getFloatValue();
 #endif	
+		instr.target.user_frame_id = instr.target.tool_frame_id = -1 ;
 	}
 	else if(value.getType() == TYPE_POSE)
 	{
@@ -1796,6 +1804,7 @@ int call_MoveXPos(int iLineNum, struct thread_control_block* objThreadCntrolBloc
 			instr.target.prPos[prPosIdx] = 21 + prPosIdx;
 		}
 	}
+	instr.target.user_frame_id = instr.target.tool_frame_id = -1 ;
 	// We had jump ","
 	// get_token(objThreadCntrolBlock);
     get_exp(objThreadCntrolBlock, &value, &boolValue);
@@ -1957,17 +1966,17 @@ int execute_Timer(struct thread_control_block* objThreadCntrolBlock, char *vname
 	{
 		FST_INFO("%d: call_Timer  start", __LINE__);
 		g_structStopWatch[iTimerIdx].start_time = time(0);
-		value.setFloatValue(0); // 0.0; 
+		// value.setFloatValue(0); // 0.0; 
 		erase_var(objThreadCntrolBlock, vname);
-	//	assign_var(objThreadCntrolBlock, vname, value); // 0.0);
+		assign_global_var(objThreadCntrolBlock, vname, value); // 0.0);
 	}
 	else if(value.getFloatValue() == TIMER_RESET_VALUE)
 	{
 		FST_INFO("%d: call_Timer restart", __LINE__);
 		g_structStopWatch[iTimerIdx].start_time = time(0);
-		value.setFloatValue(0); // 0.0; 
+		// value.setFloatValue(0); // 0.0; 
 		erase_var(objThreadCntrolBlock, vname);
-	//	assign_var(objThreadCntrolBlock, vname, value); // 0.0);
+		assign_global_var(objThreadCntrolBlock, vname, value); // 0.0);
 	}
 	else if(value.getFloatValue() == TIMER_STOP_VALUE)
 	{
@@ -2013,7 +2022,7 @@ int call_Timer(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		if(timerNumber >= MAX_STOPWATCH_NUM)
 			return 0;
 		
-		sprintf(var, "timer[%d]", timerNumber);
+		sprintf(var, "%s[%d]", FORSIGHT_TIMER, timerNumber);
 		get_token(objThreadCntrolBlock);
         FST_INFO("%d: call_Timer  enter %s ", __LINE__, objThreadCntrolBlock->token);
 		if(strcmp(objThreadCntrolBlock->token, "start") == 0)

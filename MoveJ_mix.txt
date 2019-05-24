@@ -1,0 +1,13 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(047)/prog/prog_body/function/body/logical/determine                                                         WHILE 1 = 1 
+EXPORT: (003)(065)/prog/prog_body/function/body/logical/logical_body/instruction[1]                                           MOVEJ PR[1], 100 CNT -1 
+EXPORT: (004)(065)/prog/prog_body/function/body/logical/logical_body/instruction[2]                                           MOVEJ PR[2], 100 SD 100 ;ACC 100 
+EXPORT: (005)(065)/prog/prog_body/function/body/logical/logical_body/instruction[3]                                           MOVEJ PR[3], 100 CNT -1 
+EXPORT: (006)(065)/prog/prog_body/function/body/logical/logical_body/instruction[4]                                           MOVEJ P[1], 100 CNT -1 
+EXPORT: (007)(065)/prog/prog_body/function/body/logical/logical_body/instruction[5]                                           MOVEJ P[2], 100 CNT -1 
+EXPORT: (008)(065)/prog/prog_body/function/body/logical/logical_body/instruction[6]                                           MOVEJ P[4], 100 CNT -1 
+EXPORT: (009)(065)/prog/prog_body/function/body/logical/logical_body/instruction[7]                                           MOVEJ P[5], 100 CNT -1 
+EXPORT: (010)(065)/prog/prog_body/function/body/logical/logical_body/instruction[8]                                           MOVEJ P[6], 100 CNT -1 
+EXPORT: (011)(037)/prog/prog_body/function/body/logical                                                                   WEND 
+EXPORT: (012)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (013)(024)/prog/prog_body/function                                                                            END SUB 
