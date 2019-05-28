@@ -1713,7 +1713,7 @@ static int jumpout_one_block_in_loc(struct thread_control_block * objThreadCntro
 			}
 			return JUMP_OUT_OK ;
 	    }
-		else
+		else  if(objThreadCntrolBlock->prog_mode == ERROR_MODE)
 		{
 			return JUMP_OUT_RANGE ;
 		}

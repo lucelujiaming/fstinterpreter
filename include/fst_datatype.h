@@ -261,11 +261,9 @@ enum MotionType {
 
 // A flag indicating the smooth type between two motions
 enum SmoothType {
-    SMOOTH_NONE,
-    SMOOTH_2J,
-    SMOOTH_2L,
-    SMOOTH_2C,
-    SMOOTH_UNKNOWN,
+    SMOOTH_NONE = 0,
+	SMOOTH_DISTANCE = 1,
+    SMOOTH_VELOCITY = 2,
 };
 
 enum SmoothMode
@@ -427,27 +425,19 @@ struct CircleTarget {
 #define     PR_POS_LEN           128
 // target structure used in motion command
 struct MotionTarget {
-    MotionType  type;
-
-    // 0.0 - 1.0
-    double cnt;
-
-    // percent velocity in move Joint, range: 0.0-1.0
-    // linear velocity in move cartesian, range 0.0-MAC_VEL
-    // velocity < 0 means using default velocity
-    double vel;
-
-    // percent accleration in move Joint, range: 0.0-1.0
-    // linear accleration in move cartesian, range: 0.0-MAX_ACC
-    // accleration < 0 means using default accleration
-    double acc;
-
-	int user_frame_id;
-    int tool_frame_id;
-
-     int             prPos[PR_POS_LEN];
-	TargetPoint target;  
-    TargetPoint via;     
+    MotionType  type;           // 指令的运动类型
+    SmoothType  smooth_type;    // 指令的平滑类型
+	
+    double  cnt;    // 平滑参数的范围 ： 速度平滑[0.0, 1.0]，距离平滑[0.0, +∞]， 如果是FINE语句CNT应为-1
+    double  vel;    // 指令速度： 如果是moveJ，指令速度是百分比, 范围: 0.0 - 1.0
+	//           如果是moveL或moveC，指令速度是mm/s, 范围： 0.0 - MAX_VEL
+    
+    int user_frame_id;  // 如果是moveL或者moveC，需要指定目标点所处的用户坐标系标号和所用工具的标号，反解时需要
+    int tool_frame_id;  // 如果用户坐标系标号和工具标号与当前的在用标号不符时直接报错，如果是-1则使用当前激活的uf和tf
+	
+    int prPos[PR_POS_LEN];
+    TargetPoint target;   // moveJ和moveL时使用
+    TargetPoint via;      // moveC时用作中间一个辅助点
 };
 
 // initial state of a line motion

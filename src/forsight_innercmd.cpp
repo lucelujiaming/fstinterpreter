@@ -30,6 +30,10 @@
 #define   MOVL_COMMAND_PARAM_MIN     8
 #define   MOVC_COMMAND_PARAM_MIN     14
 
+#define   SMOOTH_TYPE_CNT      "cnt"
+#define   SMOOTH_TYPE_SD       "sd"
+#define   SMOOTH_TYPE_SV       "sv"
+
 typedef struct _StopWatch
 {
     time_t start_time;
@@ -68,6 +72,7 @@ struct intern_cmd_type {
     (char *)"wait",           1, call_Wait,
     (char *)"pause",          1, call_Pause,
     (char *)"abort",          1, call_Abort,
+    (char *)"bldc_ctrl",  1, call_BLDC_CTRL,
     (char *)"", 0  // null terminate the list   
 };
 
@@ -956,28 +961,52 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
     instr.target.vel        = value.getFloatValue() / 100;
 	
 	get_token(objThreadCntrolBlock);
-	if(strcmp(objThreadCntrolBlock->token, "cnt") == 0)
+	if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_CNT) == 0)
     {
+		// 平滑参数的范围 ：
     	get_exp(objThreadCntrolBlock, &value, &boolValue);
     	if(objThreadCntrolBlock->prog_mode == STEP_MODE)
     	{
+			instr.target.smooth_type = SMOOTH_NONE;
         	instr.target.cnt = -1;
     	}
 	    else
 	    {
+			// 如果是FINE语句CNT应为-1
 	        if(value.getFloatValue() < 0) // == -1
 	    	{
+				instr.target.smooth_type = SMOOTH_NONE;
 	        	instr.target.cnt = -1;
 	     		FST_INFO("instr.target.cnt = %f in the FINE.", instr.target.cnt);
 	    	}
 	        else 
+			{
+				// 速度平滑[0.0, 1.0]，
+				instr.target.smooth_type = SMOOTH_VELOCITY;
 				instr.target.cnt = value.getFloatValue() / 100;
+			}
 	    }
     }
     else
     {
     	get_exp(objThreadCntrolBlock, &value, &boolValue);
-        instr.target.cnt = value.getFloatValue() / 100;
+		if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_SD) == 0)
+		{
+			instr.target.smooth_type = SMOOTH_DISTANCE;
+			// 距离平滑[0.0, +∞]，
+        	instr.target.cnt = value.getFloatValue() ;    // 
+		}
+		else if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_SV) == 0)
+		{
+			instr.target.smooth_type = SMOOTH_VELOCITY;
+			// 速度平滑[0.0, 1.0]，
+        	instr.target.cnt = value.getFloatValue() / 100;
+		}
+		else 
+		{
+			instr.target.smooth_type = SMOOTH_NONE;
+			instr.target.cnt = -1.0000;
+		}
     }
 	// instr.target.acc = -1 ;
 	// Set to instrSet
@@ -1261,29 +1290,53 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
     instr.target.vel                  = value.getFloatValue();
 
 	get_token(objThreadCntrolBlock);
-	if(strcmp(objThreadCntrolBlock->token, "cnt") == 0)
+	if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_CNT) == 0)
     {
+		// 平滑参数的范围 ：
     	get_exp(objThreadCntrolBlock, &value, &boolValue);
-	     FST_INFO("instr.target.cnt = %f setInstruction.", value.getFloatValue());
+	    FST_INFO("instr.target.cnt = %f setInstruction.", value.getFloatValue());
     	if(objThreadCntrolBlock->prog_mode == STEP_MODE)
     	{
+			instr.target.smooth_type = SMOOTH_NONE;
         	instr.target.cnt = -1;
     	}
 	    else
 	    {
+			// 如果是FINE语句CNT应为-1
 	        if(value.getFloatValue() < 0) // == -1
 	    	{
+				instr.target.smooth_type = SMOOTH_NONE;
 	        	instr.target.cnt = -1.0000;
 	     		FST_INFO("instr.target.cnt = %f in the FINE.", instr.target.cnt);
 	    	}
 	        else 
-	            instr.target.cnt = value.getFloatValue() / 100;
+			{
+				// 速度平滑[0.0, 1.0]，
+				instr.target.smooth_type = SMOOTH_VELOCITY;
+				instr.target.cnt = value.getFloatValue() / 100;
+			}
 	    }
     }
     else
     {
     	get_exp(objThreadCntrolBlock, &value, &boolValue);
-        instr.target.cnt = value.getFloatValue() / 100;
+		if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_SD) == 0)
+		{
+			instr.target.smooth_type = SMOOTH_DISTANCE;
+			// 距离平滑[0.0, +∞]，
+        	instr.target.cnt = value.getFloatValue() ;
+		}
+		else if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_SV) == 0)
+		{
+			instr.target.smooth_type = SMOOTH_VELOCITY;
+			// 速度平滑[0.0, 1.0]，
+        	instr.target.cnt = value.getFloatValue() / 100;
+		}
+		else 
+		{
+			instr.target.smooth_type = SMOOTH_NONE;
+			instr.target.cnt = -1.0000;
+		}
     }
 	// instr.target.acc = -1 ;
 	// Set to instrSet
@@ -1628,28 +1681,52 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
     instr.target.vel                  = value.getFloatValue();
 
 	get_token(objThreadCntrolBlock);
-	if(strcmp(objThreadCntrolBlock->token, "cnt") == 0)
+	if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_CNT) == 0)
     {
+		// 平滑参数的范围 ：
     	get_exp(objThreadCntrolBlock, &value, &boolValue);
     	if(objThreadCntrolBlock->prog_mode == STEP_MODE)
     	{
+			instr.target.smooth_type = SMOOTH_NONE;
         	instr.target.cnt = -1;
     	}
 	    else
-	    {
+		{
+			// 如果是FINE语句CNT应为-1
 	        if(value.getFloatValue() < 0) // == -1
 	    	{
+				instr.target.smooth_type = SMOOTH_NONE;
 	        	instr.target.cnt = -1.0000;
 	     		FST_INFO("instr.target.cnt = %f in the FINE.", instr.target.cnt);
 	    	}
 	        else 
-	            instr.target.cnt = value.getFloatValue() / 100;
+			{
+				// 速度平滑[0.0, 1.0]，
+				instr.target.smooth_type = SMOOTH_VELOCITY;
+				instr.target.cnt = value.getFloatValue() / 100;
+			}
 	    }
     }
     else
     {
     	get_exp(objThreadCntrolBlock, &value, &boolValue);
-        instr.target.cnt = value.getFloatValue() / 100;
+		if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_SD) == 0)
+		{
+			instr.target.smooth_type = SMOOTH_DISTANCE;
+			// 距离平滑[0.0, +∞]，
+        	instr.target.cnt = value.getFloatValue() ;
+		}
+		else if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_SV) == 0)
+		{
+			instr.target.smooth_type = SMOOTH_VELOCITY;
+			// 速度平滑[0.0, 1.0]，
+        	instr.target.cnt = value.getFloatValue() / 100;
+		}
+		else 
+		{
+			instr.target.smooth_type = SMOOTH_NONE;
+			instr.target.cnt = -1.0000;
+		}
     }
 	// instr.target.acc = -1 ;
 	// Set to instrSet
@@ -1811,29 +1888,53 @@ int call_MoveXPos(int iLineNum, struct thread_control_block* objThreadCntrolBloc
     instr.target.vel                  = value.getFloatValue() / 100;
 	
 	get_token(objThreadCntrolBlock);
-	if(strcmp(objThreadCntrolBlock->token, "cnt") == 0)
+	if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_CNT) == 0)
     {
+		// 平滑参数的范围 ：
 		get_exp(objThreadCntrolBlock, &value, &boolValue);
 		FST_INFO("instr.target.cnt = %f setInstruction.", value.getFloatValue());
 		if(objThreadCntrolBlock->prog_mode == STEP_MODE)
 		{
+			instr.target.smooth_type = SMOOTH_NONE;
 			instr.target.cnt = -1;
 		}
 		else
 		{
+			// 如果是FINE语句CNT应为-1
 			if(value.getFloatValue() < 0) // == -1
 			{
+				instr.target.smooth_type = SMOOTH_NONE;
 				instr.target.cnt = -1.0000;
 				FST_INFO("instr.target.cnt = %f in the FINE.", instr.target.cnt);
 			}
 			else 
+			{
+				// 速度平滑[0.0, 1.0]，
+				instr.target.smooth_type = SMOOTH_VELOCITY;
 				instr.target.cnt = value.getFloatValue() / 100;
+			}
 		}
     }
     else
     {
 		get_exp(objThreadCntrolBlock, &value, &boolValue);
-        instr.target.cnt = value.getFloatValue() / 100;
+		if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_SD) == 0)
+		{
+			instr.target.smooth_type = SMOOTH_DISTANCE;
+			// 距离平滑[0.0, +∞]，
+        	instr.target.cnt = value.getFloatValue();
+		}
+		else if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_SV) == 0)
+		{
+			instr.target.smooth_type = SMOOTH_VELOCITY;
+			// 速度平滑[0.0, 1.0]，
+        	instr.target.cnt = value.getFloatValue() / 100;
+		}
+		else 
+		{
+			instr.target.smooth_type = SMOOTH_NONE;
+			instr.target.cnt = -1.0000;
+		}
     }
 	// instr.target.acc = -1 ;
 	// Set to instrSet
