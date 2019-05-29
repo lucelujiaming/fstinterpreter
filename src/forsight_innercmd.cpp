@@ -989,18 +989,37 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
     }
     else
     {
-    	get_exp(objThreadCntrolBlock, &value, &boolValue);
 		if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_SD) == 0)
 		{
-			instr.target.smooth_type = SMOOTH_DISTANCE;
 			// 距离平滑[0.0, +∞]，
-        	instr.target.cnt = value.getFloatValue() ;    // 
+			get_exp(objThreadCntrolBlock, &value, &boolValue);
+			if(value.getFloatValue() < 0) // == -1
+			{
+				instr.target.smooth_type = SMOOTH_NONE;
+				instr.target.cnt = -1;
+				FST_INFO("instr.target.cnt = %f in the FINE.", instr.target.cnt);
+			}
+			else 
+			{
+				instr.target.smooth_type = SMOOTH_DISTANCE;
+        		instr.target.cnt = value.getFloatValue() ; 
+			}
 		}
 		else if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_SV) == 0)
 		{
-			instr.target.smooth_type = SMOOTH_VELOCITY;
 			// 速度平滑[0.0, 1.0]，
-        	instr.target.cnt = value.getFloatValue() / 100;
+    		get_exp(objThreadCntrolBlock, &value, &boolValue);
+			if(value.getFloatValue() < 0) // == -1
+			{
+				instr.target.smooth_type = SMOOTH_NONE;
+				instr.target.cnt = -1;
+				FST_INFO("instr.target.cnt = %f in the FINE.", instr.target.cnt);
+			}
+			else 
+			{
+				instr.target.smooth_type = SMOOTH_VELOCITY;
+				instr.target.cnt = value.getFloatValue() / 100;
+			}
 		}
 		else 
 		{
@@ -1319,18 +1338,39 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
     }
     else
     {
-    	get_exp(objThreadCntrolBlock, &value, &boolValue);
 		if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_SD) == 0)
 		{
 			instr.target.smooth_type = SMOOTH_DISTANCE;
 			// 距离平滑[0.0, +∞]，
-        	instr.target.cnt = value.getFloatValue() ;
+			get_exp(objThreadCntrolBlock, &value, &boolValue);
+			if(value.getFloatValue() < 0) // == -1
+			{
+				instr.target.smooth_type = SMOOTH_NONE;
+				instr.target.cnt = -1;
+				FST_INFO("instr.target.cnt = %f in the FINE.", instr.target.cnt);
+			}
+			else 
+			{
+				instr.target.smooth_type = SMOOTH_DISTANCE;
+        		instr.target.cnt = value.getFloatValue() ; 
+			}
 		}
 		else if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_SV) == 0)
 		{
 			instr.target.smooth_type = SMOOTH_VELOCITY;
 			// 速度平滑[0.0, 1.0]，
-        	instr.target.cnt = value.getFloatValue() / 100;
+    		get_exp(objThreadCntrolBlock, &value, &boolValue);
+			if(value.getFloatValue() < 0) // == -1
+			{
+				instr.target.smooth_type = SMOOTH_NONE;
+				instr.target.cnt = -1;
+				FST_INFO("instr.target.cnt = %f in the FINE.", instr.target.cnt);
+			}
+			else 
+			{
+				instr.target.smooth_type = SMOOTH_VELOCITY;
+				instr.target.cnt = value.getFloatValue() / 100;
+			}
 		}
 		else 
 		{
@@ -1709,18 +1749,39 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
     }
     else
     {
-    	get_exp(objThreadCntrolBlock, &value, &boolValue);
 		if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_SD) == 0)
 		{
 			instr.target.smooth_type = SMOOTH_DISTANCE;
 			// 距离平滑[0.0, +∞]，
-        	instr.target.cnt = value.getFloatValue() ;
+			get_exp(objThreadCntrolBlock, &value, &boolValue);
+			if(value.getFloatValue() < 0) // == -1
+			{
+				instr.target.smooth_type = SMOOTH_NONE;
+				instr.target.cnt = -1;
+				FST_INFO("instr.target.cnt = %f in the FINE.", instr.target.cnt);
+			}
+			else 
+			{
+				instr.target.smooth_type = SMOOTH_DISTANCE;
+        		instr.target.cnt = value.getFloatValue() ; 
+			}
 		}
 		else if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_SV) == 0)
 		{
 			instr.target.smooth_type = SMOOTH_VELOCITY;
 			// 速度平滑[0.0, 1.0]，
-        	instr.target.cnt = value.getFloatValue() / 100;
+    		get_exp(objThreadCntrolBlock, &value, &boolValue);
+			if(value.getFloatValue() < 0) // == -1
+			{
+				instr.target.smooth_type = SMOOTH_NONE;
+				instr.target.cnt = -1;
+				FST_INFO("instr.target.cnt = %f in the FINE.", instr.target.cnt);
+			}
+			else 
+			{
+				instr.target.smooth_type = SMOOTH_VELOCITY;
+				instr.target.cnt = value.getFloatValue() / 100;
+			}
 		}
 		else 
 		{
@@ -1917,18 +1978,39 @@ int call_MoveXPos(int iLineNum, struct thread_control_block* objThreadCntrolBloc
     }
     else
     {
-		get_exp(objThreadCntrolBlock, &value, &boolValue);
 		if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_SD) == 0)
 		{
 			instr.target.smooth_type = SMOOTH_DISTANCE;
 			// 距离平滑[0.0, +∞]，
-        	instr.target.cnt = value.getFloatValue();
+			get_exp(objThreadCntrolBlock, &value, &boolValue);
+			if(value.getFloatValue() < 0) // == -1
+			{
+				instr.target.smooth_type = SMOOTH_NONE;
+				instr.target.cnt = -1;
+				FST_INFO("instr.target.cnt = %f in the FINE.", instr.target.cnt);
+			}
+			else 
+			{
+				instr.target.smooth_type = SMOOTH_DISTANCE;
+        		instr.target.cnt = value.getFloatValue() ; 
+			}
 		}
 		else if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_SV) == 0)
 		{
 			instr.target.smooth_type = SMOOTH_VELOCITY;
 			// 速度平滑[0.0, 1.0]，
-        	instr.target.cnt = value.getFloatValue() / 100;
+    		get_exp(objThreadCntrolBlock, &value, &boolValue);
+			if(value.getFloatValue() < 0) // == -1
+			{
+				instr.target.smooth_type = SMOOTH_NONE;
+				instr.target.cnt = -1;
+				FST_INFO("instr.target.cnt = %f in the FINE.", instr.target.cnt);
+			}
+			else 
+			{
+				instr.target.smooth_type = SMOOTH_VELOCITY;
+				instr.target.cnt = value.getFloatValue() / 100;
+			}
 		}
 		else 
 		{
