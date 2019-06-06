@@ -21,6 +21,18 @@
 		<instruction type="wait">
 			   <argument name="timeout" type="num" unit="sec">1</argument>
 		</instruction>
+        <assignment type="assignment">
+          <lvalue>
+            <element type="di">
+              <element type="num">2</element>
+            </element>
+          </lvalue>
+          <rvalue>
+			  <element type="register">
+				<element type="num">2</element>
+			  </element>
+          </rvalue>
+        </assignment>
         <comment>测试结束</comment>
         <end name="prog"/>
       </body>

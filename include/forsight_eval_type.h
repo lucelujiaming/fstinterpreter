@@ -1,6 +1,7 @@
 #ifndef FORSIGHT_EVAL_TYPE_H
 #define FORSIGHT_EVAL_TYPE_H
 #include <stdlib.h>
+#include <string>
 
 #ifdef WIN32
 #include "fst_datatype.h" 
@@ -13,6 +14,10 @@ using namespace basic_alg;
 #include "process_comm.h"
 using namespace fst_ctrl ;
 #endif
+
+#define EVAL_CMP_TRUE            1
+#define EVAL_CMP_FALSE           0
+#define EVAL_CMP_ERROR           -1
 
 typedef struct
 {
@@ -48,6 +53,9 @@ public:
 	eval_value() 
 	{
 		resetNoneValue() ;
+	}
+	int hasType(EvalValueType type){
+		return evalType & type ;
 	}
 	int getType(){
 		return evalType ;
@@ -772,6 +780,149 @@ public:
 		return opt ;
 	}
 	
+	int calcLT(eval_value * operand)
+	{
+		if((hasType(TYPE_STRING) == TYPE_STRING)
+			&& (operand->hasType(TYPE_STRING) == TYPE_STRING))
+		{
+			if(getStringValue() < operand->getStringValue()) 
+				return EVAL_CMP_TRUE;
+			else
+				return EVAL_CMP_FALSE ;
+		}
+		else if((hasType(TYPE_FLOAT) == TYPE_FLOAT)
+			&& (operand->hasType(TYPE_FLOAT) == TYPE_FLOAT))
+		{
+			if(getFloatValue() < operand->getFloatValue()) 
+				return EVAL_CMP_TRUE;
+			else
+				return EVAL_CMP_FALSE ;
+		}
+		else {
+			noticeErrorType(operand->getType()) ;
+			return EVAL_CMP_ERROR;
+		}
+	}
+
+	int calcLE(eval_value * operand)
+	{
+		if((hasType(TYPE_STRING) == TYPE_STRING)
+			&& (operand->hasType(TYPE_STRING) == TYPE_STRING))
+		{
+			if(getStringValue() <= operand->getStringValue()) 
+				return EVAL_CMP_TRUE;
+			else
+				return EVAL_CMP_FALSE ;
+		}
+		else if((hasType(TYPE_FLOAT) == TYPE_FLOAT)
+			&& (operand->hasType(TYPE_FLOAT) == TYPE_FLOAT))
+		{
+			if(getFloatValue() <= operand->getFloatValue()) 
+				return EVAL_CMP_TRUE;
+			else
+				return EVAL_CMP_FALSE ;
+		}
+		else {
+			noticeErrorType(operand->getType()) ;
+			return EVAL_CMP_ERROR;
+		}
+	}
+
+	int calcGT(eval_value * operand)
+	{
+		if((hasType(TYPE_STRING) == TYPE_STRING)
+			&& (operand->hasType(TYPE_STRING) == TYPE_STRING))
+		{
+			if(getStringValue() > operand->getStringValue()) 
+				return EVAL_CMP_TRUE;
+			else
+				return EVAL_CMP_FALSE ;
+		}
+		else if((hasType(TYPE_FLOAT) == TYPE_FLOAT)
+			&& (operand->hasType(TYPE_FLOAT) == TYPE_FLOAT))
+		{
+			if(getFloatValue() > operand->getFloatValue()) 
+				return EVAL_CMP_TRUE;
+			else
+				return EVAL_CMP_FALSE ;
+		}
+		else {
+			noticeErrorType(operand->getType()) ;
+			return EVAL_CMP_ERROR;
+		}
+	}
+
+	int calcGE(eval_value * operand)
+	{
+		if((hasType(TYPE_STRING) == TYPE_STRING)
+			&& (operand->hasType(TYPE_STRING) == TYPE_STRING))
+		{
+			if(getStringValue() >= operand->getStringValue()) 
+				return EVAL_CMP_TRUE;
+			else
+				return EVAL_CMP_FALSE ;
+		}
+		else if((hasType(TYPE_FLOAT) == TYPE_FLOAT)
+			&& (operand->hasType(TYPE_FLOAT) == TYPE_FLOAT))
+		{
+			if(getFloatValue() >= operand->getFloatValue()) 
+				return EVAL_CMP_TRUE;
+			else
+				return EVAL_CMP_FALSE ;
+		}
+		else {
+			noticeErrorType(operand->getType()) ;
+			return EVAL_CMP_ERROR;
+		}
+	}
+
+	int calcEQ(eval_value * operand)
+	{
+		if((hasType(TYPE_STRING) == TYPE_STRING)
+			&& (operand->hasType(TYPE_STRING) == TYPE_STRING))
+		{
+			if(getStringValue() == operand->getStringValue()) 
+				return EVAL_CMP_TRUE;
+			else
+				return EVAL_CMP_FALSE ;
+		}
+		else if((hasType(TYPE_FLOAT) == TYPE_FLOAT)
+			&& (operand->hasType(TYPE_FLOAT) == TYPE_FLOAT))
+		{
+			if(getFloatValue() == operand->getFloatValue()) 
+				return EVAL_CMP_TRUE;
+			else
+				return EVAL_CMP_FALSE ;
+		}
+		else {
+			noticeErrorType(operand->getType()) ;
+			return EVAL_CMP_ERROR;
+		}
+	}
+	
+	int calcNE(eval_value * operand)
+	{
+		if((hasType(TYPE_STRING) == TYPE_STRING)
+			&& (operand->hasType(TYPE_STRING) == TYPE_STRING))
+		{
+			if(getStringValue() != operand->getStringValue()) 
+				return EVAL_CMP_TRUE;
+			else
+				return EVAL_CMP_FALSE ;
+		}
+		else if((hasType(TYPE_FLOAT) == TYPE_FLOAT)
+			&& (operand->hasType(TYPE_FLOAT) == TYPE_FLOAT))
+		{
+			if(getFloatValue() != operand->getFloatValue()) 
+				return EVAL_CMP_TRUE;
+			else
+				return EVAL_CMP_FALSE ;
+		}
+		else {
+			noticeErrorType(operand->getType()) ;
+			return EVAL_CMP_ERROR;
+		}
+	}
 private:
 	void noticeErrorType(int type){
 		printf("TypeError: call %04X in the %04X\n", type, evalType);

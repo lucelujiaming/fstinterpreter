@@ -218,6 +218,7 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 			int speed = (int)value.getFloatValue();
 			additionalInfomation.acc_speed = speed ;
 			iCount++ ;
+			objThreadCntrolBlock->instrSet->target.acc = (float)speed / 100 ;
 		}
 		// 2.	 Condition <case>（低优先级）
 		// 3.	批量位置补偿指令（低优先级）
@@ -1030,6 +1031,7 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	// instr.target.acc = -1 ;
 	// Set to instrSet
 	memcpy(objThreadCntrolBlock->instrSet, &instr, sizeof(Instruction));
+	objThreadCntrolBlock->instrSet->target.acc = 1.0 ;
 	
 	get_token(objThreadCntrolBlock);
 	// result.size() > MOVJ_COMMAND_PARAM_MIN
@@ -1061,7 +1063,9 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 // 	#else
 // 		FST_INFO("setInstruction MOTION_JOINT at %d", instr.line);
 // 	#endif
-	FST_INFO("call_MoveJ instr.target.cnt = %f setInstruction.", instr.target.cnt);
+	FST_INFO("call_MoveJ instr.target.cnt = %f setInstruction with %f.", 
+				objThreadCntrolBlock->instrSet->target.cnt, 
+				objThreadCntrolBlock->instrSet->target.acc);
 	bool bRet = setInstruction(objThreadCntrolBlock, objThreadCntrolBlock->instrSet);
 	while(bRet == false)
 	{
@@ -1381,6 +1385,7 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	// instr.target.acc = -1 ;
 	// Set to instrSet
 	memcpy(objThreadCntrolBlock->instrSet, &instr, sizeof(Instruction));
+	objThreadCntrolBlock->instrSet->target.acc = 1.0 ;
 	
 	get_token(objThreadCntrolBlock);
 	// result.size() > MOVJ_COMMAND_PARAM_MIN
@@ -1413,7 +1418,9 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 // 		FST_INFO("setInstruction MOTION_LINE at %d", instr.line);
 // 	#endif
 	
-	 FST_INFO("instr.target.cnt = %f setInstruction.", instr.target.cnt);
+	FST_INFO("call_MoveL instr.target.cnt = %f setInstruction with %f.", 
+				objThreadCntrolBlock->instrSet->target.cnt, 
+				objThreadCntrolBlock->instrSet->target.acc);
 	bool bRet = setInstruction(objThreadCntrolBlock, objThreadCntrolBlock->instrSet);
 	while(bRet == false)
 	{
@@ -1792,6 +1799,7 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	// instr.target.acc = -1 ;
 	// Set to instrSet
 	memcpy(objThreadCntrolBlock->instrSet, &instr, sizeof(Instruction));
+	objThreadCntrolBlock->instrSet->target.acc = 1.0 ;
 	
 	get_token(objThreadCntrolBlock);
 	// result.size() > MOVJ_COMMAND_PARAM_MIN
@@ -1822,6 +1830,9 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 // 	#else
 // 		FST_INFO("setInstruction MOTION_CURVE at %d", instr.line);
 // 	#endif
+	FST_INFO("call_MoveC instr.target.cnt = %f setInstruction with %f.", 
+				objThreadCntrolBlock->instrSet->target.cnt, 
+				objThreadCntrolBlock->instrSet->target.acc);
 	bool bRet = setInstruction(objThreadCntrolBlock, objThreadCntrolBlock->instrSet);
 	while(bRet == false)
 	{
@@ -2021,6 +2032,7 @@ int call_MoveXPos(int iLineNum, struct thread_control_block* objThreadCntrolBloc
 	// instr.target.acc = -1 ;
 	// Set to instrSet
 	memcpy(objThreadCntrolBlock->instrSet, &instr, sizeof(Instruction));
+	objThreadCntrolBlock->instrSet->target.acc = 1.0 ;
 	
 	get_token(objThreadCntrolBlock);
 	// result.size() > MOVJ_COMMAND_PARAM_MIN
@@ -2056,6 +2068,9 @@ int call_MoveXPos(int iLineNum, struct thread_control_block* objThreadCntrolBloc
 // 	#else
 // 		FST_INFO("setInstruction MOTION_CURVE at %d", instr.line);
 // 	#endif
+	FST_INFO("call_MoveXPos instr.target.cnt = %f setInstruction with %f.", 
+				objThreadCntrolBlock->instrSet->target.cnt, 
+				objThreadCntrolBlock->instrSet->target.acc);
 	bool bRet = setInstruction(objThreadCntrolBlock, objThreadCntrolBlock->instrSet);
 	while(bRet == false)
 	{

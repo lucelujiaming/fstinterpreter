@@ -3551,22 +3551,52 @@ void level2(struct thread_control_block * objThreadCntrolBlock, eval_value *valu
 
         switch(op) { // perform the relational operation
 			case LT:
-			    *boolValue = (value->getFloatValue() < partial_value.getFloatValue());
+				// *boolValue = (value->getFloatValue() < partial_value.getFloatValue());
+				*boolValue = value->calcLT(&partial_value);
+				if(*boolValue == EVAL_CMP_ERROR)
+				{
+					serror(objThreadCntrolBlock, 25);
+				}
 			    break;
 			case LE:
-			    *boolValue = (value->getFloatValue() <= partial_value.getFloatValue());
+				// *boolValue = (value->getFloatValue() <= partial_value.getFloatValue());
+				*boolValue = value->calcLE(&partial_value);
+				if(*boolValue == EVAL_CMP_ERROR)
+				{
+					serror(objThreadCntrolBlock, 25);
+				}
 			    break;
 			case GT:
-			    *boolValue = (value->getFloatValue() > partial_value.getFloatValue());
+				// *boolValue = (value->getFloatValue() > partial_value.getFloatValue());
+				*boolValue = value->calcGT(&partial_value);
+				if(*boolValue == EVAL_CMP_ERROR)
+				{
+					serror(objThreadCntrolBlock, 25);
+				}
 			    break;
 			case GE:
-			    *boolValue = (value->getFloatValue() >= partial_value.getFloatValue());
+				// *boolValue = (value->getFloatValue() >= partial_value.getFloatValue());
+				*boolValue = value->calcGE(&partial_value);
+				if(*boolValue == EVAL_CMP_ERROR)
+				{
+					serror(objThreadCntrolBlock, 25);
+				}
 			    break;
 			case EQ:
-			    *boolValue = (value->getFloatValue() == partial_value.getFloatValue());
+			    // *boolValue = (value->getFloatValue() == partial_value.getFloatValue());
+				*boolValue = value->calcEQ(&partial_value);
+				if(*boolValue == EVAL_CMP_ERROR)
+				{
+					serror(objThreadCntrolBlock, 25);
+				}
 			    break;
 			case NE:
-			    *boolValue = (value->getFloatValue() != partial_value.getFloatValue());
+				// *boolValue = (value->getFloatValue() != partial_value.getFloatValue());
+				*boolValue = value->calcNE(&partial_value);
+				if(*boolValue == EVAL_CMP_ERROR)
+				{
+					serror(objThreadCntrolBlock, 25);
+				}
 			    break;
         }
     }
