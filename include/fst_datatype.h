@@ -432,6 +432,7 @@ struct MotionTarget {
     double  vel;    // 指令速度： 如果是moveJ，指令速度是百分比, 范围: 0.0 - 1.0
 	//           如果是moveL或moveC，指令速度是mm/s, 范围： 0.0 - MAX_VEL
     
+    double  acc;  
     int user_frame_id;  // 如果是moveL或者moveC，需要指定目标点所处的用户坐标系标号和所用工具的标号，反解时需要
     int tool_frame_id;  // 如果用户坐标系标号和工具标号与当前的在用标号不符时直接报错，如果是-1则使用当前激活的uf和tf
 	
