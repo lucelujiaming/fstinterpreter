@@ -28,7 +28,7 @@
 			</lvalue>
 			<rvalue>
               <element type="num">-0.0005</element>
-			  <element type="operation">×</element>
+			  <element type="operation">*</element>
               <element type="num">-0.0705</element>
 			</rvalue>
 		</assignment>
@@ -124,15 +124,63 @@
                       </element>
                     </rvalue>
                   </assignment>
+                  <assignment type="assignment">
+                    <lvalue>
+                      <element type="ro">
+                        <element type="num">1</element>
+                      </element>
+                    </lvalue>
+                    <rvalue>
+                      <element type="io_val">ON</element>
+                    </rvalue>
+                  </assignment>
+                  <assignment type="reg_assignment">
+                    <lvalue>
+                      <element type="register">
+                        <element type="num">3</element>
+                      </element>
+                    </lvalue>
+                    <rvalue>
+                      <element type="ro">
+                        <element type="num">1</element>
+                      </element>
+                    </rvalue>
+                  </assignment>
+                  <assignment type="assignment">
+                    <lvalue>
+                      <element type="uo">
+                        <element type="num">1</element>
+                      </element>
+                    </lvalue>
+                    <rvalue>
+                      <element type="io_val">ON</element>
+                    </rvalue>
+                  </assignment>
+                  <assignment type="reg_assignment">
+                    <lvalue>
+                      <element type="register">
+                        <element type="num">3</element>
+                      </element>
+                    </lvalue>
+                    <rvalue>
+                      <element type="uo">
+                        <element type="num">1</element>
+                      </element>
+                    </rvalue>
+                  </assignment>
                   <logical type="if">
                     <determine>
                       <element type="register">
                         <element type="num">3</element>
                       </element>
+                      <element type="boolean_operation">&lt;&gt;</element>
+                      <element type="num">1</element>
                       <element type="boolean_operation">AND</element>
                       <element type="register">
                         <element type="num">1</element>
                       </element>
+                      <element type="boolean_operation">&lt;</element>
+                      <element type="num">100</element>
                     </determine>
                     <logical_body>
                       <assignment type="reg_assignment">
@@ -190,7 +238,7 @@
                           <element type="register">
                             <element type="num">1</element>
                           </element>
-                          <element type="operation">×</element>
+                          <element type="operation">*</element>
                           <element type="register">
                             <element type="num">4</element>
                           </element>

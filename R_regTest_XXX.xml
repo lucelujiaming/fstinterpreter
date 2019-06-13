@@ -97,6 +97,50 @@
                       </element>
                     </rvalue>
                   </assignment>
+                  <assignment type="assignment">
+                    <lvalue>
+                      <element type="ro">
+                        <element type="num">1</element>
+                      </element>
+                    </lvalue>
+                    <rvalue>
+                      <element type="io_val">ON</element>
+                    </rvalue>
+                  </assignment>
+                  <assignment type="reg_assignment">
+                    <lvalue>
+                      <element type="register">
+                        <element type="num">3</element>
+                      </element>
+                    </lvalue>
+                    <rvalue>
+                      <element type="ro">
+                        <element type="num">1</element>
+                      </element>
+                    </rvalue>
+                  </assignment>
+                  <assignment type="assignment">
+                    <lvalue>
+                      <element type="uo">
+                        <element type="num">1</element>
+                      </element>
+                    </lvalue>
+                    <rvalue>
+                      <element type="io_val">ON</element>
+                    </rvalue>
+                  </assignment>
+                  <assignment type="reg_assignment">
+                    <lvalue>
+                      <element type="register">
+                        <element type="num">3</element>
+                      </element>
+                    </lvalue>
+                    <rvalue>
+                      <element type="uo">
+                        <element type="num">1</element>
+                      </element>
+                    </rvalue>
+                  </assignment>
                   <logical type="if">
                     <determine>
                       <element type="register">

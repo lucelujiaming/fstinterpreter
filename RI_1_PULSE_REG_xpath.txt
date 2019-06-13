@@ -1,0 +1,11 @@
+001:RI_1_PULSE_REG:/prog/head/include
+002:RI_1_PULSE_REG:/prog/prog_body/function
+003:RI_1_PULSE_REG:/prog/prog_body/function/body/assignment[1]
+004:RI_1_PULSE_REG:/prog/prog_body/function/body/assignment[2]
+005:RI_1_PULSE_REG:/prog/prog_body/function/body/instruction
+006:RI_1_PULSE_REG:/prog/prog_body/function/body/assignment[3]
+007:RI_1_PULSE_REG:/prog/prog_body/function/body/end
+008:RI_1_PULSE_REG:/prog/prog_body/function
+009:MarcuscTest:/prog/prog_body/function
+010:MarcuscTest:/prog/prog_body/function/body/end
+011:MarcuscTest:/prog/prog_body/function

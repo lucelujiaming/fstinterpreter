@@ -334,6 +334,42 @@ int parsePosture(struct thread_control_block * objThreadCntrolBlock,
 }
 
 /************************************************* 
+	Function:		parsePosture
+	Description:	Analyze the Additional info in the properity json file .
+	Input:			thread_control_block  - interpreter info
+	Input:			jsonPosture           - cJSON object
+	Input:			posture               - Posture object
+	Output: 		NULL
+	Return: 		1 - success
+*************************************************/ 
+int parsePos(struct thread_control_block * objThreadCntrolBlock, 
+			   cJSON *jsonPosture, double* pos)
+{
+	// int numentries=0,i=0,fail=0;
+	cJSON *child=jsonPosture->child;
+	int iIdx = 0 ;
+	while (child) //  && !fail)
+	{
+	//	FST_INFO("parsePosesContent: cJSON_Array %s", child->string);
+		switch ((child->type)&255)
+		{
+		case cJSON_Number:	
+			// FST_INFO("cJSON_Number %f", child->valuedouble); 
+			pos[iIdx] = child->valuedouble;
+			iIdx++ ;
+			break;
+		case cJSON_String:	
+			FST_INFO("cJSON_String %s", child->valuestring); break;
+		case cJSON_Object:	
+			// FST_INFO("cJSON_Object"); 
+			break;
+		}
+		child=child->next;
+	}
+	return 1;
+}
+
+/************************************************* 
 	Function:		parsePoses
 	Description:	Analyze the P[*] in the properity json file .
 	Input:			thread_control_block  - interpreter info
@@ -344,14 +380,19 @@ int parsePosture(struct thread_control_block * objThreadCntrolBlock,
 int parsePosesContent(struct thread_control_block * objThreadCntrolBlock, 
 			   cJSON *jsonPoseContent)
 {
+    bool bIsUsePosArray = false ;
 	int id = -1 , uf = -1 , tf = -1 ;
 	int iPoseType = POSE_NONE ;
 	Joint joint ;
 	PoseEuler cart ;
 	Posture posture ;
+	double  pos[9 * 2] ;
+	
 	AdditionalE additionalE ;
 	char var[128];
 	eval_value value ;
+
+	memset(pos, 0x00, sizeof(double) * 9 * 2);
 
 	int numentries=0; // ,i=0,fail=0;
 	cJSON *child=jsonPoseContent->child;
@@ -400,6 +441,11 @@ int parsePosesContent(struct thread_control_block * objThreadCntrolBlock,
 		case cJSON_Array:
 			if(strcmp(child->string, "posture") == 0)
 				parsePosture(objThreadCntrolBlock, child, posture);	
+			else if(strcmp(child->string, "pos") == 0)
+			{
+				parsePos(objThreadCntrolBlock, child, pos);	
+				bIsUsePosArray = true ;
+			}
 			break;
 		}
 		child=child->next;
@@ -413,16 +459,48 @@ int parsePosesContent(struct thread_control_block * objThreadCntrolBlock,
 
 	if(iPoseType == POSE_CART)
 	{
+		if(bIsUsePosArray)
+		{
+#ifndef WIN32
+			cart.point_.x_ = pos[0], cart.point_.y_ = pos[1], cart.point_.z_ = pos[2];
+			cart.euler_.a_ = pos[3], cart.euler_.b_ = pos[4], cart.euler_.c_ = pos[5];
+#else
+			cart.position.x = pos[0];
+			cart.position.y = pos[1];
+			cart.position.z = pos[2];
+			cart.orientation.a = pos[3];
+			cart.orientation.b = pos[4];
+			cart.orientation.c = pos[5];
+#endif
+		}
 		value.setPoseValue(&cart);
 	}
 	else if(iPoseType == POSE_JOINT)
 	{
+		if(bIsUsePosArray)
+		{
+#ifndef WIN32
+			joint.j1_ = pos[0], joint.j2_ = pos[1], joint.j3_ = pos[2];
+			joint.j4_ = pos[3], joint.j5_ = pos[4], joint.j6_ = pos[5];
+			joint.j7_ = pos[6], joint.j8_ = pos[7], joint.j9_ = pos[8];
+#else
+			joint.j1  = pos[0], joint.j2  = pos[1], joint.j3  = pos[2];
+			joint.j4  = pos[3], joint.j5  = pos[4], joint.j6  = pos[5];
+			joint.j7  = pos[6], joint.j8  = pos[7], joint.j9  = pos[8];
+#endif
+		}
 		value.setJointValue(&joint);
 	}
 	else
 		return 0;
 	
 	value.setUFIndex(uf);   value.setTFIndex(tf);
+	if(bIsUsePosArray)
+	{
+		additionalE.e1 = pos[6];
+		additionalE.e2 = pos[7];
+		additionalE.e3 = pos[8];
+	}
 	value.updateAdditionalE(additionalE);
 
 	value.setPosture(posture);

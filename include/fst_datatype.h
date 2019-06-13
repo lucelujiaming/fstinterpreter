@@ -422,20 +422,24 @@ struct CircleTarget {
 };
 
 
-#define     PR_POS_LEN           128
 // target structure used in motion command
-struct MotionTarget {
+#define     PR_POS_LEN           64
+struct MotionTarget     // 用于move指令的数据结构
+{
     MotionType  type;           // 指令的运动类型
     SmoothType  smooth_type;    // 指令的平滑类型
-	
+
     double  cnt;    // 平滑参数的范围 ： 速度平滑[0.0, 1.0]，距离平滑[0.0, +∞]， 如果是FINE语句CNT应为-1
     double  vel;    // 指令速度： 如果是moveJ，指令速度是百分比, 范围: 0.0 - 1.0
-	//           如果是moveL或moveC，指令速度是mm/s, 范围： 0.0 - MAX_VEL
+                    //          如果是moveL或moveC，指令速度是mm/s, 范围： 0.0 - MAX_VEL
+    double  acc;    // 指令加速度： 附加指令中的加速度是百分比，范围: 0.0 - 1.0
     
-    double  acc;  
     int user_frame_id;  // 如果是moveL或者moveC，需要指定目标点所处的用户坐标系标号和所用工具的标号，反解时需要
     int tool_frame_id;  // 如果用户坐标系标号和工具标号与当前的在用标号不符时直接报错，如果是-1则使用当前激活的uf和tf
-	
+
+    int user_frame_offset_id;  // 如果是moveL或者moveC，需要指定目标点所处的用户坐标系标号和所用工具的标号，反解时需要
+    int tool_frame_offset_id;  // 如果用户坐标系标号和工具标号与当前的在用标号不符时直接报错，如果是-1则使用当前激活的uf和tf
+
     int prPos[PR_POS_LEN];
     TargetPoint target;   // moveJ和moveL时使用
     TargetPoint via;      // moveC时用作中间一个辅助点
@@ -555,20 +559,16 @@ enum ManualMode
     APOINT,
 };
 
-enum ManualDirection
-{
-    STANDBY  = 0,
-    INCREASE = 1,
-    DECREASE = 2,
-};
 
-struct ManualCoeff
+struct ManualCoef           // 手动示教模式下关节或者笛卡尔坐标的梯形轨迹
 {
-    double duration_1;
-    double duration_2;
-    double duration_3;
-    double alpha_1;
-    double alpha_3;
+    MotionTime start_time;  // 开始加速的时刻
+    MotionTime stable_time; // 加速完毕的时刻
+    MotionTime brake_time;  // 开始减速的时刻
+    MotionTime stop_time;   // 停止的时刻
+
+    double  start_alpha;    // 匀加速阶段的加速度
+    double  brake_alpha;    // 匀减速阶段的加速度
 };
 
 

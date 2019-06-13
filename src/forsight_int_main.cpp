@@ -96,7 +96,7 @@ int main(int  argc, char *argv[])
 #else
 			if (intprt_ctrl.cmd != fst_base::INTERPRETER_SERVER_CMD_LOAD)
 			{
-				parseCtrlComand(intprt_ctrl, "life_test");
+				parseCtrlComand(intprt_ctrl, "BLDC_CTRL_cmdTest");
 				Sleep(1);
 				intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_RESUME ;
 				parseCtrlComand(intprt_ctrl, "");

@@ -1,0 +1,29 @@
+EXPORT: (001)(018)/prog/head/include                                                                                  IMPORT MR_regTest
+EXPORT: (002)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (003)(040)/prog/prog_body/function/body/assignment                                                                R[1]  = 1  
+EXPORT: (004)(047)/prog/prog_body/function/body/logical/determine                                                         WHILE R[1]  = 21 
+EXPORT: (005)(065)/prog/prog_body/function/body/logical/logical_body/instruction[1]                                           WAIT 
+EXPORT: (006)(064)/prog/prog_body/function/body/logical/logical_body/assignment[1]                                             RO[R[1] ] = ON   
+EXPORT: (007)(065)/prog/prog_body/function/body/logical/logical_body/instruction[2]                                           WAIT  5
+EXPORT: (008)(064)/prog/prog_body/function/body/logical/logical_body/assignment[2]                                            R[1]  = R[1]  + 1  
+EXPORT: (009)(065)/prog/prog_body/function/body/logical/logical_body/instruction[3]                                           WAIT 
+EXPORT: (010)(064)/prog/prog_body/function/body/logical/logical_body/assignment[3]                                             RI[R[1] ] = OFF   
+EXPORT: (011)(065)/prog/prog_body/function/body/logical/logical_body/instruction[4]                                           WAIT  5
+EXPORT: (012)(064)/prog/prog_body/function/body/logical/logical_body/assignment[4]                                             RO[R[1] ] = PULSE  5  
+EXPORT: (013)(068)/prog/prog_body/function/body/logical/logical_body/logical/determine                                        SELECT CASE  R[1]  
+EXPORT: (014)(084)/prog/prog_body/function/body/logical/logical_body/logical/vice_logical[1]/determine                            CASE  2 
+EXPORT: (015)(103)/prog/prog_body/function/body/logical/logical_body/logical/vice_logical[1]/vice_logical_body/assignment                R[1]  = 5  
+EXPORT: (016)(058)/prog/prog_body/function/body/logical/logical_body/logical                                                      BREAK 
+EXPORT: (017)(084)/prog/prog_body/function/body/logical/logical_body/logical/vice_logical[2]/determine                            CASE  10 
+EXPORT: (018)(103)/prog/prog_body/function/body/logical/logical_body/logical/vice_logical[2]/vice_logical_body/assignment                 RO[1] = ON   
+EXPORT: (019)(058)/prog/prog_body/function/body/logical/logical_body/logical                                                      BREAK 
+EXPORT: (020)(084)/prog/prog_body/function/body/logical/logical_body/logical/vice_logical[3]/determine                            CASE  15 
+EXPORT: (021)(103)/prog/prog_body/function/body/logical/logical_body/logical/vice_logical[3]/vice_logical_body/assignment                 RI[1] = ON   
+EXPORT: (022)(058)/prog/prog_body/function/body/logical/logical_body/logical                                                      BREAK 
+EXPORT: (023)(084)/prog/prog_body/function/body/logical/logical_body/logical/vice_logical[4]/determine                            DEFAULT   
+EXPORT: (024)(097)/prog/prog_body/function/body/logical/logical_body/logical/vice_logical[4]/vice_logical_body/call                   CALL MR_regTest::main () 
+EXPORT: (025)(058)/prog/prog_body/function/body/logical/logical_body/logical                                                      BREAK 
+EXPORT: (026)(058)/prog/prog_body/function/body/logical/logical_body/logical                                                  END SELECT 
+EXPORT: (027)(037)/prog/prog_body/function/body/logical                                                                   WEND 
+EXPORT: (028)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (029)(024)/prog/prog_body/function                                                                            END SUB 

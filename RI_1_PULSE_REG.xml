@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <prog>
   <head>
     <include>MarcuscTest</include>
@@ -7,9 +7,19 @@
     <function name="main">
       <body>
         <comment>测试IO</comment>
+		<assignment type="io_assignment">
+			<lvalue>
+			  <element type="ro">
+				<element type="num">1</element>
+			  </element>
+			</lvalue>
+			<rvalue>
+			  <element type="io_val">ON</element>
+			</rvalue>
+		</assignment>
         <assignment type="assignment">
           <lvalue>
-            <element type="di">
+            <element type="ri">
               <element type="num">1</element>
             </element>
           </lvalue>
@@ -23,7 +33,7 @@
 		</instruction>
         <assignment type="assignment">
           <lvalue>
-            <element type="di">
+            <element type="ri">
               <element type="num">2</element>
             </element>
           </lvalue>

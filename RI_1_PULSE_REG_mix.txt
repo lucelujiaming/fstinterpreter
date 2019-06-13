@@ -1,0 +1,8 @@
+EXPORT: (001)(018)/prog/head/include                                                                                  IMPORT MarcuscTest
+EXPORT: (002)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (003)(043)/prog/prog_body/function/body/assignment[1]                                                              RO[1] = ON   
+EXPORT: (004)(043)/prog/prog_body/function/body/assignment[2]                                                              RI[1] = pulse  10  
+EXPORT: (005)(041)/prog/prog_body/function/body/instruction                                                               WAIT  1
+EXPORT: (006)(043)/prog/prog_body/function/body/assignment[3]                                                              RI[2] = R[2]   
+EXPORT: (007)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (008)(024)/prog/prog_body/function                                                                            END SUB 

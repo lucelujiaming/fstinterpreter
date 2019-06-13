@@ -2496,6 +2496,10 @@ int call_BLDC_CTRL(int iLineNum, struct thread_control_block* objThreadCntrolBlo
 	eval_value value;
 	int boolValue;
 	uint8_t iDir = 0, iVel = 0 ;
+#if 1
+	get_exp(objThreadCntrolBlock, &value, &boolValue);
+	iVel = (int)value.getFloatValue() ;
+#else
 	get_token(objThreadCntrolBlock);
 	if(strcmp(objThreadCntrolBlock->token, "dir") == 0)
 	{
@@ -2521,13 +2525,15 @@ int call_BLDC_CTRL(int iLineNum, struct thread_control_block* objThreadCntrolBlo
 		get_exp(objThreadCntrolBlock, &value, &boolValue);
 		iVel = (int)value.getFloatValue() ;
 	}
-	iVel = iDir * 128 + iVel ;
+	iVel = iDir * 128 + iVel ;  
+#endif
+
 #ifdef WIN32
     return 0; 
 #else
 	if(g_objRegManagerInterface)
 	{
-		bRet = g_objRegManagerInterface->setBLDC(iVel);
+//		bRet = g_objRegManagerInterface->setBLDC(iVel);
 		if(bRet)
 		{
 			return bRet ;
@@ -2537,7 +2543,7 @@ int call_BLDC_CTRL(int iLineNum, struct thread_control_block* objThreadCntrolBlo
 	{
 		FST_ERROR("g_objRegManagerInterface is NULL");
 	}
-    return END_COMMND_RET;   
+    return 1;   
 #endif
 }
 

@@ -866,8 +866,8 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
   			FST_INFO("set abort motion flag.");
 	        objThdCtrlBlockPtr->is_abort = true;
             // Restore program pointer
-  			FST_INFO("reset prog position.");
-            objThdCtrlBlockPtr->prog = objThdCtrlBlockPtr->p_buf ;
+  			// FST_INFO("reset prog position.");
+            // objThdCtrlBlockPtr->prog = objThdCtrlBlockPtr->p_buf ;
 
  		    setPrgmState(objThdCtrlBlockPtr, INTERPRETER_PAUSE_TO_IDLE);
 #ifdef WIN32

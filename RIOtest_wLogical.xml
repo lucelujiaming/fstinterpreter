@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<prog>
+  <head>
+    <include>MR_regTest</include>
+  </head>
+  <prog_body>
+    <function name="main">
+      <body>
+        <assignment type="reg_assignment">
+          <lvalue>
+            <element type="register">
+              <element type="num">1</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="num">1</element>
+          </rvalue>
+        </assignment>
+        <comment>DIDO test</comment>
+        <logical type="while">
+          <determine>
+            <element type="register">
+              <element type="num">1</element>
+            </element>
+            <element type="boolean_operation">&lt;=</element>
+            <element type="num">21</element>
+          </determine>
+          <logical_body>
+            <instruction type="wait">
+              <argument name="conrition" type="expression">
+                <element type="ri">
+                  <element type="register">
+                    <element type="num">1</element>
+                  </element>
+                </element>
+                <element type="boolean_operation">=</element>
+                <element type="io_val">ON</element>
+              </argument>
+            </instruction>
+            <assignment type="io_assignment">
+              <lvalue>
+                <element type="ro">
+                  <element type="register">
+                    <element type="num">1</element>
+                  </element>
+                </element>
+              </lvalue>
+              <rvalue>
+                <element type="io_val">ON</element>
+              </rvalue>
+            </assignment>
+            <instruction type="wait">
+              <argument name="timeout" type="num" unit="sec">5</argument>
+            </instruction>
+            <assignment type="reg_assignment">
+              <lvalue>
+                <element type="register">
+                  <element type="num">1</element>
+                </element>
+              </lvalue>
+              <rvalue>
+                <element type="register">
+                  <element type="num">1</element>
+                </element>
+                <element type="operation">+</element>
+                <element type="num">1</element>
+              </rvalue>
+            </assignment>
+            <instruction type="wait">
+              <argument name="conrition" type="expression">
+                <element type="ri">
+                  <element type="register">
+                    <element type="num">1</element>
+                  </element>
+                </element>
+                <element type="boolean_operation">=</element>
+                <element type="io_val">OFF</element>
+              </argument>
+            </instruction>
+            <assignment type="io_assignment">
+              <lvalue>
+                <element type="ri">
+                  <element type="register">
+                    <element type="num">1</element>
+                  </element>
+                </element>
+              </lvalue>
+              <rvalue>
+                <element type="io_val">OFF</element>
+              </rvalue>
+            </assignment>
+            <instruction type="wait">
+              <argument name="timeout" type="num" unit="sec">5</argument>
+            </instruction>
+            <assignment type="io_assignment">
+              <lvalue>
+                <element type="ro">
+                  <element type="register">
+                    <element type="num">1</element>
+                  </element>
+                </element>
+              </lvalue>
+              <rvalue>
+                <element type="io_val">PULSE</element>
+                <element type="num">5</element>
+              </rvalue>
+            </assignment>
+            <nop/>
+            <logical type="switch">
+              <determine>
+                <element type="register">
+                  <element type="num">1</element>
+                </element>
+              </determine>
+              <vice_logical type="case">
+                <determine>
+                  <element type="num">2</element>
+                </determine>
+                <vice_logical_body>
+                  <assignment type="reg_assignment">
+                    <lvalue>
+                      <element type="register">
+                        <element type="num">1</element>
+                      </element>
+                    </lvalue>
+                    <rvalue>
+                      <element type="num">5</element>
+                    </rvalue>
+                  </assignment>
+                  <nop/>
+                </vice_logical_body>
+              </vice_logical>
+              <vice_logical type="case">
+                <determine>
+                  <element type="num">10</element>
+                </determine>
+                <vice_logical_body>
+                  <assignment type="io_assignment">
+                    <lvalue>
+                      <element type="ro">
+                        <element type="num">1</element>
+                      </element>
+                    </lvalue>
+                    <rvalue>
+                      <element type="io_val">ON</element>
+                    </rvalue>
+                  </assignment>
+                  <nop/>
+                </vice_logical_body>
+              </vice_logical>
+              <vice_logical type="case">
+                <determine>
+                  <element type="num">15</element>
+                </determine>
+                <vice_logical_body>
+                  <assignment type="io_assignment">
+                    <lvalue>
+                      <element type="ri">
+                        <element type="num">1</element>
+                      </element>
+                    </lvalue>
+                    <rvalue>
+                      <element type="io_val">ON</element>
+                    </rvalue>
+                  </assignment>
+                  <nop/>
+                </vice_logical_body>
+              </vice_logical>
+              <vice_logical type="default">
+                <determine/>
+                <vice_logical_body>
+                  <nop/>
+                  <call file="MR_regTest"/>
+                </vice_logical_body>
+              </vice_logical>
+            </logical>
+          </logical_body>
+        </logical>
+        <end name="prog"/>
+      </body>
+    </function>
+  </prog_body>
+</prog>
