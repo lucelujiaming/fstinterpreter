@@ -1,0 +1,12 @@
+001:abort_test:/prog/prog_body/function
+002:abort_test:/prog/prog_body/function/body/assignment[1]
+003:abort_test:/prog/prog_body/function/body/instruction[1]
+004:abort_test:/prog/prog_body/function/body/instruction[2]
+005:abort_test:/prog/prog_body/function/body/assignment[2]
+006:abort_test:/prog/prog_body/function/body/assignment[3]
+007:abort_test:/prog/prog_body/function/body/instruction[3]
+008:abort_test:/prog/prog_body/function/body/instruction[4]
+009:abort_test:/prog/prog_body/function/body/assignment[4]
+010:abort_test:/prog/prog_body/function/body/assignment[5]
+011:abort_test:/prog/prog_body/function/body/assignment[6]
+012:abort_test:/prog/prog_body/function

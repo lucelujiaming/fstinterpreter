@@ -8,7 +8,7 @@
           <parameter type="num">param0</parameter>
           <parameter type="string">param1</parameter>
           <body>
-          
+		    <comment>WAIT COND R[1]  = 3 20 SKIP</comment>
             <instruction type="wait">
               <argument name="condition" type="expression">
                 <element type="register">
@@ -22,9 +22,74 @@
             </instruction>
 			
 			<instruction type="wait">
-			  <argument name="timeout" type="num" unit="sec">5</argument>
+			  <argument name="timeout" type="num" unit="sec">1</argument>
+			</instruction>
+			
+		    <comment>WAIT COND R[1]  = 3 20 Warning</comment>
+            <instruction type="wait">
+              <argument name="condition" type="expression">
+                <element type="register">
+                  <element type="num">1</element>
+                </element>
+                <element type="boolean_operation">=</element>
+                <element type="num">3</element>
+              </argument>
+              <argument name="timeout" type="num" unit="sec">20</argument>
+              <argument name="handle" type="function">Warning</argument>
+            </instruction>
+			
+			<instruction type="wait">
+			  <argument name="timeout" type="num" unit="sec">1</argument>
+			</instruction>
+			
+		    <comment>WAIT COND R[1]  = 3 20 CALL MarcuscTest::main ()</comment>
+            <instruction type="wait">
+              <argument name="condition" type="expression">
+                <element type="register">
+                  <element type="num">1</element>
+                </element>
+                <element type="boolean_operation">=</element>
+                <element type="num">3</element>
+              </argument>
+              <argument name="timeout" type="num" unit="sec">20</argument>
+			  <argument name="handle" type="function">
+				<call file="MarcuscTest"/>
+			  </argument>
+            </instruction>
+			
+			<instruction type="wait">
+			  <argument name="timeout" type="num" unit="sec">1</argument>
+			</instruction>
+			
+			<comment>WAIT COND DI[1]  = ON  25 SKIP</comment>
+			<instruction type="wait">
+			  <argument name="condition" type="expression">
+				<element type="di">
+				  <element type="num">1</element>
+				</element>
+				<element type="boolean_operation">=</element>
+				<element type="io_val">ON</element>
+			  </argument>
+			  <argument name="timeout" type="num" unit="sec">25</argument>
+			  <argument name="handle" type="function">SKIP</argument>
 			</instruction>
 		
+			<instruction type="wait">
+			  <argument name="timeout" type="num" unit="sec">1</argument>
+			</instruction>
+			
+			<assignment type="reg_assignment">
+			  <lvalue>
+				<element type="register">
+				  <element type="num">1</element>
+				</element>
+			  </lvalue>
+			  <rvalue>
+				<element type="num">1</element>
+			  </rvalue>
+			</assignment>
+			
+			<comment>WAIT COND DI[1]  = ON  25 Warning</comment>
 			<instruction type="wait">
 			  <argument name="condition" type="expression">
 				<element type="di">
@@ -38,9 +103,20 @@
 			</instruction>
 		
 			<instruction type="wait">
-			  <argument name="timeout" type="num" unit="sec">5</argument>
+				<argument name="timeout" type="register" unit="sec">1</argument>
 			</instruction>
 			
+			<assignment type="reg_assignment">
+			  <lvalue>
+				<element type="motion_register">
+				  <element type="num">1</element>
+				</element>
+			  </lvalue>
+			  <rvalue>
+				<element type="num">1</element>
+			  </rvalue>
+			</assignment>
+			<comment>WAIT COND DI[1]  = ON  25 MarcuscTest</comment>
 			<instruction type="wait">
 			  <argument name="condition" type="expression">
                 <element type="register">
@@ -53,6 +129,10 @@
 			  <argument name="handle" type="function">
 				<call file="MarcuscTest"/>
 			  </argument>
+			</instruction>
+			
+			<instruction type="wait">
+				<argument name="timeout" type="motion_register" unit="sec">1</argument>
 			</instruction>
 			
            </body>

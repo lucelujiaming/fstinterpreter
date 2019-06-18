@@ -1,0 +1,36 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(040)/prog/prog_body/function/body/assignment                                                                OVC. = 100  
+EXPORT: (003)(047)/prog/prog_body/function/body/logical/determine                                                         WHILE 1 = 1 
+EXPORT: (004)(065)/prog/prog_body/function/body/logical/logical_body/instruction[1]                                           MOVEJ P[1], 57 SD 100 
+EXPORT: (005)(065)/prog/prog_body/function/body/logical/logical_body/instruction[2]                                           MOVEJ P[2], 60 SD 150 
+EXPORT: (006)(065)/prog/prog_body/function/body/logical/logical_body/instruction[3]                                           MOVEJ P[4], 57 SD 100 
+EXPORT: (007)(065)/prog/prog_body/function/body/logical/logical_body/instruction[4]                                           MOVEJ P[5], 49 SD 100 
+EXPORT: (008)(065)/prog/prog_body/function/body/logical/logical_body/instruction[5]                                           MOVEJ P[6], 57 SD 100 
+EXPORT: (009)(065)/prog/prog_body/function/body/logical/logical_body/instruction[6]                                           MOVEJ P[7], 57 SD 100 
+EXPORT: (010)(065)/prog/prog_body/function/body/logical/logical_body/instruction[7]                                           MOVEJ P[8], 53 SD 200 
+EXPORT: (011)(065)/prog/prog_body/function/body/logical/logical_body/instruction[8]                                           MOVEJ P[1], 58 SD 100 
+EXPORT: (012)(065)/prog/prog_body/function/body/logical/logical_body/instruction[9]                                           MOVEJ P[9], 60 SD 200 
+EXPORT: (013)(066)/prog/prog_body/function/body/logical/logical_body/instruction[10]                                          MOVEJ P[10], 60 SD 200 
+EXPORT: (014)(066)/prog/prog_body/function/body/logical/logical_body/instruction[11]                                          MOVEJ P[11], 50 SD 100 
+EXPORT: (015)(066)/prog/prog_body/function/body/logical/logical_body/instruction[12]                                          MOVEJ P[12], 50 SD 100 
+EXPORT: (016)(066)/prog/prog_body/function/body/logical/logical_body/instruction[13]                                          MOVEJ P[13], 51 SD 150 
+EXPORT: (017)(066)/prog/prog_body/function/body/logical/logical_body/instruction[14]                                          MOVEJ P[14], 59 SD 100 
+EXPORT: (018)(066)/prog/prog_body/function/body/logical/logical_body/instruction[15]                                          MOVEJ P[15], 54 SD 300 
+EXPORT: (019)(066)/prog/prog_body/function/body/logical/logical_body/instruction[16]                                          MOVEJ P[1], 54 CNT -1 
+EXPORT: (020)(066)/prog/prog_body/function/body/logical/logical_body/instruction[17]                                          WAIT  5
+EXPORT: (021)(066)/prog/prog_body/function/body/logical/logical_body/instruction[18]                                          MOVEJ P[16], 100 CNT -1 
+EXPORT: (022)(066)/prog/prog_body/function/body/logical/logical_body/instruction[19]                                          MOVEL P[20], 1000 SD 300 
+EXPORT: (023)(066)/prog/prog_body/function/body/logical/logical_body/instruction[20]                                          MOVEL P[21], 1000 SD 300 
+EXPORT: (024)(066)/prog/prog_body/function/body/logical/logical_body/instruction[21]                                          MOVEL P[22], 1000 SD 300 
+EXPORT: (025)(066)/prog/prog_body/function/body/logical/logical_body/instruction[22]                                          MOVEL P[23], 1000 SD 300 
+EXPORT: (026)(066)/prog/prog_body/function/body/logical/logical_body/instruction[23]                                          MOVEL P[20], 1000 CNT -1 
+EXPORT: (027)(066)/prog/prog_body/function/body/logical/logical_body/instruction[24]                                          WAIT  5
+EXPORT: (028)(066)/prog/prog_body/function/body/logical/logical_body/instruction[25]                                          MOVEJ P[16], 100 CNT -1 
+EXPORT: (029)(066)/prog/prog_body/function/body/logical/logical_body/instruction[26]                                          MOVEL P[17], 1000 SD 300 
+EXPORT: (030)(066)/prog/prog_body/function/body/logical/logical_body/instruction[27]                                          MOVEL P[18], 1000 SD 300 
+EXPORT: (031)(066)/prog/prog_body/function/body/logical/logical_body/instruction[28]                                          MOVEL P[19], 1000 SD 300 
+EXPORT: (032)(066)/prog/prog_body/function/body/logical/logical_body/instruction[29]                                          MOVEL P[3], 1000 SD 300 
+EXPORT: (033)(066)/prog/prog_body/function/body/logical/logical_body/instruction[30]                                          MOVEL P[17], 1000 CNT -1 
+EXPORT: (034)(037)/prog/prog_body/function/body/logical                                                                   WEND 
+EXPORT: (035)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (036)(024)/prog/prog_body/function                                                                            END SUB 

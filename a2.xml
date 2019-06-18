@@ -1,2 +1,29 @@
-<?xml version='1.0' encoding='utf-8'?>
-<prog><head><include>a</include><include>a_copy1</include></head><prog_body><function name="main"><body><nop/><instruction type="wait"><argument name="timeout" type="num" unit="sec">3</argument></instruction><instruction type="wait"><argument name="timeout" type="num" unit="sec">3</argument></instruction><call file="a"/><instruction type="wait"><argument name="timeout" type="num" unit="sec">3</argument></instruction><skip><call file="a_copy1"></call></skip><end name="prog"/></body></function></prog_body></prog>
+<?xml version="1.0" encoding="utf-8"?>
+
+<prog>
+  <head>
+    <include>a</include>
+    <include>a_copy1</include>
+  </head>
+  <prog_body>
+    <function name="main">
+      <body>
+        <nop/>
+        <instruction type="wait">
+          <argument name="timeout" type="num" unit="sec">3</argument>
+        </instruction>
+        <instruction type="wait">
+          <argument name="timeout" type="num" unit="sec">3</argument>
+        </instruction>
+        <call file="a"/>
+        <instruction type="wait">
+          <argument name="timeout" type="num" unit="sec">3</argument>
+        </instruction>
+        <skip>
+          <call file="a_copy1"/>
+        </skip>
+        <end name="prog"/>
+      </body>
+    </function>
+  </prog_body>
+</prog>

@@ -691,7 +691,7 @@ int set_OVC(int iLineNum, double dOVCNum, struct thread_control_block* objThread
 int set_OAC(int iLineNum, double dOACNum, struct thread_control_block* objThreadCntrolBlock)
 {
     Instruction instr;
-	instr.type = SET_OVC ;
+	instr.type = SET_OAC ;
 #ifdef USE_XPATH
 	if(iLineNum < (int)objThreadCntrolBlock->vector_XPath.size())
 		sprintf(instr.line, "%s", objThreadCntrolBlock->vector_XPath[iLineNum].c_str());

@@ -8,7 +8,7 @@ EXPORT: (007)(065)/prog/prog_body/function/body/logical/logical_body/instruction
 EXPORT: (008)(064)/prog/prog_body/function/body/logical/logical_body/assignment[2]                                            R[1]  = R[1]  + 1  
 EXPORT: (009)(065)/prog/prog_body/function/body/logical/logical_body/instruction[3]                                           WAIT COND  DI[R[1] ] = OFF 
 EXPORT: (010)(064)/prog/prog_body/function/body/logical/logical_body/assignment[3]                                             DI[R[1] ] = OFF   
-EXPORT: (011)(065)/prog/prog_body/function/body/logical/logical_body/instruction[4]                                           WAIT  5
+EXPORT: (011)(065)/prog/prog_body/function/body/logical/logical_body/instruction[4]                                           WAIT  R[1]
 EXPORT: (012)(064)/prog/prog_body/function/body/logical/logical_body/assignment[4]                                             DO[R[1] ] = PULSE  5  
 EXPORT: (013)(068)/prog/prog_body/function/body/logical/logical_body/logical/determine                                        SELECT CASE  R[1]  
 EXPORT: (014)(084)/prog/prog_body/function/body/logical/logical_body/logical/vice_logical[1]/determine                            CASE  2 
@@ -21,9 +21,10 @@ EXPORT: (020)(084)/prog/prog_body/function/body/logical/logical_body/logical/vic
 EXPORT: (021)(103)/prog/prog_body/function/body/logical/logical_body/logical/vice_logical[3]/vice_logical_body/assignment                 DI[1] = ON   
 EXPORT: (022)(058)/prog/prog_body/function/body/logical/logical_body/logical                                                      BREAK 
 EXPORT: (023)(084)/prog/prog_body/function/body/logical/logical_body/logical/vice_logical[4]/determine                            DEFAULT   
-EXPORT: (024)(097)/prog/prog_body/function/body/logical/logical_body/logical/vice_logical[4]/vice_logical_body/call                   CALL MR_regTest::main () 
-EXPORT: (025)(058)/prog/prog_body/function/body/logical/logical_body/logical                                                      BREAK 
-EXPORT: (026)(058)/prog/prog_body/function/body/logical/logical_body/logical                                                  END SELECT 
-EXPORT: (027)(037)/prog/prog_body/function/body/logical                                                                   WEND 
-EXPORT: (028)(033)/prog/prog_body/function/body/end                                                                       END 
-EXPORT: (029)(024)/prog/prog_body/function                                                                            END SUB 
+EXPORT: (024)(100)/prog/prog_body/function/body/logical/logical_body/logical/vice_logical[4]/vice_logical_body/call[1]                CALL MR_regTest::main () 
+EXPORT: (025)(100)/prog/prog_body/function/body/logical/logical_body/logical/vice_logical[4]/vice_logical_body/call[2]                CALLMACRO MR_regTest::main () 
+EXPORT: (026)(058)/prog/prog_body/function/body/logical/logical_body/logical                                                      BREAK 
+EXPORT: (027)(058)/prog/prog_body/function/body/logical/logical_body/logical                                                  END SELECT 
+EXPORT: (028)(037)/prog/prog_body/function/body/logical                                                                   WEND 
+EXPORT: (029)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (030)(024)/prog/prog_body/function                                                                            END SUB 

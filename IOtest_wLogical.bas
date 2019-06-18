@@ -8,7 +8,7 @@ SUB main ()
         R[1]  = R[1]  + 1  
         WAIT COND  DI[R[1] ] = OFF 
          DI[R[1] ] = OFF   
-        WAIT  5
+        WAIT  R[1]
          DO[R[1] ] = PULSE  5  
         SELECT CASE  R[1]  
             CASE  2 
@@ -22,6 +22,7 @@ SUB main ()
             BREAK 
             DEFAULT   
                 CALL MR_regTest::main () 
+                CALLMACRO MR_regTest::main () 
             BREAK 
         END SELECT 
     WEND 

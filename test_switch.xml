@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<prog>
+  <head>
+    <include>MarcuscTest</include>
+  </head>
+  <prog_body>
+    <function name="main">
+      <body>
+        <comment>Test DO[1]</comment>
+        <assignment type="reg_assignment">
+          <lvalue>
+			<element type="do">
+                <element type="num">1</element>
+			</element>
+          </lvalue>
+          <rvalue>
+            <element type="num">1</element>
+          </rvalue>
+        </assignment>
+		<logical type="switch">
+		  <determine>
+			<element type="do">
+                <element type="num">1</element>
+			</element>
+		  </determine>
+		  <vice_logical type="case">
+			<determine>
+			  <element type="num">1</element>
+			</determine>
+			<vice_logical_body>
+				<assignment type="reg_assignment">
+				  <lvalue>
+					<element type="do">
+					   <element type="num">1</element>
+					</element>
+				  </lvalue>
+				  <rvalue>
+					<element type="num">0</element>
+				  </rvalue>
+				</assignment>
+			</vice_logical_body>
+		  </vice_logical>
+		  <vice_logical type="default">
+			<determine/>
+			<vice_logical_body>
+			  <nop/>
+			  <call file="MarcuscTest"/>
+			</vice_logical_body>
+		  </vice_logical>
+		</logical>
+        <comment>Test RO[1]</comment>
+        <assignment type="reg_assignment">
+          <lvalue>
+			<element type="ro">
+                   <element type="num">1</element>
+			</element>
+          </lvalue>
+          <rvalue>
+            <element type="num">1</element>
+          </rvalue>
+        </assignment>
+		<logical type="switch">
+		  <determine>
+			<element type="ro">
+                <element type="num">1</element>
+			</element>
+		  </determine>
+		  <vice_logical type="case">
+			<determine>
+			  <element type="num">1</element>
+			</determine>
+			<vice_logical_body>
+				<assignment type="reg_assignment">
+				  <lvalue>
+					<element type="ro">
+					   <element type="num">1</element>
+					</element>
+				  </lvalue>
+				  <rvalue>
+					<element type="num">0</element>
+				  </rvalue>
+				</assignment>
+			</vice_logical_body>
+		  </vice_logical>
+		  <vice_logical type="default">
+			<determine/>
+			<vice_logical_body>
+			  <nop/>
+			  <call file="MarcuscTest"/>
+			</vice_logical_body>
+		  </vice_logical>
+		</logical>
+        <comment>Test UO[1]</comment>
+        <assignment type="reg_assignment">
+          <lvalue>
+			<element type="uo">
+                   <element type="num">1</element>
+			</element>
+          </lvalue>
+          <rvalue>
+            <element type="num">1</element>
+          </rvalue>
+        </assignment>
+		<logical type="switch">
+		  <determine>
+			<element type="uo">
+                <element type="num">1</element>
+			</element>
+		  </determine>
+		  <vice_logical type="case">
+			<determine>
+			  <element type="num">1</element>
+			</determine>
+			<vice_logical_body>
+				<assignment type="reg_assignment">
+				  <lvalue>
+					<element type="uo">
+					   <element type="num">1</element>
+					</element>
+				  </lvalue>
+				  <rvalue>
+					<element type="num">0</element>
+				  </rvalue>
+				</assignment>
+			</vice_logical_body>
+		  </vice_logical>
+		  <vice_logical type="default">
+			<determine/>
+			<vice_logical_body>
+			  <nop/>
+			  <call file="MarcuscTest"/>
+			</vice_logical_body>
+		  </vice_logical>
+		</logical>
+        <comment>Test R[1]</comment>
+        <assignment type="reg_assignment">
+          <lvalue>
+            <element type="register">
+              <element type="num">1</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="num">1</element>
+          </rvalue>
+        </assignment>
+		<logical type="switch">
+		  <determine>
+            <element type="register">
+              <element type="num">1</element>
+            </element>
+		  </determine>
+		  <vice_logical type="case">
+			<determine>
+			  <element type="num">1</element>
+			</determine>
+			<vice_logical_body>
+				<assignment type="reg_assignment">
+				  <lvalue>
+					<element type="register">
+					  <element type="num">1</element>
+					</element>
+				  </lvalue>
+				  <rvalue>
+					<element type="num">0</element>
+				  </rvalue>
+				</assignment>
+			</vice_logical_body>
+		  </vice_logical>
+		  <vice_logical type="default">
+			<determine/>
+			<vice_logical_body>
+			  <nop/>
+			  <call file="MarcuscTest"/>
+			</vice_logical_body>
+		  </vice_logical>
+		</logical>
+        <comment>Test MR[1]</comment>
+        <assignment type="reg_assignment">
+          <lvalue>
+            <element type="motion_register">
+              <element type="num">1</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="num">1</element>
+          </rvalue>
+        </assignment>
+		<logical type="switch">
+		  <determine>
+            <element type="motion_register">
+              <element type="num">1</element>
+            </element>
+		  </determine>
+		  <vice_logical type="case">
+			<determine>
+			  <element type="num">1</element>
+			</determine>
+			<vice_logical_body>
+				<assignment type="reg_assignment">
+				  <lvalue>
+					<element type="motion_register">
+					  <element type="num">1</element>
+					</element>
+				  </lvalue>
+				  <rvalue>
+					<element type="num">0</element>
+				  </rvalue>
+				</assignment>
+			</vice_logical_body>
+		  </vice_logical>
+		  <vice_logical type="default">
+			<determine/>
+			<vice_logical_body>
+			  <nop/>
+			  <call file="MarcuscTest"/>
+			</vice_logical_body>
+		  </vice_logical>
+		</logical>
+        <comment>Test SR[1]</comment>
+        <assignment type="reg_assignment">
+          <lvalue>
+            <element type="string_register">
+              <element type="num">1</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="string">Hello, World</element>
+          </rvalue>
+        </assignment>
+		<logical type="switch">
+		  <determine>
+            <element type="motion_register">
+              <element type="num">1</element>
+            </element>
+		  </determine>
+		  <vice_logical type="case">
+			<determine>
+				<element type="string">Hello, World</element>
+			</determine>
+			<vice_logical_body>
+				<assignment type="reg_assignment">
+				  <lvalue>
+					<element type="string_register">
+					  <element type="num">1</element>
+					</element>
+				  </lvalue>
+				  <rvalue>
+					<element type="string">Hello</element>
+				  </rvalue>
+				</assignment>
+			</vice_logical_body>
+		  </vice_logical>
+		  <vice_logical type="default">
+			<determine/>
+			<vice_logical_body>
+			  <nop/>
+			  <call file="MarcuscTest"/>
+			</vice_logical_body>
+		  </vice_logical>
+		</logical>
+        <end name="prog"/>
+      </body>
+    </function>
+  </prog_body>
+</prog>

@@ -1,7 +1,7 @@
 EXPORT: (001)(018)/prog/head/include                                                                                  IMPORT MR_regTest
 EXPORT: (002)(024)/prog/prog_body/function                                                                            SUB main ()
 EXPORT: (003)(040)/prog/prog_body/function/body/assignment                                                                R[1]  = 1  
-EXPORT: (004)(047)/prog/prog_body/function/body/logical/determine                                                         WHILE R[1]  = 21 
+EXPORT: (004)(047)/prog/prog_body/function/body/logical/determine                                                         WHILE R[1]  <= 21 
 EXPORT: (005)(065)/prog/prog_body/function/body/logical/logical_body/instruction[1]                                           WAIT 
 EXPORT: (006)(064)/prog/prog_body/function/body/logical/logical_body/assignment[1]                                             RO[R[1] ] = ON   
 EXPORT: (007)(065)/prog/prog_body/function/body/logical/logical_body/instruction[2]                                           WAIT  5

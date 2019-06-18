@@ -1,0 +1,12 @@
+EXPORT: (001)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (002)(043)/prog/prog_body/function/body/assignment[1]                                                             TIMER[1]  = START  
+EXPORT: (003)(044)/prog/prog_body/function/body/instruction[1]                                                            PAUSE 
+EXPORT: (004)(044)/prog/prog_body/function/body/instruction[2]                                                            WAIT  1
+EXPORT: (005)(043)/prog/prog_body/function/body/assignment[2]                                                             R[3]  = TIMER[1]   
+EXPORT: (006)(043)/prog/prog_body/function/body/assignment[3]                                                             TIMER[1]  = RESET  
+EXPORT: (007)(044)/prog/prog_body/function/body/instruction[3]                                                            WAIT  3
+EXPORT: (008)(044)/prog/prog_body/function/body/instruction[4]                                                            ABORT 
+EXPORT: (009)(043)/prog/prog_body/function/body/assignment[4]                                                             R[3]  = TIMER[1]   
+EXPORT: (010)(043)/prog/prog_body/function/body/assignment[5]                                                             TIMER[1]  = STOP  
+EXPORT: (011)(043)/prog/prog_body/function/body/assignment[6]                                                             R[3]  = TIMER[1]   
+EXPORT: (012)(024)/prog/prog_body/function                                                                            END SUB 

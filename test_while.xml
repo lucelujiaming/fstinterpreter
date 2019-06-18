@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<prog>
+  <head>
+    <include>MR_regTest</include>
+  </head>
+  <prog_body>
+    <function name="main">
+      <body>
+        <comment>Test DO[1]</comment>
+        <assignment type="reg_assignment">
+          <lvalue>
+			<element type="do">
+                <element type="num">1</element>
+			</element>
+          </lvalue>
+          <rvalue>
+            <element type="num">1</element>
+          </rvalue>
+        </assignment>
+        <logical type="while">
+          <determine>
+              <element type="do">
+                <element type="num">1</element>
+              </element>
+            <element type="boolean_operation">=</element>
+            <element type="num">1</element>
+          </determine>
+          <logical_body>
+			<assignment type="reg_assignment">
+			  <lvalue>
+                <element type="do">
+                   <element type="num">1</element>
+                </element>
+			  </lvalue>
+			  <rvalue>
+				<element type="num">0</element>
+			  </rvalue>
+			</assignment>
+          </logical_body>
+        </logical>
+        <comment>Test RO[1]</comment>
+        <assignment type="reg_assignment">
+          <lvalue>
+			<element type="ro">
+                   <element type="num">1</element>
+			</element>
+          </lvalue>
+          <rvalue>
+            <element type="num">1</element>
+          </rvalue>
+        </assignment>
+        <logical type="while">
+          <determine>
+                <element type="ro">
+                   <element type="num">1</element>
+                </element>
+            <element type="boolean_operation">=</element>
+            <element type="num">1</element>
+          </determine>
+          <logical_body>
+			<assignment type="reg_assignment">
+			  <lvalue>
+                <element type="ro">
+                   <element type="num">1</element>
+                </element>
+			  </lvalue>
+			  <rvalue>
+				<element type="num">0</element>
+			  </rvalue>
+			</assignment>
+          </logical_body>
+        </logical>
+        <comment>Test UO[1]</comment>
+        <assignment type="reg_assignment">
+          <lvalue>
+			<element type="uo">
+                   <element type="num">1</element>
+			</element>
+          </lvalue>
+          <rvalue>
+            <element type="num">1</element>
+          </rvalue>
+        </assignment>
+        <logical type="while">
+          <determine>
+                <element type="uo">
+                   <element type="num">1</element>
+                </element>
+            <element type="boolean_operation">=</element>
+            <element type="num">1</element>
+          </determine>
+          <logical_body>
+			<assignment type="reg_assignment">
+			  <lvalue>
+                <element type="uo">
+                   <element type="num">1</element>
+                </element>
+			  </lvalue>
+			  <rvalue>
+				<element type="num">0</element>
+			  </rvalue>
+			</assignment>
+          </logical_body>
+        </logical>
+        <comment>Test R[1]</comment>
+        <assignment type="reg_assignment">
+          <lvalue>
+            <element type="register">
+              <element type="num">1</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="num">1</element>
+          </rvalue>
+        </assignment>
+        <logical type="while">
+          <determine>
+            <element type="register">
+              <element type="num">1</element>
+            </element>
+            <element type="boolean_operation">&lt;=</element>
+            <element type="num">2</element>
+          </determine>
+          <logical_body>
+			<assignment type="reg_assignment">
+			  <lvalue>
+				<element type="register">
+				  <element type="num">1</element>
+				</element>
+			  </lvalue>
+			  <rvalue>
+				<element type="num">5</element>
+			  </rvalue>
+			</assignment>
+          </logical_body>
+        </logical>
+        <comment>Test MR[1]</comment>
+        <assignment type="reg_assignment">
+          <lvalue>
+            <element type="motion_register">
+              <element type="num">1</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="num">1</element>
+          </rvalue>
+        </assignment>
+        <logical type="while">
+          <determine>
+            <element type="motion_register">
+              <element type="num">1</element>
+            </element>
+            <element type="boolean_operation">&lt;=</element>
+            <element type="num">2</element>
+          </determine>
+          <logical_body>
+			<assignment type="reg_assignment">
+			  <lvalue>
+				<element type="motion_register">
+				  <element type="num">1</element>
+				</element>
+			  </lvalue>
+			  <rvalue>
+				<element type="num">5</element>
+			  </rvalue>
+			</assignment>
+          </logical_body>
+        </logical>
+        <comment>Test SR[1]</comment>
+        <assignment type="reg_assignment">
+          <lvalue>
+            <element type="string_register">
+              <element type="num">1</element>
+            </element>
+          </lvalue>
+          <rvalue>
+            <element type="string">Hello, World</element>
+          </rvalue>
+        </assignment>
+        <logical type="while">
+          <determine>
+            <element type="string_register">
+              <element type="num">1</element>
+            </element>
+            <element type="boolean_operation">=</element>
+            <element type="string">Hello, World</element>
+          </determine>
+          <logical_body>
+			<assignment type="reg_assignment">
+			  <lvalue>
+				<element type="string_register">
+				  <element type="num">1</element>
+				</element>
+			  </lvalue>
+			  <rvalue>
+                 <element type="string">Hello</element>
+			  </rvalue>
+			</assignment>
+          </logical_body>
+        </logical>
+        <end name="prog"/>
+      </body>
+    </function>
+  </prog_body>
+</prog>

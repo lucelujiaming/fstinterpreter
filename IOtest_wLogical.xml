@@ -91,7 +91,7 @@
               </rvalue>
             </assignment>
             <instruction type="wait">
-              <argument name="timeout" type="num" unit="sec">5</argument>
+		      <argument name="timeout" type="register" unit="sec">1</argument>
             </instruction>
             <assignment type="io_assignment">
               <lvalue>
@@ -172,6 +172,7 @@
                 <vice_logical_body>
                   <nop/>
                   <call file="MR_regTest"/>
+                  <call name="MR_regTest" type="macro"/>
                 </vice_logical_body>
               </vice_logical>
             </logical>

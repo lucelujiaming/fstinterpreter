@@ -1,7 +1,7 @@
 IMPORT MR_regTest
 SUB main ()
     R[1]  = 1  
-    WHILE R[1]  = 21 
+    WHILE R[1]  <= 21 
         WAIT 
          RO[R[1] ] = ON   
         WAIT  5

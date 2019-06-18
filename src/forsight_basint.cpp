@@ -81,10 +81,14 @@ enum var_inner_type { FORSIGHT_CHAR, FORSIGHT_INT, FORSIGHT_FLOAT };
 // #define FORSIGHT_REGISTER_UF    "uf"
 // #define FORSIGHT_REGISTER_TF    "tf"
 
-#define FORSIGHT_TF_NO    "tf_no."
-#define FORSIGHT_UF_NO    "uf_no."
-#define FORSIGHT_OVC      "ovc."
-#define FORSIGHT_OAC      "oac."
+#define FORSIGHT_TF_NO			"tf_no"
+#define FORSIGHT_TF_NO_POINT    "tf_no."
+#define FORSIGHT_UF_NO			"uf_no"
+#define FORSIGHT_UF_NO_POINT    "uf_no."
+#define FORSIGHT_OVC			"ovc"
+#define FORSIGHT_OVC_POINT      "ovc."
+#define FORSIGHT_OAC			"oac"
+#define FORSIGHT_OAC_POINT      "oac."
 
 #define STR_AND    "and"
 #define STR_OR     "or"
@@ -2444,13 +2448,19 @@ void exec_case(struct thread_control_block * objThreadCntrolBlock)
 
   get_exp(objThreadCntrolBlock, &x, &boolValue); /* get expression */
 
-  if(x.getFloatValue() == select_stack.target.getFloatValue()) { 
+  boolValue = x.calcEQ(&select_stack.target);
+  if(boolValue == EVAL_CMP_ERROR)
+  {
+	  serror(objThreadCntrolBlock, 25);
+  }
+  // if(x.getFloatValue() == select_stack.target.getFloatValue()) { 
+  else if(boolValue == EVAL_CMP_TRUE) {
 	 /* is true so process target of CASE */
      select_and_cycle_push(objThreadCntrolBlock, select_stack);  // Use of END SELECt
      find_eol(objThreadCntrolBlock);
      return;
   }
-  else
+  else if(boolValue == EVAL_CMP_FALSE)
   {
      select_and_cycle_push(objThreadCntrolBlock, select_stack);
      while(1)
@@ -4118,28 +4128,32 @@ void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname,
 		}
 	}
 
-	if(strcmp(FORSIGHT_TF_NO, vname) == 0)
+	if((strcmp(FORSIGHT_TF_NO_POINT, vname) == 0)
+	      ||(strcmp(FORSIGHT_TF_NO, vname) == 0))
     {
         FST_INFO("set_global_TF vname = %s and value = %f.", vname, value.getFloatValue());
 		iLineNum = calc_line_from_prog(objThreadCntrolBlock);
 		set_global_TF(iLineNum, (int)value.getFloatValue(), objThreadCntrolBlock);
 		return ;
     }
-	else if(strcmp(FORSIGHT_UF_NO, vname) == 0)
+	else if((strcmp(FORSIGHT_UF_NO_POINT, vname) == 0)
+	      ||(strcmp(FORSIGHT_UF_NO, vname) == 0))
     {
         FST_INFO("set_global_UF vname = %s and value = %f.", vname, value.getFloatValue());
 		iLineNum = calc_line_from_prog(objThreadCntrolBlock);
 		set_global_UF(iLineNum, (int)value.getFloatValue(), objThreadCntrolBlock);
 		return ;
     }
-	else if(strcmp(FORSIGHT_OVC, vname) == 0)
+	else if((strcmp(FORSIGHT_OVC_POINT, vname) == 0)
+	      ||(strcmp(FORSIGHT_OVC, vname) == 0))
     {
         FST_INFO("set_OVC vname = %s and value = %f.", vname, value.getFloatValue());
 		iLineNum = calc_line_from_prog(objThreadCntrolBlock);
 		set_OVC(iLineNum, value.getFloatValue(), objThreadCntrolBlock);
 		return ;
     }
-	else if(strcmp(FORSIGHT_OAC, vname) == 0)
+	else if((strcmp(FORSIGHT_OAC_POINT, vname) == 0)
+	      ||(strcmp(FORSIGHT_OAC, vname) == 0))
     {
         FST_INFO("set_OAC vname = %s and value = %f.", vname, value.getFloatValue());
 		iLineNum = calc_line_from_prog(objThreadCntrolBlock);

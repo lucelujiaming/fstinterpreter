@@ -1,0 +1,58 @@
+EXPORT: (001)(018)/prog/head/include                                                                                  IMPORT MarcuscTest
+EXPORT: (002)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (003)(043)/prog/prog_body/function/body/assignment[1]                                                              DO[1] = 1  
+EXPORT: (004)(050)/prog/prog_body/function/body/logical[1]/determine                                                      SELECT CASE   DO[1] 
+EXPORT: (005)(066)/prog/prog_body/function/body/logical[1]/vice_logical[1]/determine                                          CASE  1 
+EXPORT: (006)(085)/prog/prog_body/function/body/logical[1]/vice_logical[1]/vice_logical_body/assignment                            DO[1] = 0  
+EXPORT: (007)(040)/prog/prog_body/function/body/logical[1]                                                                    BREAK 
+EXPORT: (008)(066)/prog/prog_body/function/body/logical[1]/vice_logical[2]/determine                                          DEFAULT   
+EXPORT: (009)(079)/prog/prog_body/function/body/logical[1]/vice_logical[2]/vice_logical_body/call                                 CALL MarcuscTest::main () 
+EXPORT: (010)(040)/prog/prog_body/function/body/logical[1]                                                                    BREAK 
+EXPORT: (011)(040)/prog/prog_body/function/body/logical[1]                                                                END SELECT 
+EXPORT: (012)(043)/prog/prog_body/function/body/assignment[2]                                                              RO[1] = 1  
+EXPORT: (013)(050)/prog/prog_body/function/body/logical[2]/determine                                                      SELECT CASE   RO[1] 
+EXPORT: (014)(066)/prog/prog_body/function/body/logical[2]/vice_logical[1]/determine                                          CASE  1 
+EXPORT: (015)(085)/prog/prog_body/function/body/logical[2]/vice_logical[1]/vice_logical_body/assignment                            RO[1] = 0  
+EXPORT: (016)(040)/prog/prog_body/function/body/logical[2]                                                                    BREAK 
+EXPORT: (017)(066)/prog/prog_body/function/body/logical[2]/vice_logical[2]/determine                                          DEFAULT   
+EXPORT: (018)(079)/prog/prog_body/function/body/logical[2]/vice_logical[2]/vice_logical_body/call                                 CALL MarcuscTest::main () 
+EXPORT: (019)(040)/prog/prog_body/function/body/logical[2]                                                                    BREAK 
+EXPORT: (020)(040)/prog/prog_body/function/body/logical[2]                                                                END SELECT 
+EXPORT: (021)(043)/prog/prog_body/function/body/assignment[3]                                                              UO[1] = 1  
+EXPORT: (022)(050)/prog/prog_body/function/body/logical[3]/determine                                                      SELECT CASE   UO[1] 
+EXPORT: (023)(066)/prog/prog_body/function/body/logical[3]/vice_logical[1]/determine                                          CASE  1 
+EXPORT: (024)(085)/prog/prog_body/function/body/logical[3]/vice_logical[1]/vice_logical_body/assignment                            UO[1] = 0  
+EXPORT: (025)(040)/prog/prog_body/function/body/logical[3]                                                                    BREAK 
+EXPORT: (026)(066)/prog/prog_body/function/body/logical[3]/vice_logical[2]/determine                                          DEFAULT   
+EXPORT: (027)(079)/prog/prog_body/function/body/logical[3]/vice_logical[2]/vice_logical_body/call                                 CALL MarcuscTest::main () 
+EXPORT: (028)(040)/prog/prog_body/function/body/logical[3]                                                                    BREAK 
+EXPORT: (029)(040)/prog/prog_body/function/body/logical[3]                                                                END SELECT 
+EXPORT: (030)(043)/prog/prog_body/function/body/assignment[4]                                                             R[1]  = 1  
+EXPORT: (031)(050)/prog/prog_body/function/body/logical[4]/determine                                                      SELECT CASE  R[1]  
+EXPORT: (032)(066)/prog/prog_body/function/body/logical[4]/vice_logical[1]/determine                                          CASE  1 
+EXPORT: (033)(085)/prog/prog_body/function/body/logical[4]/vice_logical[1]/vice_logical_body/assignment                           R[1]  = 0  
+EXPORT: (034)(040)/prog/prog_body/function/body/logical[4]                                                                    BREAK 
+EXPORT: (035)(066)/prog/prog_body/function/body/logical[4]/vice_logical[2]/determine                                          DEFAULT   
+EXPORT: (036)(079)/prog/prog_body/function/body/logical[4]/vice_logical[2]/vice_logical_body/call                                 CALL MarcuscTest::main () 
+EXPORT: (037)(040)/prog/prog_body/function/body/logical[4]                                                                    BREAK 
+EXPORT: (038)(040)/prog/prog_body/function/body/logical[4]                                                                END SELECT 
+EXPORT: (039)(043)/prog/prog_body/function/body/assignment[5]                                                             MR[1]  = 1  
+EXPORT: (040)(050)/prog/prog_body/function/body/logical[5]/determine                                                      SELECT CASE  MR[1]  
+EXPORT: (041)(066)/prog/prog_body/function/body/logical[5]/vice_logical[1]/determine                                          CASE  1 
+EXPORT: (042)(085)/prog/prog_body/function/body/logical[5]/vice_logical[1]/vice_logical_body/assignment                           MR[1]  = 0  
+EXPORT: (043)(040)/prog/prog_body/function/body/logical[5]                                                                    BREAK 
+EXPORT: (044)(066)/prog/prog_body/function/body/logical[5]/vice_logical[2]/determine                                          DEFAULT   
+EXPORT: (045)(079)/prog/prog_body/function/body/logical[5]/vice_logical[2]/vice_logical_body/call                                 CALL MarcuscTest::main () 
+EXPORT: (046)(040)/prog/prog_body/function/body/logical[5]                                                                    BREAK 
+EXPORT: (047)(040)/prog/prog_body/function/body/logical[5]                                                                END SELECT 
+EXPORT: (048)(043)/prog/prog_body/function/body/assignment[6]                                                             SR[1]  = "Hello, World"  
+EXPORT: (049)(050)/prog/prog_body/function/body/logical[6]/determine                                                      SELECT CASE  MR[1]  
+EXPORT: (050)(066)/prog/prog_body/function/body/logical[6]/vice_logical[1]/determine                                          CASE  "Hello, World" 
+EXPORT: (051)(085)/prog/prog_body/function/body/logical[6]/vice_logical[1]/vice_logical_body/assignment                           SR[1]  = "Hello"  
+EXPORT: (052)(040)/prog/prog_body/function/body/logical[6]                                                                    BREAK 
+EXPORT: (053)(066)/prog/prog_body/function/body/logical[6]/vice_logical[2]/determine                                          DEFAULT   
+EXPORT: (054)(079)/prog/prog_body/function/body/logical[6]/vice_logical[2]/vice_logical_body/call                                 CALL MarcuscTest::main () 
+EXPORT: (055)(040)/prog/prog_body/function/body/logical[6]                                                                    BREAK 
+EXPORT: (056)(040)/prog/prog_body/function/body/logical[6]                                                                END SELECT 
+EXPORT: (057)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (058)(024)/prog/prog_body/function                                                                            END SUB 
