@@ -1080,8 +1080,9 @@ bool reg_manager_interface_setValueMH(int *ptr, uint16_t num)
 		objMhDataIpc.id    = num;
 		objMhDataIpc.value = *ptr;
 		bRet = g_objRegManagerInterface->setMh(&objMhDataIpc);
-		FST_INFO("setValueMH:(%f) at %d with %s", 
-			objMhDataIpc.value, num, bRet?"TRUE":"FALSE");
+// crash sometimes
+//		FST_INFO("setValueMH:(%f) at %d with %s", 
+//			objMhDataIpc.value, num, bRet?"TRUE":"FALSE");
 		if(!bRet)
 		{
 			bRet = true ;

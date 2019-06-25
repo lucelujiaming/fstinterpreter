@@ -2458,6 +2458,21 @@ void exec_case(struct thread_control_block * objThreadCntrolBlock)
 	 /* is true so process target of CASE */
      select_and_cycle_push(objThreadCntrolBlock, select_stack);  // Use of END SELECt
      find_eol(objThreadCntrolBlock);
+	 get_token(objThreadCntrolBlock);
+	 // Jump consequent CASE statements
+	 if(objThreadCntrolBlock->tok == CASE)
+     {
+		while(objThreadCntrolBlock->tok == CASE)
+		{
+			find_eol(objThreadCntrolBlock);
+			get_token(objThreadCntrolBlock);
+		}
+	    putback(objThreadCntrolBlock);
+	 }
+	 else
+	 {
+		 putback(objThreadCntrolBlock);
+	 }
      return;
   }
   else if(boolValue == EVAL_CMP_FALSE)

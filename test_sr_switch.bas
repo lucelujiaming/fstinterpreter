@@ -3,6 +3,10 @@ SUB main ()
     R[1]  = 1  
     SELECT CASE  R[1]  
         CASE  1 
+        CASE  2 
+        CASE  3 
+            R[1]  = 0  
+        CASE  1
             R[1]  = 0  
         BREAK 
         DEFAULT   
