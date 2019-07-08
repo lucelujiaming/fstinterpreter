@@ -1,0 +1,5 @@
+SUB main ()
+    MOVEJ PR[1], 80 CNT -1 ;ACC 100
+    MOVEX PR[2], PR[3], PR[4], 20 CNT -1 ;ACC 100
+	MOVEX PR[1], PR[2], PR[3], PR[4], 20 CNT -1 ;ACC 100
+END SUB 

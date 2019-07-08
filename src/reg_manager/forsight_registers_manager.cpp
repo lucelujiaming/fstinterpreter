@@ -122,6 +122,8 @@ int forgesight_registers_manager_get_register(
 	// char reg_content_buffer[512] ;
 	
 	PrRegData objPrRegData ;
+	
+	Posture posture ;
 
 //    int       iID ;
 //    char      cComment[MAX_REG_COMMENT_LENGTH];
@@ -184,9 +186,72 @@ int forgesight_registers_manager_get_register(
 			else
 			{
 				value->setPrRegDataValue(&objPrRegData);
+				if(objPrRegData.value.pos_type == PR_REG_POS_TYPE_CARTESIAN)
+				{
+					objPoseEuler.point_.x_  = objPrRegData.value.pos[0];
+                    objPoseEuler.point_.y_  = objPrRegData.value.pos[1];
+                    objPoseEuler.point_.z_  = objPrRegData.value.pos[2];
+                    objPoseEuler.euler_.a_  = objPrRegData.value.pos[3];
+                    objPoseEuler.euler_.b_  = objPrRegData.value.pos[4];
+                    objPoseEuler.euler_.c_  = objPrRegData.value.pos[5];
+					
+					value->setPoseValue(&objPoseEuler);
+	       			FST_INFO("setPoseValue PR[%d].pos_type = %d ", iRegIdx, value->getIntType());
+	
+					posture.arm   = objPrRegData.value.posture[0];	
+					posture.elbow = objPrRegData.value.posture[1];	
+					posture.wrist = objPrRegData.value.posture[2];	
+					posture.flip  = objPrRegData.value.posture[3];
+					value->setPosture(posture);
+				}
+				else if(objPrRegData.value.pos_type == PR_REG_POS_TYPE_JOINT)
+				{
+					objJoint.j1_ = objPrRegData.value.pos[0];
+                    objJoint.j2_ = objPrRegData.value.pos[1];
+                    objJoint.j3_ = objPrRegData.value.pos[2];
+                    objJoint.j4_ = objPrRegData.value.pos[3];
+                    objJoint.j5_ = objPrRegData.value.pos[4];
+                    objJoint.j6_ = objPrRegData.value.pos[5];
+					value->setJointValue(&objJoint);
+	       			FST_INFO("setJointValue PR[%d].pos_type = %d ", iRegIdx, value->getIntType());
+
+					posture.arm   = objPrRegData.value.posture[0];	
+					posture.elbow = objPrRegData.value.posture[1];	
+					posture.wrist = objPrRegData.value.posture[2];	
+					posture.flip  = objPrRegData.value.posture[3];
+					value->setPosture(posture);
+				}
 			}
 #else
 			value->setPrRegDataValue(&objPrRegData);
+			if(objPrRegData.value.pos_type == PR_REG_POS_TYPE_JOINT)
+			{
+				objJoint.j1 = objPrRegData.value.joint_pos[0];
+                objJoint.j2 = objPrRegData.value.joint_pos[1];
+                objJoint.j3 = objPrRegData.value.joint_pos[2];
+                objJoint.j4 = objPrRegData.value.joint_pos[3];
+                objJoint.j5 = objPrRegData.value.joint_pos[4];
+                objJoint.j6 = objPrRegData.value.joint_pos[5];
+				value->setJointValue(&objJoint);
+				
+				posture.arm   = objPrRegData.value.posture[0];	
+				posture.elbow = objPrRegData.value.posture[1];	
+				posture.wrist = objPrRegData.value.posture[2];	
+				posture.flip  = objPrRegData.value.posture[3];
+				value->setPosture(posture);
+			}
+			else if(objPrRegData.value.pos_type == PR_REG_POS_TYPE_CARTESIAN)
+			{
+				objPoseEuler.position    = objPrRegData.value.cartesian_pos.position;
+                objPoseEuler.orientation = objPrRegData.value.cartesian_pos.orientation;
+				value->setPoseValue(&objPoseEuler);
+				
+				posture.arm   = objPrRegData.value.posture[0];	
+				posture.elbow = objPrRegData.value.posture[1];	
+				posture.wrist = objPrRegData.value.posture[2];	
+				posture.flip  = objPrRegData.value.posture[3];
+				value->setPosture(posture);
+			}
 #endif
 		}
 		// Implement for intergretion
@@ -606,11 +671,11 @@ int forgesight_registers_manager_set_register(
 	{
 		if(strlen(reg_member) == 0)
 		{
-			if (valueStart->getType() == TYPE_PR)
+			if (valueStart->hasType(TYPE_PR) == TYPE_PR)
 			{
 				reg_manager_interface_setPr(&(valueStart->getPrRegDataValue()), iRegIdx);
 			}
-			else if (valueStart->getType() == TYPE_POSE)
+			else if (valueStart->hasType(TYPE_POSE) == TYPE_POSE)
 			{
 				pose    = valueStart->getPoseValue();
 				posture = valueStart->getPosture();
@@ -626,7 +691,7 @@ int forgesight_registers_manager_set_register(
 				reg_manager_interface_setPosePr(&pose, &posture, iRegIdx);
 				return 0 ;
 			}
-			else if (valueStart->getType() == TYPE_JOINT)
+			else if (valueStart->hasType(TYPE_JOINT) == TYPE_JOINT)
 			{
 				joint = valueStart->getJointValue();
 				posture = valueStart->getPosture();
@@ -644,7 +709,7 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_POSE))
 		{
-			if (valueStart->getType() == TYPE_FLOAT)
+			if (valueStart->hasType(TYPE_FLOAT) == TYPE_FLOAT)
 			{
 #ifndef WIN32
 				pose.point_.x_ = (double)valueStart->getFloatValue();
@@ -699,7 +764,7 @@ int forgesight_registers_manager_set_register(
 				reg_manager_interface_setPosePr(&pose, &posture, iRegIdx);
 	 	      	return 0 ;
 			}
-			else if (valueStart->getType() == TYPE_POSE)
+			else if (valueStart->hasType(TYPE_POSE) == TYPE_POSE)
 			{
 				pose = valueStart->getPoseValue();
 				posture = valueStart->getPosture();
@@ -880,7 +945,7 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_JOINT))
 		{
-			if (valueStart->getType() == TYPE_FLOAT)
+			if (valueStart->hasType(TYPE_FLOAT) == TYPE_FLOAT)
 			{
 #ifndef WIN32
 				joint.j1_ = (double)valueStart->getFloatValue();
@@ -933,7 +998,7 @@ int forgesight_registers_manager_set_register(
 				reg_manager_interface_setJointPr(&joint, &posture, iRegIdx);
 	    	   	return 0 ;
 			}
-			else if (valueStart->getType() == TYPE_JOINT)
+			else if (valueStart->hasType(TYPE_JOINT) == TYPE_JOINT)
 			{
 				joint = valueStart->getJointValue();
 				FST_INFO("Set JOINT:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
@@ -1654,12 +1719,12 @@ int forgesight_registers_manager_set_resource(
 	{
 		if(strlen(reg_member) == 0)
 		{
-			if(valueStart->getType() == TYPE_FLOAT)
+			if(valueStart->hasType(TYPE_FLOAT) == TYPE_FLOAT)
 			{    
 				int iValue = (int)valueStart->getFloatValue();
 			    reg_manager_interface_setValueMI(&iValue, iRegIdx);
 			}
-			else if(valueStart->getType() == TYPE_STRING)
+			else if(valueStart->hasType(TYPE_STRING) == TYPE_STRING)
 			{
 				std::string strValue;
 				strValue = valueStart->getStringValue();
@@ -1681,12 +1746,12 @@ int forgesight_registers_manager_set_resource(
 	{
 		if(strlen(reg_member) == 0)
 		{
-			if(valueStart->getType() == TYPE_FLOAT)
+			if(valueStart->hasType(TYPE_FLOAT) == TYPE_FLOAT)
 			{    
 				int iValue = (int)valueStart->getFloatValue();
 			    reg_manager_interface_setValueMH(&iValue, iRegIdx);
 			}
-			else if(valueStart->getType() == TYPE_STRING)
+			else if(valueStart->hasType(TYPE_STRING) == TYPE_STRING)
 			{
 				std::string strValue;
 				strValue = valueStart->getStringValue();
@@ -1708,13 +1773,13 @@ int forgesight_registers_manager_set_resource(
 	{
 		if(strlen(reg_member) == 0)
 		{
-			if(valueStart->getType() == TYPE_FLOAT)
+			if(valueStart->hasType(TYPE_FLOAT) == TYPE_FLOAT)
 			{    
 				double fValue = valueStart->getFloatValue();
 				FST_INFO("Set FLOAT:(%f) to R[%s]", fValue, reg_idx);
 			    reg_manager_interface_setValueR(&fValue, iRegIdx);
 			}
-			else if(valueStart->getType() == TYPE_STRING)
+			else if(valueStart->hasType(TYPE_STRING) == TYPE_STRING)
 			{
 				std::string strValue;
 				strValue = valueStart->getStringValue();
@@ -1737,12 +1802,12 @@ int forgesight_registers_manager_set_resource(
 	{
 		if(strlen(reg_member) == 0)
 		{
-			if(valueStart->getType() == TYPE_FLOAT)
+			if(valueStart->hasType(TYPE_FLOAT) == TYPE_FLOAT)
 			{    
 				int iValue = (int)valueStart->getFloatValue();
 			    reg_manager_interface_setValueMr(&iValue, iRegIdx);
 			}
-			else if(valueStart->getType() == TYPE_STRING)
+			else if(valueStart->hasType(TYPE_STRING) == TYPE_STRING)
 			{
 				std::string strValue;
 				strValue = valueStart->getStringValue();
@@ -1767,13 +1832,13 @@ int forgesight_registers_manager_set_resource(
 		if(strlen(reg_member) == 0)
 		{
 			strValue = valueStart->getStringValue() ;
-			if(valueStart->getType() == TYPE_STRING)
+			if(valueStart->hasType(TYPE_STRING) == TYPE_STRING)
 			{
 				FST_INFO("Set TYPE_STRING token:(%s) to %s", 
 						objThreadCntrolBlock->token, strValue.c_str());
 			   reg_manager_interface_setValueSr(strValue, iRegIdx);
 			}
-			else if(valueStart->getType() == TYPE_FLOAT)
+			else if(valueStart->hasType(TYPE_FLOAT) == TYPE_FLOAT)
 			{
 			    char cStringValue[64];
 			    sprintf(cStringValue, "%f", valueStart->getFloatValue());
@@ -1878,7 +1943,7 @@ int forgesight_registers_manager_get_point(
 			
 		if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J1))
 		{
-			if(TYPE_POSE == value.getType())
+			if(TYPE_POSE == value.hasType(TYPE_POSE))
 			{
 				objPoseEuler = value.getPoseValue();
 #ifndef WIN32
@@ -1887,7 +1952,7 @@ int forgesight_registers_manager_get_point(
 				valueStart->setFloatValue(objPoseEuler.position.x);
 #endif
 			}
-			else if(TYPE_JOINT == value.getType())
+			else if(TYPE_JOINT == value.hasType(TYPE_JOINT))
 			{
 				objJoint = value.getJointValue();
 #ifndef WIN32
@@ -1899,7 +1964,7 @@ int forgesight_registers_manager_get_point(
 		}
 		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J2))
 		{
-			if(TYPE_POSE == value.getType())
+			if(TYPE_POSE == value.hasType(TYPE_POSE))
 			{
 				objPoseEuler = value.getPoseValue();
 #ifndef WIN32
@@ -1908,7 +1973,7 @@ int forgesight_registers_manager_get_point(
 				valueStart->setFloatValue(objPoseEuler.position.y);
 #endif
 			}
-			else if(TYPE_JOINT == value.getType())
+			else if(TYPE_JOINT == value.hasType(TYPE_JOINT))
 			{
 				objJoint = value.getJointValue();
 #ifndef WIN32
@@ -1920,7 +1985,7 @@ int forgesight_registers_manager_get_point(
 		}
 		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J3))
 		{
-			if(TYPE_POSE == value.getType())
+			if(TYPE_POSE == value.hasType(TYPE_POSE))
 			{
 				objPoseEuler = value.getPoseValue();
 #ifndef WIN32
@@ -1929,7 +1994,7 @@ int forgesight_registers_manager_get_point(
 				valueStart->setFloatValue(objPoseEuler.position.z);
 #endif
 			}
-			else if(TYPE_JOINT == value.getType())
+			else if(TYPE_JOINT == value.hasType(TYPE_JOINT))
 			{
 				objJoint = value.getJointValue();
 #ifndef WIN32
@@ -1941,7 +2006,7 @@ int forgesight_registers_manager_get_point(
 		}
 		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J4))
 		{
-			if(TYPE_POSE == value.getType())
+			if(TYPE_POSE == value.hasType(TYPE_POSE))
 			{
 				objPoseEuler = value.getPoseValue();
 #ifndef WIN32
@@ -1950,7 +2015,7 @@ int forgesight_registers_manager_get_point(
 				valueStart->setFloatValue(objPoseEuler.orientation.a);
 #endif
 			}
-			else if(TYPE_JOINT == value.getType())
+			else if(TYPE_JOINT == value.hasType(TYPE_JOINT))
 			{
 				objJoint = value.getJointValue();
 #ifndef WIN32
@@ -1962,7 +2027,7 @@ int forgesight_registers_manager_get_point(
 		}
 		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J5))
 		{
-			if(TYPE_POSE == value.getType())
+			if(TYPE_POSE == value.hasType(TYPE_POSE))
 			{
 				objPoseEuler = value.getPoseValue();
 #ifndef WIN32
@@ -1971,7 +2036,7 @@ int forgesight_registers_manager_get_point(
 				valueStart->setFloatValue(objPoseEuler.orientation.b);
 #endif
 			}
-			else if(TYPE_JOINT == value.getType())
+			else if(TYPE_JOINT == value.hasType(TYPE_JOINT))
 			{
 				objJoint = value.getJointValue();
 #ifndef WIN32
@@ -1983,7 +2048,7 @@ int forgesight_registers_manager_get_point(
 		}
 		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J6))
 		{
-			if(TYPE_POSE == value.getType())
+			if(TYPE_POSE == value.hasType(TYPE_POSE))
 			{
 				objPoseEuler = value.getPoseValue();
 #ifndef WIN32
@@ -1992,7 +2057,7 @@ int forgesight_registers_manager_get_point(
 				valueStart->setFloatValue(objPoseEuler.orientation.c);
 #endif
 			}
-			else if(TYPE_JOINT == value.getType())
+			else if(TYPE_JOINT == value.hasType(TYPE_JOINT))
 			{
 				objJoint = value.getJointValue();
 #ifndef WIN32
@@ -2077,7 +2142,7 @@ int forgesight_registers_manager_set_point(
 		{
 			double fValue = valueStart->getFloatValue();
 			
-			if(TYPE_POSE == value.getType())
+			if(TYPE_POSE == value.hasType(TYPE_POSE))
 			{
 				pose = value.getPoseValue();
 #ifndef WIN32
@@ -2087,7 +2152,7 @@ int forgesight_registers_manager_set_point(
 #endif
 				value.setPoseValue(&pose);
 			}
-			else if(TYPE_JOINT == value.getType())
+			else if(TYPE_JOINT == value.hasType(TYPE_JOINT))
 			{
 				joint = value.getJointValue();
 #ifndef WIN32
@@ -2100,14 +2165,14 @@ int forgesight_registers_manager_set_point(
 			else
 			{
 	       		FST_ERROR("Set PJ1:(%f) P[%d].pos_type = %d ", 
-					fValue, iRegIdx, value.getType());
+					fValue, iRegIdx, value.getIntType());
 			}
 		}
 		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J2))
 		{
 			double fValue = valueStart->getFloatValue();
 			
-			if(TYPE_POSE == value.getType())
+			if(TYPE_POSE == value.hasType(TYPE_POSE))
 			{
 				pose = value.getPoseValue();
 #ifndef WIN32
@@ -2117,7 +2182,7 @@ int forgesight_registers_manager_set_point(
 #endif
 				value.setPoseValue(&pose);
 			}
-			else if(TYPE_JOINT == value.getType())
+			else if(TYPE_JOINT == value.hasType(TYPE_JOINT))
 			{
 				joint = value.getJointValue();
 #ifndef WIN32
@@ -2130,14 +2195,14 @@ int forgesight_registers_manager_set_point(
 			else
 			{
 	       		FST_ERROR("Set PJ1:(%f) P[%d].pos_type = %d ", 
-					fValue, iRegIdx, value.getType());
+					fValue, iRegIdx, value.getIntType());
 			}
 		}
 		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J3))
 		{
 			double fValue = valueStart->getFloatValue();
 			
-			if(TYPE_POSE == value.getType())
+			if(TYPE_POSE == value.hasType(TYPE_POSE))
 			{
 				pose = value.getPoseValue();
 #ifndef WIN32
@@ -2147,7 +2212,7 @@ int forgesight_registers_manager_set_point(
 #endif
 				value.setPoseValue(&pose);
 			}
-			else if(TYPE_JOINT == value.getType())
+			else if(TYPE_JOINT == value.hasType(TYPE_JOINT))
 			{
 				joint = value.getJointValue();
 #ifndef WIN32
@@ -2160,14 +2225,14 @@ int forgesight_registers_manager_set_point(
 			else
 			{
 	       		FST_ERROR("Set PJ1:(%f) P[%d].pos_type = %d ", 
-					fValue, iRegIdx, value.getType());
+					fValue, iRegIdx, value.getIntType());
 			}
 		}
 		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J4))
 		{
 			double fValue = valueStart->getFloatValue();
 			
-			if(TYPE_POSE == value.getType())
+			if(TYPE_POSE == value.hasType(TYPE_POSE))
 			{
 				pose = value.getPoseValue();
 #ifndef WIN32
@@ -2177,7 +2242,7 @@ int forgesight_registers_manager_set_point(
 #endif
 				value.setPoseValue(&pose);
 			}
-			else if(TYPE_JOINT == value.getType())
+			else if(TYPE_JOINT == value.hasType(TYPE_JOINT))
 			{
 				joint = value.getJointValue();
 #ifndef WIN32
@@ -2190,14 +2255,14 @@ int forgesight_registers_manager_set_point(
 			else
 			{
 	       		FST_ERROR("Set PJ1:(%f) P[%d].pos_type = %d ", 
-					fValue, iRegIdx, value.getType());
+					fValue, iRegIdx, value.getIntType());
 			}
 		}
 		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J5))
 		{
 			double fValue = valueStart->getFloatValue();
 			
-			if(TYPE_POSE == value.getType())
+			if(TYPE_POSE == value.hasType(TYPE_POSE))
 			{
 				pose = value.getPoseValue();
 #ifndef WIN32
@@ -2207,7 +2272,7 @@ int forgesight_registers_manager_set_point(
 #endif
 				value.setPoseValue(&pose);
 			}
-			else if(TYPE_JOINT == value.getType())
+			else if(TYPE_JOINT == value.hasType(TYPE_JOINT))
 			{
 				joint = value.getJointValue();
 #ifndef WIN32
@@ -2220,14 +2285,14 @@ int forgesight_registers_manager_set_point(
 			else
 			{
 	       		FST_ERROR("Set PJ1:(%f) P[%d].pos_type = %d ", 
-					fValue, iRegIdx, value.getType());
+					fValue, iRegIdx, value.getIntType());
 			}
 		}
 		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J6))
 		{
 			double fValue = valueStart->getFloatValue();
 			
-			if(TYPE_POSE == value.getType())
+			if(TYPE_POSE == value.hasType(TYPE_POSE))
 			{
 				pose = value.getPoseValue();
 #ifndef WIN32
@@ -2237,7 +2302,7 @@ int forgesight_registers_manager_set_point(
 #endif
 				value.setPoseValue(&pose);
 			}
-			else if(TYPE_JOINT == value.getType())
+			else if(TYPE_JOINT == value.hasType(TYPE_JOINT))
 			{
 				joint = value.getJointValue();
 #ifndef WIN32
@@ -2250,7 +2315,7 @@ int forgesight_registers_manager_set_point(
 			else
 			{
 	       		FST_ERROR("Set PJ1:(%f) P[%d].pos_type = %d ", 
-					fValue, iRegIdx, value.getType());
+					fValue, iRegIdx, value.getIntType());
 			}
 		}
 		

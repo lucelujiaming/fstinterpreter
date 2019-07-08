@@ -5,7 +5,8 @@ SUB main ()
         CASE  1 
         CASE  2 
         CASE  3 
-            R[1]  = 0  
+            R[1]  = 0 
+        BREAK  
         CASE  1
             R[1]  = 0  
         BREAK 

@@ -404,6 +404,19 @@ struct PoseAndPosture
     Posture      posture;
 };
 
+struct FrameOffset
+{
+    bool valid;            
+    int offset_frame_id;  
+    CoordinateType coord_type;  
+	
+    union
+    {
+        Joint offset_joint;
+        PoseEuler offset_pose; 
+    };
+};
+
 struct TargetPoint
 {
     CoordinateType  type;
@@ -436,9 +449,14 @@ struct MotionTarget     // 用于move指令的数据结构
     
     int user_frame_id;  // 如果是moveL或者moveC，需要指定目标点所处的用户坐标系标号和所用工具的标号，反解时需要
     int tool_frame_id;  // 如果用户坐标系标号和工具标号与当前的在用标号不符时直接报错，如果是-1则使用当前激活的uf和tf
+	
+    FrameOffset user_frame_offset;
+    FrameOffset tool_frame_offset;
 
-    int user_frame_offset_id;  // 如果是moveL或者moveC，需要指定目标点所处的用户坐标系标号和所用工具的标号，反解时需要
-    int tool_frame_offset_id;  // 如果用户坐标系标号和工具标号与当前的在用标号不符时直接报错，如果是-1则使用当前激活的uf和tf
+    // -------------------- to be deleted ---------------------------------------------------------------------------
+    int user_frame_offset_id; 
+    int tool_frame_offset_id; 
+    // --------------------------------------------------------------------------------------------------------------
 
     int prPos[PR_POS_LEN];
     TargetPoint target;   // moveJ和moveL时使用

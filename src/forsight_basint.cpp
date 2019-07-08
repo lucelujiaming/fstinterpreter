@@ -565,6 +565,8 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 		FST_ERROR("allocation failure");
 		exit(1);
 	  }
+	  memset(objThreadCntrolBlock->instrSet, 0x00, sizeof(Instruction) + 
+		  sizeof(AdditionalInfomation) * ADD_INFO_NUM);
 	
 	  objThreadCntrolBlock->iSubProgNum = 0 ;
 	  memset(objThreadCntrolBlock->sub_prog, 0x00, sizeof(char *) * NUM_SUBROUTINE);
@@ -2686,12 +2688,12 @@ bool call_inner_func(struct thread_control_block * objThreadCntrolBlock, eval_va
     // Process a comma-separated list of values.
     do {
         get_exp(objThreadCntrolBlock, &value, &boolValue);
-		if(value.getType() == TYPE_STRING)
+		if(value.hasType(TYPE_STRING) == TYPE_STRING)
 		{
 			sprintf(temp[count], "%s", value.getStringValue().c_str()); // save temporarily
 		}
-		else if( (value.getType() == (int)(TYPE_JOINT | TYPE_PR))
-		       ||(value.getType() ==  (int)(TYPE_POSE | TYPE_PR)))
+		else if( (value.hasType((int)(TYPE_JOINT | TYPE_PR)) == (int)(TYPE_JOINT | TYPE_PR))
+		       ||(value.hasType((int)(TYPE_POSE | TYPE_PR)) ==  (int)(TYPE_POSE | TYPE_PR)))
 		{
 			// sprintf(temp[count], "%f", value.getFloatValue()); // save temporarily
 		}
@@ -3948,12 +3950,13 @@ void set_var_value(struct thread_control_block * objThreadCntrolBlock,
 				   char *dst_reg_name, eval_value& valueDst, eval_value& valueSrc)
 {
 	Posture posture = {1, 1, -1, 0};
-	FST_INFO("set_var_value = %s with %04X and %04X", dst_reg_name, valueSrc.getType(), valueDst.getType());
+	FST_INFO("set_var_value = %s with %04X and %04X", dst_reg_name, 
+		valueSrc.getIntType(), valueDst.getIntType());
 	if(strcmp(dst_reg_name, "p") == 0) // lvalue is P register
 	{
-		if (valueSrc.getType() == TYPE_PR)
+		if (valueSrc.hasType(TYPE_PR) == TYPE_PR)
 		{
-			if (valueDst.getType() == TYPE_POSE)
+			if (valueDst.hasType(TYPE_POSE) == TYPE_POSE)
 			{
 				PoseEuler pointEulerVal ;
 #ifdef WIN32
@@ -3981,7 +3984,7 @@ void set_var_value(struct thread_control_block * objThreadCntrolBlock,
 				valueDst.setPoseValue(&pointEulerVal);
 				valueDst.setPosture(posture);
 			}
-			else if (valueDst.getType() == TYPE_JOINT)
+			else if (valueDst.hasType(TYPE_JOINT) == TYPE_JOINT)
 			{
 				Joint jointVal ;
 #ifdef WIN32
@@ -4009,12 +4012,12 @@ void set_var_value(struct thread_control_block * objThreadCntrolBlock,
 				valueDst.setPosture(posture);
 			}
 		}
-		else if (valueSrc.getType() == TYPE_POSE)
+		else if (valueSrc.hasType(TYPE_POSE) == TYPE_POSE)
 		{
 			valueDst.setPoseValue(&valueSrc.getPoseValue());
 			valueDst.setPosture(valueSrc.getPosture());
 		}
-		else if (valueSrc.getType() == TYPE_JOINT)
+		else if (valueSrc.hasType(TYPE_JOINT) == TYPE_JOINT)
 		{
 			valueDst.setJointValue(&valueSrc.getJointValue());
 			valueDst.setPosture(valueSrc.getPosture());
@@ -4077,11 +4080,11 @@ void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname,
     {
 		if(strchr(vname, '['))
 		{
-			if((value.getType() & TYPE_FLOAT) == TYPE_FLOAT)
+			if(value.hasType(TYPE_FLOAT) == TYPE_FLOAT)
 			{
 				FST_INFO("assign_var vname = %s and value = %f.", vname, value.getFloatValue());
 			}
-			if ((value.getType() & TYPE_STRING) == TYPE_STRING)
+			if (value.hasType(TYPE_STRING) == TYPE_STRING)
 			{
 				string strTmp = value.getStringValue() ;
 				FST_INFO("assign_var vname = %s and value = (%s).", vname, strTmp.c_str());

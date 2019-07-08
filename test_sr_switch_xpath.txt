@@ -34,3 +34,6 @@
 034:MarcuscTest:/prog/prog_body/function
 035:MarcuscTest:/prog/prog_body/function/body/end
 036:MarcuscTest:/prog/prog_body/function
+037:MarcuscTest:/prog/prog_body/function
+038:MarcuscTest:/prog/prog_body/function/body/end
+039:MarcuscTest:/prog/prog_body/function
