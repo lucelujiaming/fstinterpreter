@@ -117,8 +117,18 @@ public:
 	   
 		tfIndex = -1 ;
 		ufIndex = -1 ;
+		
+		postureInfo.arm = postureInfo.elbow =
+			postureInfo.flip = postureInfo.wrist = 0 ;
 		postureFake.arm = postureFake.elbow =
 			postureFake.flip = postureFake.wrist = 0 ;
+		
+		turnInfo.j1 = turnInfo.j2 = turnInfo.j3 = 
+			turnInfo.j4 = turnInfo.j5 = turnInfo.j6 = 
+			turnInfo.j7 = turnInfo.j8 = turnInfo.j9 = 0;
+		turnFake.j1 = turnFake.j2 = turnFake.j3 = 
+			turnFake.j4 = turnFake.j5 = turnFake.j6 = 
+			turnFake.j7 = turnFake.j8 = turnFake.j9 = 0;
 		isPulse = false ;
 	}
 	// TYPE_FLOAT
@@ -253,6 +263,28 @@ public:
 		else {
 			noticeErrorType(TYPE_JOINT | TYPE_POSE) ;
 			return postureFake;
+		}
+	}
+
+	void setTurn(Turn turn){
+		if((hasType(TYPE_JOINT) == TYPE_JOINT) 
+			|| (hasType(TYPE_POSE) == TYPE_POSE)) {
+			turnInfo = turn ;
+		}
+		else {
+			noticeErrorType(TYPE_JOINT | TYPE_POSE) ;
+			return ;
+		}
+	}
+	
+	Turn getTurn(){
+		if((hasType(TYPE_JOINT) == TYPE_JOINT) 
+			|| (hasType(TYPE_POSE) == TYPE_POSE)) {
+			return turnInfo ;
+		}
+		else {
+			noticeErrorType(TYPE_JOINT | TYPE_POSE) ;
+			return turnFake;
 		}
 	}
 
@@ -999,6 +1031,9 @@ private:
 		int ufIndex ;
 		Posture     postureInfo;
 		Posture     postureFake;
+
+		Turn        turnInfo ;
+		Turn        turnFake ;
 		
 		bool isPulse ;
 #if 0

@@ -342,6 +342,52 @@ int parsePosture(struct thread_control_block * objThreadCntrolBlock,
 	Output: 		NULL
 	Return: 		1 - success
 *************************************************/ 
+int parseTurn(struct thread_control_block * objThreadCntrolBlock, 
+			   cJSON *jsonPosture, Turn& turn)
+{
+	int numArray[9 * 2];
+	// int numentries=0,i=0,fail=0;
+	cJSON *child=jsonPosture->child;
+	int iIdx = 0 ;
+	while (child) //  && !fail)
+	{
+	//	FST_INFO("parsePosesContent: cJSON_Array %s", child->string);
+		switch ((child->type)&255)
+		{
+		case cJSON_Number:	
+			// FST_INFO("cJSON_Number %f", child->valuedouble); 
+			numArray[iIdx] = (int)child->valuedouble;
+			iIdx++ ;
+			break;
+		case cJSON_String:	
+			FST_INFO("cJSON_String %s", child->valuestring); break;
+		case cJSON_Object:	
+			// FST_INFO("cJSON_Object"); 
+			break;
+		}
+		child=child->next;
+	}
+	turn.j1 = numArray[0];
+	turn.j2 = numArray[1];
+	turn.j3 = numArray[2];
+	turn.j4 = numArray[3];
+	turn.j5 = numArray[4];
+	turn.j6 = numArray[5];
+	turn.j7 = numArray[6];
+	turn.j8 = numArray[7];
+	turn.j9 = numArray[8];
+	return 1;
+}
+
+/************************************************* 
+	Function:		parsePosture
+	Description:	Analyze the Additional info in the properity json file .
+	Input:			thread_control_block  - interpreter info
+	Input:			jsonPosture           - cJSON object
+	Input:			posture               - Posture object
+	Output: 		NULL
+	Return: 		1 - success
+*************************************************/ 
 int parsePos(struct thread_control_block * objThreadCntrolBlock, 
 			   cJSON *jsonPosture, double* pos)
 {
@@ -387,6 +433,7 @@ int parsePosesContent(struct thread_control_block * objThreadCntrolBlock,
 	PoseEuler cart ;
 	Posture posture ;
 	double  pos[9 * 2] ;
+	Turn    turn ;
 	
 	AdditionalE additionalE ;
 	char var[128];
@@ -440,11 +487,17 @@ int parsePosesContent(struct thread_control_block * objThreadCntrolBlock,
 			break;
 		case cJSON_Array:
 			if(strcmp(child->string, "posture") == 0)
+			{
 				parsePosture(objThreadCntrolBlock, child, posture);	
-			else if(strcmp(child->string, "pos") == 0)
+			}
+			else if(strcmp(child->string, "pos") == 0)  // xyzabc
 			{
 				parsePos(objThreadCntrolBlock, child, pos);	
 				bIsUsePosArray = true ;
+			}
+			else if(strcmp(child->string, "turnCircle") == 0) 
+			{
+				parseTurn(objThreadCntrolBlock, child, turn);
 			}
 			break;
 		}
@@ -504,6 +557,8 @@ int parsePosesContent(struct thread_control_block * objThreadCntrolBlock,
 	value.updateAdditionalE(additionalE);
 
 	value.setPosture(posture);
+	value.setTurn(turn);
+	
 	
 	// assign_var(objThreadCntrolBlock, var, value);
     var_type vt;

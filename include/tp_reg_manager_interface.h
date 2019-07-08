@@ -59,7 +59,8 @@ typedef struct
     double ext_pos[MAX_PR_EXT_AXIS_NUM];   // not used
     int group_id;           // not used
     bool posture[4];        // not used
-    int multiturn[3];       // not used
+//  int  multiturn[3];       // not used
+    int  turn[9];       // not used
 }PrValue;
 
 typedef struct

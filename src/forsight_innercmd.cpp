@@ -997,6 +997,7 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		instr.target.user_frame_id = value.getUFIndex();
 		instr.target.tool_frame_id = value.getTFIndex();
 		instr.target.target.pose.posture = value.getPosture();
+		instr.target.target.pose.turn = value.getTurn();
 		
 		// instr.target.pose_target = value.getPoseValue();
 	    FST_INFO("value.getIntType() == TYPE_POSE in MovJ");
@@ -1022,6 +1023,8 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		instr.target.target.joint = value.getJointValue();
 		instr.target.user_frame_id = value.getUFIndex();
 		instr.target.tool_frame_id = value.getTFIndex();
+		instr.target.target.pose.posture = value.getPosture();
+		instr.target.target.pose.turn = value.getTurn();
 		
 	    FST_INFO("Forward movej to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ", 
 #ifndef WIN32
@@ -1089,7 +1092,16 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		instr.target.target.pose.posture.elbow = value.getPrRegDataValue().value.posture[1];
 		instr.target.target.pose.posture.wrist = value.getPrRegDataValue().value.posture[2];
 		instr.target.target.pose.posture.flip  = value.getPrRegDataValue().value.posture[3];
-		
+
+		instr.target.target.pose.turn.j1   = value.getPrRegDataValue().value.turn[0];
+		instr.target.target.pose.turn.j2   = value.getPrRegDataValue().value.turn[1];
+		instr.target.target.pose.turn.j3   = value.getPrRegDataValue().value.turn[2];
+		instr.target.target.pose.turn.j4   = value.getPrRegDataValue().value.turn[3];
+		instr.target.target.pose.turn.j5   = value.getPrRegDataValue().value.turn[4];
+		instr.target.target.pose.turn.j6   = value.getPrRegDataValue().value.turn[5];
+		instr.target.target.pose.turn.j7   = value.getPrRegDataValue().value.turn[6];
+		instr.target.target.pose.turn.j8   = value.getPrRegDataValue().value.turn[7];
+		instr.target.target.pose.turn.j9   = value.getPrRegDataValue().value.turn[8];
 #endif		
 	}
 	// Use start point in revert mode  
@@ -1491,6 +1503,7 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		instr.target.user_frame_id = value.getUFIndex();
 		instr.target.tool_frame_id = value.getTFIndex();
 		instr.target.target.pose.posture = value.getPosture();
+		instr.target.target.pose.turn    = value.getTurn();
 		
 #ifndef WIN32
 	    FST_INFO("Forward movel to POSE:(%f, %f, %f, %f, %f, %f) in MovL", 
@@ -1510,6 +1523,10 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		instr.target.target.joint     = value.getJointValue();
 		instr.target.user_frame_id = value.getUFIndex();
 		instr.target.tool_frame_id = value.getTFIndex();
+		
+		instr.target.target.pose.posture = value.getPosture();
+		instr.target.target.pose.turn    = value.getTurn();
+		
 		// instr.target.joint_target = value.getJointValue();
 	    FST_INFO("value.getIntType() == TYPE_JOINT in MovL");
 	//	serror(objThreadCntrolBlock, 15);
@@ -1567,6 +1584,16 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		instr.target.target.pose.posture.elbow     = value.getPrRegDataValue().value.posture[1];
 		instr.target.target.pose.posture.wrist     = value.getPrRegDataValue().value.posture[2];
 		instr.target.target.pose.posture.flip      = value.getPrRegDataValue().value.posture[3];
+
+		instr.target.target.pose.turn.j1   = value.getPrRegDataValue().value.turn[0];
+		instr.target.target.pose.turn.j2   = value.getPrRegDataValue().value.turn[1];
+		instr.target.target.pose.turn.j3   = value.getPrRegDataValue().value.turn[2];
+		instr.target.target.pose.turn.j4   = value.getPrRegDataValue().value.turn[3];
+		instr.target.target.pose.turn.j5   = value.getPrRegDataValue().value.turn[4];
+		instr.target.target.pose.turn.j6   = value.getPrRegDataValue().value.turn[5];
+		instr.target.target.pose.turn.j7   = value.getPrRegDataValue().value.turn[6];
+		instr.target.target.pose.turn.j8   = value.getPrRegDataValue().value.turn[7];
+		instr.target.target.pose.turn.j9   = value.getPrRegDataValue().value.turn[8];
 #endif	
 	}
 	
@@ -1962,11 +1989,15 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		instr.target.via.pose.pose = value.getPoseValue();
 		
 		instr.target.via.pose.posture = value.getPosture();
+		instr.target.via.pose.turn    = value.getTurn();
 	}
 	else if(value.hasType(TYPE_JOINT) == TYPE_JOINT)
 	{
 		instr.target.via.type      = COORDINATE_JOINT ;
 		instr.target.via.joint     = value.getJointValue();
+		
+		instr.target.via.pose.posture = value.getPosture();
+		instr.target.via.pose.turn    = value.getTurn();
 	//  instr.target.joint_target = value.getJointValue();
 	//	find_eol(objThreadCntrolBlock);
     //	return 0;
@@ -2019,6 +2050,16 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		instr.target.via.pose.posture.elbow     = value.getPrRegDataValue().value.posture[1];
 		instr.target.via.pose.posture.wrist     = value.getPrRegDataValue().value.posture[2];
 		instr.target.via.pose.posture.flip      = value.getPrRegDataValue().value.posture[3];
+		
+		instr.target.via.pose.turn.j1   = value.getPrRegDataValue().value.turn[0];
+		instr.target.via.pose.turn.j2   = value.getPrRegDataValue().value.turn[1];
+		instr.target.via.pose.turn.j3   = value.getPrRegDataValue().value.turn[2];
+		instr.target.via.pose.turn.j4   = value.getPrRegDataValue().value.turn[3];
+		instr.target.via.pose.turn.j5   = value.getPrRegDataValue().value.turn[4];
+		instr.target.via.pose.turn.j6   = value.getPrRegDataValue().value.turn[5];
+		instr.target.via.pose.turn.j7   = value.getPrRegDataValue().value.turn[6];
+		instr.target.via.pose.turn.j8   = value.getPrRegDataValue().value.turn[7];
+		instr.target.via.pose.turn.j9   = value.getPrRegDataValue().value.turn[8];
 #endif	
 	}
 	
@@ -2085,9 +2126,11 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		instr.target.target.type      = COORDINATE_CARTESIAN ;
 		instr.target.target.pose.pose = value.getPoseValue();
 		instr.target.target.pose.posture = value.getPosture();
+		instr.target.target.pose.turn    = value.getTurn();
 		
 		instr.target.user_frame_id = value.getUFIndex();
 		instr.target.tool_frame_id = value.getTFIndex();
+		
 #ifndef WIN32
 	    FST_INFO("move to POSE:(%f, %f, %f, %f, %f, %f) in MovC", 
 			instr.target.target.pose.pose.point_.x_, instr.target.target.pose.pose.point_.y_, 
@@ -2104,6 +2147,9 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	{
 		instr.target.target.type      = COORDINATE_JOINT ;
 		instr.target.target.joint     = value.getJointValue();
+		
+		instr.target.target.pose.posture = value.getPosture();
+		instr.target.target.pose.turn    = value.getTurn();
 		// instr.target.joint_target = value.getJointValue();
 	    FST_INFO("value.getIntType() == TYPE_JOINT in MovC");
 	//	find_eol(objThreadCntrolBlock);
@@ -2160,6 +2206,16 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		instr.target.target.pose.posture.elbow     = value.getPrRegDataValue().value.posture[1];
 		instr.target.target.pose.posture.wrist     = value.getPrRegDataValue().value.posture[2];
 		instr.target.target.pose.posture.flip      = value.getPrRegDataValue().value.posture[3];
+		
+		instr.target.target.pose.turn.j1   = value.getPrRegDataValue().value.turn[0];
+		instr.target.target.pose.turn.j2   = value.getPrRegDataValue().value.turn[1];
+		instr.target.target.pose.turn.j3   = value.getPrRegDataValue().value.turn[2];
+		instr.target.target.pose.turn.j4   = value.getPrRegDataValue().value.turn[3];
+		instr.target.target.pose.turn.j5   = value.getPrRegDataValue().value.turn[4];
+		instr.target.target.pose.turn.j6   = value.getPrRegDataValue().value.turn[5];
+		instr.target.target.pose.turn.j7   = value.getPrRegDataValue().value.turn[6];
+		instr.target.target.pose.turn.j8   = value.getPrRegDataValue().value.turn[7];
+		instr.target.target.pose.turn.j9   = value.getPrRegDataValue().value.turn[8];
 #endif	
 	}
 	

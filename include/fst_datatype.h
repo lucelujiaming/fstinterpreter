@@ -206,6 +206,18 @@ typedef struct
     int flip;   // 0: not flip wrist, 1: flip wrist
 }Posture;
 
+typedef struct
+{
+    int   j1;
+    int   j2;
+    int   j3;
+    int   j4;
+    int   j5;
+    int   j6;
+    int   j7;
+    int   j8;
+    int   j9;
+}Turn;
 
 // Define the home position, upper limit and lower limit of a joint
 struct JointLimit {
@@ -402,6 +414,7 @@ struct PoseAndPosture
 {
     PoseEuler    pose;
     Posture      posture;
+    Turn         turn;
 };
 
 struct FrameOffset
