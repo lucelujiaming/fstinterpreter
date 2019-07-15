@@ -250,11 +250,13 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 					additionalInfomation.offset.type = PR;
 				else if(strcmp(objThreadCntrolBlock->token, "pr_uf") == 0)
 					additionalInfomation.offset.type = PR_UF;
+				else if(strcmp(objThreadCntrolBlock->token, "pr_tf") == 0)
+					additionalInfomation.offset.type = PR_TF;
 				
 				get_token(objThreadCntrolBlock);
 				if(strcmp(objThreadCntrolBlock->token, "pr") == 0)
 					additionalInfomation.offset.pr_reg.type = POSE_REG;
-				else if(strcmp(objThreadCntrolBlock->token, "ur") == 0)
+				else if(strcmp(objThreadCntrolBlock->token, "uf") == 0)
 					additionalInfomation.offset.pr_reg.type = NUM_REG;
 				
 				get_token(objThreadCntrolBlock);
@@ -332,6 +334,28 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 						return 0 ;
 					}
 				}
+				else if(additionalInfomation.offset.type == PR_TF)
+				{
+					get_token(objThreadCntrolBlock);
+					if(strcmp(objThreadCntrolBlock->token, "pr") == 0)
+						additionalInfomation.offset.uf_reg.type = POSE_REG;
+					else if(strcmp(objThreadCntrolBlock->token, "tf") == 0)
+						additionalInfomation.offset.uf_reg.type = NUM_REG;
+					
+					get_token(objThreadCntrolBlock);
+					if(*(objThreadCntrolBlock->token) != '[') {
+						return 0 ;
+					}
+					get_exp(objThreadCntrolBlock, &value, &boolValue);
+					additionalInfomation.offset.uf_reg.index = (int)value.getFloatValue();
+					//
+					objFrameOffsetPtr->offset_frame_id = (int)value.getFloatValue();
+					//
+					get_token(objThreadCntrolBlock);
+					if(*(objThreadCntrolBlock->token) != ']') {
+						return 0 ;
+					}
+				}
 				else 
 				{
 					// Current offset_frame_id
@@ -344,6 +368,8 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 					additionalInfomation.offset.type = C_VEC;
 				else if(strcmp(objThreadCntrolBlock->token, "c_vec_uf") == 0)
 					additionalInfomation.offset.type = C_VEC_UF;
+				else if(strcmp(objThreadCntrolBlock->token, "c_vec_tf") == 0)
+					additionalInfomation.offset.type = C_VEC_TF;
 				
 				// additionalInfomation.offset.pose_target ;
 				get_token(objThreadCntrolBlock);
@@ -429,7 +455,29 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 	  				get_token(objThreadCntrolBlock);
 					if(strcmp(objThreadCntrolBlock->token, "pr") == 0)
 						additionalInfomation.offset.uf_reg.type = POSE_REG;
-					else if(strcmp(objThreadCntrolBlock->token, "ur") == 0)
+					else if(strcmp(objThreadCntrolBlock->token, "uf") == 0)
+						additionalInfomation.offset.uf_reg.type = NUM_REG;
+					
+					get_token(objThreadCntrolBlock);
+					if(*(objThreadCntrolBlock->token) != '[') {
+						return 0 ;
+					}
+					get_exp(objThreadCntrolBlock, &value, &boolValue);
+					additionalInfomation.offset.uf_reg.index = (int)value.getFloatValue();
+					//
+					objFrameOffsetPtr->offset_frame_id = (int)value.getFloatValue();
+					//
+					get_token(objThreadCntrolBlock);
+					if(*(objThreadCntrolBlock->token) != ']') {
+						return 0 ;
+					}
+				}	
+				else if(additionalInfomation.offset.type == C_VEC_TF)
+				{
+					get_token(objThreadCntrolBlock);
+					if(strcmp(objThreadCntrolBlock->token, "pr") == 0)
+						additionalInfomation.offset.uf_reg.type = POSE_REG;
+					else if(strcmp(objThreadCntrolBlock->token, "tf") == 0)
 						additionalInfomation.offset.uf_reg.type = NUM_REG;
 					
 					get_token(objThreadCntrolBlock);
@@ -458,6 +506,8 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 					additionalInfomation.offset.type = J_VEC;
 				else if(strcmp(objThreadCntrolBlock->token, "j_vec_uf") == 0)
 					additionalInfomation.offset.type = J_VEC_UF;
+				else if(strcmp(objThreadCntrolBlock->token, "j_vec_tf") == 0)
+					additionalInfomation.offset.type = J_VEC_TF;
 				
 				// additionalInfomation.offset.joint_target ;
 				get_token(objThreadCntrolBlock);
@@ -544,7 +594,29 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 	  				get_token(objThreadCntrolBlock);
 					if(strcmp(objThreadCntrolBlock->token, "pr") == 0)
 						additionalInfomation.offset.uf_reg.type = POSE_REG;
-					else if(strcmp(objThreadCntrolBlock->token, "ur") == 0)
+					else if(strcmp(objThreadCntrolBlock->token, "uf") == 0)
+						additionalInfomation.offset.uf_reg.type = NUM_REG;
+					
+					get_token(objThreadCntrolBlock);
+					if(*(objThreadCntrolBlock->token) != '[') {
+						return 0 ;
+					}
+					get_exp(objThreadCntrolBlock, &value, &boolValue);
+					additionalInfomation.offset.uf_reg.index = (int)value.getFloatValue();
+					//
+					objFrameOffsetPtr->offset_frame_id = (int)value.getFloatValue();
+					//
+					get_token(objThreadCntrolBlock);
+					if(*(objThreadCntrolBlock->token) != ']') {
+						return 0 ;
+					}
+				}
+				else if(additionalInfomation.offset.type == J_VEC_TF)
+				{
+					get_token(objThreadCntrolBlock);
+					if(strcmp(objThreadCntrolBlock->token, "pr") == 0)
+						additionalInfomation.offset.uf_reg.type = POSE_REG;
+					else if(strcmp(objThreadCntrolBlock->token, "tf") == 0)
 						additionalInfomation.offset.uf_reg.type = NUM_REG;
 					
 					get_token(objThreadCntrolBlock);

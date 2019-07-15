@@ -45,11 +45,14 @@ typedef enum _AdditionalInfomationType
 typedef enum _AdditionalOffsetInfomationType
 {
     PR, 
-    PR_UF, 
+	PR_UF,
+    PR_TF, 
     C_VEC ,
     C_VEC_UF ,
+    C_VEC_TF ,
     J_VEC, 
     J_VEC_UF, 
+    J_VEC_TF, 
 } AdditionalOffsetInfomationType;
 
 typedef enum __AdditionalExecuteInfomationType
