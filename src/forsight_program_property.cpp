@@ -291,50 +291,7 @@ int parseAdditionalE(struct thread_control_block * objThreadCntrolBlock,
 }
 
 /************************************************* 
-	Function:		parsePosture
-	Description:	Analyze the Additional info in the properity json file .
-	Input:			thread_control_block  - interpreter info
-	Input:			jsonPosture           - cJSON object
-	Input:			posture               - Posture object
-	Output: 		NULL
-	Return: 		1 - success
-*************************************************/ 
-int parsePosture(struct thread_control_block * objThreadCntrolBlock, 
-			   cJSON *jsonPosture, Posture & posture)
-{
-	// int numentries=0,i=0,fail=0;
-	cJSON *child=jsonPosture->child;
-	int iIdx = 1 ;
-	while (child) //  && !fail)
-	{
-	//	FST_INFO("parsePosesContent: cJSON_Array %s", child->string);
-		switch ((child->type)&255)
-		{
-		case cJSON_Number:	
-			// FST_INFO("cJSON_Number %f", child->valuedouble); 
-			if(iIdx == 1)
-				posture.arm = child->valuedouble;
-			else if(iIdx == 2)
-				posture.elbow = child->valuedouble;
-			else if(iIdx == 3)
-				posture.wrist = child->valuedouble;
-			else if(iIdx == 4)
-				posture.flip = child->valuedouble;
-			iIdx++ ;
-			break;
-		case cJSON_String:	
-			FST_INFO("cJSON_String %s", child->valuestring); break;
-		case cJSON_Object:	
-			// FST_INFO("cJSON_Object"); 
-			break;
-		}
-		child=child->next;
-	}
-	return 1;
-}
-
-/************************************************* 
-	Function:		parsePosture
+	Function:		parseTurn
 	Description:	Analyze the Additional info in the properity json file .
 	Input:			thread_control_block  - interpreter info
 	Input:			jsonPosture           - cJSON object
@@ -376,6 +333,107 @@ int parseTurn(struct thread_control_block * objThreadCntrolBlock,
 	turn.j7 = numArray[6];
 	turn.j8 = numArray[7];
 	turn.j9 = numArray[8];
+
+	return 1;
+}
+
+/************************************************* 
+	Function:		parsePostureAndTurn
+	Description:	Analyze the Additional info in the properity json file .
+	Input:			thread_control_block  - interpreter info
+	Input:			jsonPosture           - cJSON object
+	Input:			posture               - Posture object
+	Output: 		NULL
+	Return: 		1 - success
+*************************************************/ 
+int parsePostureAndTurn(struct thread_control_block * objThreadCntrolBlock, 
+			   cJSON *jsonPosture, Posture & posture, Turn& turn)
+{
+	// int numentries=0,i=0,fail=0;
+	cJSON *child=jsonPosture->child;
+	while (child) //  && !fail)
+	{
+	//	FST_INFO("parsePosesContent: cJSON_Array %s", child->string);
+		switch ((child->type)&255)
+		{
+		case cJSON_Number:	
+			// FST_INFO("cJSON_Number %f", child->valuedouble); 
+			if(strcmp(child->string, "flipOrNot") == 0)
+			{
+				posture.flip = child->valuedouble;	
+			}
+			else if(strcmp(child->string, "armLeftRight") == 0)
+			{
+				posture.arm = child->valuedouble;	
+			}
+			else if(strcmp(child->string, "armUpDown") == 0)
+			{
+				posture.elbow = child->valuedouble;	
+			}
+			else if(strcmp(child->string, "armFrontBack") == 0)
+			{
+				posture.wrist = child->valuedouble;	
+			}
+			break;
+		case cJSON_String:	
+			FST_INFO("cJSON_String %s", child->valuestring); break;
+			break;
+		case cJSON_Object:	
+			FST_INFO("cJSON_Object"); 
+			break;
+		case cJSON_Array:
+			if(strcmp(child->string, "turnCircle") == 0)
+			{
+				parseTurn(objThreadCntrolBlock, child, turn);	
+			}
+			break;
+		}
+		child=child->next;
+	}
+
+	return 1;
+}
+
+/************************************************* 
+	Function:		parsePosture
+	Description:	Analyze the Additional info in the properity json file .
+	Input:			thread_control_block  - interpreter info
+	Input:			jsonPosture           - cJSON object
+	Input:			posture               - Posture object
+	Output: 		NULL
+	Return: 		1 - success
+*************************************************/ 
+int parsePosture(struct thread_control_block * objThreadCntrolBlock, 
+			   cJSON *jsonPosture, Posture & posture)
+{
+	// int numentries=0,i=0,fail=0;
+	cJSON *child=jsonPosture->child;
+	int iIdx = 1 ;
+	while (child) //  && !fail)
+	{
+	//	FST_INFO("parsePosesContent: cJSON_Array %s", child->string);
+		switch ((child->type)&255)
+		{
+		case cJSON_Number:	
+			// FST_INFO("cJSON_Number %f", child->valuedouble); 
+			if(iIdx == 1)
+				posture.arm = child->valuedouble;
+			else if(iIdx == 2)
+				posture.elbow = child->valuedouble;
+			else if(iIdx == 3)
+				posture.wrist = child->valuedouble;
+			else if(iIdx == 4)
+				posture.flip = child->valuedouble;
+			iIdx++ ;
+			break;
+		case cJSON_String:	
+			FST_INFO("cJSON_String %s", child->valuestring); break;
+		case cJSON_Object:	
+			// FST_INFO("cJSON_Object"); 
+			break;
+		}
+		child=child->next;
+	}
 	return 1;
 }
 
@@ -484,6 +542,10 @@ int parsePosesContent(struct thread_control_block * objThreadCntrolBlock,
 				parseJoint(objThreadCntrolBlock, child, joint);
 			else if(strcmp(child->string, "additionalE") == 0)
 				parseAdditionalE(objThreadCntrolBlock, child, additionalE);
+			else if(strcmp(child->string, "posture") == 0)
+			{
+				parsePostureAndTurn(objThreadCntrolBlock, child, posture, turn);	
+			}
 			break;
 		case cJSON_Array:
 			if(strcmp(child->string, "posture") == 0)
@@ -494,10 +556,6 @@ int parsePosesContent(struct thread_control_block * objThreadCntrolBlock,
 			{
 				parsePos(objThreadCntrolBlock, child, pos);	
 				bIsUsePosArray = true ;
-			}
-			else if(strcmp(child->string, "turnCircle") == 0) 
-			{
-				parseTurn(objThreadCntrolBlock, child, turn);
 			}
 			break;
 		}

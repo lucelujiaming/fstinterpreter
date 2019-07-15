@@ -185,7 +185,7 @@ int forgesight_registers_manager_get_register(
 			}
 			else
 			{
-				value->setPrRegDataValue(&objPrRegData);
+			//	value->setPrRegDataValue(&objPrRegData);
 				if(objPrRegData.value.pos_type == PR_REG_POS_TYPE_CARTESIAN)
 				{
 					objPoseEuler.point_.x_  = objPrRegData.value.pos[0];
@@ -196,7 +196,11 @@ int forgesight_registers_manager_get_register(
                     objPoseEuler.euler_.c_  = objPrRegData.value.pos[5];
 					
 					value->setPoseValue(&objPoseEuler);
-	       			FST_INFO("setPoseValue PR[%d].pos_type = %d ", iRegIdx, value->getIntType());
+	       			FST_INFO("setPoseValue PR[%d].pos_type = %d at CART:(%f, %f, %f, %f, %f, %f)", 
+						iRegIdx, value->getIntType(), 
+						value->getPoseValue().point_.x_, value->getPoseValue().point_.y_, 
+						value->getPoseValue().point_.z_, value->getPoseValue().euler_.a_, 
+						value->getPoseValue().euler_.b_, value->getPoseValue().euler_.c_);
 				}
 				else if(objPrRegData.value.pos_type == PR_REG_POS_TYPE_JOINT)
 				{
@@ -207,7 +211,11 @@ int forgesight_registers_manager_get_register(
                     objJoint.j5_ = objPrRegData.value.pos[4];
                     objJoint.j6_ = objPrRegData.value.pos[5];
 					value->setJointValue(&objJoint);
-	       			FST_INFO("setJointValue PR[%d].pos_type = %d ", iRegIdx, value->getIntType());
+	       			FST_INFO("setJointValue PR[%d].pos_type = %d at HOINT:(%f, %f, %f, %f, %f, %f)",
+						iRegIdx, value->getIntType(), 
+						value->getJointValue().j1_, value->getJointValue().j2_, 
+						value->getJointValue().j3_, value->getJointValue().j4_, 
+						value->getJointValue().j5_, value->getJointValue().j6_);
 				}
 				
 				posture.arm   = objPrRegData.value.posture[0];	
@@ -228,7 +236,7 @@ int forgesight_registers_manager_get_register(
 				value->setTurn(turn);
 			}
 #else
-			value->setPrRegDataValue(&objPrRegData);
+			// value->setPrRegDataValue(&objPrRegData);
 			if(objPrRegData.value.pos_type == PR_REG_POS_TYPE_JOINT)
 			{
 				objJoint.j1 = objPrRegData.value.joint_pos[0];
@@ -681,11 +689,7 @@ int forgesight_registers_manager_set_register(
 	{
 		if(strlen(reg_member) == 0)
 		{
-			if (valueStart->hasType(TYPE_PR) == TYPE_PR)
-			{
-				reg_manager_interface_setPr(&(valueStart->getPrRegDataValue()), iRegIdx);
-			}
-			else if (valueStart->hasType(TYPE_POSE) == TYPE_POSE)
+			if (valueStart->hasType(TYPE_POSE) == TYPE_POSE)
 			{
 				pose    = valueStart->getPoseValue();
 				posture = valueStart->getPosture();

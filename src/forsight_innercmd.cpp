@@ -268,59 +268,41 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 				// NOTICE: lower case
 				sprintf(var, "pr[%d]", (int)value.getFloatValue());
 				result = find_var(objThreadCntrolBlock, var);
-				if(result.getPrRegDataValue().value.pos_type == PR_REG_POS_TYPE_JOINT)
+				if(result.hasType(TYPE_JOINT) == TYPE_JOINT)
 				{
 					objFrameOffsetPtr->coord_type = COORDINATE_JOINT;
+					objFrameOffsetPtr->offset_joint = result.getJointValue();
 #ifndef WIN32
-					objFrameOffsetPtr->offset_joint.j1_ = 
-						result.getPrRegDataValue().value.pos[0];
-					objFrameOffsetPtr->offset_joint.j2_ = 
-						result.getPrRegDataValue().value.pos[1];
-					objFrameOffsetPtr->offset_joint.j3_ = 
-						result.getPrRegDataValue().value.pos[2];
-					objFrameOffsetPtr->offset_joint.j4_ = 
-						result.getPrRegDataValue().value.pos[3];
-					objFrameOffsetPtr->offset_joint.j5_ = 
-						result.getPrRegDataValue().value.pos[4];
-					objFrameOffsetPtr->offset_joint.j6_ = 
-						result.getPrRegDataValue().value.pos[5];
+	       			FST_INFO("setJointValue pos_type = %d at HOINT:(%f, %f, %f, %f, %f, %f)",
+						result.getIntType(), 
+						result.getJointValue().j1_, result.getJointValue().j2_, 
+						result.getJointValue().j3_, result.getJointValue().j4_, 
+						result.getJointValue().j5_, result.getJointValue().j6_);
 #else
-					objFrameOffsetPtr->offset_joint.j1 = 
-						result.getPrRegDataValue().value.joint_pos[0];
-					objFrameOffsetPtr->offset_joint.j2 = 
-						result.getPrRegDataValue().value.joint_pos[1];
-					objFrameOffsetPtr->offset_joint.j3 = 
-						result.getPrRegDataValue().value.joint_pos[2];
-					objFrameOffsetPtr->offset_joint.j4 = 
-						result.getPrRegDataValue().value.joint_pos[3];
-					objFrameOffsetPtr->offset_joint.j5 = 
-						result.getPrRegDataValue().value.joint_pos[4];
-					objFrameOffsetPtr->offset_joint.j6 = 
-						result.getPrRegDataValue().value.joint_pos[5];
-#endif
+					FST_INFO("setJointValue pos_type = %d at HOINT:(%f, %f, %f, %f, %f, %f)",
+						result.getIntType(), 
+						result.getJointValue().j1, result.getJointValue().j2, 
+						result.getJointValue().j3, result.getJointValue().j4, 
+						result.getJointValue().j5, result.getJointValue().j6);		
+#endif	
 				}
-				else if(result.getPrRegDataValue().value.pos_type == PR_REG_POS_TYPE_CARTESIAN)
+				else if(result.hasType(TYPE_POSE) == TYPE_POSE)
 				{
 					objFrameOffsetPtr->coord_type = COORDINATE_CARTESIAN;
+					objFrameOffsetPtr->offset_pose = result.getPoseValue();
 #ifndef WIN32
-					objFrameOffsetPtr->offset_pose.point_.x_ = 
-						value.getPrRegDataValue().value.pos[0];
-					objFrameOffsetPtr->offset_pose.point_.y_ = 
-						value.getPrRegDataValue().value.pos[1];
-					objFrameOffsetPtr->offset_pose.point_.z_ = 
-						value.getPrRegDataValue().value.pos[2];
-					objFrameOffsetPtr->offset_pose.euler_.a_ = 
-						value.getPrRegDataValue().value.pos[3];
-					objFrameOffsetPtr->offset_pose.euler_.b_ = 
-						value.getPrRegDataValue().value.pos[4];
-					objFrameOffsetPtr->offset_pose.euler_.c_ = 
-						value.getPrRegDataValue().value.pos[5];
+	       			FST_INFO("setPoseValue pos_type = %d at CART:(%f, %f, %f, %f, %f, %f)", 
+						result.getIntType(), 
+						result.getPoseValue().point_.x_, result.getPoseValue().point_.y_, 
+						result.getPoseValue().point_.z_, result.getPoseValue().euler_.a_, 
+						result.getPoseValue().euler_.b_, result.getPoseValue().euler_.c_);
 #else
-					objFrameOffsetPtr->offset_pose.position = 
-						value.getPrRegDataValue().value.cartesian_pos.position;
-					objFrameOffsetPtr->offset_pose.orientation = 
-						value.getPrRegDataValue().value.cartesian_pos.orientation;
-#endif
+					FST_INFO("setPoseValue pos_type = %d at CART:(%f, %f, %f, %f, %f, %f)", 
+						result.getIntType(), 
+						result.getPoseValue().position.x, result.getPoseValue().position.y, 
+						result.getPoseValue().position.z, result.getPoseValue().orientation.a, 
+						result.getPoseValue().orientation.b, result.getPoseValue().orientation.c);
+#endif	
 				}
 				// 
 				get_token(objThreadCntrolBlock);
@@ -1037,73 +1019,7 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			instr.target.target.joint.j5, instr.target.target.joint.j6);
 #endif		
 	}
-	else if(value.hasType(TYPE_PR) == TYPE_PR)
-	{
-#ifdef WIN32
-		instr.target.target.joint.j1 = value.getPrRegDataValue().value.joint_pos[0];
-		instr.target.target.joint.j2 = value.getPrRegDataValue().value.joint_pos[1];
-		instr.target.target.joint.j3 = value.getPrRegDataValue().value.joint_pos[2];
-		instr.target.target.joint.j4 = value.getPrRegDataValue().value.joint_pos[3];
-		instr.target.target.joint.j5 = value.getPrRegDataValue().value.joint_pos[4];
-		instr.target.target.joint.j6 = value.getPrRegDataValue().value.joint_pos[5];
-#else
-		instr.target.target.type      = value.getPrRegDataValue().value.pos_type ;
-		if(instr.target.target.type == PR_REG_POS_TYPE_JOINT)
-		{
-			instr.target.target.joint.j1_ = value.getPrRegDataValue().value.pos[0];
-			instr.target.target.joint.j2_ = value.getPrRegDataValue().value.pos[1];
-			instr.target.target.joint.j3_ = value.getPrRegDataValue().value.pos[2];
-			instr.target.target.joint.j4_ = value.getPrRegDataValue().value.pos[3];
-			instr.target.target.joint.j5_ = value.getPrRegDataValue().value.pos[4];
-			instr.target.target.joint.j6_ = value.getPrRegDataValue().value.pos[5];
-			
-		    FST_INFO("TYPE_PR: Forward movej to TYPE_PR:JOINT:(%d)(%f, %f, %f, %f, %f, %f) in MovJ", 
-				value.getPrRegDataValue().value.pos_type, 
-				instr.target.target.joint.j1_, instr.target.target.joint.j2_, 
-				instr.target.target.joint.j3_, instr.target.target.joint.j4_, 
-				instr.target.target.joint.j5_, instr.target.target.joint.j6_);
-		}
-		else if(instr.target.target.type == PR_REG_POS_TYPE_CARTESIAN)
-		{
-			instr.target.target.pose.pose.point_.x_ = value.getPrRegDataValue().value.pos[0];
-			instr.target.target.pose.pose.point_.y_ = value.getPrRegDataValue().value.pos[1];
-			instr.target.target.pose.pose.point_.z_ = value.getPrRegDataValue().value.pos[2];
-			instr.target.target.pose.pose.euler_.a_ = value.getPrRegDataValue().value.pos[3];
-			instr.target.target.pose.pose.euler_.b_ = value.getPrRegDataValue().value.pos[4];
-			instr.target.target.pose.pose.euler_.c_ = value.getPrRegDataValue().value.pos[5];
-			
-		    FST_INFO("TYPE_PR: Forward movej to TYPE_PR:POSE:(%d)(%f, %f, %f, %f, %f, %f) in MovJ", 
-				value.getPrRegDataValue().value.pos_type, 
-				instr.target.target.pose.pose.point_.x_, instr.target.target.pose.pose.point_.y_, 
-				instr.target.target.pose.pose.point_.z_, instr.target.target.pose.pose.euler_.a_, 
-				instr.target.target.pose.pose.euler_.b_, instr.target.target.pose.pose.euler_.c_);
-		}
-		else 
-		{
-		    FST_INFO("TYPE_PR: Forward movej error to TYPE_PR:POSE:(%d) in MovJ", 
-				value.getPrRegDataValue().value.pos_type);
-		}
-			
-		
-		instr.target.user_frame_id = value.getUFIndex();
-		instr.target.tool_frame_id = value.getTFIndex();
-		
-		instr.target.target.pose.posture.arm   = value.getPrRegDataValue().value.posture[0];
-		instr.target.target.pose.posture.elbow = value.getPrRegDataValue().value.posture[1];
-		instr.target.target.pose.posture.wrist = value.getPrRegDataValue().value.posture[2];
-		instr.target.target.pose.posture.flip  = value.getPrRegDataValue().value.posture[3];
-
-		instr.target.target.pose.turn.j1   = value.getPrRegDataValue().value.turn[0];
-		instr.target.target.pose.turn.j2   = value.getPrRegDataValue().value.turn[1];
-		instr.target.target.pose.turn.j3   = value.getPrRegDataValue().value.turn[2];
-		instr.target.target.pose.turn.j4   = value.getPrRegDataValue().value.turn[3];
-		instr.target.target.pose.turn.j5   = value.getPrRegDataValue().value.turn[4];
-		instr.target.target.pose.turn.j6   = value.getPrRegDataValue().value.turn[5];
-		instr.target.target.pose.turn.j7   = value.getPrRegDataValue().value.turn[6];
-		instr.target.target.pose.turn.j8   = value.getPrRegDataValue().value.turn[7];
-		instr.target.target.pose.turn.j9   = value.getPrRegDataValue().value.turn[8];
-#endif		
-	}
+	
 	// Use start point in revert mode  
 	if(objThreadCntrolBlock->execute_direction == EXECUTE_BACKWARD)
 	{
@@ -1269,10 +1185,10 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_frame_id);
 #endif	
 		}
-		else if(objThreadCntrolBlock->instrSet->target.user_frame_offset.coord_type == COORDINATE_JOINT)
+		else if(objThreadCntrolBlock->instrSet->target.user_frame_offset.coord_type == COORDINATE_CARTESIAN)
 		{
 #ifndef WIN32
-	    FST_INFO("user_frame_offset to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ with %d", 
+	    FST_INFO("user_frame_offset to CART:(%f, %f, %f, %f, %f, %f) in MovJ with %d", 
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_pose.point_.x_, 
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_pose.point_.y_, 
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_pose.point_.z_, 
@@ -1281,7 +1197,7 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_pose.euler_.c_, 
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_frame_id);
 #else
-	    FST_INFO("user_frame_offset to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ with %d", 
+	    FST_INFO("user_frame_offset to CART:(%f, %f, %f, %f, %f, %f) in MovJ with %d", 
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_pose.position.x, 
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_pose.position.y, 
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_pose.position.z, 
@@ -1316,10 +1232,10 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_frame_id);
 #endif	
 		}
-		else if(objThreadCntrolBlock->instrSet->target.tool_frame_offset.coord_type == COORDINATE_JOINT)
+		else if(objThreadCntrolBlock->instrSet->target.tool_frame_offset.coord_type == COORDINATE_CARTESIAN)
 		{
 #ifndef WIN32
-	    FST_INFO("tool_frame_offset to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ with %d", 
+	    FST_INFO("tool_frame_offset to CART:(%f, %f, %f, %f, %f, %f) in MovJ with %d", 
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_pose.point_.x_, 
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_pose.point_.y_, 
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_pose.point_.z_, 
@@ -1328,7 +1244,7 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_pose.euler_.c_, 
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_frame_id);
 #else
-	    FST_INFO("tool_frame_offset to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ with %d", 
+	    FST_INFO("tool_frame_offset to CART:(%f, %f, %f, %f, %f, %f) in MovJ with %d", 
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_pose.position.x, 
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_pose.position.y, 
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_pose.position.z, 
@@ -1533,69 +1449,6 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	//	find_eol(objThreadCntrolBlock);
     //	return 0;
 	}
-	else if(value.hasType(TYPE_PR) == TYPE_PR)
-	{
-#ifdef WIN32
-		instr.target.target.pose.pose.position    = value.getPrRegDataValue().value.cartesian_pos.position ;
-		instr.target.target.pose.pose.orientation = value.getPrRegDataValue().value.cartesian_pos.orientation;
-#else
-		instr.target.target.type      = value.getPrRegDataValue().value.pos_type ;
-
-		if(instr.target.target.type == PR_REG_POS_TYPE_JOINT)
-		{
-			instr.target.target.joint.j1_ = value.getPrRegDataValue().value.pos[0];
-			instr.target.target.joint.j2_ = value.getPrRegDataValue().value.pos[1];
-			instr.target.target.joint.j3_ = value.getPrRegDataValue().value.pos[2];
-			instr.target.target.joint.j4_ = value.getPrRegDataValue().value.pos[3];
-			instr.target.target.joint.j5_ = value.getPrRegDataValue().value.pos[4];
-			instr.target.target.joint.j6_ = value.getPrRegDataValue().value.pos[5];
-			
-		    FST_INFO("TYPE_PR: Forward movel to TYPE_PR:JOINT:(%d)(%f, %f, %f, %f, %f, %f) in MovL", 
-				value.getPrRegDataValue().value.pos_type, 
-				instr.target.target.joint.j1_, instr.target.target.joint.j2_, 
-				instr.target.target.joint.j3_, instr.target.target.joint.j4_, 
-				instr.target.target.joint.j5_, instr.target.target.joint.j6_);
-		}
-		else if(instr.target.target.type == PR_REG_POS_TYPE_CARTESIAN)
-		{
-			instr.target.target.pose.pose.point_.x_ = value.getPrRegDataValue().value.pos[0];
-			instr.target.target.pose.pose.point_.y_ = value.getPrRegDataValue().value.pos[1];
-			instr.target.target.pose.pose.point_.z_ = value.getPrRegDataValue().value.pos[2];
-			instr.target.target.pose.pose.euler_.a_ = value.getPrRegDataValue().value.pos[3];
-			instr.target.target.pose.pose.euler_.b_ = value.getPrRegDataValue().value.pos[4];
-			instr.target.target.pose.pose.euler_.c_ = value.getPrRegDataValue().value.pos[5];
-			
-		    FST_INFO("TYPE_PR: Forward movel to TYPE_PR:POSE:(%d)(%f, %f, %f, %f, %f, %f) in MovL", 
-				value.getPrRegDataValue().value.pos_type, 
-				instr.target.target.pose.pose.point_.x_, instr.target.target.pose.pose.point_.y_, 
-				instr.target.target.pose.pose.point_.z_, instr.target.target.pose.pose.euler_.a_, 
-				instr.target.target.pose.pose.euler_.b_, instr.target.target.pose.pose.euler_.c_);
-		}
-		else 
-		{
-		    FST_INFO("TYPE_PR: Forward movel error to TYPE_PR:POSE:(%d) in MovL", 
-				value.getPrRegDataValue().value.pos_type);
-		}
-		
-		instr.target.user_frame_id                 = value.getUFIndex();
-		instr.target.tool_frame_id                 = value.getTFIndex();
-		
-		instr.target.target.pose.posture.arm       = value.getPrRegDataValue().value.posture[0];
-		instr.target.target.pose.posture.elbow     = value.getPrRegDataValue().value.posture[1];
-		instr.target.target.pose.posture.wrist     = value.getPrRegDataValue().value.posture[2];
-		instr.target.target.pose.posture.flip      = value.getPrRegDataValue().value.posture[3];
-
-		instr.target.target.pose.turn.j1   = value.getPrRegDataValue().value.turn[0];
-		instr.target.target.pose.turn.j2   = value.getPrRegDataValue().value.turn[1];
-		instr.target.target.pose.turn.j3   = value.getPrRegDataValue().value.turn[2];
-		instr.target.target.pose.turn.j4   = value.getPrRegDataValue().value.turn[3];
-		instr.target.target.pose.turn.j5   = value.getPrRegDataValue().value.turn[4];
-		instr.target.target.pose.turn.j6   = value.getPrRegDataValue().value.turn[5];
-		instr.target.target.pose.turn.j7   = value.getPrRegDataValue().value.turn[6];
-		instr.target.target.pose.turn.j8   = value.getPrRegDataValue().value.turn[7];
-		instr.target.target.pose.turn.j9   = value.getPrRegDataValue().value.turn[8];
-#endif	
-	}
 	
 	// Use start point in revert mode  
 	if(objThreadCntrolBlock->execute_direction == EXECUTE_BACKWARD)
@@ -1762,10 +1615,10 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_frame_id);
 #endif	
 		}
-		else if(objThreadCntrolBlock->instrSet->target.user_frame_offset.coord_type == COORDINATE_JOINT)
+		else if(objThreadCntrolBlock->instrSet->target.user_frame_offset.coord_type == COORDINATE_CARTESIAN)
 		{
 #ifndef WIN32
-	    FST_INFO("user_frame_offset to JOINT:(%f, %f, %f, %f, %f, %f) in MovL with %d", 
+	    FST_INFO("user_frame_offset to CART:(%f, %f, %f, %f, %f, %f) in MovL with %d", 
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_pose.point_.x_, 
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_pose.point_.y_, 
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_pose.point_.z_, 
@@ -1774,7 +1627,7 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_pose.euler_.c_, 
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_frame_id);
 #else
-	    FST_INFO("user_frame_offset to JOINT:(%f, %f, %f, %f, %f, %f) in MovL with %d", 
+	    FST_INFO("user_frame_offset to CART:(%f, %f, %f, %f, %f, %f) in MovL with %d", 
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_pose.position.x, 
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_pose.position.y, 
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_pose.position.z, 
@@ -1809,10 +1662,10 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_frame_id);
 #endif	
 		}
-		else if(objThreadCntrolBlock->instrSet->target.tool_frame_offset.coord_type == COORDINATE_JOINT)
+		else if(objThreadCntrolBlock->instrSet->target.tool_frame_offset.coord_type == COORDINATE_CARTESIAN)
 		{
 #ifndef WIN32
-	    FST_INFO("tool_frame_offset to JOINT:(%f, %f, %f, %f, %f, %f) in MovL with %d", 
+	    FST_INFO("tool_frame_offset to CART:(%f, %f, %f, %f, %f, %f) in MovL with %d", 
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_pose.point_.x_, 
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_pose.point_.y_, 
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_pose.point_.z_, 
@@ -1821,7 +1674,7 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_pose.euler_.c_, 
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_frame_id);
 #else
-	    FST_INFO("tool_frame_offset to JOINT:(%f, %f, %f, %f, %f, %f) in MovL with %d", 
+	    FST_INFO("tool_frame_offset to CART:(%f, %f, %f, %f, %f, %f) in MovL with %d", 
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_pose.position.x, 
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_pose.position.y, 
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_pose.position.z, 
@@ -2002,66 +1855,6 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	//	find_eol(objThreadCntrolBlock);
     //	return 0;
 	}
-	else if(value.hasType(TYPE_PR) == TYPE_PR)
-	{
-#ifdef WIN32
-		instr.target.via.pose.pose.position    = value.getPrRegDataValue().value.cartesian_pos.position ;
-		instr.target.via.pose.pose.orientation = value.getPrRegDataValue().value.cartesian_pos.orientation;
-#else
-		instr.target.via.type      = value.getPrRegDataValue().value.pos_type ;
-
-		if(instr.target.target.type == PR_REG_POS_TYPE_JOINT)
-		{
-			instr.target.via.joint.j1_ = value.getPrRegDataValue().value.pos[0];
-			instr.target.via.joint.j2_ = value.getPrRegDataValue().value.pos[1];
-			instr.target.via.joint.j3_ = value.getPrRegDataValue().value.pos[2];
-			instr.target.via.joint.j4_ = value.getPrRegDataValue().value.pos[3];
-			instr.target.via.joint.j5_ = value.getPrRegDataValue().value.pos[4];
-			instr.target.via.joint.j6_ = value.getPrRegDataValue().value.pos[5];
-			
-		    FST_INFO("TYPE_PR: Forward movec via to TYPE_PR:JOINT:(%d)(%f, %f, %f, %f, %f, %f) in MovC", 
-				value.getPrRegDataValue().value.pos_type, 
-				instr.target.target.joint.j1_, instr.target.target.joint.j2_, 
-				instr.target.target.joint.j3_, instr.target.target.joint.j4_, 
-				instr.target.target.joint.j5_, instr.target.target.joint.j6_);
-		}
-		else if(instr.target.target.type == PR_REG_POS_TYPE_CARTESIAN)
-		{
-			instr.target.via.pose.pose.point_.x_ = value.getPrRegDataValue().value.pos[0];
-			instr.target.via.pose.pose.point_.y_ = value.getPrRegDataValue().value.pos[1];
-			instr.target.via.pose.pose.point_.z_ = value.getPrRegDataValue().value.pos[2];
-			instr.target.via.pose.pose.euler_.a_ = value.getPrRegDataValue().value.pos[3];
-			instr.target.via.pose.pose.euler_.b_ = value.getPrRegDataValue().value.pos[4];
-			instr.target.via.pose.pose.euler_.c_ = value.getPrRegDataValue().value.pos[5];
-			
-		    FST_INFO("TYPE_PR: Forward movec via to TYPE_PR:POSE:(%d)(%f, %f, %f, %f, %f, %f) in MovC", 
-				value.getPrRegDataValue().value.pos_type, 
-				instr.target.target.pose.pose.point_.x_, instr.target.target.pose.pose.point_.y_, 
-				instr.target.target.pose.pose.point_.z_, instr.target.target.pose.pose.euler_.a_, 
-				instr.target.target.pose.pose.euler_.b_, instr.target.target.pose.pose.euler_.c_);
-		}
-		else 
-		{
-		    FST_INFO("TYPE_PR: Forward movec via error to TYPE_PR:POSE:(%d) in MovC", 
-				value.getPrRegDataValue().value.pos_type);
-		}
-		
-		instr.target.via.pose.posture.arm       = value.getPrRegDataValue().value.posture[0];
-		instr.target.via.pose.posture.elbow     = value.getPrRegDataValue().value.posture[1];
-		instr.target.via.pose.posture.wrist     = value.getPrRegDataValue().value.posture[2];
-		instr.target.via.pose.posture.flip      = value.getPrRegDataValue().value.posture[3];
-		
-		instr.target.via.pose.turn.j1   = value.getPrRegDataValue().value.turn[0];
-		instr.target.via.pose.turn.j2   = value.getPrRegDataValue().value.turn[1];
-		instr.target.via.pose.turn.j3   = value.getPrRegDataValue().value.turn[2];
-		instr.target.via.pose.turn.j4   = value.getPrRegDataValue().value.turn[3];
-		instr.target.via.pose.turn.j5   = value.getPrRegDataValue().value.turn[4];
-		instr.target.via.pose.turn.j6   = value.getPrRegDataValue().value.turn[5];
-		instr.target.via.pose.turn.j7   = value.getPrRegDataValue().value.turn[6];
-		instr.target.via.pose.turn.j8   = value.getPrRegDataValue().value.turn[7];
-		instr.target.via.pose.turn.j9   = value.getPrRegDataValue().value.turn[8];
-#endif	
-	}
 	
 	get_token(objThreadCntrolBlock);
 
@@ -2154,69 +1947,6 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	    FST_INFO("value.getIntType() == TYPE_JOINT in MovC");
 	//	find_eol(objThreadCntrolBlock);
     //	return 0;
-	}
-	else if(value.hasType(TYPE_PR) == TYPE_PR)
-	{
-#ifdef WIN32
-		instr.target.target.pose.pose.position    = value.getPrRegDataValue().value.cartesian_pos.position ;
-		instr.target.target.pose.pose.orientation = value.getPrRegDataValue().value.cartesian_pos.orientation;
-#else
-		instr.target.target.type      = value.getPrRegDataValue().value.pos_type ;
-
-		if(instr.target.target.type == PR_REG_POS_TYPE_JOINT)
-		{
-			instr.target.target.joint.j1_ = value.getPrRegDataValue().value.pos[0];
-			instr.target.target.joint.j2_ = value.getPrRegDataValue().value.pos[1];
-			instr.target.target.joint.j3_ = value.getPrRegDataValue().value.pos[2];
-			instr.target.target.joint.j4_ = value.getPrRegDataValue().value.pos[3];
-			instr.target.target.joint.j5_ = value.getPrRegDataValue().value.pos[4];
-			instr.target.target.joint.j6_ = value.getPrRegDataValue().value.pos[5];
-			
-		    FST_INFO("TYPE_PR: Forward movec target to TYPE_PR:JOINT:(%d)(%f, %f, %f, %f, %f, %f) in MovC", 
-				value.getPrRegDataValue().value.pos_type, 
-				instr.target.target.joint.j1_, instr.target.target.joint.j2_, 
-				instr.target.target.joint.j3_, instr.target.target.joint.j4_, 
-				instr.target.target.joint.j5_, instr.target.target.joint.j6_);
-		}
-		else if(instr.target.target.type == PR_REG_POS_TYPE_CARTESIAN)
-		{
-			instr.target.target.pose.pose.point_.x_ = value.getPrRegDataValue().value.pos[0];
-			instr.target.target.pose.pose.point_.y_ = value.getPrRegDataValue().value.pos[1];
-			instr.target.target.pose.pose.point_.z_ = value.getPrRegDataValue().value.pos[2];
-			instr.target.target.pose.pose.euler_.a_ = value.getPrRegDataValue().value.pos[3];
-			instr.target.target.pose.pose.euler_.b_ = value.getPrRegDataValue().value.pos[4];
-			instr.target.target.pose.pose.euler_.c_ = value.getPrRegDataValue().value.pos[5];
-			
-		    FST_INFO("TYPE_PR: Forward movec target to TYPE_PR:POSE:(%d)(%f, %f, %f, %f, %f, %f) in MovC", 
-				value.getPrRegDataValue().value.pos_type, 
-				instr.target.target.pose.pose.point_.x_, instr.target.target.pose.pose.point_.y_, 
-				instr.target.target.pose.pose.point_.z_, instr.target.target.pose.pose.euler_.a_, 
-				instr.target.target.pose.pose.euler_.b_, instr.target.target.pose.pose.euler_.c_);
-		}
-		else 
-		{
-		    FST_INFO("TYPE_PR: Forward movec target error to TYPE_PR:POSE:(%d) in MovC", 
-				value.getPrRegDataValue().value.pos_type);
-		}
-		
-		instr.target.user_frame_id                 = value.getUFIndex();
-		instr.target.tool_frame_id                 = value.getTFIndex();
-		
-		instr.target.target.pose.posture.arm       = value.getPrRegDataValue().value.posture[0];
-		instr.target.target.pose.posture.elbow     = value.getPrRegDataValue().value.posture[1];
-		instr.target.target.pose.posture.wrist     = value.getPrRegDataValue().value.posture[2];
-		instr.target.target.pose.posture.flip      = value.getPrRegDataValue().value.posture[3];
-		
-		instr.target.target.pose.turn.j1   = value.getPrRegDataValue().value.turn[0];
-		instr.target.target.pose.turn.j2   = value.getPrRegDataValue().value.turn[1];
-		instr.target.target.pose.turn.j3   = value.getPrRegDataValue().value.turn[2];
-		instr.target.target.pose.turn.j4   = value.getPrRegDataValue().value.turn[3];
-		instr.target.target.pose.turn.j5   = value.getPrRegDataValue().value.turn[4];
-		instr.target.target.pose.turn.j6   = value.getPrRegDataValue().value.turn[5];
-		instr.target.target.pose.turn.j7   = value.getPrRegDataValue().value.turn[6];
-		instr.target.target.pose.turn.j8   = value.getPrRegDataValue().value.turn[7];
-		instr.target.target.pose.turn.j9   = value.getPrRegDataValue().value.turn[8];
-#endif	
 	}
 	
 	// Use start point in revert mode  
@@ -2354,10 +2084,10 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_frame_id);
 #endif	
 		}
-		else if(objThreadCntrolBlock->instrSet->target.user_frame_offset.coord_type == COORDINATE_JOINT)
+		else if(objThreadCntrolBlock->instrSet->target.user_frame_offset.coord_type == COORDINATE_CARTESIAN)
 		{
 #ifndef WIN32
-	    FST_INFO("Backward move to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ with %d", 
+	    FST_INFO("Backward move to CART:(%f, %f, %f, %f, %f, %f) in MovJ with %d", 
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_pose.point_.x_, 
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_pose.point_.y_, 
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_pose.point_.z_, 
@@ -2366,7 +2096,7 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_pose.euler_.c_, 
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_frame_id);
 #else
-	    FST_INFO("Backward move to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ with %d", 
+	    FST_INFO("Backward move to CART:(%f, %f, %f, %f, %f, %f) in MovJ with %d", 
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_pose.position.x, 
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_pose.position.y, 
 			objThreadCntrolBlock->instrSet->target.user_frame_offset.offset_pose.position.z, 
@@ -2401,10 +2131,10 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_frame_id);
 #endif	
 		}
-		else if(objThreadCntrolBlock->instrSet->target.tool_frame_offset.coord_type == COORDINATE_JOINT)
+		else if(objThreadCntrolBlock->instrSet->target.tool_frame_offset.coord_type == COORDINATE_CARTESIAN)
 		{
 #ifndef WIN32
-	    FST_INFO("Backward move to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ with %d", 
+	    FST_INFO("Backward move to CART:(%f, %f, %f, %f, %f, %f) in MovJ with %d", 
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_pose.point_.x_, 
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_pose.point_.y_, 
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_pose.point_.z_, 
@@ -2413,7 +2143,7 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_pose.euler_.c_, 
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_frame_id);
 #else
-	    FST_INFO("Backward move to JOINT:(%f, %f, %f, %f, %f, %f) in MovJ with %d", 
+	    FST_INFO("Backward move to CART:(%f, %f, %f, %f, %f, %f) in MovJ with %d", 
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_pose.position.x, 
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_pose.position.y, 
 			objThreadCntrolBlock->instrSet->target.tool_frame_offset.offset_pose.position.z, 

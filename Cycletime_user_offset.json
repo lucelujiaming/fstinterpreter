@@ -7,6 +7,13 @@
     "protectStatus": "0",
     "poses": [
         {
+            "tf": 0,
+            "uf": 0,
+            "id": 1,
+            "name": "P1",
+            "comment": "",
+            "groupNumber": 1,
+            "poseType": "cart",
             "cart": {
                 "x": 300,
                 "y": -150,
@@ -23,19 +30,18 @@
                 "j5": -1.655,
                 "j6": -0.268
             },
-            "comment": "",
-            "groupNumber": 1,
-            "poseType": "cart",
-            "name": "P1",
-            "tf": 0,
-            "uf": 0,
-            "id": 1,
             "additionalE": {
                 "e1": 0,
                 "e2": 0,
                 "e3": 0
             },
-			 "posture": [1, -1, 1, 0]
+			"posture": {
+			  "flipOrNot": 0,
+			  "armLeftRight": 1,
+			  "armUpDown": 1,
+			  "armFrontBack": -1,
+			  "turnCircle": [1, 2, 3, 4, 5, 6, 7, 8, 9]
+			}
         },
         {
             "cart": {
@@ -66,7 +72,13 @@
                 "e2": 0,
                 "e3": 0
             },
-			 "posture": [1, -1, 1, 0]
+			"posture": {
+			  "flipOrNot": 0,
+			  "armLeftRight": 1,
+			  "armUpDown": 1,
+			  "armFrontBack": -1,
+			  "turnCircle": [1, 2, 3, 4, 5, 4, 3, 2, 1]
+			}
         },
         {
             "cart": {
@@ -97,7 +109,13 @@
                 "e2": 0,
                 "e3": 0
             },
-			 "posture": [1, -1, 1, 0]
+			"posture": {
+			  "flipOrNot": 0,
+			  "armLeftRight": 1,
+			  "armUpDown": 1,
+			  "armFrontBack": -1,
+			  "turnCircle": [1, 2, 3, 4, 5, 6, 7, 8, 9]
+			}
         },
         {
             "cart": {
@@ -128,7 +146,13 @@
                 "e2": 0,
                 "e3": 0
             },
-			 "posture": [1, -1, 1, 0]
+			"posture": {
+			  "flipOrNot": 0,
+			  "armLeftRight": 1,
+			  "armUpDown": 1,
+			  "armFrontBack": -1,
+			  "turnCircle": [1, 2, 3, 4, 5, 4, 3, 2, 1]
+			}
         },
         {
             "cart": {
@@ -159,7 +183,13 @@
                 "e2": 0,
                 "e3": 0
             },
-			 "posture": [1, -1, 1, 0]
+			"posture": {
+			  "flipOrNot": 0,
+			  "armLeftRight": 1,
+			  "armUpDown": 1,
+			  "armFrontBack": -1,
+			  "turnCircle": [1, 2, 3, 4, 5, 4, 3, 2, 1]
+			}
         }
     ],
     "homePose": -1,

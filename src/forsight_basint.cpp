@@ -2692,8 +2692,8 @@ bool call_inner_func(struct thread_control_block * objThreadCntrolBlock, eval_va
 		{
 			sprintf(temp[count], "%s", value.getStringValue().c_str()); // save temporarily
 		}
-		else if( (value.hasType((int)(TYPE_JOINT | TYPE_PR)) == (int)(TYPE_JOINT | TYPE_PR))
-		       ||(value.hasType((int)(TYPE_POSE | TYPE_PR)) ==  (int)(TYPE_POSE | TYPE_PR)))
+		else if( (value.hasType(TYPE_JOINT) == TYPE_JOINT)
+		       ||(value.hasType(TYPE_POSE) ==  TYPE_POSE))
 		{
 			// sprintf(temp[count], "%f", value.getFloatValue()); // save temporarily
 		}
@@ -3954,65 +3954,7 @@ void set_var_value(struct thread_control_block * objThreadCntrolBlock,
 		valueSrc.getIntType(), valueDst.getIntType());
 	if(strcmp(dst_reg_name, "p") == 0) // lvalue is P register
 	{
-		if (valueSrc.hasType(TYPE_PR) == TYPE_PR)
-		{
-			if (valueDst.hasType(TYPE_POSE) == TYPE_POSE)
-			{
-				PoseEuler pointEulerVal ;
-#ifdef WIN32
-				pointEulerVal.position = valueSrc.getPrRegDataValue().value.cartesian_pos.position ;
-				pointEulerVal.orientation = valueSrc.getPrRegDataValue().value.cartesian_pos.orientation;
-#else
-				pointEulerVal.point_.x_    = valueSrc.getPrRegDataValue().value.pos[0];
-				pointEulerVal.point_.y_    = valueSrc.getPrRegDataValue().value.pos[1];
-				pointEulerVal.point_.z_    = valueSrc.getPrRegDataValue().value.pos[2];
-				pointEulerVal.euler_.a_ = valueSrc.getPrRegDataValue().value.pos[3];
-				pointEulerVal.euler_.b_ = valueSrc.getPrRegDataValue().value.pos[4];
-				pointEulerVal.euler_.c_ = valueSrc.getPrRegDataValue().value.pos[5];
-
-				posture.arm   = valueSrc.getPrRegDataValue().value.posture[0];
-				posture.elbow = valueSrc.getPrRegDataValue().value.posture[1];
-				posture.wrist = valueSrc.getPrRegDataValue().value.posture[2];
-				posture.flip  = valueSrc.getPrRegDataValue().value.posture[3];
-				
-				FST_INFO("set_var_value: id = (%f, %f, %f, %f, %f, %f) ", 
-					valueSrc.getPrRegDataValue().value.pos[0], valueSrc.getPrRegDataValue().value.pos[1], 
-					valueSrc.getPrRegDataValue().value.pos[2], valueSrc.getPrRegDataValue().value.pos[3], 
-					valueSrc.getPrRegDataValue().value.pos[4], valueSrc.getPrRegDataValue().value.pos[5]);
-#endif
-				//	vt.value = value;
-				valueDst.setPoseValue(&pointEulerVal);
-				valueDst.setPosture(posture);
-			}
-			else if (valueDst.hasType(TYPE_JOINT) == TYPE_JOINT)
-			{
-				Joint jointVal ;
-#ifdef WIN32
-				jointVal.j1 = valueSrc.getPrRegDataValue().value.joint_pos[0];
-				jointVal.j2 = valueSrc.getPrRegDataValue().value.joint_pos[1];
-				jointVal.j3 = valueSrc.getPrRegDataValue().value.joint_pos[2];
-				jointVal.j4 = valueSrc.getPrRegDataValue().value.joint_pos[3];
-				jointVal.j5 = valueSrc.getPrRegDataValue().value.joint_pos[4];
-				jointVal.j6 = valueSrc.getPrRegDataValue().value.joint_pos[5];
-#else
-				jointVal.j1_ = valueSrc.getPrRegDataValue().value.pos[0];
-				jointVal.j2_ = valueSrc.getPrRegDataValue().value.pos[1];
-				jointVal.j3_ = valueSrc.getPrRegDataValue().value.pos[2];
-				jointVal.j4_ = valueSrc.getPrRegDataValue().value.pos[3];
-				jointVal.j5_ = valueSrc.getPrRegDataValue().value.pos[4];
-				jointVal.j6_ = valueSrc.getPrRegDataValue().value.pos[5];
-				
-				posture.arm   = valueSrc.getPrRegDataValue().value.posture[0];
-				posture.elbow = valueSrc.getPrRegDataValue().value.posture[1];
-				posture.wrist = valueSrc.getPrRegDataValue().value.posture[2];
-				posture.flip  = valueSrc.getPrRegDataValue().value.posture[3];
-#endif
-				//	vt.value = value;
-				valueDst.setJointValue(&jointVal);
-				valueDst.setPosture(posture);
-			}
-		}
-		else if (valueSrc.hasType(TYPE_POSE) == TYPE_POSE)
+		if (valueSrc.hasType(TYPE_POSE) == TYPE_POSE)
 		{
 			valueDst.setPoseValue(&valueSrc.getPoseValue());
 			valueDst.setPosture(valueSrc.getPosture());

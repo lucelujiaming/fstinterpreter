@@ -9,6 +9,7 @@ SUB main ()
               ELSE
                    MR[1] = 2
               ENDIF
+        COMPUTE_DYN_POINT
         SELECT CASE MR[1]
                CASE 1
                       MOVEJ PR[3], 100 CNT -1
