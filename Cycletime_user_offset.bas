@@ -1,4 +1,10 @@
 SUB main ()
+    MI[1] = rand()
+    IF PR[1] THEN
+		MOVEJ P[1], 50 CNT -1 
+	ENDIF
+    fkj_one()
+    fkj_two()
     MOVEJ P[1], 50 CNT -1 
     WHILE 1 
         MOVEL P[1], 1500 CNT -1 ;ACC 40 ;TOOL_OFFSET C_VEC_TF (100, 0, 0, 45, 0, 0) TF[1]

@@ -2,14 +2,21 @@
 #define FORSIGHT_INNERFUNC_H
 #include "forsight_inter_control.h"
 
+#define PARAM_NUM_ZERO    0
 #define PARAM_NUM_ONE     1
 #define PARAM_NUM_TWO     2
 #define PARAM_NUM_THR     3
-#define PARAM_NUM_MAX     3
+#define PARAM_NUM_FOUR    4
+#define PARAM_NUM_FIVE    5
+#define PARAM_NUM_MAX     5
+
+#define FUNC_FKJ_ONE    "fkj_one"
+#define FUNC_FKJ_TWO    "fkj_two"
 
 int find_internal_func(char *s);
 int get_func_params_num(int iIdx);
 bool call_internal_func(int index, eval_value *result, 
-		char * valFirst, char * valSecond = 0, char * valThird = 0);
+		char * valFirst = 0, char * valSecond = 0, char * valThird = 0, 
+		char * valFourth = 0, char * valFiveth = 0);
 
 #endif

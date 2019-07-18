@@ -10,7 +10,7 @@ SUB main ()
                    MR[1] = 2
               ENDIF
         COMPUTE_DYN_POINT
-        SELECT CASE MR[1]
+        SELECT CASE DO[601]
                CASE 1
                       MOVEJ PR[3], 100 CNT -1
                       BREAK

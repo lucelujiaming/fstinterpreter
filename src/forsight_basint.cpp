@@ -214,6 +214,8 @@ void get_args(struct thread_control_block * objThreadCntrolBlock);
 void get_params(struct thread_control_block * objThreadCntrolBlock);
 int  calc_line_from_prog(struct thread_control_block * objThreadCntrolBlock);
 
+bool call_inner_func(struct thread_control_block * objThreadCntrolBlock, eval_value *result);
+
 #ifdef WIN32
 HANDLE    g_basic_interpreter_handle[NUM_THREAD + 1];
 extern MacroInstrMgr  *  g_macro_instr_mgr_ptr; 
@@ -859,6 +861,12 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 		int iRet = exec_call(objThreadCntrolBlock);
 		if(iRet == END_COMMND_RET)
 			return END_COMMND_RET;
+	}
+	else if(objThreadCntrolBlock->token_type==BUILTINFUNC) /* is BUILTINFUNC */
+	{
+		eval_value result ;
+		// putback(objThreadCntrolBlock); /* return the var to the input stream */
+		int iRet = call_inner_func(objThreadCntrolBlock, &result);
 	}
 	else if(objThreadCntrolBlock->token_type==OUTSIDEFUNC) /* is OUTSIDEFUNC */
 	{
@@ -2653,6 +2661,22 @@ void input(struct thread_control_block * objThreadCntrolBlock)
   assign_var(objThreadCntrolBlock, var, value); // i) ;
 }
 
+void exec_fkj_one(struct thread_control_block * objThreadCntrolBlock)
+{
+    eval_value result = find_var(objThreadCntrolBlock, "MH[1]");
+	
+    result = find_var(objThreadCntrolBlock, "DI[1]");
+	
+}
+
+void exec_fkj_two(struct thread_control_block * objThreadCntrolBlock)
+{
+    eval_value result = find_var(objThreadCntrolBlock, "MH[1]");
+	
+    result = find_var(objThreadCntrolBlock, "DI[1]");
+}
+
+
 /************************************************* 
 	Function:		call_inner_func
 	Description:	Execute inner defined function . 
@@ -2662,14 +2686,17 @@ void input(struct thread_control_block * objThreadCntrolBlock)
 *************************************************/ 
 bool call_inner_func(struct thread_control_block * objThreadCntrolBlock, eval_value *result)
 {
+	char cFuncName[LAB_LEN];
     eval_value value;
     int boolValue;
 	int count ;
 	char temp[NUM_OF_PARAMS][LAB_LEN];
 
 	int funcIdx = find_internal_func(objThreadCntrolBlock->token);
+	memset(cFuncName, 0x00, LAB_LEN);
+	strncpy(cFuncName, objThreadCntrolBlock->token, LAB_LEN);
 
-    count = 0;
+    count = PARAM_NUM_ZERO;
     get_token(objThreadCntrolBlock);
 	// Fit for circumstance without parameter
 	if((*(objThreadCntrolBlock->token) == '\r')
@@ -2688,7 +2715,11 @@ bool call_inner_func(struct thread_control_block * objThreadCntrolBlock, eval_va
     // Process a comma-separated list of values.
     do {
         get_exp(objThreadCntrolBlock, &value, &boolValue);
-		if(value.hasType(TYPE_STRING) == TYPE_STRING)
+		if(value.getIntType() == TYPE_NONE)
+		{
+			break ;
+		}
+		else if(value.hasType(TYPE_STRING) == TYPE_STRING)
 		{
 			sprintf(temp[count], "%s", value.getStringValue().c_str()); // save temporarily
 		}
@@ -2711,8 +2742,22 @@ bool call_inner_func(struct thread_control_block * objThreadCntrolBlock, eval_va
 		serror(objThreadCntrolBlock, 18);
 		return false;
     }
+	// Special operation
+	if(strcmp(cFuncName, FUNC_FKJ_ONE) == 0)
+	{
+		exec_fkj_one(objThreadCntrolBlock);
+	}
+	else if(strcmp(cFuncName, FUNC_FKJ_TWO) == 0)
+	{
+		exec_fkj_two(objThreadCntrolBlock);
+	}
+
     // Now, push on local_var_stack in reverse order.
-    if(count == PARAM_NUM_ONE)
+    if(count == PARAM_NUM_ZERO)
+	{
+		return call_internal_func(funcIdx, result);
+    }
+	else if(count == PARAM_NUM_ONE)
 	{
 		return call_internal_func(funcIdx, result, temp[0]);
     }
@@ -2723,6 +2768,14 @@ bool call_inner_func(struct thread_control_block * objThreadCntrolBlock, eval_va
 	else if(count == PARAM_NUM_THR)
 	{
 		return call_internal_func(funcIdx, result, temp[0], temp[1], temp[2]);
+    }
+	else if(count == PARAM_NUM_FOUR)
+	{
+		return call_internal_func(funcIdx, result, temp[0], temp[1], temp[2], temp[3]);
+    }
+	else if(count == PARAM_NUM_FIVE)
+	{
+		return call_internal_func(funcIdx, result, temp[0], temp[1], temp[2], temp[3], temp[4]);
     }
 	else 
 	{

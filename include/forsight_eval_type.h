@@ -339,13 +339,6 @@ public:
 				joint.j4 += jointOperand.j4;
 				joint.j5 += jointOperand.j5;
 				joint.j6 += jointOperand.j6;
-				
-				reg_pr.value.joint_pos[0] += jointOperand.j1;
-				reg_pr.value.joint_pos[1] += jointOperand.j2;
-				reg_pr.value.joint_pos[2] += jointOperand.j3;
-				reg_pr.value.joint_pos[3] += jointOperand.j4;
-				reg_pr.value.joint_pos[4] += jointOperand.j5;
-				reg_pr.value.joint_pos[5] += jointOperand.j6;
 #else
 				joint.j1_ += jointOperand.j1_;
 				joint.j2_ += jointOperand.j2_;
@@ -353,18 +346,13 @@ public:
 				joint.j4_ += jointOperand.j4_;
 				joint.j5_ += jointOperand.j5_;
 				joint.j6_ += jointOperand.j6_;
-				
-				reg_pr.value.pos[0] += jointOperand.j1_;
-				reg_pr.value.pos[1] += jointOperand.j2_;
-				reg_pr.value.pos[2] += jointOperand.j3_;
-				reg_pr.value.pos[3] += jointOperand.j4_;
-				reg_pr.value.pos[4] += jointOperand.j5_;
-				reg_pr.value.pos[5] += jointOperand.j6_;
-				reg_pr.value.pos[6] = 0.0;
-				reg_pr.value.pos[7] = 0.0;
-				reg_pr.value.pos[8] = 0.0;
 #endif
 		    }
+			else if(operand->hasType(TYPE_POSE) == TYPE_POSE)
+		    {
+		    	PoseEuler poseOperand = operand->getPoseValue();
+		    	pose = calcCartesianPosAdd(pose, poseOperand);
+			}
 			else {
 				noticeErrorType(operand->getIntType()) ;
 			}
@@ -374,19 +362,24 @@ public:
 		    {
 		    	PoseEuler poseOperand = operand->getPoseValue();
 		    	pose = calcCartesianPosAdd(pose, poseOperand);
+		    }
+			else if(operand->hasType(TYPE_JOINT) == TYPE_JOINT)
+		    {
+		    	Joint jointOperand = operand->getJointValue();
 #ifdef WIN32
-				reg_pr.value.cartesian_pos.position    = pose.position;
-				reg_pr.value.cartesian_pos.orientation = pose.orientation;
+				joint.j1 += jointOperand.j1;
+				joint.j2 += jointOperand.j2;
+				joint.j3 += jointOperand.j3;
+				joint.j4 += jointOperand.j4;
+				joint.j5 += jointOperand.j5;
+				joint.j6 += jointOperand.j6;
 #else
-				reg_pr.value.pos[0] = pose.point_.x_;
-				reg_pr.value.pos[1] = pose.point_.y_;
-				reg_pr.value.pos[2] = pose.point_.z_;
-				reg_pr.value.pos[3] = pose.euler_.a_;
-				reg_pr.value.pos[4] = pose.euler_.b_;
-				reg_pr.value.pos[5] = pose.euler_.c_;
-				reg_pr.value.pos[6] = 0.0;
-				reg_pr.value.pos[7] = 0.0;
-				reg_pr.value.pos[8] = 0.0;
+				joint.j1_ += jointOperand.j1_;
+				joint.j2_ += jointOperand.j2_;
+				joint.j3_ += jointOperand.j3_;
+				joint.j4_ += jointOperand.j4_;
+				joint.j5_ += jointOperand.j5_;
+				joint.j6_ += jointOperand.j6_;
 #endif
 		    }
 			else {
@@ -427,7 +420,12 @@ public:
 			return ;
 		}
 		else if(hasType(TYPE_JOINT) == TYPE_JOINT){
-		    if(operand->hasType(TYPE_JOINT) == TYPE_JOINT)
+		    if(operand->hasType(TYPE_POSE) == TYPE_POSE)
+		    {
+		    	PoseEuler poseOperand = operand->getPoseValue();
+		    	pose = calcCartesianPosSubtract(pose, poseOperand);
+		    }
+			else if(operand->hasType(TYPE_JOINT) == TYPE_JOINT)
 		    {
 		    	Joint jointOperand = operand->getJointValue();
 #ifdef WIN32
@@ -437,13 +435,6 @@ public:
 				joint.j4 -= jointOperand.j4;
 				joint.j5 -= jointOperand.j5;
 				joint.j6 -= jointOperand.j6;
-
-				reg_pr.value.joint_pos[0] -= jointOperand.j1;
-				reg_pr.value.joint_pos[1] -= jointOperand.j2;
-				reg_pr.value.joint_pos[2] -= jointOperand.j3;
-				reg_pr.value.joint_pos[3] -= jointOperand.j4;
-				reg_pr.value.joint_pos[4] -= jointOperand.j5;
-				reg_pr.value.joint_pos[5] -= jointOperand.j6;
 #else
 				joint.j1_ -= jointOperand.j1_;
 				joint.j2_ -= jointOperand.j2_;
@@ -451,16 +442,6 @@ public:
 				joint.j4_ -= jointOperand.j4_;
 				joint.j5_ -= jointOperand.j5_;
 				joint.j6_ -= jointOperand.j6_;
-
-				reg_pr.value.pos[0] -= jointOperand.j1_;
-				reg_pr.value.pos[1] -= jointOperand.j2_;
-				reg_pr.value.pos[2] -= jointOperand.j3_;
-				reg_pr.value.pos[3] -= jointOperand.j4_;
-				reg_pr.value.pos[4] -= jointOperand.j5_;
-				reg_pr.value.pos[5] -= jointOperand.j6_;
-				reg_pr.value.pos[6] = 0.0;
-				reg_pr.value.pos[7] = 0.0;
-				reg_pr.value.pos[8] = 0.0;
 #endif
 		    }
 			else {
@@ -473,19 +454,24 @@ public:
 		    {
 		    	PoseEuler poseOperand = operand->getPoseValue();
 		    	pose = calcCartesianPosSubtract(pose, poseOperand);
+		    }
+			else if(operand->hasType(TYPE_JOINT) == TYPE_JOINT)
+		    {
+		    	Joint jointOperand = operand->getJointValue();
 #ifdef WIN32
-				reg_pr.value.cartesian_pos.position    = pose.position;
-				reg_pr.value.cartesian_pos.orientation = pose.orientation;
+				joint.j1 -= jointOperand.j1;
+				joint.j2 -= jointOperand.j2;
+				joint.j3 -= jointOperand.j3;
+				joint.j4 -= jointOperand.j4;
+				joint.j5 -= jointOperand.j5;
+				joint.j6 -= jointOperand.j6;
 #else
-				reg_pr.value.pos[0] = pose.point_.x_;
-				reg_pr.value.pos[1] = pose.point_.y_;
-				reg_pr.value.pos[2] = pose.point_.z_;
-				reg_pr.value.pos[3] = pose.euler_.a_;
-				reg_pr.value.pos[4] = pose.euler_.b_;
-				reg_pr.value.pos[5] = pose.euler_.c_;
-				reg_pr.value.pos[6] = 0.0;
-				reg_pr.value.pos[7] = 0.0;
-				reg_pr.value.pos[8] = 0.0;
+				joint.j1_ -= jointOperand.j1_;
+				joint.j2_ -= jointOperand.j2_;
+				joint.j3_ -= jointOperand.j3_;
+				joint.j4_ -= jointOperand.j4_;
+				joint.j5_ -= jointOperand.j5_;
+				joint.j6_ -= jointOperand.j6_;
 #endif
 		    }
 			else {
@@ -526,6 +512,47 @@ public:
 			fValue = fValue * operand->getFloatValue();
 			return ;
 		}
+		else if(hasType(TYPE_JOINT) == TYPE_JOINT){
+		    if(operand->hasType(TYPE_FLOAT) == TYPE_FLOAT)
+		    {
+#ifdef WIN32
+				joint.j1   = joint.j1 * operand->getFloatValue();
+				joint.j2   = joint.j2 * operand->getFloatValue();
+				joint.j3   = joint.j3 * operand->getFloatValue();
+				joint.j4   = joint.j4 * operand->getFloatValue();
+				joint.j5   = joint.j5 * operand->getFloatValue();
+				joint.j6   = joint.j6 * operand->getFloatValue();
+#else
+				joint.j1_  = joint.j1_ * operand->getFloatValue();
+				joint.j2_  = joint.j2_ * operand->getFloatValue();
+				joint.j3_  = joint.j3_ * operand->getFloatValue();
+				joint.j4_  = joint.j4_ * operand->getFloatValue();
+				joint.j5_  = joint.j5_ * operand->getFloatValue();
+				joint.j6_  = joint.j6_ * operand->getFloatValue();
+#endif
+		    }
+		}
+		else if(hasType(TYPE_POSE) == TYPE_POSE){
+		    if(operand->hasType(TYPE_FLOAT) == TYPE_FLOAT)
+		    {
+#ifdef WIN32
+				pose.position.x    = pose.position.x    * operand->getFloatValue();
+				pose.position.y    = pose.position.y    * operand->getFloatValue();
+				pose.position.z    = pose.position.z    * operand->getFloatValue();
+				pose.orientation.a = pose.orientation.a * operand->getFloatValue();
+				pose.orientation.b = pose.orientation.b * operand->getFloatValue();
+				pose.orientation.c = pose.orientation.c * operand->getFloatValue();
+#else
+				pose.point_.x_ = pose.point_.x_ * operand->getFloatValue();
+				pose.point_.y_ = pose.point_.y_ * operand->getFloatValue();
+				pose.point_.z_ = pose.point_.z_ * operand->getFloatValue();
+				
+				pose.euler_.a_ = pose.euler_.a_ * operand->getFloatValue();
+				pose.euler_.b_ = pose.euler_.b_ * operand->getFloatValue();
+				pose.euler_.c_ = pose.euler_.c_ * operand->getFloatValue();
+#endif
+		    }
+		}
 		else if(hasType(TYPE_STRING) == TYPE_STRING){
 		    if(operand->hasType(TYPE_FLOAT) == TYPE_FLOAT)
 		    {
@@ -548,12 +575,61 @@ public:
 	void calcDivide(eval_value * operand)
 	{
 		if(hasType(TYPE_INT) == TYPE_INT){
-			iValue = iValue / operand->getIntValue();
+		    if(operand->getIntValue() != 0)
+				iValue = iValue / operand->getIntValue();
 			return ;
 		}
 		else if(hasType(TYPE_FLOAT) == TYPE_FLOAT){
-			fValue = fValue / operand->getFloatValue();
+		    if(operand->getFloatValue() != 0.0)
+				fValue = fValue / operand->getFloatValue();
 			return ;
+		}
+		else if(hasType(TYPE_JOINT) == TYPE_JOINT){
+		    if(operand->hasType(TYPE_FLOAT) == TYPE_FLOAT)
+		    {
+		    	if(operand->getFloatValue() != 0.0)
+			    {
+#ifdef WIN32
+					joint.j1   = joint.j1 / operand->getFloatValue();
+					joint.j2   = joint.j2 / operand->getFloatValue();
+					joint.j3   = joint.j3 / operand->getFloatValue();
+					joint.j4   = joint.j4 / operand->getFloatValue();
+					joint.j5   = joint.j5 / operand->getFloatValue();
+					joint.j6   = joint.j6 / operand->getFloatValue();
+#else
+					joint.j1_  = joint.j1_ / operand->getFloatValue();
+					joint.j2_  = joint.j2_ / operand->getFloatValue();
+					joint.j3_  = joint.j3_ / operand->getFloatValue();
+					joint.j4_  = joint.j4_ / operand->getFloatValue();
+					joint.j5_  = joint.j5_ / operand->getFloatValue();
+					joint.j6_  = joint.j6_ / operand->getFloatValue();
+#endif
+			    }
+		    }
+		}
+		else if(hasType(TYPE_POSE) == TYPE_POSE){
+		    if(operand->hasType(TYPE_FLOAT) == TYPE_FLOAT)
+		    {
+		    	if(operand->getFloatValue() != 0.0)
+			    {
+#ifdef WIN32
+					pose.position.x    = pose.position.x    / operand->getFloatValue();
+					pose.position.y    = pose.position.y    / operand->getFloatValue();
+					pose.position.z    = pose.position.z    / operand->getFloatValue();
+					pose.orientation.a = pose.orientation.a / operand->getFloatValue();
+					pose.orientation.b = pose.orientation.b / operand->getFloatValue();
+					pose.orientation.c = pose.orientation.c / operand->getFloatValue();
+#else
+					pose.point_.x_ = pose.point_.x_ / operand->getFloatValue();
+					pose.point_.y_ = pose.point_.y_ / operand->getFloatValue();
+					pose.point_.z_ = pose.point_.z_ / operand->getFloatValue();
+					
+					pose.euler_.a_ = pose.euler_.a_ / operand->getFloatValue();
+					pose.euler_.b_ = pose.euler_.b_ / operand->getFloatValue();
+					pose.euler_.c_ = pose.euler_.c_ / operand->getFloatValue();
+#endif
+			    }
+		    }
 		}
 		else {
 			noticeErrorType(operand->getIntType()) ;
@@ -860,7 +936,7 @@ private:
 		mr_shmi_t reg_mr ;
 		uf_shmi_t reg_ur ;
 		tf_shmi_t reg_tf ;
-#else
+		
 		// All of register
         PrRegData reg_pr ;
 		PrRegData     prRegDataFake;
