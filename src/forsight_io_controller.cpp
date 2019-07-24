@@ -132,6 +132,7 @@ eval_value forgesight_get_io_status(
 	else if(!strcmp(io_name, TXT_DO))
 	{
 #ifdef WIN32
+                iValue = 1;
 		bRet = SUCCESS;
 #else
 		bRet = g_objRegManagerInterface->getDo(iIOIdx, iValue);

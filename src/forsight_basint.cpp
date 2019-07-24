@@ -433,11 +433,10 @@ void printCurrentLine(struct thread_control_block* objThreadCntrolBlock, int iId
 	{
 		*cLineContentPtr++=*cLineContentProgPtr++;
 	}
-	FST_INFO("\t(0X%08X - 0X%08X)(%d): (%s) at 0X%08X(%d)", 
-		objThreadCntrolBlock->prog_jmp_line[iIdx].start_prog_pos, 
-		objThreadCntrolBlock->prog_jmp_line[iIdx].end_prog_pos, 
-		objThreadCntrolBlock->iLineNum, cLineContent, 
-		objThreadCntrolBlock->prog, objThreadCntrolBlock->iThreadIdx);
+	FST_INFO("\t(%d) (%d): (%s  %s) at (%d)", 
+		objThreadCntrolBlock->iLineNum, iIdx, 
+		objThreadCntrolBlock->token, cLineContent,
+		objThreadCntrolBlock->iThreadIdx);
 }
 
 /************************************************* 
@@ -848,8 +847,8 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	// Deal PAUSED_R opration had moved to the beginning on 190125 
     /* check for assignment statement */
 	iLinenum = calc_line_from_prog(objThreadCntrolBlock);
-    FST_INFO("objThreadCntrolBlock->token_type = %d at line %d ", 
-    	objThreadCntrolBlock->token_type, iLinenum);
+    FST_INFO("objThreadCntrolBlock->token_type = %d (%d) at line %d ", 
+    	objThreadCntrolBlock->token_type, objThreadCntrolBlock->tok, iLinenum);
 	setLinenum(objThreadCntrolBlock, iLinenum);
     if(objThreadCntrolBlock->token_type==VARIABLE) {
       putback(objThreadCntrolBlock); /* return the var to the input stream */
@@ -920,6 +919,8 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
     }
     else if(objThreadCntrolBlock->token_type==COMMAND) /* is command */
 	{
+	    FST_INFO("objThreadCntrolBlock->token = %d at line %d ", 
+	    	objThreadCntrolBlock->tok, iLinenum);
       switch(objThreadCntrolBlock->tok) {
         case SUB:
 		  // Skip Function declaration by jiaming.lu at 180717
@@ -1114,7 +1115,7 @@ int  calc_line_from_prog(struct thread_control_block * objThreadCntrolBlock)
 		//   FST_INFO("calc_line_from_prog get %d at (%08X, %08X) ", 
 		//   	    i, objThreadCntrolBlock->prog,
 		//   	    objThreadCntrolBlock->prog_jmp_line[i-1].start_prog_pos);
-		   printCurrentLine(objThreadCntrolBlock, i);
+		   printCurrentLine(objThreadCntrolBlock, i+1);
 		// When I found prog is less than end_prog_pos address of lineN in the first time
 		// We got the right line. we add one for the line_num starts from one .
 		   return i + 1;
@@ -1916,42 +1917,73 @@ void exec_if(struct thread_control_block * objThreadCntrolBlock)
 *************************************************/ 
 void exec_else(struct thread_control_block * objThreadCntrolBlock)
 {
-  select_and_cycle_stack if_stack ;
-  int iRet = JUMP_OUT_INIT ;
-  while(1)
-  {
-    get_token(objThreadCntrolBlock);
-	if(objThreadCntrolBlock->tok==IF)
-	{
-	   iRet = jumpout_one_block_in_loc(objThreadCntrolBlock,
-		   objThreadCntrolBlock->prog_end, IF, ENDIF);
-
-	   if(iRet == JUMP_OUT_RANGE)
-	   {
-          FST_ERROR("%s  out range", objThreadCntrolBlock->token);
-		  return;
-	   }
+	int iRet = JUMP_OUT_INIT ;
+	struct select_and_cycle_stack if_stack ;
+	// float x , y;
+	int cond;
+	
+	if_stack = select_and_cycle_pop(objThreadCntrolBlock); /* read the loop info */
+	if(if_stack.itokentype != IF){
+		serror(objThreadCntrolBlock, 4);
+		return;
 	}
-	else if(objThreadCntrolBlock->tok==ELSE)  // Execute else
+	
+	if(if_stack.target.getFloatValue() != 0.0)  // if statement is true
+		cond = 0 ;
+	else
+		cond = calc_conditions(objThreadCntrolBlock);
+	
+	if(cond) { /* is true so process target of IF */
+		get_token(objThreadCntrolBlock);
+		if(objThreadCntrolBlock->tok!=THEN) {
+			serror(objThreadCntrolBlock, 8);
+			return;
+		}/* else program execution starts on next line */
+		else
+		{
+			find_eol(objThreadCntrolBlock);
+		}
+		if_stack.itokentype = IF ;
+		select_and_cycle_push(objThreadCntrolBlock, if_stack);
+	}
+	// else find_eol(); /* find start of next line */
+	else
 	{
-	    serror(objThreadCntrolBlock, 1); /* not a legal operator */
-		break ;
-    }
-	else if(objThreadCntrolBlock->tok==ELSEIF)  // Execute else
-	{
-	    serror(objThreadCntrolBlock, 1); /* not a legal operator */
-		break ;
-    }
- 	else if (objThreadCntrolBlock->tok==ENDIF) // Finish if
-	{
- 	    if_stack = select_and_cycle_pop(objThreadCntrolBlock); /* read the loop info */
- 	    if(if_stack.itokentype != IF){
-		   serror(objThreadCntrolBlock, 4);
-		   return;
- 	    }
-		break ;
-    }
-  }
+		while(1)
+		{
+			get_token(objThreadCntrolBlock);
+			if(objThreadCntrolBlock->tok==IF)
+			{
+			   iRet = jumpout_one_block_in_loc(objThreadCntrolBlock,
+				   objThreadCntrolBlock->prog_end, IF, ENDIF);
+
+			   if(iRet == JUMP_OUT_RANGE)
+			   {
+				  FST_ERROR("%s  out range", objThreadCntrolBlock->token);
+				  return;
+			   }
+			}
+			else if(objThreadCntrolBlock->tok==ELSE)  // Execute else
+			{
+				serror(objThreadCntrolBlock, 1); /* not a legal operator */
+				break ;
+			}
+			else if(objThreadCntrolBlock->tok==ELSEIF)  // Execute else
+			{
+				serror(objThreadCntrolBlock, 1); /* not a legal operator */
+				break ;
+			}
+			else if (objThreadCntrolBlock->tok==ENDIF) // Finish if
+			{
+ 			//	if_stack = select_and_cycle_pop(objThreadCntrolBlock); /* read the loop info */
+ 			//	if(if_stack.itokentype != IF){
+			//	   serror(objThreadCntrolBlock, 4);
+			//	   return;
+ 			//	}
+				break ;
+			}
+		}
+	}
 }
 
 /************************************************* 
@@ -2010,6 +2042,7 @@ void exec_elseif(struct thread_control_block * objThreadCntrolBlock)
 		}
 		else if(objThreadCntrolBlock->tok==ELSE)  // Execute else
 		{
+			putback(objThreadCntrolBlock);
 		    if_stack.itokentype = IF ;
             select_and_cycle_push(objThreadCntrolBlock, if_stack);
 			break ;
@@ -2017,6 +2050,7 @@ void exec_elseif(struct thread_control_block * objThreadCntrolBlock)
 		else if(objThreadCntrolBlock->tok==ELSEIF)  // Execute else
 		{
 			putback(objThreadCntrolBlock);
+			select_and_cycle_push(objThreadCntrolBlock, if_stack);
 			break ;
 	    }
 	 	else if (objThreadCntrolBlock->tok==ENDIF) // Finish if
@@ -2717,6 +2751,7 @@ bool call_inner_func(struct thread_control_block * objThreadCntrolBlock, eval_va
         get_exp(objThreadCntrolBlock, &value, &boolValue);
 		if(value.getIntType() == TYPE_NONE)
 		{
+			get_token(objThreadCntrolBlock);
 			break ;
 		}
 		else if(value.hasType(TYPE_STRING) == TYPE_STRING)
@@ -3265,6 +3300,9 @@ void serror(struct thread_control_block * objThreadCntrolBlock, int error)
   FST_INFO("\t NOTICE : %d -  %llx(%s)", error, errInfo[error].warn, errInfo[error].desc);
 #endif
   FST_INFO("-----------------ERR:%d----------------------", error);
+  
+  FST_INFO("---token = <%s> ----------", objThreadCntrolBlock->token);
+  FST_INFO("---prog = <%s> ----------", objThreadCntrolBlock->prog);
   
   setWarning(errInfo[error].warn) ; 
 //  objThreadCntrolBlock->prog_mode = ERROR_MODE;
@@ -3894,6 +3932,11 @@ void primitive(struct thread_control_block * objThreadCntrolBlock,
 	result->setFloatValue(atoi(strValue.c_str()));
     get_token(objThreadCntrolBlock);
     return;
+  case DELIMITER:
+	if(*(objThreadCntrolBlock->token) == ')')
+	{
+		return ;
+	}
   default:
 	FST_ERROR("primitive error :: get_token =  '%s'", objThreadCntrolBlock->token);
     serror(objThreadCntrolBlock, 0);

@@ -96,7 +96,7 @@ int main(int  argc, char *argv[])
 #else
 			if (intprt_ctrl.cmd != fst_base::INTERPRETER_SERVER_CMD_LOAD)
 			{
-				parseCtrlComand(intprt_ctrl, "Cycletime_user_offset");
+				parseCtrlComand(intprt_ctrl, "Cycletime_lu");
 				Sleep(1);
 				intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_RESUME ;
 				parseCtrlComand(intprt_ctrl, "");

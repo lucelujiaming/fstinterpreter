@@ -492,7 +492,14 @@ int parsePosesContent(struct thread_control_block * objThreadCntrolBlock,
 	Posture posture ;
 	double  pos[9 * 2] ;
 	Turn    turn ;
-	
+
+	memset(&joint, 0x00, sizeof(Joint));
+	memset(&cart, 0x00, sizeof(PoseEuler));
+
+	memset(&posture, 0x00, sizeof(Posture));
+	memset(pos, 0x00, sizeof(double) * 9 * 2);
+	memset(&turn, 0x00, sizeof(Turn));
+
 	AdditionalE additionalE ;
 	char var[128];
 	eval_value value ;
