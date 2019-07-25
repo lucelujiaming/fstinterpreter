@@ -2836,6 +2836,7 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			{
 #ifdef WIN32
 				Sleep(100);
+				break;
 #else
 			    usleep(1000);
 #endif
@@ -2868,6 +2869,7 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			{
 #ifdef WIN32
 				Sleep(100);
+				break;
 #else
 			    usleep(1000);
 #endif

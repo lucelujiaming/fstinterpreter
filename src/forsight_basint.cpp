@@ -1928,21 +1928,18 @@ void exec_else(struct thread_control_block * objThreadCntrolBlock)
 		return;
 	}
 	
+	FST_INFO("exec_else select_and_cycle_pop return %f", if_stack.target.getFloatValue());
 	if(if_stack.target.getFloatValue() != 0.0)  // if statement is true
+	{
 		cond = 0 ;
+	}
 	else
-		cond = calc_conditions(objThreadCntrolBlock);
+	{
+		cond = 1 ;
+	}
+	FST_INFO("exec_else cond return %d", cond);
 	
 	if(cond) { /* is true so process target of IF */
-		get_token(objThreadCntrolBlock);
-		if(objThreadCntrolBlock->tok!=THEN) {
-			serror(objThreadCntrolBlock, 8);
-			return;
-		}/* else program execution starts on next line */
-		else
-		{
-			find_eol(objThreadCntrolBlock);
-		}
 		if_stack.itokentype = IF ;
 		select_and_cycle_push(objThreadCntrolBlock, if_stack);
 	}
@@ -1994,6 +1991,7 @@ void exec_else(struct thread_control_block * objThreadCntrolBlock)
 *************************************************/ 
 void exec_elseif(struct thread_control_block * objThreadCntrolBlock)
 {
+  eval_value x ;
   int iRet = JUMP_OUT_INIT ;
   struct select_and_cycle_stack if_stack ;
   // float x , y;
@@ -2008,7 +2006,10 @@ void exec_elseif(struct thread_control_block * objThreadCntrolBlock)
   if(if_stack.target.getFloatValue() != 0.0)  // if statement is true
   	cond = 0 ;
   else
-  	cond = calc_conditions(objThreadCntrolBlock);
+  {
+	  cond = calc_conditions(objThreadCntrolBlock);
+      x.setFloatValue(cond);
+  }
 
   if(cond) { /* is true so process target of IF */
     get_token(objThreadCntrolBlock);
@@ -2021,6 +2022,7 @@ void exec_elseif(struct thread_control_block * objThreadCntrolBlock)
       find_eol(objThreadCntrolBlock);
     }
     if_stack.itokentype = IF ;
+	if_stack.target = x;
     select_and_cycle_push(objThreadCntrolBlock, if_stack);
   }
   // else find_eol(); /* find start of next line */
@@ -3300,9 +3302,6 @@ void serror(struct thread_control_block * objThreadCntrolBlock, int error)
   FST_INFO("\t NOTICE : %d -  %llx(%s)", error, errInfo[error].warn, errInfo[error].desc);
 #endif
   FST_INFO("-----------------ERR:%d----------------------", error);
-  
-  FST_INFO("---token = <%s> ----------", objThreadCntrolBlock->token);
-  FST_INFO("---prog = <%s> ----------", objThreadCntrolBlock->prog);
   
   setWarning(errInfo[error].warn) ; 
 //  objThreadCntrolBlock->prog_mode = ERROR_MODE;
