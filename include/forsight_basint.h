@@ -68,6 +68,7 @@ using namespace std;
 
 #define FORSIGHT_TIMER          "timer"
 
+#define    DOUBLE_OPS_LENGTH      1
 enum double_ops {
 	LT=1,    // value < partial_value
 	LE,      // value <= partial_value

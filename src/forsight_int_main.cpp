@@ -94,9 +94,20 @@ int main(int  argc, char *argv[])
 				usleep(1000);
 			}
 #else
-			if (intprt_ctrl.cmd != fst_base::INTERPRETER_SERVER_CMD_LOAD)
+			if (intprt_ctrl.cmd == fst_base::INTERPRETER_SERVER_CMD_LAUNCH)
 			{
-				parseCtrlComand(intprt_ctrl, "Cycletime_lu");
+				parseCtrlComand(intprt_ctrl, "R_regTest");
+				Sleep(1);
+				intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_RESUME ;
+				parseCtrlComand(intprt_ctrl, "");
+				intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_LOAD ;
+			}
+			else if (intprt_ctrl.cmd == fst_base::INTERPRETER_SERVER_CMD_PAUSE)
+			{
+				parseCtrlComand(intprt_ctrl, "");
+				Sleep(1);
+				intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_JUMP ;
+				parseCtrlComand(intprt_ctrl, "R_regTest:/prog/prog_body/function/body/assignment[1]");
 				Sleep(1);
 				intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_RESUME ;
 				parseCtrlComand(intprt_ctrl, "");

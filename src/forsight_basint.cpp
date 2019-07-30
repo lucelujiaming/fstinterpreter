@@ -472,6 +472,10 @@ checkHomePoseResult check_home_pose(struct thread_control_block* objThreadCntrol
 	updateHomePoseMgr();
 	if(strlen(objThreadCntrolBlock->home_pose_exp) == 0)
 	{
+#ifndef WIN32
+		// redmine/issues/1229
+		serror(objThreadCntrolBlock, 28); /* Home pose not exist */
+#endif
 		return HOME_POSE_WITHIN_CUR_POS ;
 	}
 	memset(home_pose_exp, 0x00, LAB_LEN);
@@ -1831,7 +1835,7 @@ int calc_conditions(
 		struct thread_control_block * objThreadCntrolBlock)
 {
   eval_value x ;
-  int boolValue = 1; // true - 0; // false
+  int boolValue = EVAL_CMP_TRUE; // true / false
   get_exp(objThreadCntrolBlock, &x, &boolValue); /* get left expression */
 //	return calc_single_condition(objThreadCntrolBlock);
   return boolValue ;
@@ -3525,20 +3529,61 @@ int get_token(struct thread_control_block * objThreadCntrolBlock)
 *************************************************/ 
 void putback(struct thread_control_block * objThreadCntrolBlock)
 {
-
   char *t;
-
-  t = objThreadCntrolBlock->token;
-  for(; *t; t++)
+  
+  if( (strlen(objThreadCntrolBlock->token) == DOUBLE_OPS_LENGTH)
+	  && (objThreadCntrolBlock->token[0] >= LT)
+	  && (objThreadCntrolBlock->token[0] <= XOR))
   {
-	  // Revert \r\n to \n
-	  if(t[0] != '\r')
-	     objThreadCntrolBlock->prog--;
+	  switch (objThreadCntrolBlock->token[0])
+	  {
+	  case LT :  // value < partial_value
+		    objThreadCntrolBlock->prog -= strlen("<");
+	  		break;
+	  case LE :  // value <= partial_value
+		    objThreadCntrolBlock->prog -= strlen("<=");
+	  		break;
+	  case GT :  // value > partial_value
+		    objThreadCntrolBlock->prog -= strlen(">");
+	  		break;
+	  case GE :  // value >= partial_value
+		    objThreadCntrolBlock->prog -= strlen(">=");
+	  		break;
+	  case EQ :  // value == partial_value
+		    objThreadCntrolBlock->prog -= strlen("==");
+	  		break;
+	  case NE :  // value <> partial_value
+		    objThreadCntrolBlock->prog -= strlen("<>");
+	  		break;
+	  case AND:  // value AND partial_value
+		    objThreadCntrolBlock->prog -= strlen("AND");
+	  		break;
+	  case OR :  // value OR  partial_value
+		    objThreadCntrolBlock->prog -= strlen("OR");
+	  		break;
+	  case XOR:  // value XOR  partial_value
+		    objThreadCntrolBlock->prog -= strlen("XOR");
+	  		break;
+	  default :
+		    objThreadCntrolBlock->prog -= 
+				strlen(objThreadCntrolBlock->token);
+	  		break;
+	  }
   }
-  if(objThreadCntrolBlock->token_type == QUOTE)
+  else
   {
-	  objThreadCntrolBlock->prog--; // put back left "
-	  objThreadCntrolBlock->prog--; // put back right "
+	  t = objThreadCntrolBlock->token;
+	  for(; *t; t++)
+	  {
+		  // Revert \r\n to \n
+		  if(t[0] != '\r')
+			  objThreadCntrolBlock->prog--;
+	  }
+	  if(objThreadCntrolBlock->token_type == QUOTE)
+	  {
+		  objThreadCntrolBlock->prog--; // put back left "
+		  objThreadCntrolBlock->prog--; // put back right "
+	  }
   }
   memset(objThreadCntrolBlock->token, 0x00, 80);
 }
@@ -3615,7 +3660,7 @@ int iswhite(char c)
 void level1(struct thread_control_block * objThreadCntrolBlock, eval_value *value, int* boolValue)
 {
     eval_value partial_value;
-    int   another_bool_value = 1; // true
+    int   another_bool_value = EVAL_CMP_TRUE; // FALSE
     char op;
     char relops[] = {
         AND, OR, XOR, 0
@@ -3887,6 +3932,17 @@ void primitive(struct thread_control_block * objThreadCntrolBlock,
 		}
 
 		*result = find_var(objThreadCntrolBlock, var, 1);
+		if(result->hasType(TYPE_FLOAT) == TYPE_FLOAT)
+		{
+			if(result->getFloatValue() != 0.0)
+			{
+				*boolValue = 1.0 ;
+			}
+			else
+			{
+				*boolValue = 0.0 ;
+			}
+		}
 		get_token(objThreadCntrolBlock);
 		// No deal unexist array type element
 		// if(objThreadCntrolBlock->g_variable_error == 0)
