@@ -482,14 +482,14 @@ public:
 		else if(hasType(TYPE_STRING) == TYPE_STRING){
 		    if(operand->hasType(TYPE_STRING) == TYPE_STRING)
 		    {
-		    	std::string testKey;
-		    	testKey = operand->getStringValue();
-				std::string testFind = std::string(strContent);
+		    //	std::string testKey;
+		    //	testKey = operand->getStringValue();
+			//	std::string testFind = std::string(strContent);
 				
-				if (strContent.rfind(testKey) != std::string::npos)
-				{
-					strContent = strContent.substr(0, strContent.length() - testKey.length());
-				}
+			//	if (strContent.rfind(testKey) != std::string::npos)
+			//	{
+			//		strContent = strContent.substr(0, strContent.length() - testKey.length());
+			//	}
 			}
 			else {
 				noticeErrorType(operand->getIntType()) ;

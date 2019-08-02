@@ -869,7 +869,11 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	{
 		eval_value result ;
 		// putback(objThreadCntrolBlock); /* return the var to the input stream */
-		int iRet = call_inner_func(objThreadCntrolBlock, &result);
+		bRet = call_inner_func(objThreadCntrolBlock, &result);
+		if(bRet == false)
+		{
+	    	serror(objThreadCntrolBlock, 18);
+		}
 	}
 	else if(objThreadCntrolBlock->token_type==OUTSIDEFUNC) /* is OUTSIDEFUNC */
 	{
@@ -3889,6 +3893,7 @@ void level7(struct thread_control_block * objThreadCntrolBlock, eval_value *resu
 void primitive(struct thread_control_block * objThreadCntrolBlock, 
 			   eval_value *result, int* boolValue)
 {
+  bool bRet = true ;
   std::string strValue ;
   char var[80];
   int iRet = 0 ;
@@ -3977,7 +3982,11 @@ void primitive(struct thread_control_block * objThreadCntrolBlock,
     return;
   case BUILTINFUNC:
   	// use objThreadCntrolBlock->token
-  	call_inner_func(objThreadCntrolBlock, result);
+  	bRet = call_inner_func(objThreadCntrolBlock, result);
+	if(bRet == false)
+	{
+    	serror(objThreadCntrolBlock, 18);
+	}
     get_token(objThreadCntrolBlock);
     return;
   case QUOTE:

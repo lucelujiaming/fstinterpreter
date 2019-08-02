@@ -146,3 +146,38 @@ install(FILES config/prg_interpreter_config.yaml
     DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/runtime/component_param
 )
 
+#############
+## Testing ##
+#############
+#if(GTEST)
+    # Link utest with what we want to test and the GTest and pthread library.
+    add_executable(prg_interpreter_test test/prg_interpreter_main.cpp
+    src/reg_manager/reg_manager_interface_wrapper.cpp
+    src/reg_manager/forsight_registers_manager.cpp
+    src/forsight_innercmd.cpp
+    src/forsight_xml_reader.cpp
+    src/forsight_basint.cpp
+    src/forsight_innerfunc.cpp
+    src/forsight_inter_control.cpp
+    src/forsight_io_controller.cpp
+    src/forsight_program_property.cpp
+    src/forsight_cJSON.cpp
+    src/launch_code_mgr.cpp
+    src/forsight_home_pose.cpp
+    src/forsight_external_resource.cpp
+    )
+    target_link_libraries(prg_interpreter_test ${catkin_LIBRARIES} 
+    parameter_manager
+    xml2
+#    motion_plan
+    process_comm 
+    thread_help
+    pthread
+    modbus_manager
+    logger
+    basic_alg
+    kinematics_alg
+    )
+    install(TARGETS prg_interpreter_test RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+#endif()
+
