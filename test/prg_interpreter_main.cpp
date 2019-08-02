@@ -16,6 +16,7 @@
 
 #include "reg_manager/reg_manager_interface_wrapper.h"
 #include "forsight_innerfunc.h"
+#include "forsight_io_controller.h"
 
 #ifndef WIN32
 void signalInterrupt(int signo) 
@@ -727,6 +728,240 @@ void test_internal_func()
 		FST_ERROR("FUNC         ftoa: result = %s ", result.getStringValue().c_str());
 }
 
+
+void test_pr_register()
+{
+	char * cPR1Str = (char *)"pr[1]" ;
+	char * cPR2Str = (char *)"pr[2]" ;
+
+	eval_value result_fst ;
+	eval_value result_snd ;
+
+	thread_control_block objLocalThreadCntrolBlock;
+
+	Joint jointValFst = {1,2,3,4,5,6};
+	Joint jointValSnd = {6,5,4,3,2,1};
+
+	
+	result_fst.resetNoneValue();
+	result_fst.setJointValue(&jointValFst);
+	forgesight_registers_manager_set_register(&objLocalThreadCntrolBlock, cPR1Str, &result_fst);
+	// PR Calculation
+	result_fst.resetNoneValue();
+	forgesight_registers_manager_get_register(&objLocalThreadCntrolBlock, cPR1Str, &result_fst);
+	
+	if(result_fst.hasType(TYPE_POSE) == TYPE_POSE)
+	{
+#ifndef WIN32
+	    FST_INFO("PR Get :(%f, %f, %f, %f, %f, %f) in MovL", 
+			result_fst.getPoseValue().point_.x_, result_fst.getPoseValue().point_.y_, 
+			result_fst.getPoseValue().point_.z_, result_fst.getPoseValue().euler_.a_, 
+			result_fst.getPoseValue().euler_.b_, result_fst.getPoseValue().euler_.c_);
+#else
+	    FST_INFO("PR Get :(%f, %f, %f, %f, %f, %f) in MovL", 
+			result_fst.getPoseValue().position.x,    result_fst.getPoseValue().position.y, 
+			result_fst.getPoseValue().position.z,    result_fst.getPoseValue().orientation.a, 
+			result_fst.getPoseValue().orientation.b, result_fst.getPoseValue().orientation.c);
+#endif
+	}
+	else if(result_fst.hasType(TYPE_JOINT) == TYPE_JOINT)
+	{
+	    FST_INFO("PR Get :(%f, %f, %f, %f, %f, %f) in MovJ", 
+#ifndef WIN32
+			result_fst.getJointValue().j1_, result_fst.getJointValue().j2_, 
+			result_fst.getJointValue().j3_, result_fst.getJointValue().j4_, 
+			result_fst.getJointValue().j5_, result_fst.getJointValue().j6_);
+#else
+			result_fst.getJointValue().j1, result_fst.getJointValue().j2, 
+			result_fst.getJointValue().j3, result_fst.getJointValue().j4, 
+			result_fst.getJointValue().j5, result_fst.getJointValue().j6);
+#endif		
+	}
+	
+	result_fst.resetNoneValue();
+	result_fst.setJointValue(&jointValSnd);
+	forgesight_registers_manager_set_register(&objLocalThreadCntrolBlock, cPR1Str, &result_fst);
+	// PR Calculation
+	result_fst.resetNoneValue();
+	forgesight_registers_manager_get_register(&objLocalThreadCntrolBlock, cPR1Str, &result_fst);
+	
+	if(result_fst.hasType(TYPE_POSE) == TYPE_POSE)
+	{
+#ifndef WIN32
+		FST_INFO("PR Get :(%f, %f, %f, %f, %f, %f) in MovL", 
+			result_fst.getPoseValue().point_.x_, result_fst.getPoseValue().point_.y_, 
+			result_fst.getPoseValue().point_.z_, result_fst.getPoseValue().euler_.a_, 
+			result_fst.getPoseValue().euler_.b_, result_fst.getPoseValue().euler_.c_);
+#else
+		FST_INFO("PR Get :(%f, %f, %f, %f, %f, %f) in MovL", 
+			result_fst.getPoseValue().position.x,	 result_fst.getPoseValue().position.y, 
+			result_fst.getPoseValue().position.z,	 result_fst.getPoseValue().orientation.a, 
+			result_fst.getPoseValue().orientation.b, result_fst.getPoseValue().orientation.c);
+#endif
+	}
+	else if(result_fst.hasType(TYPE_JOINT) == TYPE_JOINT)
+	{
+		FST_INFO("PR Get :(%f, %f, %f, %f, %f, %f) in MovJ", 
+#ifndef WIN32
+			result_fst.getJointValue().j1_, result_fst.getJointValue().j2_, 
+			result_fst.getJointValue().j3_, result_fst.getJointValue().j4_, 
+			result_fst.getJointValue().j5_, result_fst.getJointValue().j6_);
+#else
+			result_fst.getJointValue().j1, result_fst.getJointValue().j2, 
+			result_fst.getJointValue().j3, result_fst.getJointValue().j4, 
+			result_fst.getJointValue().j5, result_fst.getJointValue().j6);
+#endif		
+	}
+}
+
+void test_r_register()
+{
+    int iRet = 0;
+	key_variable keyVar ;
+    char * cR1Str = (char *)"r[1]" ;
+    char * cR2Str = (char *)"r[2]" ;
+	
+    eval_value result_fst ;
+    eval_value result_snd ;
+	
+	thread_control_block objLocalThreadCntrolBlock;
+
+	// R Calculation
+	if(forgesight_find_external_resource((char *)"r", keyVar))
+	{
+		result_fst.resetNoneValue();
+		result_fst.setFloatValue(123.456);
+		iRet = forgesight_registers_manager_set_resource(
+			&objLocalThreadCntrolBlock, cR1Str, keyVar, &result_fst);
+		// PR Calculation
+		result_fst.resetNoneValue();
+		iRet = forgesight_registers_manager_get_resource(
+			&objLocalThreadCntrolBlock, cR1Str, keyVar, &result_fst);
+		FST_INFO("R Get: result_fst = %f \n", result_fst.getFloatValue());
+		
+		result_fst.resetNoneValue();
+		result_fst.setFloatValue(456.123);
+		iRet = forgesight_registers_manager_set_resource(
+			&objLocalThreadCntrolBlock, cR1Str, keyVar, &result_fst);
+		// PR Calculation
+		result_fst.resetNoneValue();
+		iRet = forgesight_registers_manager_get_resource(
+			&objLocalThreadCntrolBlock, cR1Str, keyVar, &result_fst);
+		FST_INFO("R Get: result_fst = %f \n", result_fst.getFloatValue());
+	}
+}
+
+void test_mr_register()
+{
+    int iRet = 0;
+	key_variable keyVar ;
+    char * cMR1Str = (char *)"mr[1]" ;
+    char * cMR2Str = (char *)"mr[2]" ;
+	
+    eval_value result_fst ;
+    eval_value result_snd ;
+
+	thread_control_block objLocalThreadCntrolBlock;
+	
+	// MR Calculation
+	// External Type
+	if(forgesight_find_external_resource((char *)"mr", keyVar))
+	{
+		result_fst.resetNoneValue();
+		result_fst.setFloatValue(123.456);
+		iRet = forgesight_registers_manager_set_resource(
+			&objLocalThreadCntrolBlock, cMR1Str, keyVar, &result_fst);
+		result_snd.resetNoneValue();
+		iRet = forgesight_registers_manager_get_resource(
+			&objLocalThreadCntrolBlock, cMR2Str, keyVar, &result_snd);
+		FST_INFO("MR Add: result_fst = %f \n", result_fst.getFloatValue());
+		
+		result_fst.resetNoneValue();
+		result_fst.setFloatValue(456.123);
+		iRet = forgesight_registers_manager_set_resource(
+			&objLocalThreadCntrolBlock, cMR1Str, keyVar, &result_fst);
+		result_snd.resetNoneValue();
+		iRet = forgesight_registers_manager_get_resource(
+			&objLocalThreadCntrolBlock, cMR2Str, keyVar, &result_snd);
+		FST_INFO("MR Add: result_fst = %f \n", result_fst.getFloatValue());
+	}
+}
+
+void test_sr_register()
+{
+    int iRet = 0;
+	key_variable keyVar ;
+    char * cSR1Str = (char *)"sr[1]" ;
+    char * cSR2Str = (char *)"sr[2]" ;
+
+	string strTmp ;
+	
+    eval_value result_fst ;
+    eval_value result_snd ;
+
+	thread_control_block objLocalThreadCntrolBlock;
+	
+	// MR Calculation
+	// External Type
+	if(forgesight_find_external_resource((char *)"sr", keyVar))
+	{
+		result_fst.resetNoneValue();
+		strTmp = string("ABCDEFG");
+		result_fst.setStringValue(strTmp);
+		iRet = forgesight_registers_manager_set_resource(
+			&objLocalThreadCntrolBlock, cSR1Str, keyVar, &result_fst);
+		result_snd.resetNoneValue();
+		iRet = forgesight_registers_manager_get_resource(
+			&objLocalThreadCntrolBlock, cSR1Str, keyVar, &result_snd);
+		FST_INFO("SR Add: result_fst = %s \n", result_fst.getStringValue().c_str());
+		
+		result_fst.resetNoneValue();
+		strTmp = string("GFEDCBA");
+		result_fst.setStringValue(strTmp);
+		iRet = forgesight_registers_manager_set_resource(
+			&objLocalThreadCntrolBlock, cSR1Str, keyVar, &result_fst);
+		result_snd.resetNoneValue();
+		iRet = forgesight_registers_manager_get_resource(
+			&objLocalThreadCntrolBlock, cSR1Str, keyVar, &result_snd);
+		FST_INFO("SR Add: result_fst = %s \n", result_fst.getStringValue().c_str());
+		
+	}
+}
+
+void test_io_value(char * cInput1Str, char * cOutput1Str)
+{
+	thread_control_block objLocalThreadCntrolBlock;
+	eval_value value ;
+	
+	value.resetNoneValue();
+	value.setFloatValue(1);
+	forgesight_set_io_status(&objLocalThreadCntrolBlock, cInput1Str, value);
+	value.resetNoneValue();
+	value = forgesight_get_io_status(&objLocalThreadCntrolBlock, cInput1Str);
+	FST_INFO("DI Add: value = %f \n", value.getFloatValue());
+
+	value.resetNoneValue();
+	value.setFloatValue(0);
+	forgesight_set_io_status(&objLocalThreadCntrolBlock, cInput1Str, value);
+	value.resetNoneValue();
+	value = forgesight_get_io_status(&objLocalThreadCntrolBlock, cInput1Str);
+	FST_INFO("DI Add: value = %f \n", value.getFloatValue());
+
+	value.resetNoneValue();
+	value.setFloatValue(1);
+	forgesight_set_io_status(&objLocalThreadCntrolBlock, cOutput1Str, value);
+	value.resetNoneValue();
+	value = forgesight_get_io_status(&objLocalThreadCntrolBlock, cOutput1Str);
+	FST_INFO("DI Add: value = %f \n", value.getFloatValue());
+
+	value.resetNoneValue();
+	value.setFloatValue(0);
+	forgesight_set_io_status(&objLocalThreadCntrolBlock, cOutput1Str, value);
+	value.resetNoneValue();
+	value = forgesight_get_io_status(&objLocalThreadCntrolBlock, cOutput1Str);
+	FST_INFO("DI Add: value = %f \n", value.getFloatValue());
+}
+
 int main(int argc, char **argv)
 {
 	char cCase[128];
@@ -779,10 +1014,21 @@ int main(int argc, char **argv)
 	{
 		test_sr_calculation();
 	}
-	
 	if((strcmp("all", cCase) == 0) || (strcmp("innerfunc", cCase) == 0))
 	{
 		test_internal_func();
+	}
+	if((strcmp("all", cCase) == 0) || (strcmp("register", cCase) == 0))
+	{
+		test_pr_register();
+		test_r_register();
+		test_mr_register();
+		test_sr_register();
+	}
+	if((strcmp("all", cCase) == 0) || (strcmp("io", cCase) == 0))
+	{
+		test_io_value((char *)"di[1]", (char *)"do[1]");
+		test_io_value((char *)"ri[1]", (char *)"ro[1]");
 	}
 	
     return 1;
