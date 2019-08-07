@@ -630,6 +630,31 @@ int forgesight_registers_manager_get_register(
 	return 0 ;
 }
 
+void Split(const std::string& src, const std::string& separator, 
+		   std::vector<std::string>& dest)
+{
+	string str = src;
+	string substring;
+	string::size_type start = 0, index;
+	dest.clear();
+	index = str.find_first_of(separator,start);
+	do
+	{
+		if (index != string::npos)
+		{    
+			substring = str.substr(start,index-start );
+			dest.push_back(substring);
+			start =index+separator.size();
+			index = str.find(separator,start);
+			if (start == string::npos) break;
+		}
+	}while(index != string::npos);
+	
+	//the last part
+	substring = str.substr(start);
+	dest.push_back(substring);
+}
+
 /************************************************* 
 	Function:		forgesight_registers_manager_set_register
 	Description:	Set the register info from controller .
@@ -638,6 +663,7 @@ int forgesight_registers_manager_get_register(
 	Input:			valueStart       - register value
 	Return: 		1 - success
 *************************************************/
+#define  POSE_ELEMENTS_NUM     (1 + 6 + 4)   // 1Type + 6Pose + 4Poseture
 int forgesight_registers_manager_set_register(
 		struct thread_control_block* objThreadCntrolBlock, 
 		char *name, eval_value * valueStart)
@@ -718,6 +744,63 @@ int forgesight_registers_manager_set_register(
 					reg_idx);
 				reg_manager_interface_setJointPr(&joint, &posture, iRegIdx);
 				return 0 ;
+			}
+			else if (valueStart->hasType(TYPE_STRING) == TYPE_STRING)
+			{
+				vector<string> strArray;
+				string Insta;
+				Split(valueStart->getStringValue(),"|",strArray);
+				
+				if(strArray.size() == POSE_ELEMENTS_NUM)
+				{
+					if(strArray[0] == "POINT")
+					{
+#ifndef WIN32
+						joint.j1_ = atof(strArray[1].c_str()); 
+						joint.j2_ = atof(strArray[2].c_str());
+						joint.j3_ = atof(strArray[3].c_str()); 
+						joint.j4_ = atof(strArray[4].c_str());
+						joint.j5_ = atof(strArray[5].c_str()); 
+						joint.j6_ = atof(strArray[6].c_str());
+#else
+						joint.j1  = atof(strArray[1].c_str()); 
+						joint.j2  = atof(strArray[2].c_str());
+						joint.j3  = atof(strArray[3].c_str()); 
+						joint.j4  = atof(strArray[4].c_str());
+						joint.j5  = atof(strArray[5].c_str()); 
+						joint.j6  = atof(strArray[6].c_str());
+#endif
+						posture.arm      = atoi(strArray[7].c_str()); 
+						posture.elbow    = atoi(strArray[8].c_str()); 
+						posture.wrist    = atoi(strArray[9].c_str());
+						posture.flip     = atoi(strArray[10].c_str()); 
+						reg_manager_interface_setJointPr(&joint, &posture, iRegIdx);
+					}
+					else if(strArray[0] == "POSE")
+					{
+#ifndef WIN32
+						pose.point_.x_ = atof(strArray[1].c_str()); 
+						pose.point_.y_ = atof(strArray[2].c_str());
+						pose.point_.z_ = atof(strArray[3].c_str()); 
+						pose.euler_.a_ = atof(strArray[4].c_str());
+						pose.euler_.b_ = atof(strArray[5].c_str()); 
+						pose.euler_.c_ = atof(strArray[6].c_str());
+#else
+						pose.position.x    = atof(strArray[1].c_str()); 
+						pose.position.y    = atof(strArray[2].c_str());
+						pose.position.z    = atof(strArray[3].c_str()); 
+						pose.orientation.a = atof(strArray[4].c_str());
+						pose.orientation.b = atof(strArray[5].c_str()); 
+						pose.orientation.c = atof(strArray[6].c_str());
+#endif	
+						posture.arm      = atoi(strArray[7].c_str()); 
+						posture.elbow    = atoi(strArray[8].c_str()); 
+						posture.wrist    = atoi(strArray[9].c_str());
+						posture.flip     = atoi(strArray[10].c_str()); 
+						reg_manager_interface_setPosePr(&pose, &posture, iRegIdx);
+					}
+					return 0 ;
+				}
 			}
 	       	return 0 ;
 		}
@@ -1651,7 +1734,10 @@ int forgesight_registers_manager_get_resource(
 			if(bRet == false)
 				serror(objThreadCntrolBlock, 4) ; 
 			else
+			{
 				value->setStringValue(strResValue);
+				value->setFloatValue(atof(strResValue.c_str()));
+			}
 		}
 		else if (!strcmp(reg_member, TXT_REG_VALUE))
 		{
@@ -1659,7 +1745,10 @@ int forgesight_registers_manager_get_resource(
 			if(bRet == false)
 				serror(objThreadCntrolBlock, 4) ; 
 			else
+			{
 				value->setStringValue(strResValue);
+				value->setFloatValue(atof(strResValue.c_str()));
+			}
 		}
 	}
 	else
@@ -1860,6 +1949,69 @@ int forgesight_registers_manager_set_resource(
 				FST_INFO("Set TYPE_STRING token:(%s) to %s", 
 						objThreadCntrolBlock->token, cStringValue);
 			    reg_manager_interface_setValueSr(strValue, iRegIdx);
+			}
+			else if(valueStart->hasType(TYPE_POSE) == TYPE_POSE)
+			{
+				char cStringValue[64];
+#ifndef WIN32
+				sprintf(cStringValue, "POSE|%0.3f|%0.3f|%0.3f|%0.3f|%0.3f|%0.3f", 
+					valueStart->getPoseValue().point_.x_,
+					valueStart->getPoseValue().point_.y_,
+					valueStart->getPoseValue().point_.z_,
+					valueStart->getPoseValue().euler_.a_,
+					valueStart->getPoseValue().euler_.b_,
+					valueStart->getPoseValue().euler_.c_);
+#else
+				sprintf(cStringValue, "POSE|%0.3f|%0.3f|%0.3f|%0.3f|%0.3f|%0.3f", 
+					valueStart->getPoseValue().position.x   ,
+					valueStart->getPoseValue().position.y   ,
+					valueStart->getPoseValue().position.z   ,
+					valueStart->getPoseValue().orientation.a,
+					valueStart->getPoseValue().orientation.b,
+					valueStart->getPoseValue().orientation.c);
+#endif	
+				sprintf(cStringValue, "%s|%d|%d|%d|%d",
+					cStringValue, 
+					valueStart->getPosture().arm  ,
+					valueStart->getPosture().elbow,
+					valueStart->getPosture().wrist,
+					valueStart->getPosture().flip);
+
+				strValue = std::string(cStringValue);
+				FST_INFO("Set TYPE_STRING token:(%s) to %s", 
+					objThreadCntrolBlock->token, cStringValue);
+				reg_manager_interface_setValueSr(strValue, iRegIdx);
+			}
+			else if(valueStart->hasType(TYPE_JOINT) == TYPE_JOINT)
+			{
+				char cStringValue[64];
+#ifndef WIN32
+				sprintf(cStringValue, "JOINT|%0.3f|%0.3f|%0.3f|%0.3f|%0.3f|%0.3f", 
+					valueStart->getJointValue().j1_,
+					valueStart->getJointValue().j2_,
+					valueStart->getJointValue().j3_,
+					valueStart->getJointValue().j4_,
+					valueStart->getJointValue().j5_,
+					valueStart->getJointValue().j6_);
+#else
+				sprintf(cStringValue, "POSE|%0.3f|%0.3f|%0.3f|%0.3f|%0.3f|%0.3f", 
+					valueStart->getJointValue().j1,
+					valueStart->getJointValue().j2,
+					valueStart->getJointValue().j3,
+					valueStart->getJointValue().j4,
+					valueStart->getJointValue().j5,
+					valueStart->getJointValue().j6);
+#endif
+				sprintf(cStringValue, "%s|%d|%d|%d|%d",
+					cStringValue, 
+					valueStart->getPosture().arm  ,
+					valueStart->getPosture().elbow,
+					valueStart->getPosture().wrist,
+					valueStart->getPosture().flip);
+				strValue = std::string(cStringValue);
+				FST_INFO("Set TYPE_STRING token:(%s) to %s", 
+					objThreadCntrolBlock->token, cStringValue);
+				reg_manager_interface_setValueSr(strValue, iRegIdx);
 			}
 	       	return 0 ;
 		}

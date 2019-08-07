@@ -429,7 +429,7 @@ bool reg_manager_interface_getSr(string &ptr, uint16_t num)
 		FST_ERROR("g_objRegManagerInterface is NULL");
 	}
 #else
-    ptr = string("Test");
+    ptr = string("123.456Test");
 	bRet = true ;
 #endif
 	return bRet ;

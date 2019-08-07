@@ -3993,7 +3993,7 @@ void primitive(struct thread_control_block * objThreadCntrolBlock,
   	strValue = std::string(objThreadCntrolBlock->token);
 	result->setStringValue(strValue);
 	// Save number data
-	result->setFloatValue(atoi(strValue.c_str()));
+	result->setFloatValue(atof(strValue.c_str()));
     get_token(objThreadCntrolBlock);
     return;
   case DELIMITER:

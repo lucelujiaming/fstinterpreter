@@ -382,7 +382,8 @@ int parsePostureAndTurn(struct thread_control_block * objThreadCntrolBlock,
 			FST_INFO("cJSON_Object"); 
 			break;
 		case cJSON_Array:
-			if(strcmp(child->string, "turnCircle") == 0)
+		//	if(strcmp(child->string, "turnCircle") == 0)
+			if(strcmp(child->string, "turnCycle") == 0)
 			{
 				parseTurn(objThreadCntrolBlock, child, turn);	
 			}

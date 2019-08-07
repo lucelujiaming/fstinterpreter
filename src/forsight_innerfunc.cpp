@@ -479,6 +479,7 @@ bool call_hypot(eval_value *result, const char * valFirst,const char * valSecond
 
 int Stein_GCD(int x, int y)
 {
+	x = fabs(x), y= fabs(y);
     if (x == 0) return y;
     if (y == 0) return x;
     if (x % 2 == 0 && y % 2 == 0)
@@ -661,16 +662,19 @@ bool call_substr (eval_value *result, const char * valFirst,
 		string strVal = string(valFirst);
 		int    valTwo = (int)atof(valSecond);
 		int    valThr = (int)atof(valThird);
-	    string strRet = strVal.substr(valTwo, valThr);
-		if(strRet.length() == 0)
+		if((valTwo > 0) && (valThr > 0))
 		{
-			return false ;
-		}
-		else 
-		{
-			result->setStringValue(strRet);
-		//	FST_INFO("result = %s", result->getStringValue().c_str());
-			return true ;
+		    string strRet = strVal.substr(valTwo, valThr);
+			if(strRet.length() == 0)
+			{
+				return false ;
+			}
+			else 
+			{
+				result->setStringValue(strRet);
+			//	FST_INFO("result = %s", result->getStringValue().c_str());
+				return true ;
+			}
 		}
 	}
 	return false;
