@@ -642,11 +642,13 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	  objThreadCntrolBlock->is_paused = false;
 	  
 	  get_token(objThreadCntrolBlock);
-	  while(objThreadCntrolBlock->tok == IMPORT)
+ 	  while(objThreadCntrolBlock->tok == IMPORT)
 	  {
 		  exec_import(objThreadCntrolBlock);
 		  find_eol(objThreadCntrolBlock);
 		  get_token(objThreadCntrolBlock);
+		  while(objThreadCntrolBlock->tok == EOL)
+			get_token(objThreadCntrolBlock);
 	  }
       generateXPathVector(objThreadCntrolBlock, objThreadCntrolBlock->project_name);
 	  struct prog_line_info_t objProgLineInfo ;
@@ -3609,7 +3611,10 @@ int look_up(char *s)
 
   /* see if token is in table */
   for(i=0; *table[i].command; i++)
-      if(!strcmp(table[i].command, s)) return table[i].tok;
+  {
+	  if(!strcmp(table[i].command, s)) 
+		  return table[i].tok;
+  }
   return 0; /* unknown command */
 }
 
@@ -3673,7 +3678,7 @@ void level1(struct thread_control_block * objThreadCntrolBlock, eval_value *valu
     level2(objThreadCntrolBlock, value, boolValue);
 
     op = *(objThreadCntrolBlock->token);
-    if(strchr(relops, op) && op != 0) {
+    while(strchr(relops, op) && op != 0) {
         get_token(objThreadCntrolBlock);
         level2(objThreadCntrolBlock, &partial_value, &another_bool_value);
 
@@ -3688,6 +3693,7 @@ void level1(struct thread_control_block * objThreadCntrolBlock, eval_value *valu
 			    *boolValue = (*boolValue ^ another_bool_value);
 			    break;
         }
+		op = *(objThreadCntrolBlock->token);
     }
 }
 

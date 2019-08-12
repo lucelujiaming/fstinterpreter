@@ -1,3 +1,8 @@
+Private Type MyType 
+	a As Integer 
+	b As Integer 
+End Type
+
 SUB main ()
     MR[2]  = SR[2] + MR[2]
     SR[2]  = PR[2]

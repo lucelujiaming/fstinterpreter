@@ -1371,8 +1371,7 @@ void test_overflow_internal_func()
 	//	036 	(char *)"substr",	  3, call_substr ,
 	result.resetNoneValue();
 	call_internal_func(36, &result, (char *)"123456789", (char *)"-11", (char *)"2");
-	FST_INFO("FUNC       substr: result = %s "
-		, result.getStringValue().c_str());
+	FST_INFO("FUNC       substr: result = %s ", result.getStringValue().c_str());
 	
 	//	037 	(char *)"replace",	  3, call_replace ,
 	result.resetNoneValue();
