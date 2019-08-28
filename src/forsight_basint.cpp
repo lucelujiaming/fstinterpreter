@@ -61,7 +61,14 @@
 #define DEFAULT   28
 #define WAIT      29
 #define CALLMACRO 30
-#define NOP       31
+// structure define
+#define PRIVATE   31
+#define PUBLIC    32
+#define TYPE      33
+#define AS        34
+// structure variable
+#define DIM       35
+#define NOP       36
 
 enum var_inner_type { FORSIGHT_CHAR, FORSIGHT_INT, FORSIGHT_FLOAT };
 
@@ -135,6 +142,11 @@ static struct commands table[] = { /* Commands must be entered lowercase */
   "end",         END,
   "import",      IMPORT,
   "callmacro",   CALLMACRO,
+  "private",     PRIVATE,
+  "public",      PUBLIC,
+  "type",        TYPE,
+  "as",          AS,
+  "dim",         DIM,
   "nop",         NOP,
   "", END  /* mark end of table */
 };
@@ -184,7 +196,10 @@ void greturn(struct thread_control_block * objThreadCntrolBlock),
 	 gosub_push(struct thread_control_block * objThreadCntrolBlock, char *s),
 	 label_init(struct thread_control_block * objThreadCntrolBlock),
 //	 exec_call(struct thread_control_block * objThreadCntrolBlock), 
-	 exec_import(struct thread_control_block * objThreadCntrolBlock);
+	 exec_import(struct thread_control_block * objThreadCntrolBlock),
+	 exec_import_type(struct thread_control_block * objThreadCntrolBlock),
+     exec_import_dim_var(struct thread_control_block * objThreadCntrolBlock) ;
+
 void get_exp(struct thread_control_block * objThreadCntrolBlock, eval_value * result, int* boolValue),
 	 putback(struct thread_control_block * objThreadCntrolBlock);
 void    level1(struct thread_control_block * objThreadCntrolBlock, eval_value *result, int* boolValue),
@@ -346,15 +361,15 @@ int getLinenum(
 	Output: 		NULL
 	Return: 		NULL
 *************************************************/ 
-void setRunningMacroInstr(char* program_name)
-{
-#ifdef WIN32
-  if (g_macro_instr_mgr_ptr)
-  {
-	  g_macro_instr_mgr_ptr->setRunningInMacroInstrList(program_name);
-  }
-#endif
-}
+//	void setRunningMacroInstr(char* program_name)
+//	{
+//#ifdef WIN32
+//	  if (g_macro_instr_mgr_ptr)
+//	  {
+//		  g_macro_instr_mgr_ptr->setRunningInMacroInstrList(program_name);
+//	  }
+//#endif
+//	}
 
 /************************************************* 
 	Function:		resetRunningMacroInstr
@@ -363,15 +378,15 @@ void setRunningMacroInstr(char* program_name)
 	Output: 		NULL
 	Return: 		NULL
 *************************************************/ 
-void resetRunningMacroInstr(char* program_name)
-{
-#ifdef WIN32
-  if (g_macro_instr_mgr_ptr)
-  {
-	  g_macro_instr_mgr_ptr->resetRunningInMacroInstrList(program_name);
-  }
-#endif
-}
+//	void resetRunningMacroInstr(char* program_name)
+//	{
+//#ifdef WIN32
+//	  if (g_macro_instr_mgr_ptr)
+//	  {
+//		  g_macro_instr_mgr_ptr->resetRunningInMacroInstrList(program_name);
+//	  }
+//#endif
+//	}
 	
 /************************************************* 
 	Function:		setLinenum
@@ -650,6 +665,27 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 		  while(objThreadCntrolBlock->tok == EOL)
 			get_token(objThreadCntrolBlock);
 	  }
+
+	  // Load all of Type
+	  while((objThreadCntrolBlock->tok == PUBLIC)
+		  ||(objThreadCntrolBlock->tok == PRIVATE)
+		  ||(objThreadCntrolBlock->tok == DIM))
+	  {
+		  if((objThreadCntrolBlock->tok == PUBLIC)
+			||(objThreadCntrolBlock->tok == PRIVATE))
+		  {
+			  exec_import_type(objThreadCntrolBlock);
+		  }
+		  else if(objThreadCntrolBlock->tok == DIM)
+		  {
+			  exec_import_dim_var(objThreadCntrolBlock);
+		  }
+		  find_eol(objThreadCntrolBlock);
+		  get_token(objThreadCntrolBlock);
+		  while(objThreadCntrolBlock->tok == EOL)
+			get_token(objThreadCntrolBlock);
+	  }
+
       generateXPathVector(objThreadCntrolBlock, objThreadCntrolBlock->project_name);
 	  struct prog_line_info_t objProgLineInfo ;
 	  objProgLineInfo.start_prog_pos = objThreadCntrolBlock->prog_end ;
@@ -872,10 +908,10 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 		eval_value result ;
 		// putback(objThreadCntrolBlock); /* return the var to the input stream */
 		bRet = call_inner_func(objThreadCntrolBlock, &result);
-		if(bRet == false)
-		{
-	    	serror(objThreadCntrolBlock, 18);
-		}
+	//	if(bRet == false)
+	//	{
+	//    	serror(objThreadCntrolBlock, 18);
+	//	}
 	}
 	else if(objThreadCntrolBlock->token_type==OUTSIDEFUNC) /* is OUTSIDEFUNC */
 	{
@@ -1219,14 +1255,14 @@ int release_array_element(struct thread_control_block * objThreadCntrolBlock)
 	  }
 	  // putback ']'
 	  putback(objThreadCntrolBlock);
-	  return (int)value.getFloatValue() ;
+	  return (int)value.getDoubleValue() ;
 	}
 	get_token(objThreadCntrolBlock);
 	if(objThreadCntrolBlock->token[0] == '['){
-		value.setFloatValue(release_array_element(objThreadCntrolBlock));
+		value.setDoubleValue(release_array_element(objThreadCntrolBlock));
 		// Jump ']'
 		get_token(objThreadCntrolBlock);
-		sprintf(val_name, "%s[%d]", val_name, (int)value.getFloatValue());
+		sprintf(val_name, "%s[%d]", val_name, (int)value.getDoubleValue());
 		value = find_var(objThreadCntrolBlock, val_name);
 		// Jump ']'
 		get_token(objThreadCntrolBlock);
@@ -1234,14 +1270,14 @@ int release_array_element(struct thread_control_block * objThreadCntrolBlock)
 			putback(objThreadCntrolBlock);
 			// Simulate left value
 			objThreadCntrolBlock->token_type = NUMBER ;
-			sprintf(objThreadCntrolBlock->token, "%d", (int)value.getFloatValue());
+			sprintf(objThreadCntrolBlock->token, "%d", (int)value.getDoubleValue());
 			// Calc
 			level3(objThreadCntrolBlock, &value, &boolValue);
 			putback(objThreadCntrolBlock);
 		}
 		// putback ']'
 		putback(objThreadCntrolBlock);
-		return (int)value.getFloatValue();
+		return (int)value.getDoubleValue();
 	}
 	else {
 	  objThreadCntrolBlock->prog = temp_prog;
@@ -1255,7 +1291,7 @@ int release_array_element(struct thread_control_block * objThreadCntrolBlock)
 	  else {
 		// putback ']'
 		putback(objThreadCntrolBlock);
-	    return (int)value.getFloatValue();
+	    return (int)value.getDoubleValue();
 	  }
 	}
 }
@@ -1403,7 +1439,7 @@ void print(struct thread_control_block * objThreadCntrolBlock)
       putback(objThreadCntrolBlock);
       get_exp(objThreadCntrolBlock, &answer, &boolValue);
       get_token(objThreadCntrolBlock);
-      len += printf("%d", (int)answer.getFloatValue());
+      len += printf("%d", (int)answer.getDoubleValue());
     }
     last_delim = *(objThreadCntrolBlock->token);
 
@@ -1861,7 +1897,7 @@ void exec_if(struct thread_control_block * objThreadCntrolBlock)
   int cond;
 
   cond = calc_conditions(objThreadCntrolBlock);
-  x.setFloatValue(cond);
+  x.setDoubleValue(cond);
 
   if(cond) { /* is true so process target of IF */
     get_token(objThreadCntrolBlock);
@@ -1938,8 +1974,8 @@ void exec_else(struct thread_control_block * objThreadCntrolBlock)
 		return;
 	}
 	
-	FST_INFO("exec_else select_and_cycle_pop return %f", if_stack.target.getFloatValue());
-	if(if_stack.target.getFloatValue() != 0.0)  // if statement is true
+	FST_INFO("exec_else select_and_cycle_pop return %f", if_stack.target.getDoubleValue());
+	if(if_stack.target.getDoubleValue() != 0.0)  // if statement is true
 	{
 		cond = 0 ;
 	}
@@ -2013,12 +2049,12 @@ void exec_elseif(struct thread_control_block * objThreadCntrolBlock)
 	return;
   }
 
-  if(if_stack.target.getFloatValue() != 0.0)  // if statement is true
+  if(if_stack.target.getDoubleValue() != 0.0)  // if statement is true
   	cond = 0 ;
   else
   {
 	  cond = calc_conditions(objThreadCntrolBlock);
-      x.setFloatValue(cond);
+      x.setDoubleValue(cond);
   }
 
   if(cond) { /* is true so process target of IF */
@@ -2116,7 +2152,7 @@ void exec_for(struct thread_control_block * objThreadCntrolBlock)
   /* if loop can execute at least once, push info on stack */
   // if(value>=variables[for_stack.var]) {
   tmp = find_var(objThreadCntrolBlock, for_stack.var);
-  if(value.getFloatValue() >= tmp.getFloatValue()) {
+  if(value.getDoubleValue() >= tmp.getDoubleValue()) {
   	for_stack.itokentype = FOR ;
 	find_eol(objThreadCntrolBlock);
     for_stack.loc = objThreadCntrolBlock->prog;
@@ -2167,12 +2203,12 @@ void exec_next(struct thread_control_block * objThreadCntrolBlock)
   value = find_var(objThreadCntrolBlock, for_stack.var);
   // int iVar = find_var(objThreadCntrolBlock, for_stack.var);
   // iVar++ ;
-  value.increaseFloatValue();
+  value.increaseDoubleValue();
   assign_var(objThreadCntrolBlock, for_stack.var, value); // iVar);
 
   // if(variables[for_stack.var]>for_stack.target) return;  /* all done */
   value = find_var(objThreadCntrolBlock, for_stack.var);
-  if(value.getFloatValue() > for_stack.target.getFloatValue()) 
+  if(value.getDoubleValue() > for_stack.target.getDoubleValue()) 
   {
   	  find_eol(objThreadCntrolBlock);
       return;  /* all done */
@@ -2198,7 +2234,7 @@ void exec_loop(struct thread_control_block * objThreadCntrolBlock)
   // for_stack.var=toupper(*token)-'A'; /* save its index */
   memset(loop_stack.var, 0x00, 80);
   strcpy(loop_stack.var, "loop_var");
-  value.setFloatValue( 1 ) ;
+  value.setDoubleValue( 1 ) ;
   assign_var(objThreadCntrolBlock, loop_stack.var, value) ;
 
   // deal target such like "5"
@@ -2231,11 +2267,11 @@ void exec_endloop(struct thread_control_block * objThreadCntrolBlock)
   value = find_var(objThreadCntrolBlock, loop_stack.var);
   // int iVar = find_var(objThreadCntrolBlock, loop_stack.var);
   // iVar++ ;
-  value.increaseFloatValue();
+  value.increaseDoubleValue();
   assign_var(objThreadCntrolBlock, loop_stack.var, value); // iVar);
   value = find_var(objThreadCntrolBlock, loop_stack.var) ;
   // if(variables[for_stack.var]>for_stack.target) return;  /* all done */
-  if(value.getFloatValue() > loop_stack.target.getFloatValue())
+  if(value.getDoubleValue() > loop_stack.target.getDoubleValue())
   {
   	  find_eol(objThreadCntrolBlock);
       return;  /* all done */
@@ -2378,7 +2414,7 @@ void exec_continue(struct thread_control_block * objThreadCntrolBlock)
 
 	 // if(variables[cycle_stack.var]>cycle_stack.target)
 	 value = find_var(objThreadCntrolBlock, cycle_stack.var);
-     if(value.getFloatValue() > cycle_stack.target.getFloatValue())
+     if(value.getDoubleValue() > cycle_stack.target.getDoubleValue())
 	 {
          while (objThreadCntrolBlock->tok!=NEXT) 
 		 	get_token(objThreadCntrolBlock);
@@ -2509,7 +2545,7 @@ void exec_case(struct thread_control_block * objThreadCntrolBlock)
   {
 	  serror(objThreadCntrolBlock, 25);
   }
-  // if(x.getFloatValue() == select_stack.target.getFloatValue()) { 
+  // if(x.getDoubleValue() == select_stack.target.getDoubleValue()) { 
   else if(boolValue == EVAL_CMP_TRUE) {
 	 /* is true so process target of CASE */
      select_and_cycle_push(objThreadCntrolBlock, select_stack);  // Use of END SELECt
@@ -2703,7 +2739,7 @@ void input(struct thread_control_block * objThreadCntrolBlock)
   scanf("%d", &i); /* read input */
 
   // variables[var] = i; /* store it */
-  value.setFloatValue(i) ; 
+  value.setDoubleValue(i) ; 
   assign_var(objThreadCntrolBlock, var, value); // i) ;
 }
 
@@ -2748,13 +2784,13 @@ bool call_inner_func(struct thread_control_block * objThreadCntrolBlock, eval_va
 	if((*(objThreadCntrolBlock->token) == '\r')
 		|| (*(objThreadCntrolBlock->token) == '\n'))
 	{
-		result->setFloatValue(0.0);
+		result->setDoubleValue(0.0);
 		return false;
 	}
     if(*(objThreadCntrolBlock->token) != '(')
     {
 		serror(objThreadCntrolBlock, 2);
-		result->setFloatValue(0.0);
+		result->setDoubleValue(0.0);
 		return false;
 	}
 
@@ -2769,15 +2805,18 @@ bool call_inner_func(struct thread_control_block * objThreadCntrolBlock, eval_va
 		else if(value.hasType(TYPE_STRING) == TYPE_STRING)
 		{
 			sprintf(temp[count], "%s", value.getStringValue().c_str()); // save temporarily
+    		FST_INFO("We got a string which is '%s'", temp[count]); 
 		}
 		else if( (value.hasType(TYPE_JOINT) == TYPE_JOINT)
 		       ||(value.hasType(TYPE_POSE) ==  TYPE_POSE))
 		{
-			// sprintf(temp[count], "%f", value.getFloatValue()); // save temporarily
+			// sprintf(temp[count], "%f", value.getDoubleValue()); // save temporarily
+    		FST_INFO("We got a unknown type data which is '%s'", temp[count]); 
 		}
 		else // It is number in most times
 		{
-			sprintf(temp[count], "%f", value.getFloatValue()); // save temporarily
+			sprintf(temp[count], "%f", value.getDoubleValue()); // save temporarily
+    		FST_INFO("We got a number which is '%s'", temp[count]); 
 		}
         get_token(objThreadCntrolBlock);
         count++;
@@ -2871,7 +2910,7 @@ void get_args(struct thread_control_block * objThreadCntrolBlock)
     // Process a comma-separated list of values.
     do {
         get_exp(objThreadCntrolBlock, &value, &boolValue);
-        temp[count] = value.getFloatValue(); // save temporarily
+        temp[count] = value.getDoubleValue(); // save temporarily
         get_token(objThreadCntrolBlock);
         count++;
     } while(*(objThreadCntrolBlock->token) == ',');
@@ -2879,7 +2918,7 @@ void get_args(struct thread_control_block * objThreadCntrolBlock)
 
     // Now, push on local_var_stack in reverse order.
     for(; count>=0; count--) {
-        vt.value.setFloatValue(temp[count]);
+        vt.value.setDoubleValue(temp[count]);
         // vt.v_type = FORSIGHT_INT;
         objThreadCntrolBlock->local_var_stack.push_back(vt);
     }
@@ -2942,6 +2981,88 @@ void get_params(struct thread_control_block * objThreadCntrolBlock)
 	    serror(objThreadCntrolBlock, 7); /* label not defined */
 		return;
     }
+}
+
+/************************************************* 
+	Function:		exec_import
+	Description:	Execute a IMPORT statement. 
+	Input:			thread_control_block  - interpreter info
+	Ouput:			NULL
+	Return: 		NULL
+*************************************************/ 
+void exec_import_type(struct thread_control_block * objThreadCntrolBlock)
+{
+	std::string structName;
+	eval_struct_member objEvalStructMember ;
+	vector<eval_struct_member> vecMembers;
+    get_token(objThreadCntrolBlock);
+    if(objThreadCntrolBlock->tok != TYPE) {
+		serror(objThreadCntrolBlock, 8);
+		return;
+    }
+    get_token(objThreadCntrolBlock);
+	structName = objThreadCntrolBlock->token;
+	find_eol(objThreadCntrolBlock);
+	
+	vecMembers.clear();
+    get_token(objThreadCntrolBlock);
+	objEvalStructMember.memberName = objThreadCntrolBlock->token;
+
+    while(objThreadCntrolBlock->tok != END) {
+		get_token(objThreadCntrolBlock);
+		if(objThreadCntrolBlock->tok != AS) {
+			serror(objThreadCntrolBlock, 8);
+			return;
+		}
+		objThreadCntrolBlock->token_type = get_token(objThreadCntrolBlock);
+		if(objThreadCntrolBlock->token_type != VARIABLE) {
+			serror(objThreadCntrolBlock, 8);
+			return;
+		}
+		else
+		{
+			objEvalStructMember.memberTypeStr = objThreadCntrolBlock->token;
+			vecMembers.push_back(objEvalStructMember);
+		}
+
+		find_eol(objThreadCntrolBlock);
+		get_token(objThreadCntrolBlock);
+		objEvalStructMember.memberName = objThreadCntrolBlock->token;
+	}
+	// End element had been eaten
+    get_token(objThreadCntrolBlock);
+    if(objThreadCntrolBlock->tok != TYPE) {
+		serror(objThreadCntrolBlock, 8);
+		return;
+    }
+	AddUseDefinedStructure(objThreadCntrolBlock, structName, vecMembers);
+}
+
+/************************************************* 
+	Function:		exec_import
+	Description:	Execute a IMPORT statement. 
+	Input:			thread_control_block  - interpreter info
+	Ouput:			NULL
+	Return: 		NULL
+*************************************************/ 
+void exec_import_dim_var(struct thread_control_block * objThreadCntrolBlock)
+{
+	std::string varName;
+	eval_struct_member objEvalStructMember ;
+	vector<eval_struct_member> vecMembers;
+
+    get_token(objThreadCntrolBlock);
+	varName = objThreadCntrolBlock->token;
+	
+	get_token(objThreadCntrolBlock);
+	if(objThreadCntrolBlock->tok != AS) {
+		serror(objThreadCntrolBlock, 8);
+		return;
+	}
+
+    get_token(objThreadCntrolBlock);
+
+	AddUseDefinedStructureVar(objThreadCntrolBlock, varName, objThreadCntrolBlock->token);
 }
 
 /************************************************* 
@@ -3188,7 +3309,7 @@ void greturn(struct thread_control_block * objThreadCntrolBlock)
 	  }
 	  putback(objThreadCntrolBlock);
 	  get_exp(objThreadCntrolBlock,&ret_value, &boolValue);
-	  objThreadCntrolBlock->ret_value = ret_value.getFloatValue() ;
+	  objThreadCntrolBlock->ret_value = ret_value.getDoubleValue() ;
   }
   objThreadCntrolBlock->prog = progTemp ;
   // We should skip the whole line
@@ -3693,7 +3814,8 @@ void level1(struct thread_control_block * objThreadCntrolBlock, eval_value *valu
 			    *boolValue = (*boolValue ^ another_bool_value);
 			    break;
         }
-		op = *(objThreadCntrolBlock->token);
+
+        op = *(objThreadCntrolBlock->token);
     }
 }
 
@@ -3723,7 +3845,7 @@ void level2(struct thread_control_block * objThreadCntrolBlock, eval_value *valu
 
         switch(op) { // perform the relational operation
 			case LT:
-				// *boolValue = (value->getFloatValue() < partial_value.getFloatValue());
+				// *boolValue = (value->getDoubleValue() < partial_value.getDoubleValue());
 				*boolValue = value->calcLT(&partial_value);
 				if(*boolValue == EVAL_CMP_ERROR)
 				{
@@ -3731,7 +3853,7 @@ void level2(struct thread_control_block * objThreadCntrolBlock, eval_value *valu
 				}
 			    break;
 			case LE:
-				// *boolValue = (value->getFloatValue() <= partial_value.getFloatValue());
+				// *boolValue = (value->getDoubleValue() <= partial_value.getDoubleValue());
 				*boolValue = value->calcLE(&partial_value);
 				if(*boolValue == EVAL_CMP_ERROR)
 				{
@@ -3739,7 +3861,7 @@ void level2(struct thread_control_block * objThreadCntrolBlock, eval_value *valu
 				}
 			    break;
 			case GT:
-				// *boolValue = (value->getFloatValue() > partial_value.getFloatValue());
+				// *boolValue = (value->getDoubleValue() > partial_value.getDoubleValue());
 				*boolValue = value->calcGT(&partial_value);
 				if(*boolValue == EVAL_CMP_ERROR)
 				{
@@ -3747,7 +3869,7 @@ void level2(struct thread_control_block * objThreadCntrolBlock, eval_value *valu
 				}
 			    break;
 			case GE:
-				// *boolValue = (value->getFloatValue() >= partial_value.getFloatValue());
+				// *boolValue = (value->getDoubleValue() >= partial_value.getDoubleValue());
 				*boolValue = value->calcGE(&partial_value);
 				if(*boolValue == EVAL_CMP_ERROR)
 				{
@@ -3755,7 +3877,7 @@ void level2(struct thread_control_block * objThreadCntrolBlock, eval_value *valu
 				}
 			    break;
 			case EQ:
-			    // *boolValue = (value->getFloatValue() == partial_value.getFloatValue());
+			    // *boolValue = (value->getDoubleValue() == partial_value.getDoubleValue());
 				*boolValue = value->calcEQ(&partial_value);
 				if(*boolValue == EVAL_CMP_ERROR)
 				{
@@ -3763,7 +3885,7 @@ void level2(struct thread_control_block * objThreadCntrolBlock, eval_value *valu
 				}
 			    break;
 			case NE:
-				// *boolValue = (value->getFloatValue() != partial_value.getFloatValue());
+				// *boolValue = (value->getDoubleValue() != partial_value.getDoubleValue());
 				*boolValue = value->calcNE(&partial_value);
 				if(*boolValue == EVAL_CMP_ERROR)
 				{
@@ -3909,7 +4031,7 @@ void primitive(struct thread_control_block * objThreadCntrolBlock,
     // Timer
 	if(strcmp(objThreadCntrolBlock->token, FORSIGHT_TIMER) != 0)
     {
-		result->setFloatValue(1.0);
+		result->setDoubleValue(1.0);
 		get_token(objThreadCntrolBlock);
 		return;
 	}
@@ -3943,9 +4065,9 @@ void primitive(struct thread_control_block * objThreadCntrolBlock,
 		}
 
 		*result = find_var(objThreadCntrolBlock, var, 1);
-		if(result->hasType(TYPE_FLOAT) == TYPE_FLOAT)
+		if(result->hasType(TYPE_DOUBLE) == TYPE_DOUBLE)
 		{
-			if(result->getFloatValue() != 0.0)
+			if(result->getDoubleValue() != 0.0)
 			{
 				*boolValue = 1.0 ;
 			}
@@ -3961,9 +4083,9 @@ void primitive(struct thread_control_block * objThreadCntrolBlock,
 	objThreadCntrolBlock->g_variable_error = 0 ;
     return;
   case NUMBER:
-    result->setFloatValue(atof(objThreadCntrolBlock->token));
+    result->setDoubleValue(atof(objThreadCntrolBlock->token));
 	// Deal single value
-	if(result->getFloatValue() != 0.0)
+	if(result->getDoubleValue() != 0.0)
 	{
 		*boolValue = 1.0 ;
 	}
@@ -3979,9 +4101,9 @@ void primitive(struct thread_control_block * objThreadCntrolBlock,
 	// exec_call(objThreadCntrolBlock);
 	iRet = exec_call(objThreadCntrolBlock);
 	if(iRet == END_COMMND_RET)
-	   result->setFloatValue(0) ;
+	   result->setDoubleValue(0) ;
 	else
-	   result->setFloatValue(objThreadCntrolBlock->ret_value);
+	   result->setDoubleValue(objThreadCntrolBlock->ret_value);
     // objThreadCntrolBlock->prog = progFuncCall;
 	// find_eol(objThreadCntrolBlock);
     get_token(objThreadCntrolBlock);
@@ -3989,17 +4111,17 @@ void primitive(struct thread_control_block * objThreadCntrolBlock,
   case BUILTINFUNC:
   	// use objThreadCntrolBlock->token
   	bRet = call_inner_func(objThreadCntrolBlock, result);
-	if(bRet == false)
-	{
-    	serror(objThreadCntrolBlock, 18);
-	}
+//	if(bRet == false)
+//	{
+//    	serror(objThreadCntrolBlock, 18);
+//	}
     get_token(objThreadCntrolBlock);
     return;
   case QUOTE:
   	strValue = std::string(objThreadCntrolBlock->token);
 	result->setStringValue(strValue);
 	// Save number data
-	result->setFloatValue(atof(strValue.c_str()));
+	result->setDoubleValue(atof(strValue.c_str()));
     get_token(objThreadCntrolBlock);
     return;
   case DELIMITER:
@@ -4041,7 +4163,7 @@ void arith(struct thread_control_block * objThreadCntrolBlock, char o, eval_valu
       break;
     case '/':
       // r->fValue = (r->fValue)/(h->fValue);
-	  if(h->getFloatValue() == 0.0)
+	  if(h->getDoubleValue() == 0.0)
 	  {
 		 serror(objThreadCntrolBlock, 24);
 	  }
@@ -4050,7 +4172,7 @@ void arith(struct thread_control_block * objThreadCntrolBlock, char o, eval_valu
     case '%':
       // t = (r->fValue)/(h->fValue);
       // r->fValue = r->fValue-(t*(h->fValue));
-	  if(h->getFloatValue() == 0.0)
+	  if(h->getDoubleValue() == 0.0)
 	  {
 		 serror(objThreadCntrolBlock, 24);
 	  }
@@ -4067,7 +4189,7 @@ void arith(struct thread_control_block * objThreadCntrolBlock, char o, eval_valu
       r->calcPower(h);
       break;
     case '@':
-	  if(h->getFloatValue() == 0.0)
+	  if(h->getDoubleValue() == 0.0)
 	  {
 		 serror(objThreadCntrolBlock, 24);
 	  }
@@ -4140,18 +4262,85 @@ void set_var_value(struct thread_control_block * objThreadCntrolBlock,
 void assign_global_var(struct thread_control_block * objThreadCntrolBlock, char *vname, eval_value value)
 {
 	var_type vt;
-	// Otherwise, try global vars.
-	for(unsigned i=0; i < objThreadCntrolBlock->global_vars.size(); i++)
+	
+	char struct_name[256] ;
+	char member_name[256] ;
+	char *namePtr = NULL;
+	
+    namePtr = strchr(vname, '.');
+	memset(struct_name, 0x00, 256);
+	memset(member_name, 0x00, 256);
+	if(namePtr)
 	{
-	    if(!strcmp(objThreadCntrolBlock->global_vars[i].var_name, vname)) {
-	        objThreadCntrolBlock->global_vars[i].value = value;
-	        return;
-	    }
+		memcpy(struct_name, vname, namePtr - vname);
+		strcpy(member_name, namePtr + 1);
 	}
-	memset(vt.var_name, 0x00, LAB_LEN);
-	strcpy(vt.var_name, vname);
-	vt.value = value;
-	objThreadCntrolBlock->global_vars.push_back(vt);
+
+	if(strlen(struct_name) == 0)
+	{
+		// Otherwise, try global vars.
+		for(unsigned i=0; i < objThreadCntrolBlock->global_vars.size(); i++)
+		{
+			if(!strcmp(objThreadCntrolBlock->global_vars[i].var_name, vname)) {
+				objThreadCntrolBlock->global_vars[i].value = value;
+				return;
+			}
+		}
+		memset(vt.var_name, 0x00, LAB_LEN);
+		strcpy(vt.var_name, vname);
+		vt.value = value;
+		objThreadCntrolBlock->global_vars.push_back(vt);
+	}
+	else
+	{
+		// Otherwise, try global vars.
+		for(unsigned i=0; i < objThreadCntrolBlock->global_vars.size(); i++)
+		{
+			if(!strcmp(objThreadCntrolBlock->global_vars[i].var_name, struct_name)) {
+				std::vector<eval_struct_var> objStructData =
+					objThreadCntrolBlock->global_vars[i].value.getStructData();
+				
+				for(vector<eval_struct_var>::iterator itData
+						= objStructData.begin();
+					itData != objStructData.end(); ++itData)
+				{
+					if(itData->memberName == member_name)
+					{
+						if(itData->memberTypeStr == EVAL_VALUE_TYPE_NONE)
+						{
+							FST_ERROR("assign_global_var invalid EVAL_VALUE_TYPE_NONE %s",
+								itData->memberTypeStr);
+						}
+						else if(itData->memberTypeStr == EVAL_VALUE_TYPE_INT)
+						{
+							itData->iMember = (int)value.getDoubleValue();
+						}
+						else if(itData->memberTypeStr == EVAL_VALUE_TYPE_FLOAT)
+						{
+							itData->dMember = value.getDoubleValue();
+						}
+						else if(itData->memberTypeStr == EVAL_VALUE_TYPE_STRING)
+						{
+						//	memset(itData->strMember, 0x00, 1024);
+						//	strcpy(itData->strMember, value.getStringValue().c_str());
+							itData->strMember = value.getStringValue();
+						}
+						else if((itData->memberTypeStr == EVAL_VALUE_TYPE_POSE)
+							||(itData->memberTypeStr == EVAL_VALUE_TYPE_JOINT)
+							||(itData->memberTypeStr == EVAL_VALUE_TYPE_PL)
+							||(itData->memberTypeStr == EVAL_VALUE_TYPE_STRUCT))
+						{
+							FST_ERROR("assign_global_var invalid EVAL_VALUE_TYPE_NONE %s",
+								itData->memberTypeStr);
+						}
+						break;
+					}
+				}
+				objThreadCntrolBlock->global_vars[i].value.setStructData(objStructData);
+				return;
+			}
+		}
+	}
 }
 
 /************************************************* 
@@ -4188,9 +4377,9 @@ void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname,
     {
 		if(strchr(vname, '['))
 		{
-			if(value.hasType(TYPE_FLOAT) == TYPE_FLOAT)
+			if(value.hasType(TYPE_DOUBLE) == TYPE_DOUBLE)
 			{
-				FST_INFO("assign_var vname = %s and value = %f.", vname, value.getFloatValue());
+				FST_INFO("assign_var vname = %s and value = %f.", vname, value.getDoubleValue());
 			}
 			if (value.hasType(TYPE_STRING) == TYPE_STRING)
 			{
@@ -4244,7 +4433,7 @@ void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname,
 		if(strchr(vname, '['))
 		{
 			FST_INFO("assign_external_resource vname = %s and value = (%f).",
-				vname, value.getFloatValue());
+				vname, value.getDoubleValue());
 			int iRet = forgesight_registers_manager_set_resource(
 				objThreadCntrolBlock, vname, keyVar, &value);
 			if(iRet == 0)
@@ -4257,33 +4446,33 @@ void assign_var(struct thread_control_block * objThreadCntrolBlock, char *vname,
 	if((strcmp(FORSIGHT_TF_NO_POINT, vname) == 0)
 	      ||(strcmp(FORSIGHT_TF_NO, vname) == 0))
     {
-        FST_INFO("set_global_TF vname = %s and value = %f.", vname, value.getFloatValue());
+        FST_INFO("set_global_TF vname = %s and value = %f.", vname, value.getDoubleValue());
 		iLineNum = calc_line_from_prog(objThreadCntrolBlock);
-		set_global_TF(iLineNum, (int)value.getFloatValue(), objThreadCntrolBlock);
+		set_global_TF(iLineNum, (int)value.getDoubleValue(), objThreadCntrolBlock);
 		return ;
     }
 	else if((strcmp(FORSIGHT_UF_NO_POINT, vname) == 0)
 	      ||(strcmp(FORSIGHT_UF_NO, vname) == 0))
     {
-        FST_INFO("set_global_UF vname = %s and value = %f.", vname, value.getFloatValue());
+        FST_INFO("set_global_UF vname = %s and value = %f.", vname, value.getDoubleValue());
 		iLineNum = calc_line_from_prog(objThreadCntrolBlock);
-		set_global_UF(iLineNum, (int)value.getFloatValue(), objThreadCntrolBlock);
+		set_global_UF(iLineNum, (int)value.getDoubleValue(), objThreadCntrolBlock);
 		return ;
     }
 	else if((strcmp(FORSIGHT_OVC_POINT, vname) == 0)
 	      ||(strcmp(FORSIGHT_OVC, vname) == 0))
     {
-        FST_INFO("set_OVC vname = %s and value = %f.", vname, value.getFloatValue());
+        FST_INFO("set_OVC vname = %s and value = %f.", vname, value.getDoubleValue());
 		iLineNum = calc_line_from_prog(objThreadCntrolBlock);
-		set_OVC(iLineNum, value.getFloatValue(), objThreadCntrolBlock);
+		set_OVC(iLineNum, value.getDoubleValue(), objThreadCntrolBlock);
 		return ;
     }
 	else if((strcmp(FORSIGHT_OAC_POINT, vname) == 0)
 	      ||(strcmp(FORSIGHT_OAC, vname) == 0))
     {
-        FST_INFO("set_OAC vname = %s and value = %f.", vname, value.getFloatValue());
+        FST_INFO("set_OAC vname = %s and value = %f.", vname, value.getDoubleValue());
 		iLineNum = calc_line_from_prog(objThreadCntrolBlock);
-		set_OAC(iLineNum, value.getFloatValue(), objThreadCntrolBlock);
+		set_OAC(iLineNum, value.getDoubleValue(), objThreadCntrolBlock);
 		return ;
     }
 	
@@ -4334,6 +4523,9 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 	int  iRegIdx = 0 ;
 	char * namePtr = vname ;
 	char *temp = NULL ;
+	
+	char struct_name[256] ;
+	char member_name[256] ;
 
     vector<var_type>::reverse_iterator it ;
 	  objThreadCntrolBlock->g_variable_error = 0 ;
@@ -4345,17 +4537,17 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 
 	if(!strcmp(vname, FORSIGHT_RETURN_VALUE))
 	{
-		value.setFloatValue(objThreadCntrolBlock->ret_value);
+		value.setDoubleValue(objThreadCntrolBlock->ret_value);
 		return value ;
 	}
 	else if(!strcmp(vname, FORSIGHT_REGISTER_ON))
 	{
-		value.setFloatValue(1.0);
+		value.setDoubleValue(1.0);
 		return value ;
 	}
 	else if(!strcmp(vname, FORSIGHT_REGISTER_OFF))
 	{
-		value.setFloatValue(0.0);
+		value.setDoubleValue(0.0);
 		return value ;
 	}
 
@@ -4364,6 +4556,7 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 		getMoveCommandDestination(movCmdDst);
 	    value.setJointValue(&movCmdDst.joint_target);
 	    value.setPosture(movCmdDst.posture);
+	    value.setTurn(movCmdDst.turn);
 		
        //	value.setPrRegDataWithJointValue(&movCmdDst.joint_target);
 		return value ;
@@ -4373,23 +4566,24 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 		getMoveCommandDestination(movCmdDst);
 		value.setPoseValue(&movCmdDst.pose_target);
 	    value.setPosture(movCmdDst.posture);
+	    value.setTurn(movCmdDst.turn);
 		
 	//	value.setPrRegDataWithPoseEulerValue(&movCmdDst.pose_target);
 		return value ;
 	}
 	else if(!strcmp(vname, FORSIGHT_TIMER_START))
 	{
-		value.setFloatValue(TIMER_START_VALUE);
+		value.setDoubleValue(TIMER_START_VALUE);
 		return value ;
 	}
 	else if(!strcmp(vname, FORSIGHT_TIMER_STOP))
 	{
-		value.setFloatValue(TIMER_STOP_VALUE);
+		value.setDoubleValue(TIMER_STOP_VALUE);
 		return value ;
 	}
 	else if(!strcmp(vname, FORSIGHT_TIMER_RESET))
 	{
-		value.setFloatValue(TIMER_RESET_VALUE);
+		value.setDoubleValue(TIMER_RESET_VALUE);
 		return value ;
 	}
 	else if(!strcmp(vname, FORSIGHT_PULSE))
@@ -4418,6 +4612,15 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 	//		return -1 ;
 	//	}
 		namePtr++ ;
+	}
+	
+    namePtr = strchr(vname, '.');
+	memset(struct_name, 0x00, 256);
+	memset(member_name, 0x00, 256);
+	if(namePtr)
+	{
+		memcpy(struct_name, vname, namePtr - vname);
+		strcpy(member_name, namePtr + 1);
 	}
 
 	// Inner Type
@@ -4487,14 +4690,14 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 			if(!strcmp(reg_name, FORSIGHT_TIMER))
 			{
 				value = it->value ;
-				if(it->value.getFloatValue() == TIMER_START_VALUE)
+				if(it->value.getDoubleValue() == TIMER_START_VALUE)
 				{
-					value.setFloatValue(time(0) - get_timer_start_time(iRegIdx));
+					value.setDoubleValue(time(0) - get_timer_start_time(iRegIdx));
 					return value;
 				}
-				else if(value.getFloatValue() == TIMER_RESET_VALUE)
+				else if(value.getDoubleValue() == TIMER_RESET_VALUE)
 				{
-					value.setFloatValue(time(0) - get_timer_start_time(iRegIdx));
+					value.setDoubleValue(time(0) - get_timer_start_time(iRegIdx));
 					return value;
 				}
 				else
@@ -4507,6 +4710,45 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 				return it->value;
 			}
         }
+	    else if(!strcmp(it->var_name, struct_name))  {
+			std::vector<eval_struct_var> objStructData = it->value.getStructData();
+			
+			for(vector<eval_struct_var>::iterator itData
+					= objStructData.begin();
+				itData != objStructData.end(); ++itData)
+			{
+				if(itData->memberName == member_name)
+				{
+					if(itData->memberTypeStr == EVAL_VALUE_TYPE_NONE)
+					{
+						FST_ERROR("find_var invalid EVAL_VALUE_TYPE_NONE %s", itData->memberTypeStr);
+					}
+					else if(itData->memberTypeStr == EVAL_VALUE_TYPE_INT)
+					{
+						value.setDoubleValue(itData->iMember);
+					}
+					else if(itData->memberTypeStr == EVAL_VALUE_TYPE_FLOAT)
+					{
+						value.setDoubleValue(itData->dMember);
+					}
+					else if(itData->memberTypeStr == EVAL_VALUE_TYPE_STRING)
+					{
+						//	memset(itData->strMember, 0x00, 1024);
+						//	strcpy(itData->strMember, value.getStringValue().c_str());
+						value.setStringValue(itData->strMember);
+					}
+					else if((itData->memberTypeStr == EVAL_VALUE_TYPE_POSE)
+						||(itData->memberTypeStr == EVAL_VALUE_TYPE_JOINT)
+						||(itData->memberTypeStr == EVAL_VALUE_TYPE_PL)
+						||(itData->memberTypeStr == EVAL_VALUE_TYPE_STRUCT))
+					{
+						FST_ERROR("find_var invalid EVAL_VALUE_TYPE %s", itData->memberTypeStr);
+					}
+					break;
+				}
+			}
+			return value;
+		}
 	}
 		
 	if(strstr(vname, ".") 

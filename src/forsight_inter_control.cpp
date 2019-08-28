@@ -95,6 +95,8 @@ void getMoveCommandDestination(MoveCommandDestination& movCmdDst)
 #endif 
 	  forgesight_registers_manager_get_joint(movCmdDst.joint_target);
 	  forgesight_registers_manager_get_cart(movCmdDst.pose_target);
+	  forgesight_registers_manager_get_posture(movCmdDst.posture);
+	  forgesight_registers_manager_get_turn(movCmdDst.turn);
 #ifndef WIN32
 	  FST_INFO("getMoveCommandDestination: Forward movej to TYPE_PR:(%f, %f, %f, %f, %f, %f) ", 
 		  movCmdDst.joint_target.j1_, movCmdDst.joint_target.j2_, 
@@ -258,7 +260,41 @@ void setProgMode(struct thread_control_block * objThdCtrlBlockPtr, ProgMode prog
  	objThdCtrlBlockPtr->prog_mode   = progMode ;
 }
 
+void AddUseDefinedStructure(struct thread_control_block * objThreadCntrolBlock, 
+							std::string structName, vector<eval_struct_member> vecMembers)
+{
+	objThreadCntrolBlock->mapUseDefinedStructType.insert(
+		std::pair<std::string, vector<eval_struct_member> >(structName, vecMembers));
+}
 
+void AddUseDefinedStructureVar(struct thread_control_block * objThreadCntrolBlock, 
+							   std::string varName, std::string structName)
+{
+	std::map<std::string, vector<eval_struct_member> >::iterator it
+		= objThreadCntrolBlock->mapUseDefinedStructType.find(structName);
+	if (it==objThreadCntrolBlock->mapUseDefinedStructType.end())
+		return ;
+    else
+    {
+		var_type   varType ;
+		eval_struct_var objStructVar ;
+		vector<eval_struct_var> vecVariable ;
+
+		vector<eval_struct_member> objSecond = it->second ;
+		for(vector<eval_struct_member>::iterator itMembers
+			= objSecond.begin();
+			itMembers != objSecond.end(); ++itMembers)
+		{
+			objStructVar.memberName    = itMembers->memberName ;
+			objStructVar.memberTypeStr = itMembers->memberTypeStr ;
+			vecVariable.push_back(objStructVar);
+		}
+		strcpy(varType.var_name, varName.c_str());
+		// vector<eval_struct_var>
+		varType.value.setStructData(vecVariable);
+		objThreadCntrolBlock->global_vars.push_back(varType);
+	}
+}
 /************************************************* 
 	Function:		setCurLine
 	Description:	set current Line info
@@ -829,7 +865,9 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
   			    setProgMode(objThdCtrlBlockPtr, FULL_MODE);
 			}
 			else
+	        {
 			    setWarning(FAIL_INTERPRETER_NOT_IN_PAUSE);
+			}
             break;
         case fst_base::INTERPRETER_SERVER_CMD_PAUSE:
 			if(getCurrentThreadSeq() < 0) break ;

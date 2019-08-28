@@ -52,7 +52,7 @@ void forgesight_simulate_launch_config_values(
 			struct thread_control_block* objThreadCntrolBlock)
 {
 	eval_value value ;
-	value.setFloatValue(1.0);
+	value.setDoubleValue(1.0);
 	// Pull down all of UIO
 	// forgesight_reset_uio_config_values();
 	// Pull up UI_SELECTION_STROBE
@@ -69,38 +69,38 @@ static int get_program_selection_value(
 	int iRet = 0 ;
 	eval_value value ;
 	// Bit 0
-	value.setFloatValue(0.0);
+	value.setDoubleValue(0.0);
 	value = forgesight_get_io_status(objThreadCntrolBlock, (char *)UI_PROGRAM_SELECTION_1);
-	if(value.getFloatValue() != 0.0)   iRet = iRet + 1 ;
+	if(value.getDoubleValue() != 0.0)   iRet = iRet + 1 ;
 	// Bit 1
-	value.setFloatValue(0.0);
+	value.setDoubleValue(0.0);
 	value = forgesight_get_io_status(objThreadCntrolBlock, (char *)UI_PROGRAM_SELECTION_2);
-	if(value.getFloatValue() != 0.0)   iRet = iRet + 2 ;
+	if(value.getDoubleValue() != 0.0)   iRet = iRet + 2 ;
 	// Bit 2
-	value.setFloatValue(0.0);
+	value.setDoubleValue(0.0);
 	value = forgesight_get_io_status(objThreadCntrolBlock, (char *)UI_PROGRAM_SELECTION_3);
-	if(value.getFloatValue() != 0.0)   iRet = iRet + 4 ;
+	if(value.getDoubleValue() != 0.0)   iRet = iRet + 4 ;
 	// Bit 3
-	value.setFloatValue(0.0);
+	value.setDoubleValue(0.0);
 	value = forgesight_get_io_status(objThreadCntrolBlock, (char *)UI_PROGRAM_SELECTION_4);
-	if(value.getFloatValue() != 0.0)   iRet = iRet + 8 ;
+	if(value.getDoubleValue() != 0.0)   iRet = iRet + 8 ;
 	// Bit 4
-	value.setFloatValue(0.0);
+	value.setDoubleValue(0.0);
 	value = forgesight_get_io_status(objThreadCntrolBlock, (char *)UI_PROGRAM_SELECTION_5);
-	if(value.getFloatValue() != 0.0)   iRet = iRet + 16 ;
+	if(value.getDoubleValue() != 0.0)   iRet = iRet + 16 ;
 	// Bit 5
-	value.setFloatValue(0.0);
+	value.setDoubleValue(0.0);
 	value = forgesight_get_io_status(objThreadCntrolBlock, (char *)UI_PROGRAM_SELECTION_6);
-	if(value.getFloatValue() != 0.0)   iRet = iRet + 32 ;
+	if(value.getDoubleValue() != 0.0)   iRet = iRet + 32 ;
 #if 0
 	// Bit 6
-	value.setFloatValue(0.0);
+	value.setDoubleValue(0.0);
 	value = forgesight_get_io_status(objThreadCntrolBlock, "ui[6]");
-	if(value.getFloatValue() != 0.0)   iRet = iRet + 64 ;
+	if(value.getDoubleValue() != 0.0)   iRet = iRet + 64 ;
 	// Bit 7
-	value.setFloatValue(0.0);
+	value.setDoubleValue(0.0);
 	value = forgesight_get_io_status(objThreadCntrolBlock, "ui[7]");
-	if(value.getFloatValue() != 0.0)   iRet = iRet + 128 ;
+	if(value.getDoubleValue() != 0.0)   iRet = iRet + 128 ;
 #endif
 	return iRet ;
 }
@@ -111,7 +111,7 @@ static void clear_program_selection_value(
 	int iRet = 0 ;
 	eval_value value ;
 	// Bit 0
-	value.setFloatValue(0.0);
+	value.setDoubleValue(0.0);
 	forgesight_set_io_status(objThreadCntrolBlock, (char *)UI_PROGRAM_SELECTION_1, value);
 	// Bit 1
 	forgesight_set_io_status(objThreadCntrolBlock, (char *)UI_PROGRAM_SELECTION_2, value);
@@ -136,8 +136,8 @@ static void set_selection_confirm_value(
 {
 	int iRet = 0 ;
 	eval_value valueOn , valueOff;
-	valueOn.setFloatValue(1.0);
-	valueOff.setFloatValue(0.0);
+	valueOn.setDoubleValue(1.0);
+	valueOff.setDoubleValue(0.0);
 	// Bit 0
 	if (iUI & 1)
 		forgesight_set_io_status(objThreadCntrolBlock, (char *)UO_SELECTION_CONFIRM_1, valueOn);
@@ -176,13 +176,13 @@ static void set_selection_confirm_value(
 	iUI >>= 1;
 #if 0
 	// Bit 6
-	value.setFloatValue(0.0);
+	value.setDoubleValue(0.0);
 	value = forgesight_get_io_status("ui[6]");
-	if(value.getFloatValue() != 0.0)   iRet = iRet + 64 ;
+	if(value.getDoubleValue() != 0.0)   iRet = iRet + 64 ;
 	// Bit 7
-	value.setFloatValue(0.0);
+	value.setDoubleValue(0.0);
 	value = forgesight_get_io_status("ui[7]");
-	if(value.getFloatValue() != 0.0)   iRet = iRet + 128 ;
+	if(value.getDoubleValue() != 0.0)   iRet = iRet + 128 ;
 #endif
 }
 
@@ -192,7 +192,7 @@ static void clear_selection_confirm_value(
 	int iRet = 0 ;
 	eval_value value ;
 	// Bit 0
-	value.setFloatValue(0.0);
+	value.setDoubleValue(0.0);
 	forgesight_set_io_status(objThreadCntrolBlock, (char *)UO_SELECTION_CONFIRM_1, value);
 	// Bit 1
 	forgesight_set_io_status(objThreadCntrolBlock, (char *)UO_SELECTION_CONFIRM_2, value);
@@ -227,9 +227,9 @@ void* launch_code_thread(void* arg)
 	{
 		// According to chapter 2.4 in the Document(0110401110300)
 		// Step1: Get Selection Strobe pulse
-		value.setFloatValue(0.0);
+		value.setDoubleValue(0.0);
 		value = forgesight_get_io_status(objThdCtrlBlockPtr, (char *)UI_SELECTION_STROBE);
-		if(value.getFloatValue() != 0.0)
+		if(value.getDoubleValue() != 0.0)
 		{
 			bIsSelectionStrobe = true ;
 			// Step2: Get Program Selection 1-6
@@ -237,11 +237,11 @@ void* launch_code_thread(void* arg)
 			// Step3: Response to Selection Confirm
 			set_selection_confirm_value(objThdCtrlBlockPtr, iRet);
 			// Step3: Pull up the Selection Check Request
-			value.setFloatValue(1.0);
+			value.setDoubleValue(1.0);
 			forgesight_set_io_status(objThdCtrlBlockPtr, (char *)UO_SELECTION_CHECK_REQUEST, value);
 #ifdef USE_FAKE_PLC
 			// Step4: Send MPLCS Start
-			value.setFloatValue(1.0);
+			value.setDoubleValue(1.0);
 			forgesight_set_io_status(objThdCtrlBlockPtr, (char *)UI_MPLCS_START, value);
 #endif
 		}
@@ -250,13 +250,13 @@ void* launch_code_thread(void* arg)
 			bIsSelectionStrobe = false ;
 		}
 		// Step5: Find main program
-		value.setFloatValue(0.0);
+		value.setDoubleValue(0.0);
 		value = forgesight_get_io_status(objThdCtrlBlockPtr, (char *)UI_MPLCS_START);
-		if(value.getFloatValue() != 0.0)
+		if(value.getDoubleValue() != 0.0)
 		{
 			std:: string strRet = g_launch_code_mgr_startup_ptr->getProgramByCode(iRet);
 			// Step6: Send MPLCS Start Done
-			value.setFloatValue(1.0);
+			value.setDoubleValue(1.0);
 			forgesight_set_io_status(objThdCtrlBlockPtr, (char *)UO_MPLCS_START_DONE, value);
 			if(strRet != "")
 			{
@@ -280,10 +280,10 @@ void* launch_code_thread(void* arg)
 			}
 #ifdef USE_FAKE_PLC
 			// Step7: Pull off the Selection Strobe
-			value.setFloatValue(0.0);
+			value.setDoubleValue(0.0);
 			forgesight_set_io_status(objThdCtrlBlockPtr, (char *)UI_SELECTION_STROBE, value);
 			// Step7: Pull off the MPLCS Start
-			value.setFloatValue(0.0);
+			value.setDoubleValue(0.0);
 			forgesight_set_io_status(objThdCtrlBlockPtr, (char *)UI_MPLCS_START, value);
 			// Step7: Pull off the Program Selection
 			clear_program_selection_value(objThdCtrlBlockPtr);
@@ -292,12 +292,12 @@ void* launch_code_thread(void* arg)
 		// SelectionStrobe was pulled up
 		if(bIsSelectionStrobe)
 		{
-			value.setFloatValue(0.0);
+			value.setDoubleValue(0.0);
 			value = forgesight_get_io_status(objThdCtrlBlockPtr, (char *)UI_SELECTION_STROBE);
 			// SelectionStrobe was pulled up and disappears now.
-			if(value.getFloatValue() == 0.0)
+			if(value.getDoubleValue() == 0.0)
 			{
-				value.setFloatValue(0.0);
+				value.setDoubleValue(0.0);
 				// Step 8: Pull down Selection Check Request
 				forgesight_set_io_status(objThdCtrlBlockPtr, (char *)UO_SELECTION_CHECK_REQUEST, value);
 				// Step 8: Pull down Selection Confirm 

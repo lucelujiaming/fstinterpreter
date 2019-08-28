@@ -219,7 +219,7 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 		{
 			additionalInfomation.type = ACC ;
 			get_exp(objThreadCntrolBlock, &value, &boolValue);
-			int speed = (int)value.getFloatValue();
+			int speed = (int)value.getDoubleValue();
 			additionalInfomation.acc_speed = speed ;
 			iCount++ ;
 			objThreadCntrolBlock->instrSet->target.acc = (float)speed / 100 ;
@@ -264,11 +264,11 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 					return 0 ;
 				}
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				additionalInfomation.offset.pr_reg.index = (int)value.getFloatValue();
+				additionalInfomation.offset.pr_reg.index = (int)value.getDoubleValue();
 				// 
 				memset(var, 0x00, 80);
 				// NOTICE: lower case
-				sprintf(var, "pr[%d]", (int)value.getFloatValue());
+				sprintf(var, "pr[%d]", (int)value.getDoubleValue());
 				result = find_var(objThreadCntrolBlock, var);
 				if(result.hasType(TYPE_JOINT) == TYPE_JOINT)
 				{
@@ -325,9 +325,9 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 						return 0 ;
 					}
 					get_exp(objThreadCntrolBlock, &value, &boolValue);
-					additionalInfomation.offset.uf_reg.index = (int)value.getFloatValue();
+					additionalInfomation.offset.uf_reg.index = (int)value.getDoubleValue();
 					//
-					objFrameOffsetPtr->offset_frame_id = (int)value.getFloatValue();
+					objFrameOffsetPtr->offset_frame_id = (int)value.getDoubleValue();
 					//
 					get_token(objThreadCntrolBlock);
 					if(*(objThreadCntrolBlock->token) != ']') {
@@ -347,9 +347,9 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 						return 0 ;
 					}
 					get_exp(objThreadCntrolBlock, &value, &boolValue);
-					additionalInfomation.offset.uf_reg.index = (int)value.getFloatValue();
+					additionalInfomation.offset.uf_reg.index = (int)value.getDoubleValue();
 					//
-					objFrameOffsetPtr->offset_frame_id = (int)value.getFloatValue();
+					objFrameOffsetPtr->offset_frame_id = (int)value.getDoubleValue();
 					//
 					get_token(objThreadCntrolBlock);
 					if(*(objThreadCntrolBlock->token) != ']') {
@@ -380,11 +380,11 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-				additionalInfomation.offset.pose_target.point_.x_ = value.getFloatValue();
-				objFrameOffsetPtr->offset_pose.point_.x_ = value.getFloatValue();
+				additionalInfomation.offset.pose_target.point_.x_ = value.getDoubleValue();
+				objFrameOffsetPtr->offset_pose.point_.x_ = value.getDoubleValue();
 #else
-				additionalInfomation.offset.pose_target.position.x = value.getFloatValue();
-				objFrameOffsetPtr->offset_pose.position.x = value.getFloatValue();
+				additionalInfomation.offset.pose_target.position.x = value.getDoubleValue();
+				objFrameOffsetPtr->offset_pose.position.x = value.getDoubleValue();
 #endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ',')
@@ -392,11 +392,11 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-				additionalInfomation.offset.pose_target.point_.y_ = value.getFloatValue();
-				objFrameOffsetPtr->offset_pose.point_.y_ = value.getFloatValue();
+				additionalInfomation.offset.pose_target.point_.y_ = value.getDoubleValue();
+				objFrameOffsetPtr->offset_pose.point_.y_ = value.getDoubleValue();
 #else
-				additionalInfomation.offset.pose_target.position.y = value.getFloatValue();
-				objFrameOffsetPtr->offset_pose.position.y = value.getFloatValue();
+				additionalInfomation.offset.pose_target.position.y = value.getDoubleValue();
+				objFrameOffsetPtr->offset_pose.position.y = value.getDoubleValue();
 #endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ',')
@@ -404,11 +404,11 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-				additionalInfomation.offset.pose_target.point_.z_ = value.getFloatValue();
-				objFrameOffsetPtr->offset_pose.point_.z_ = value.getFloatValue();
+				additionalInfomation.offset.pose_target.point_.z_ = value.getDoubleValue();
+				objFrameOffsetPtr->offset_pose.point_.z_ = value.getDoubleValue();
 #else
-				additionalInfomation.offset.pose_target.position.z = value.getFloatValue();
-				objFrameOffsetPtr->offset_pose.position.z = value.getFloatValue();
+				additionalInfomation.offset.pose_target.position.z = value.getDoubleValue();
+				objFrameOffsetPtr->offset_pose.position.z = value.getDoubleValue();
 #endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ',')
@@ -416,11 +416,11 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-				additionalInfomation.offset.pose_target.euler_.a_ = value.getFloatValue();
-				objFrameOffsetPtr->offset_pose.euler_.a_ = value.getFloatValue();
+				additionalInfomation.offset.pose_target.euler_.a_ = value.getDoubleValue();
+				objFrameOffsetPtr->offset_pose.euler_.a_ = value.getDoubleValue();
 #else
-				additionalInfomation.offset.pose_target.orientation.a = value.getFloatValue();
-				objFrameOffsetPtr->offset_pose.orientation.a = value.getFloatValue();
+				additionalInfomation.offset.pose_target.orientation.a = value.getDoubleValue();
+				objFrameOffsetPtr->offset_pose.orientation.a = value.getDoubleValue();
 #endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ',')
@@ -428,11 +428,11 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-				additionalInfomation.offset.pose_target.euler_.b_ = value.getFloatValue();
-				objFrameOffsetPtr->offset_pose.euler_.b_ = value.getFloatValue();
+				additionalInfomation.offset.pose_target.euler_.b_ = value.getDoubleValue();
+				objFrameOffsetPtr->offset_pose.euler_.b_ = value.getDoubleValue();
 #else
-				additionalInfomation.offset.pose_target.orientation.b = value.getFloatValue();
-				objFrameOffsetPtr->offset_pose.orientation.b = value.getFloatValue();
+				additionalInfomation.offset.pose_target.orientation.b = value.getDoubleValue();
+				objFrameOffsetPtr->offset_pose.orientation.b = value.getDoubleValue();
 #endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ',')
@@ -440,11 +440,11 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-				additionalInfomation.offset.pose_target.euler_.c_ = value.getFloatValue();
-				objFrameOffsetPtr->offset_pose.euler_.c_ = value.getFloatValue();
+				additionalInfomation.offset.pose_target.euler_.c_ = value.getDoubleValue();
+				objFrameOffsetPtr->offset_pose.euler_.c_ = value.getDoubleValue();
 #else
-				additionalInfomation.offset.pose_target.orientation.c = value.getFloatValue();
-				objFrameOffsetPtr->offset_pose.orientation.c = value.getFloatValue();
+				additionalInfomation.offset.pose_target.orientation.c = value.getDoubleValue();
+				objFrameOffsetPtr->offset_pose.orientation.c = value.getDoubleValue();
 #endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ')')
@@ -463,9 +463,9 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 						return 0 ;
 					}
 					get_exp(objThreadCntrolBlock, &value, &boolValue);
-					additionalInfomation.offset.uf_reg.index = (int)value.getFloatValue();
+					additionalInfomation.offset.uf_reg.index = (int)value.getDoubleValue();
 					//
-					objFrameOffsetPtr->offset_frame_id = (int)value.getFloatValue();
+					objFrameOffsetPtr->offset_frame_id = (int)value.getDoubleValue();
 					//
 					get_token(objThreadCntrolBlock);
 					if(*(objThreadCntrolBlock->token) != ']') {
@@ -485,9 +485,9 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 						return 0 ;
 					}
 					get_exp(objThreadCntrolBlock, &value, &boolValue);
-					additionalInfomation.offset.uf_reg.index = (int)value.getFloatValue();
+					additionalInfomation.offset.uf_reg.index = (int)value.getDoubleValue();
 					//
-					objFrameOffsetPtr->offset_frame_id = (int)value.getFloatValue();
+					objFrameOffsetPtr->offset_frame_id = (int)value.getDoubleValue();
 					//
 					get_token(objThreadCntrolBlock);
 					if(*(objThreadCntrolBlock->token) != ']') {
@@ -519,11 +519,11 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 				//
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-				additionalInfomation.offset.joint_target.j1_ = value.getFloatValue();
-				objFrameOffsetPtr->offset_joint.j1_ = value.getFloatValue();
+				additionalInfomation.offset.joint_target.j1_ = value.getDoubleValue();
+				objFrameOffsetPtr->offset_joint.j1_ = value.getDoubleValue();
 #else
-				additionalInfomation.offset.joint_target.j1 = value.getFloatValue();
-				objFrameOffsetPtr->offset_joint.j1 = value.getFloatValue();
+				additionalInfomation.offset.joint_target.j1 = value.getDoubleValue();
+				objFrameOffsetPtr->offset_joint.j1 = value.getDoubleValue();
 #endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ',')
@@ -531,11 +531,11 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-				additionalInfomation.offset.joint_target.j2_ = value.getFloatValue();
-				objFrameOffsetPtr->offset_joint.j2_ = value.getFloatValue();
+				additionalInfomation.offset.joint_target.j2_ = value.getDoubleValue();
+				objFrameOffsetPtr->offset_joint.j2_ = value.getDoubleValue();
 #else
-				additionalInfomation.offset.joint_target.j2 = value.getFloatValue();
-				objFrameOffsetPtr->offset_joint.j2 = value.getFloatValue();
+				additionalInfomation.offset.joint_target.j2 = value.getDoubleValue();
+				objFrameOffsetPtr->offset_joint.j2 = value.getDoubleValue();
 #endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ',')
@@ -543,11 +543,11 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-				additionalInfomation.offset.joint_target.j3_ = value.getFloatValue();
-				objFrameOffsetPtr->offset_joint.j3_ = value.getFloatValue();
+				additionalInfomation.offset.joint_target.j3_ = value.getDoubleValue();
+				objFrameOffsetPtr->offset_joint.j3_ = value.getDoubleValue();
 #else
-				additionalInfomation.offset.joint_target.j3 = value.getFloatValue();
-				objFrameOffsetPtr->offset_joint.j3 = value.getFloatValue();
+				additionalInfomation.offset.joint_target.j3 = value.getDoubleValue();
+				objFrameOffsetPtr->offset_joint.j3 = value.getDoubleValue();
 #endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ',')
@@ -555,11 +555,11 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-				additionalInfomation.offset.joint_target.j4_ = value.getFloatValue();
-				objFrameOffsetPtr->offset_joint.j4_ = value.getFloatValue();
+				additionalInfomation.offset.joint_target.j4_ = value.getDoubleValue();
+				objFrameOffsetPtr->offset_joint.j4_ = value.getDoubleValue();
 #else
-				additionalInfomation.offset.joint_target.j4 = value.getFloatValue();
-				objFrameOffsetPtr->offset_joint.j4 = value.getFloatValue();
+				additionalInfomation.offset.joint_target.j4 = value.getDoubleValue();
+				objFrameOffsetPtr->offset_joint.j4 = value.getDoubleValue();
 #endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ',')
@@ -567,11 +567,11 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-				additionalInfomation.offset.joint_target.j5_ = value.getFloatValue();
-				objFrameOffsetPtr->offset_joint.j5_ = value.getFloatValue();
+				additionalInfomation.offset.joint_target.j5_ = value.getDoubleValue();
+				objFrameOffsetPtr->offset_joint.j5_ = value.getDoubleValue();
 #else
-				additionalInfomation.offset.joint_target.j5 = value.getFloatValue();
-				objFrameOffsetPtr->offset_joint.j5 = value.getFloatValue();
+				additionalInfomation.offset.joint_target.j5 = value.getDoubleValue();
+				objFrameOffsetPtr->offset_joint.j5 = value.getDoubleValue();
 #endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ',')
@@ -579,11 +579,11 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 				
 			    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-				additionalInfomation.offset.joint_target.j6_ = value.getFloatValue();
-				objFrameOffsetPtr->offset_joint.j6_ = value.getFloatValue();
+				additionalInfomation.offset.joint_target.j6_ = value.getDoubleValue();
+				objFrameOffsetPtr->offset_joint.j6_ = value.getDoubleValue();
 #else
-				additionalInfomation.offset.joint_target.j6 = value.getFloatValue();
-				objFrameOffsetPtr->offset_joint.j6 = value.getFloatValue();
+				additionalInfomation.offset.joint_target.j6 = value.getDoubleValue();
+				objFrameOffsetPtr->offset_joint.j6 = value.getDoubleValue();
 #endif
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ')')
@@ -602,9 +602,9 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 						return 0 ;
 					}
 					get_exp(objThreadCntrolBlock, &value, &boolValue);
-					additionalInfomation.offset.uf_reg.index = (int)value.getFloatValue();
+					additionalInfomation.offset.uf_reg.index = (int)value.getDoubleValue();
 					//
-					objFrameOffsetPtr->offset_frame_id = (int)value.getFloatValue();
+					objFrameOffsetPtr->offset_frame_id = (int)value.getDoubleValue();
 					//
 					get_token(objThreadCntrolBlock);
 					if(*(objThreadCntrolBlock->token) != ']') {
@@ -624,9 +624,9 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 						return 0 ;
 					}
 					get_exp(objThreadCntrolBlock, &value, &boolValue);
-					additionalInfomation.offset.uf_reg.index = (int)value.getFloatValue();
+					additionalInfomation.offset.uf_reg.index = (int)value.getDoubleValue();
 					//
-					objFrameOffsetPtr->offset_frame_id = (int)value.getFloatValue();
+					objFrameOffsetPtr->offset_frame_id = (int)value.getDoubleValue();
 					//
 					get_token(objThreadCntrolBlock);
 					if(*(objThreadCntrolBlock->token) != ']') {
@@ -646,7 +646,7 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 		{
 			additionalInfomation.type = EV ;
 			get_exp(objThreadCntrolBlock, &value, &boolValue);
-		//	int speed = (int)value.getFloatValue();
+		//	int speed = (int)value.getDoubleValue();
 			iCount++ ;
 		}
 		// 7.	Ind_EV非同步附加轴速度指令（低优先级）
@@ -654,7 +654,7 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 		{
 			additionalInfomation.type = IND_EV ;
 			get_exp(objThreadCntrolBlock, &value, &boolValue);
-		//	int speed = (int)value.getFloatValue();
+		//	int speed = (int)value.getDoubleValue();
 			iCount++ ;
 		}
 		// 8.	TB先执行指令
@@ -670,7 +670,7 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 				additionalInfomation.type = DB ;
 			
 			get_exp(objThreadCntrolBlock, &value, &boolValue);
-			additionalInfomation.execute.range = value.getFloatValue() ;
+			additionalInfomation.execute.range = value.getDoubleValue() ;
 			
 			get_token(objThreadCntrolBlock);
 			if(strcmp(objThreadCntrolBlock->token, "assign") == 0)
@@ -686,7 +686,7 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 					return 0 ;
 				}
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				additionalInfomation.execute.assignment.index = (int)value.getFloatValue();
+				additionalInfomation.execute.assignment.index = (int)value.getDoubleValue();
 				get_token(objThreadCntrolBlock);
 				if(*(objThreadCntrolBlock->token) != ']') {
 					return 0 ;
@@ -697,7 +697,7 @@ int getAditionalInfomation(struct thread_control_block* objThreadCntrolBlock,
 					return 0 ;
 				}
                 get_exp(objThreadCntrolBlock, &value, &boolValue);
-				sprintf(additionalInfomation.execute.assignment.value, "%f", value.getFloatValue());
+				sprintf(additionalInfomation.execute.assignment.value, "%f", value.getDoubleValue());
 			}
 			else if(strcmp(objThreadCntrolBlock->token, "call") == 0)
 			{
@@ -993,56 +993,56 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 //		return 0;
 //	}
 //	else 
-	if((value.hasType(TYPE_INT) == TYPE_INT) || (value.hasType(TYPE_FLOAT) == TYPE_FLOAT))
+	if((value.hasType(TYPE_INT) == TYPE_INT) || (value.hasType(TYPE_DOUBLE) == TYPE_DOUBLE))
 	{
 		instr.target.target.type      = COORDINATE_JOINT ;
 #ifndef WIN32
-		instr.target.target.joint.j1_ = value.getFloatValue();
+		instr.target.target.joint.j1_ = value.getDoubleValue();
 #else
-		instr.target.target.joint.j1 = value.getFloatValue();
+		instr.target.target.joint.j1 = value.getDoubleValue();
 #endif
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.target.joint.j2_ = value.getFloatValue();
+		instr.target.target.joint.j2_ = value.getDoubleValue();
 #else
-		instr.target.target.joint.j2 = value.getFloatValue();
+		instr.target.target.joint.j2 = value.getDoubleValue();
 #endif
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.target.joint.j3_ = value.getFloatValue();
+		instr.target.target.joint.j3_ = value.getDoubleValue();
 #else
-		instr.target.target.joint.j3 = value.getFloatValue();
+		instr.target.target.joint.j3 = value.getDoubleValue();
 #endif
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.target.joint.j4_ = value.getFloatValue();
+		instr.target.target.joint.j4_ = value.getDoubleValue();
 #else
-		instr.target.target.joint.j4 = value.getFloatValue();
+		instr.target.target.joint.j4 = value.getDoubleValue();
 #endif
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.target.joint.j5_ = value.getFloatValue();
+		instr.target.target.joint.j5_ = value.getDoubleValue();
 #else
-		instr.target.target.joint.j5 = value.getFloatValue();
+		instr.target.target.joint.j5 = value.getDoubleValue();
 #endif
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.target.joint.j6_ = value.getFloatValue();
+		instr.target.target.joint.j6_ = value.getDoubleValue();
 #else
-		instr.target.target.joint.j6 = value.getFloatValue();
+		instr.target.target.joint.j6 = value.getDoubleValue();
 #endif
 		instr.target.user_frame_id = instr.target.tool_frame_id = -1 ;
-	    FST_INFO("value.getIntType() == TYPE_FLOAT in MovJ");
+	    FST_INFO("value.getIntType() == TYPE_DOUBLE in MovJ");
 	}
 	else if(value.hasType(TYPE_POSE) == TYPE_POSE)
 	{
@@ -1132,8 +1132,8 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 
     get_exp(objThreadCntrolBlock, &value, &boolValue);
 	// Divide 100 as percent.
-	FST_INFO("get_token =  '%f'", value.getFloatValue());
-    instr.target.vel        = value.getFloatValue() / 100;
+	FST_INFO("get_token =  '%f'", value.getDoubleValue());
+    instr.target.vel        = value.getDoubleValue() / 100;
 	
 	get_token(objThreadCntrolBlock);
 	if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_CNT) == 0)
@@ -1148,7 +1148,7 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	    else
 	    {
 			// 如果是FINE语句CNT应为-1
-	        if(value.getFloatValue() < 0) // == -1
+	        if(value.getDoubleValue() < 0) // == -1
 	    	{
 				instr.target.smooth_type = SMOOTH_NONE;
 	        	instr.target.cnt = -1;
@@ -1158,7 +1158,7 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			{
 				// 速度平滑[0.0, 1.0]，
 				instr.target.smooth_type = SMOOTH_VELOCITY;
-				instr.target.cnt = value.getFloatValue() / 100;
+				instr.target.cnt = value.getDoubleValue() / 100;
 			}
 	    }
     }
@@ -1168,7 +1168,7 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		{
 			// 距离平滑[0.0, +∞]，
 			get_exp(objThreadCntrolBlock, &value, &boolValue);
-			if(value.getFloatValue() < 0) // == -1
+			if(value.getDoubleValue() < 0) // == -1
 			{
 				instr.target.smooth_type = SMOOTH_NONE;
 				instr.target.cnt = -1;
@@ -1177,14 +1177,14 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			else 
 			{
 				instr.target.smooth_type = SMOOTH_DISTANCE;
-        		instr.target.cnt = value.getFloatValue() ; 
+        		instr.target.cnt = value.getDoubleValue() ; 
 			}
 		}
 		else if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_SV) == 0)
 		{
 			// 速度平滑[0.0, 1.0]，
     		get_exp(objThreadCntrolBlock, &value, &boolValue);
-			if(value.getFloatValue() < 0) // == -1
+			if(value.getDoubleValue() < 0) // == -1
 			{
 				instr.target.smooth_type = SMOOTH_NONE;
 				instr.target.cnt = -1;
@@ -1193,7 +1193,7 @@ int call_MoveJ(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			else 
 			{
 				instr.target.smooth_type = SMOOTH_VELOCITY;
-				instr.target.cnt = value.getFloatValue() / 100;
+				instr.target.cnt = value.getDoubleValue() / 100;
 			}
 		}
 		else 
@@ -1433,53 +1433,53 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 //		return 0;
 //	}
 //	else 
-	if((value.hasType(TYPE_INT) == TYPE_INT) || (value.hasType(TYPE_FLOAT) == TYPE_FLOAT))
+	if((value.hasType(TYPE_INT) == TYPE_INT) || (value.hasType(TYPE_DOUBLE) == TYPE_DOUBLE))
 	{
 		instr.target.target.type      = COORDINATE_CARTESIAN ;
 #ifndef WIN32
-		instr.target.target.pose.pose.point_.x_    = value.getFloatValue();
+		instr.target.target.pose.pose.point_.x_    = value.getDoubleValue();
 #else
-		instr.target.target.pose.pose.position.x    = value.getFloatValue();
+		instr.target.target.pose.pose.position.x    = value.getDoubleValue();
 #endif
 		get_token(objThreadCntrolBlock);
 		
 		get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.target.pose.pose.point_.y_    = value.getFloatValue();
+		instr.target.target.pose.pose.point_.y_    = value.getDoubleValue();
 #else
-		instr.target.target.pose.pose.position.y    = value.getFloatValue();
+		instr.target.target.pose.pose.position.y    = value.getDoubleValue();
 #endif
 		get_token(objThreadCntrolBlock);
 		
 		get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.target.pose.pose.point_.z_    = value.getFloatValue();
+		instr.target.target.pose.pose.point_.z_    = value.getDoubleValue();
 #else
-		instr.target.target.pose.pose.position.z    = value.getFloatValue();
+		instr.target.target.pose.pose.position.z    = value.getDoubleValue();
 #endif
 		get_token(objThreadCntrolBlock);
 		
 		get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.target.pose.pose.euler_.a_ = value.getFloatValue();
+		instr.target.target.pose.pose.euler_.a_ = value.getDoubleValue();
 #else
-		instr.target.target.pose.pose.orientation.a = value.getFloatValue();
+		instr.target.target.pose.pose.orientation.a = value.getDoubleValue();
 #endif
 		get_token(objThreadCntrolBlock);
 		
 		get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.target.pose.pose.euler_.b_ = value.getFloatValue();
+		instr.target.target.pose.pose.euler_.b_ = value.getDoubleValue();
 #else
-		instr.target.target.pose.pose.orientation.b = value.getFloatValue();
+		instr.target.target.pose.pose.orientation.b = value.getDoubleValue();
 #endif
 		get_token(objThreadCntrolBlock);
 		
 		get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.target.pose.pose.euler_.c_ = value.getFloatValue();
+		instr.target.target.pose.pose.euler_.c_ = value.getDoubleValue();
 #else
-		instr.target.target.pose.pose.orientation.c = value.getFloatValue();
+		instr.target.target.pose.pose.orientation.c = value.getDoubleValue();
 #endif
 
 		instr.target.user_frame_id = instr.target.tool_frame_id = -1 ;
@@ -1561,14 +1561,14 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	
 	get_token(objThreadCntrolBlock);
     get_exp(objThreadCntrolBlock, &value, &boolValue);
-    instr.target.vel                  = value.getFloatValue();
+    instr.target.vel                  = value.getDoubleValue();
 
 	get_token(objThreadCntrolBlock);
 	if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_CNT) == 0)
     {
 		// 平滑参数的范围 ：
     	get_exp(objThreadCntrolBlock, &value, &boolValue);
-	    FST_INFO("instr.target.cnt = %f setInstruction.", value.getFloatValue());
+	    FST_INFO("instr.target.cnt = %f setInstruction.", value.getDoubleValue());
     	if(objThreadCntrolBlock->prog_mode == STEP_MODE)
     	{
 			instr.target.smooth_type = SMOOTH_NONE;
@@ -1577,7 +1577,7 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	    else
 	    {
 			// 如果是FINE语句CNT应为-1
-	        if(value.getFloatValue() < 0) // == -1
+	        if(value.getDoubleValue() < 0) // == -1
 	    	{
 				instr.target.smooth_type = SMOOTH_NONE;
 	        	instr.target.cnt = -1.0000;
@@ -1587,7 +1587,7 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			{
 				// 速度平滑[0.0, 1.0]，
 				instr.target.smooth_type = SMOOTH_VELOCITY;
-				instr.target.cnt = value.getFloatValue() / 100;
+				instr.target.cnt = value.getDoubleValue() / 100;
 			}
 	    }
     }
@@ -1598,7 +1598,7 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			instr.target.smooth_type = SMOOTH_DISTANCE;
 			// 距离平滑[0.0, +∞]，
 			get_exp(objThreadCntrolBlock, &value, &boolValue);
-			if(value.getFloatValue() < 0) // == -1
+			if(value.getDoubleValue() < 0) // == -1
 			{
 				instr.target.smooth_type = SMOOTH_NONE;
 				instr.target.cnt = -1;
@@ -1607,7 +1607,7 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			else 
 			{
 				instr.target.smooth_type = SMOOTH_DISTANCE;
-        		instr.target.cnt = value.getFloatValue() ; 
+        		instr.target.cnt = value.getDoubleValue() ; 
 			}
 		}
 		else if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_SV) == 0)
@@ -1615,7 +1615,7 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			instr.target.smooth_type = SMOOTH_VELOCITY;
 			// 速度平滑[0.0, 1.0]，
     		get_exp(objThreadCntrolBlock, &value, &boolValue);
-			if(value.getFloatValue() < 0) // == -1
+			if(value.getDoubleValue() < 0) // == -1
 			{
 				instr.target.smooth_type = SMOOTH_NONE;
 				instr.target.cnt = -1;
@@ -1624,7 +1624,7 @@ int call_MoveL(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			else 
 			{
 				instr.target.smooth_type = SMOOTH_VELOCITY;
-				instr.target.cnt = value.getFloatValue() / 100;
+				instr.target.cnt = value.getDoubleValue() / 100;
 			}
 		}
 		else 
@@ -1858,53 +1858,53 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 //		return 0;
 //	}
 //	else 
-	if((value.hasType(TYPE_INT) == TYPE_INT) || (value.hasType(TYPE_FLOAT) == TYPE_FLOAT))
+	if((value.hasType(TYPE_INT) == TYPE_INT) || (value.hasType(TYPE_DOUBLE) == TYPE_DOUBLE))
 	{
 		instr.target.via.type      = COORDINATE_CARTESIAN ;
 #ifndef WIN32
-		instr.target.via.pose.pose.point_.x_    = value.getFloatValue();
+		instr.target.via.pose.pose.point_.x_    = value.getDoubleValue();
 #else
-		instr.target.via.pose.pose.position.x    = value.getFloatValue();
+		instr.target.via.pose.pose.position.x    = value.getDoubleValue();
 #endif	
 		get_token(objThreadCntrolBlock);
 
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.via.pose.pose.point_.y_    = value.getFloatValue();
+		instr.target.via.pose.pose.point_.y_    = value.getDoubleValue();
 #else
-		instr.target.via.pose.pose.position.y    = value.getFloatValue();
+		instr.target.via.pose.pose.position.y    = value.getDoubleValue();
 #endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.via.pose.pose.point_.z_    = value.getFloatValue();
+		instr.target.via.pose.pose.point_.z_    = value.getDoubleValue();
 #else
-		instr.target.via.pose.pose.position.z    = value.getFloatValue();
+		instr.target.via.pose.pose.position.z    = value.getDoubleValue();
 #endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.via.pose.pose.euler_.a_ = value.getFloatValue();
+		instr.target.via.pose.pose.euler_.a_ = value.getDoubleValue();
 #else
-		instr.target.via.pose.pose.orientation.a = value.getFloatValue();
+		instr.target.via.pose.pose.orientation.a = value.getDoubleValue();
 #endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.via.pose.pose.euler_.b_ = value.getFloatValue();
+		instr.target.via.pose.pose.euler_.b_ = value.getDoubleValue();
 #else
-		instr.target.via.pose.pose.orientation.b = value.getFloatValue();
+		instr.target.via.pose.pose.orientation.b = value.getDoubleValue();
 #endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.via.pose.pose.euler_.c_ = value.getFloatValue();
+		instr.target.via.pose.pose.euler_.c_ = value.getDoubleValue();
 #else
-		instr.target.via.pose.pose.orientation.c = value.getFloatValue();
+		instr.target.via.pose.pose.orientation.c = value.getDoubleValue();
 #endif	
 		instr.target.user_frame_id = instr.target.tool_frame_id = -1 ;
 	}
@@ -1937,53 +1937,53 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 //    	return 0;
 //	}
 //	else 
-	if((value.hasType(TYPE_INT) == TYPE_INT) || (value.hasType(TYPE_FLOAT) == TYPE_FLOAT))
+	if((value.hasType(TYPE_INT) == TYPE_INT) || (value.hasType(TYPE_DOUBLE) == TYPE_DOUBLE))
 	{
 		instr.target.target.type      = COORDINATE_CARTESIAN ;
 #ifndef WIN32
-		instr.target.target.pose.pose.point_.x_    = value.getFloatValue();
+		instr.target.target.pose.pose.point_.x_    = value.getDoubleValue();
 #else
-		instr.target.target.pose.pose.position.x    = value.getFloatValue();
+		instr.target.target.pose.pose.position.x    = value.getDoubleValue();
 #endif	
 		get_token(objThreadCntrolBlock);
 
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.target.pose.pose.point_.y_    = value.getFloatValue();
+		instr.target.target.pose.pose.point_.y_    = value.getDoubleValue();
 #else
-		instr.target.target.pose.pose.position.y    = value.getFloatValue();
+		instr.target.target.pose.pose.position.y    = value.getDoubleValue();
 #endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.target.pose.pose.point_.z_    = value.getFloatValue();
+		instr.target.target.pose.pose.point_.z_    = value.getDoubleValue();
 #else
-		instr.target.target.pose.pose.position.z    = value.getFloatValue();
+		instr.target.target.pose.pose.position.z    = value.getDoubleValue();
 #endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.target.pose.pose.euler_.a_ = value.getFloatValue();
+		instr.target.target.pose.pose.euler_.a_ = value.getDoubleValue();
 #else
-		instr.target.target.pose.pose.orientation.a = value.getFloatValue();
+		instr.target.target.pose.pose.orientation.a = value.getDoubleValue();
 #endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.target.pose.pose.euler_.b_ = value.getFloatValue();
+		instr.target.target.pose.pose.euler_.b_ = value.getDoubleValue();
 #else
-		instr.target.target.pose.pose.orientation.b = value.getFloatValue();
+		instr.target.target.pose.pose.orientation.b = value.getDoubleValue();
 #endif	
 		get_token(objThreadCntrolBlock);
 		
 	    get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-		instr.target.target.pose.pose.euler_.c_ = value.getFloatValue();
+		instr.target.target.pose.pose.euler_.c_ = value.getDoubleValue();
 #else
-		instr.target.target.pose.pose.orientation.c = value.getFloatValue();
+		instr.target.target.pose.pose.orientation.c = value.getDoubleValue();
 #endif	
 	}
 	else if(value.hasType(TYPE_POSE) == TYPE_POSE)
@@ -2032,7 +2032,7 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	get_token(objThreadCntrolBlock);
 	
     get_exp(objThreadCntrolBlock, &value, &boolValue);
-    instr.target.vel                  = value.getFloatValue();
+    instr.target.vel                  = value.getDoubleValue();
 
 	get_token(objThreadCntrolBlock);
 	if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_CNT) == 0)
@@ -2047,7 +2047,7 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	    else
 		{
 			// 如果是FINE语句CNT应为-1
-	        if(value.getFloatValue() < 0) // == -1
+	        if(value.getDoubleValue() < 0) // == -1
 	    	{
 				instr.target.smooth_type = SMOOTH_NONE;
 	        	instr.target.cnt = -1.0000;
@@ -2057,7 +2057,7 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			{
 				// 速度平滑[0.0, 1.0]，
 				instr.target.smooth_type = SMOOTH_VELOCITY;
-				instr.target.cnt = value.getFloatValue() / 100;
+				instr.target.cnt = value.getDoubleValue() / 100;
 			}
 	    }
     }
@@ -2068,7 +2068,7 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			instr.target.smooth_type = SMOOTH_DISTANCE;
 			// 距离平滑[0.0, +∞]，
 			get_exp(objThreadCntrolBlock, &value, &boolValue);
-			if(value.getFloatValue() < 0) // == -1
+			if(value.getDoubleValue() < 0) // == -1
 			{
 				instr.target.smooth_type = SMOOTH_NONE;
 				instr.target.cnt = -1;
@@ -2077,7 +2077,7 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			else 
 			{
 				instr.target.smooth_type = SMOOTH_DISTANCE;
-        		instr.target.cnt = value.getFloatValue() ; 
+        		instr.target.cnt = value.getDoubleValue() ; 
 			}
 		}
 		else if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_SV) == 0)
@@ -2085,7 +2085,7 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			instr.target.smooth_type = SMOOTH_VELOCITY;
 			// 速度平滑[0.0, 1.0]，
     		get_exp(objThreadCntrolBlock, &value, &boolValue);
-			if(value.getFloatValue() < 0) // == -1
+			if(value.getDoubleValue() < 0) // == -1
 			{
 				instr.target.smooth_type = SMOOTH_NONE;
 				instr.target.cnt = -1;
@@ -2094,7 +2094,7 @@ int call_MoveC(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			else 
 			{
 				instr.target.smooth_type = SMOOTH_VELOCITY;
-				instr.target.cnt = value.getFloatValue() / 100;
+				instr.target.cnt = value.getDoubleValue() / 100;
 			}
 		}
 		else 
@@ -2425,7 +2425,7 @@ int call_MoveXPos(int iLineNum, struct thread_control_block* objThreadCntrolBloc
 		get_token(objThreadCntrolBlock);
 		if(objThreadCntrolBlock->token[0] == '['){
 			get_exp(objThreadCntrolBlock, &value, &boolValue);
-			instr.target.prPos[prPosIdx] = (int)value.getFloatValue();
+			instr.target.prPos[prPosIdx] = (int)value.getDoubleValue();
 			prPosIdx++;
 			get_token(objThreadCntrolBlock);
 			if(objThreadCntrolBlock->token[0] != ']'){
@@ -2456,14 +2456,14 @@ int call_MoveXPos(int iLineNum, struct thread_control_block* objThreadCntrolBloc
 	// We had jump ","
 	// get_token(objThreadCntrolBlock);
     get_exp(objThreadCntrolBlock, &value, &boolValue);
-    instr.target.vel                  = value.getFloatValue() / 100;
+    instr.target.vel                  = value.getDoubleValue() / 100;
 	
 	get_token(objThreadCntrolBlock);
 	if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_CNT) == 0)
     {
 		// 平滑参数的范围 ：
 		get_exp(objThreadCntrolBlock, &value, &boolValue);
-		FST_INFO("instr.target.cnt = %f setInstruction.", value.getFloatValue());
+		FST_INFO("instr.target.cnt = %f setInstruction.", value.getDoubleValue());
 		if(objThreadCntrolBlock->prog_mode == STEP_MODE)
 		{
 			instr.target.smooth_type = SMOOTH_NONE;
@@ -2472,7 +2472,7 @@ int call_MoveXPos(int iLineNum, struct thread_control_block* objThreadCntrolBloc
 		else
 		{
 			// 如果是FINE语句CNT应为-1
-			if(value.getFloatValue() < 0) // == -1
+			if(value.getDoubleValue() < 0) // == -1
 			{
 				instr.target.smooth_type = SMOOTH_NONE;
 				instr.target.cnt = -1.0000;
@@ -2482,7 +2482,7 @@ int call_MoveXPos(int iLineNum, struct thread_control_block* objThreadCntrolBloc
 			{
 				// 速度平滑[0.0, 1.0]，
 				instr.target.smooth_type = SMOOTH_VELOCITY;
-				instr.target.cnt = value.getFloatValue() / 100;
+				instr.target.cnt = value.getDoubleValue() / 100;
 			}
 		}
     }
@@ -2493,7 +2493,7 @@ int call_MoveXPos(int iLineNum, struct thread_control_block* objThreadCntrolBloc
 			instr.target.smooth_type = SMOOTH_DISTANCE;
 			// 距离平滑[0.0, +∞]，
 			get_exp(objThreadCntrolBlock, &value, &boolValue);
-			if(value.getFloatValue() < 0) // == -1
+			if(value.getDoubleValue() < 0) // == -1
 			{
 				instr.target.smooth_type = SMOOTH_NONE;
 				instr.target.cnt = -1;
@@ -2502,7 +2502,7 @@ int call_MoveXPos(int iLineNum, struct thread_control_block* objThreadCntrolBloc
 			else 
 			{
 				instr.target.smooth_type = SMOOTH_DISTANCE;
-        		instr.target.cnt = value.getFloatValue() ; 
+        		instr.target.cnt = value.getDoubleValue() ; 
 			}
 		}
 		else if(strcmp(objThreadCntrolBlock->token, SMOOTH_TYPE_SV) == 0)
@@ -2510,7 +2510,7 @@ int call_MoveXPos(int iLineNum, struct thread_control_block* objThreadCntrolBloc
 			instr.target.smooth_type = SMOOTH_VELOCITY;
 			// 速度平滑[0.0, 1.0]，
     		get_exp(objThreadCntrolBlock, &value, &boolValue);
-			if(value.getFloatValue() < 0) // == -1
+			if(value.getDoubleValue() < 0) // == -1
 			{
 				instr.target.smooth_type = SMOOTH_NONE;
 				instr.target.cnt = -1;
@@ -2519,7 +2519,7 @@ int call_MoveXPos(int iLineNum, struct thread_control_block* objThreadCntrolBloc
 			else 
 			{
 				instr.target.smooth_type = SMOOTH_VELOCITY;
-				instr.target.cnt = value.getFloatValue() / 100;
+				instr.target.cnt = value.getDoubleValue() / 100;
 			}
 		}
 		else 
@@ -2598,7 +2598,7 @@ int call_UserAlarm(int iLineNum, struct thread_control_block* objThreadCntrolBlo
     int alarmNumber;
 	
     get_exp(objThreadCntrolBlock, &value, &boolValue);
-	alarmNumber = (int)value.getFloatValue() ;
+	alarmNumber = (int)value.getDoubleValue() ;
 	setMessage(alarmNumber);
     find_eol(objThreadCntrolBlock);
     return 1;
@@ -2659,29 +2659,29 @@ int execute_Timer(struct thread_control_block* objThreadCntrolBlock, char *vname
 	}
 	namePtr++ ;
 
-	if(value.getFloatValue() == TIMER_START_VALUE)
+	if(value.getDoubleValue() == TIMER_START_VALUE)
 	{
 		FST_INFO("%d: call_Timer  start", __LINE__);
 		g_structStopWatch[iTimerIdx].start_time = time(0);
-		// value.setFloatValue(0); // 0.0; 
+		// value.setDoubleValue(0); // 0.0; 
 		erase_var(objThreadCntrolBlock, vname);
 		assign_global_var(objThreadCntrolBlock, vname, value); // 0.0);
 	}
-	else if(value.getFloatValue() == TIMER_RESET_VALUE)
+	else if(value.getDoubleValue() == TIMER_RESET_VALUE)
 	{
 		FST_INFO("%d: call_Timer restart", __LINE__);
 		g_structStopWatch[iTimerIdx].start_time = time(0);
-		// value.setFloatValue(0); // 0.0; 
+		// value.setDoubleValue(0); // 0.0; 
 		erase_var(objThreadCntrolBlock, vname);
 		assign_global_var(objThreadCntrolBlock, vname, value); // 0.0);
 	}
-	else if(value.getFloatValue() == TIMER_STOP_VALUE)
+	else if(value.getDoubleValue() == TIMER_STOP_VALUE)
 	{
 		FST_INFO("%d: call_Timer  stop", __LINE__);
 		g_structStopWatch[iTimerIdx].diff_time = time(0) - 
 			g_structStopWatch[iTimerIdx].start_time ;
 		
-		value.setFloatValue(g_structStopWatch[iTimerIdx].diff_time)  ;
+		value.setDoubleValue(g_structStopWatch[iTimerIdx].diff_time)  ;
 	//	assign_var(objThreadCntrolBlock, vname, value);
 	
 		assign_global_var(objThreadCntrolBlock, vname, value);
@@ -2714,7 +2714,7 @@ int call_Timer(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 	// TIMER 1 start 
     else {
 		get_exp(objThreadCntrolBlock, &value, &boolValue);
-		timerNumber = (int)value.getFloatValue() ;
+		timerNumber = (int)value.getDoubleValue() ;
         FST_INFO("%d: call_Timer  enter %d ", __LINE__, timerNumber);
 		if(timerNumber >= MAX_STOPWATCH_NUM)
 			return 0;
@@ -2724,17 +2724,17 @@ int call_Timer(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
         FST_INFO("%d: call_Timer  enter %s ", __LINE__, objThreadCntrolBlock->token);
 		if(strcmp(objThreadCntrolBlock->token, "start") == 0)
 		{
-			value.setFloatValue(TIMER_START_VALUE); 
+			value.setDoubleValue(TIMER_START_VALUE); 
 			execute_Timer(objThreadCntrolBlock, var, value); 
 		}
 		else if(strcmp(objThreadCntrolBlock->token, "reset") == 0)
 		{
-			value.setFloatValue(TIMER_RESET_VALUE);
+			value.setDoubleValue(TIMER_RESET_VALUE);
 			execute_Timer(objThreadCntrolBlock, var, value);
 		}
 		else if(strcmp(objThreadCntrolBlock->token, "stop") == 0)
 		{
-			value.setFloatValue(TIMER_STOP_VALUE); 
+			value.setDoubleValue(TIMER_STOP_VALUE); 
 			execute_Timer(objThreadCntrolBlock, var, value);
 			FST_INFO("Time elapse : %d .", g_structStopWatch[timerNumber].diff_time);
 		}
@@ -2794,7 +2794,7 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		putback(objThreadCntrolBlock);
     	get_exp(objThreadCntrolBlock, &value, &boolValue);
 		// Need not get_token again . let call_interpreter filter it .
-		timeWaitSeconds = (int)value.getFloatValue() ;
+		timeWaitSeconds = (int)value.getDoubleValue() ;
 	    FST_INFO("call_Wait timeWaitSeconds = %d at %lld.", timeWaitSeconds, time(NULL));
 		now = timeStart  = time(0);
 		while(now - timeStart < timeWaitSeconds)
@@ -2811,7 +2811,7 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 			}
 		}
 	    FST_INFO("call_Wait timeWaitSeconds = %d at %lld.", timeWaitSeconds, time(NULL));
-		timeWaitMicroSeconds = (int)(value.getFloatValue() * 1000000 - timeWaitSeconds * 1000000);
+		timeWaitMicroSeconds = (int)(value.getDoubleValue() * 1000000 - timeWaitSeconds * 1000000);
 #ifdef WIN32
 		Sleep(timeWaitMicroSeconds/1000);
 #else
@@ -2858,7 +2858,7 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 		{
 			putback(objThreadCntrolBlock);
 			get_exp(objThreadCntrolBlock, &value, &boolValue);
-			outTime = (int)value.getFloatValue() ;
+			outTime = (int)value.getDoubleValue() ;
 			if(outTime <= 0)
 			{
 				outTime = forgesight_get_wait_time_out_config();
@@ -3000,7 +3000,7 @@ int call_BLDC_CTRL(int iLineNum, struct thread_control_block* objThreadCntrolBlo
 	uint8_t iDir = 0, iVel = 0 ;
 #if 1
 	get_exp(objThreadCntrolBlock, &value, &boolValue);
-	iVel = (int)value.getFloatValue() ;
+	iVel = (int)value.getDoubleValue() ;
 #else
 	get_token(objThreadCntrolBlock);
 	if(strcmp(objThreadCntrolBlock->token, "dir") == 0)
@@ -3012,7 +3012,7 @@ int call_BLDC_CTRL(int iLineNum, struct thread_control_block* objThreadCntrolBlo
 			return false;
 		}
 		get_exp(objThreadCntrolBlock, &value, &boolValue);
-		iDir = (int)value.getFloatValue() ;
+		iDir = (int)value.getDoubleValue() ;
 	}
 
 	get_token(objThreadCntrolBlock);
@@ -3025,7 +3025,7 @@ int call_BLDC_CTRL(int iLineNum, struct thread_control_block* objThreadCntrolBlo
 			return false;
 		}
 		get_exp(objThreadCntrolBlock, &value, &boolValue);
-		iVel = (int)value.getFloatValue() ;
+		iVel = (int)value.getDoubleValue() ;
 	}
 	iVel = iDir * 128 + iVel ;  
 #endif

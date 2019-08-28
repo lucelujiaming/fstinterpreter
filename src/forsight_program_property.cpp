@@ -358,21 +358,22 @@ int parsePostureAndTurn(struct thread_control_block * objThreadCntrolBlock,
 		{
 		case cJSON_Number:	
 			// FST_INFO("cJSON_Number %f", child->valuedouble); 
-			if(strcmp(child->string, "flipOrNot") == 0)
+			if(strcmp(child->string, "wristFlip") == 0)
 			{
-				posture.flip = child->valuedouble;	
+				posture.wrist = child->valuedouble;	
 			}
 			else if(strcmp(child->string, "armLeftRight") == 0)
 			{
-				posture.arm = child->valuedouble;	
+				// posture.flip = child->valuedouble;	
+				posture.flip = 0;	
 			}
 			else if(strcmp(child->string, "armUpDown") == 0)
 			{
 				posture.elbow = child->valuedouble;	
 			}
-			else if(strcmp(child->string, "armFrontBack") == 0)
+			else if(strcmp(child->string, "armBackFront") == 0)
 			{
-				posture.wrist = child->valuedouble;	
+				posture.arm = child->valuedouble;	
 			}
 			break;
 		case cJSON_String:	
@@ -583,14 +584,14 @@ int parsePosesContent(struct thread_control_block * objThreadCntrolBlock,
 		    // json is x, y, z, Ez, Ey, Ex
 #ifndef WIN32
 			cart.point_.x_ = pos[0], cart.point_.y_ = pos[1], cart.point_.z_ = pos[2];
-			cart.euler_.c_ = pos[3], cart.euler_.b_ = pos[4], cart.euler_.a_ = pos[5];
+			cart.euler_.a_ = pos[3], cart.euler_.b_ = pos[4], cart.euler_.c_ = pos[5];
 #else
 			cart.position.x = pos[0];
 			cart.position.y = pos[1];
 			cart.position.z = pos[2];
-			cart.orientation.c = pos[3];
+			cart.orientation.a = pos[3];
 			cart.orientation.b = pos[4];
-			cart.orientation.a = pos[5];
+			cart.orientation.c = pos[5];
 #endif
 		}
 		value.setPoseValue(&cart);

@@ -147,12 +147,12 @@ int forgesight_get_register(struct thread_control_block* objThreadCntrolBlock,
 		else if (!strcmp(reg_member, TXT_REG_TYPE))
 		{
 			getTypePr(reg_content_buffer, iRegIdx);
-			value->setFloatValue(atoi(reg_content_buffer));
+			value->setDoubleValue(atoi(reg_content_buffer));
 		}
 		else if (!strcmp(reg_member, TXT_REG_ID))
 		{
 			getIdPr(reg_content_buffer, iRegIdx);
-			value->setFloatValue(atoi(reg_content_buffer));
+			value->setDoubleValue(atoi(reg_content_buffer));
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
@@ -176,7 +176,7 @@ int forgesight_get_register(struct thread_control_block* objThreadCntrolBlock,
 		else if (!strcmp(reg_member, TXT_REG_ID))
 		{
 			getIdSr(reg_content_buffer, iRegIdx);
-			value->setFloatValue(atoi(reg_content_buffer));
+			value->setDoubleValue(atoi(reg_content_buffer));
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
@@ -191,17 +191,17 @@ int forgesight_get_register(struct thread_control_block* objThreadCntrolBlock,
             // Use TXT_REG_VALUE
 			getR(reg_content_buffer, iRegIdx);
 			r_shmi_t * ptr = (r_shmi_t *)reg_content_buffer ;
-			value->setFloatValue(ptr->value);
+			value->setDoubleValue(ptr->value);
 		}
 		else if (!strcmp(reg_member, TXT_REG_VALUE))
 		{
 			getValueR(reg_content_buffer, iRegIdx);
-			value->setFloatValue(atof(reg_content_buffer));
+			value->setDoubleValue(atof(reg_content_buffer));
 		}
 		else if (!strcmp(reg_member, TXT_REG_ID))
 		{
 			getIdR(reg_content_buffer, iRegIdx);
-			value->setFloatValue(atoi(reg_content_buffer));
+			value->setDoubleValue(atoi(reg_content_buffer));
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
@@ -215,17 +215,17 @@ int forgesight_get_register(struct thread_control_block* objThreadCntrolBlock,
 		{
 			getMr(reg_content_buffer, iRegIdx);
 			mr_shmi_t * ptr = (mr_shmi_t *)reg_content_buffer ;
-			value->setFloatValue(ptr->value);
+			value->setDoubleValue(ptr->value);
 		}
 		else if (!strcmp(reg_member, TXT_REG_VALUE))
 		{
 			getValueMr(reg_content_buffer, iRegIdx);
-			value->setFloatValue(atoi(reg_content_buffer));
+			value->setDoubleValue(atoi(reg_content_buffer));
 		}
 		else if (!strcmp(reg_member, TXT_REG_ID))
 		{
 			getIdMr(reg_content_buffer, iRegIdx);
-			value->setFloatValue(atoi(reg_content_buffer));
+			value->setDoubleValue(atoi(reg_content_buffer));
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
@@ -251,7 +251,7 @@ int forgesight_get_register(struct thread_control_block* objThreadCntrolBlock,
 		else if (!strcmp(reg_member, TXT_REG_ID))
 		{
 			getIdUf(reg_content_buffer, iRegIdx);
-			value->setFloatValue(atoi(reg_content_buffer));
+			value->setDoubleValue(atoi(reg_content_buffer));
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
@@ -276,7 +276,7 @@ int forgesight_get_register(struct thread_control_block* objThreadCntrolBlock,
 		else if (!strcmp(reg_member, TXT_REG_ID))
 		{
 			getIdTf(reg_content_buffer, iRegIdx);
-			value->setFloatValue(atoi(reg_content_buffer));
+			value->setDoubleValue(atoi(reg_content_buffer));
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
@@ -308,12 +308,12 @@ int forgesight_get_register(struct thread_control_block* objThreadCntrolBlock,
 		else if (!strcmp(reg_member, TXT_PL_FLAG))
 		{
 			getFlagPl(reg_content_buffer, iRegIdx);
-			value->setFloatValue(atoi(reg_content_buffer));
+			value->setDoubleValue(atoi(reg_content_buffer));
 		}
 		else if (!strcmp(reg_member, TXT_REG_ID))
 		{
 			getIdPl(reg_content_buffer, iRegIdx);
-			value->setFloatValue(atoi(reg_content_buffer));
+			value->setDoubleValue(atoi(reg_content_buffer));
 		}
 		else if (!strcmp(reg_member, TXT_REG_COMMENT))
 		{
@@ -372,24 +372,24 @@ int forgesight_set_register(struct thread_control_block* objThreadCntrolBlock,
 		}
 		else if (!strcmp(reg_member, TXT_PR_POSE))
 		{
-			if (valueStart->getType() == TYPE_FLOAT)
+			if (valueStart->getType() == TYPE_DOUBLE)
 			{
-				pose.position.x = (double)valueStart->getFloatValue();
+				pose.position.x = (double)valueStart->getDoubleValue();
 
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				pose.position.y = (double)value.getFloatValue();
+				pose.position.y = (double)value.getDoubleValue();
 
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				pose.position.z = (double)value.getFloatValue();
+				pose.position.z = (double)value.getDoubleValue();
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				pose.orientation.a = (double)value.getFloatValue();
+				pose.orientation.a = (double)value.getDoubleValue();
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				pose.orientation.b = (double)value.getFloatValue();
+				pose.orientation.b = (double)value.getDoubleValue();
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				pose.orientation.c = (double)value.getFloatValue();
+				pose.orientation.c = (double)value.getDoubleValue();
 
 				printf("Set POSE:(%f, %f, %f, %f, %f, %f) to PR[%s]\n", 
 					pose.position.x, pose.position.y, pose.position.z, 
@@ -409,24 +409,24 @@ int forgesight_set_register(struct thread_control_block* objThreadCntrolBlock,
 		}
 		else if (!strcmp(reg_member, TXT_PR_JOINT))
 		{
-			if (valueStart->getType() == TYPE_FLOAT)
+			if (valueStart->getType() == TYPE_DOUBLE)
 			{
-				joint.j1 = (double)valueStart->getFloatValue();
+				joint.j1 = (double)valueStart->getDoubleValue();
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				joint.j2 = (double)value.getFloatValue();
+				joint.j2 = (double)value.getDoubleValue();
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				joint.j3 = (double)value.getFloatValue();
+				joint.j3 = (double)value.getDoubleValue();
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				joint.j4 = (double)value.getFloatValue();
+				joint.j4 = (double)value.getDoubleValue();
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				joint.j5 = (double)value.getFloatValue();
+				joint.j5 = (double)value.getDoubleValue();
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				joint.j6 = (double)value.getFloatValue();
+				joint.j6 = (double)value.getDoubleValue();
 				
 				printf("Set JOINT:(%f, %f, %f, %f, %f, %f) to PR[%s]\n", 
 					joint.j1, joint.j2, joint.j3, joint.j4, joint.j5, joint.j6, 
@@ -550,24 +550,24 @@ int forgesight_set_register(struct thread_control_block* objThreadCntrolBlock,
 		}
 		else if (!strcmp(reg_member, TXT_UF_TF_COORDINATE))
 		{
-			if (valueStart->getType() == TYPE_FLOAT)
+			if (valueStart->getType() == TYPE_DOUBLE)
 			{
 				pose.position.x = (double)(atof((char *)valueStart));
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				pose.position.y = (double)value.getFloatValue();
+				pose.position.y = (double)value.getDoubleValue();
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				pose.position.z = (double)value.getFloatValue();
+				pose.position.z = (double)value.getDoubleValue();
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				pose.orientation.a = (double)value.getFloatValue();
+				pose.orientation.a = (double)value.getDoubleValue();
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				pose.orientation.b = (double)value.getFloatValue();
+				pose.orientation.b = (double)value.getDoubleValue();
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				pose.orientation.c = (double)value.getFloatValue();
+				pose.orientation.c = (double)value.getDoubleValue();
 				
 				printf("Set COORDINATE:(%f, %f, %f, %f, %f, %f) to UF[%s]\n", 
 					pose.position.x, pose.position.y, pose.position.z, 
@@ -607,24 +607,24 @@ int forgesight_set_register(struct thread_control_block* objThreadCntrolBlock,
 		}
 		else if (!strcmp(reg_member, TXT_UF_TF_COORDINATE))
 		{
-			if (valueStart->getType() == TYPE_FLOAT)
+			if (valueStart->getType() == TYPE_DOUBLE)
 			{
 				pose.position.x = (double)(atof((char *)valueStart));
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				pose.position.y = (double)value.getFloatValue();
+				pose.position.y = (double)value.getDoubleValue();
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				pose.position.z = (double)value.getFloatValue();
+				pose.position.z = (double)value.getDoubleValue();
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				pose.orientation.a = (double)value.getFloatValue();
+				pose.orientation.a = (double)value.getDoubleValue();
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				pose.orientation.b = (double)value.getFloatValue();
+				pose.orientation.b = (double)value.getDoubleValue();
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				pose.orientation.c = (double)value.getFloatValue();
+				pose.orientation.c = (double)value.getDoubleValue();
 				
 				printf("Set COORDINATE:(%f, %f, %f, %f, %f, %f) to TF[%s]\n", 
 					pose.position.x, pose.position.y, pose.position.z, 
@@ -664,24 +664,24 @@ int forgesight_set_register(struct thread_control_block* objThreadCntrolBlock,
 		}
 		else if (!strcmp(reg_member, TXT_PL_POSE))
 		{
-			if (valueStart->getType() == TYPE_FLOAT)
+			if (valueStart->getType() == TYPE_DOUBLE)
 			{
 				pose.position.x = (double)(atof((char *)valueStart));
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				pose.position.y = (double)value.getFloatValue();
+				pose.position.y = (double)value.getDoubleValue();
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				pose.position.z = (double)value.getFloatValue();
+				pose.position.z = (double)value.getDoubleValue();
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				pose.orientation.a = (double)value.getFloatValue();
+				pose.orientation.a = (double)value.getDoubleValue();
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				pose.orientation.b = (double)value.getFloatValue();
+				pose.orientation.b = (double)value.getDoubleValue();
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
-				pose.orientation.c = (double)value.getFloatValue();
+				pose.orientation.c = (double)value.getDoubleValue();
 				
 				printf("Set COORDINATE:(%f, %f, %f, %f, %f, %f) to TF[%s]\n", 
 					pose.position.x, pose.position.y, pose.position.z, 

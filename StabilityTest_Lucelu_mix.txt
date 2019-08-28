@@ -1,9 +1,10 @@
-EXPORT: (001)(018)/prog/head/include                                                                                  IMPORT Pick
-EXPORT: (002)(024)/prog/prog_body/function                                                                            SUB main ()
-EXPORT: (003)(043)/prog/prog_body/function/body/assignment[1]                                                             R[1]  = 1  
-EXPORT: (004)(043)/prog/prog_body/function/body/assignment[2]                                                             R[2]  = 1  
-EXPORT: (005)(034)/prog/prog_body/function/body/call                                                                      CALL Pick::main () 
-EXPORT: (006)(043)/prog/prog_body/function/body/assignment[3]                                                             R[1]  = 1  
-EXPORT: (007)(041)/prog/prog_body/function/body/instruction                                                               MOVEJ P[1], 100 CNT -1 
-EXPORT: (008)(033)/prog/prog_body/function/body/end                                                                       END 
-EXPORT: (009)(024)/prog/prog_body/function                                                                            END SUB 
+EXPORT: (001)(021)/prog/head[1]/include                                                                               IMPORT PushCard
+EXPORT: (002)(021)/prog/head[2]/include                                                                               IMPORT PopCard
+EXPORT: (003)(024)/prog/prog_body/function                                                                            SUB main ()
+EXPORT: (004)(043)/prog/prog_body/function/body/assignment[1]                                                             R[1]  = 1  
+EXPORT: (005)(043)/prog/prog_body/function/body/assignment[2]                                                             R[2]  = 1  
+EXPORT: (006)(034)/prog/prog_body/function/body/call                                                                      CALL Pick::main () 
+EXPORT: (007)(043)/prog/prog_body/function/body/assignment[3]                                                             R[1]  = 1  
+EXPORT: (008)(041)/prog/prog_body/function/body/instruction                                                               MOVEJ P[1], 100 CNT -1 
+EXPORT: (009)(033)/prog/prog_body/function/body/end                                                                       END 
+EXPORT: (010)(024)/prog/prog_body/function                                                                            END SUB 

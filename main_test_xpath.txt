@@ -1,0 +1,16 @@
+001:main_test:/prog/prog_body/function
+002:main_test:/prog/prog_body/function/body/assignment[1]
+003:main_test:/prog/prog_body/function/body/assignment[2]
+004:main_test:/prog/prog_body/function/body/instruction[1]
+005:main_test:/prog/prog_body/function/body/instruction[2]
+006:main_test:/prog/prog_body/function/body/instruction[3]
+007:main_test:/prog/prog_body/function/body/instruction[4]
+008:main_test:/prog/prog_body/function/body/instruction[5]
+009:main_test:/prog/prog_body/function/body/instruction[6]
+010:main_test:/prog/prog_body/function/body/instruction[7]
+011:main_test:/prog/prog_body/function/body/instruction[8]
+012:main_test:/prog/prog_body/function/body/instruction[9]
+013:main_test:/prog/prog_body/function/body/assignment[3]
+014:main_test:/prog/prog_body/function/body/assignment[4]
+015:main_test:/prog/prog_body/function/body/end
+016:main_test:/prog/prog_body/function

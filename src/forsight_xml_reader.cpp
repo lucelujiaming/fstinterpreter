@@ -767,6 +767,176 @@ int generateOffsetVEC(xmlNodePtr nodeInstructionParam, LineInfo objLineInfo)
 	return 1 ;
 }
 
+#define OFFSET_NONE    0
+#define OFFSET_C_VEC   1
+#define OFFSET_J_VEC   2
+#define OFFSET_PR      3
+int getOffsetType(char * strName)
+{
+	if(strName[0] == 'j')
+	{
+		return OFFSET_J_VEC ;
+	}
+	else if((strName[0] == 'x') || (strName[0] == 'y')
+		|| (strName[0] == 'z') || (strName[0] == 'a')
+		|| (strName[0] == 'b') || (strName[0] == 'c'))
+	{
+		return OFFSET_C_VEC ;
+	}
+	else if(strName[0] == 'p')
+	{
+		return OFFSET_PR ;
+	}
+	return OFFSET_NONE;
+}
+
+/************************************************* 
+	Function:		generateOffsetVEC
+	Description:	parse <offset_XXX> node and output basic code.
+	Input:			nodeInstructionParam  - <offset_XXX> node
+	Input:			objLineInfo           - Line Info
+	Return: 		1 - success
+*************************************************/ 
+int generateOffsetVECandPR(xmlNodePtr nodeInstructionParam, LineInfo objLineInfo)
+{
+    xmlNodePtr nodeElement;
+    char label_uf_tf[32];
+    char label_params[1024];
+	Label labelParam ;
+	vector<Label> label_vector;
+    xmlChar *name, *type, *value;
+
+	int iJointOrCart = 0 ;
+	
+	type = xmlGetProp(nodeInstructionParam, BAD_CAST"type");
+	
+	label_vector.clear();
+	for(nodeElement = nodeInstructionParam->children; 
+	nodeElement; nodeElement = nodeElement->next){
+		if(xmlStrcasecmp(nodeElement->name, BAD_CAST"argument")==0){
+			name = xmlGetProp(nodeElement, BAD_CAST"name");
+			if(iJointOrCart == OFFSET_NONE)
+				iJointOrCart = getOffsetType((char *)name);
+
+			value = xmlNodeGetContent(nodeElement);
+			memset(&labelParam, 0x00, sizeof(labelParam));
+			strcpy(labelParam.name, (char*)value);
+			label_vector.push_back(labelParam);
+		}
+		else if(xmlStrcasecmp(nodeElement->name, BAD_CAST"element")==0){
+			// value = xmlNodeGetContent(nodeElement);
+			memset(&labelParam, 0x00, sizeof(labelParam));
+			memset(label_params, 0x00, 1024);
+			generateElementStr(nodeElement, objLineInfo, label_params);
+			strcpy(labelParam.name, (char*)label_params);
+			label_vector.push_back(labelParam);
+		}
+	}
+	
+	if(xmlStrcasecmp(type, BAD_CAST"with_uf")==0)
+	{
+		if(iJointOrCart == OFFSET_C_VEC){
+			printBASCode(objLineInfo, ";OFFSET C_VEC_UF (", "");
+		}
+		else if(iJointOrCart == OFFSET_J_VEC){
+			printBASCode(objLineInfo, ";OFFSET J_VEC_UF (", "");
+		}
+		else if(iJointOrCart == OFFSET_PR){
+			printBASCode(objLineInfo, ";OFFSET PR_UF ", "");
+		}
+	}
+	else if(xmlStrcasecmp(type, BAD_CAST"with_tf")==0)
+	{
+		if(iJointOrCart == OFFSET_C_VEC){
+			printBASCode(objLineInfo, ";TOOL_OFFSET C_VEC_TF (", "");
+		}
+		else if(iJointOrCart == OFFSET_J_VEC){
+			printBASCode(objLineInfo, ";TOOL_OFFSET J_VEC_TF (", "");
+		}
+		else if(iJointOrCart == OFFSET_PR){
+			printBASCode(objLineInfo, ";TOOL_OFFSET PR_TF ", "");
+		}
+	}
+	else if(xmlStrcasecmp(type, BAD_CAST"without_uf")==0)
+	{
+		if(iJointOrCart == OFFSET_C_VEC){
+			printBASCode(objLineInfo, ";OFFSET C_VEC (", "");
+		}
+		else if(iJointOrCart == OFFSET_J_VEC){
+			printBASCode(objLineInfo, ";OFFSET J_VEC (", "");
+		}
+		else if(iJointOrCart == OFFSET_PR){
+			printBASCode(objLineInfo, ";OFFSET PR ", "");
+		}
+	}
+	else if(xmlStrcasecmp(type, BAD_CAST"without_tf")==0)
+	{
+		if(iJointOrCart == OFFSET_C_VEC){
+			printBASCode(objLineInfo, ";TOOL_OFFSET C_VEC (", "");
+		}
+		else if(iJointOrCart == OFFSET_J_VEC){
+			printBASCode(objLineInfo, ";TOOL_OFFSET J_VEC (", "");
+		}
+		else if(iJointOrCart == OFFSET_PR){
+			printBASCode(objLineInfo, ";TOOL_OFFSET PR ", "");
+		}
+	}
+
+	if(xmlStrcasecmp(type, BAD_CAST"with_uf")==0){
+		if (label_vector.size() == 7){
+			memset(label_uf_tf, 0x00, 32);
+			strcpy(label_uf_tf, label_vector[6].name);
+			label_vector.pop_back();
+			memset(label_params, 0x00, sizeof(1024));
+			serializeFunctionParam(label_vector, label_params);
+			printBASCode(objLineInfo, "%s)", label_params);
+			printBASCode(objLineInfo, " UF[%s]", label_uf_tf);
+		}
+		else if (label_vector.size() == 2){
+			memset(label_uf_tf, 0x00, 32);
+			strcpy(label_uf_tf, label_vector[1].name);
+			label_vector.pop_back();
+			memset(label_params, 0x00, sizeof(1024));
+			serializeFunctionParam(label_vector, label_params);
+			printBASCode(objLineInfo, "PR[%s]", label_params);
+			printBASCode(objLineInfo, " UF[%s]", label_uf_tf);
+		}
+	}
+	else if(xmlStrcasecmp(type, BAD_CAST"with_tf")==0){
+		if (label_vector.size() == 7){
+			memset(label_uf_tf, 0x00, 32);
+			strcpy(label_uf_tf, label_vector[6].name);
+			label_vector.pop_back();
+			memset(label_params, 0x00, sizeof(1024));
+			serializeFunctionParam(label_vector, label_params);
+			printBASCode(objLineInfo, "%s)", label_params);
+			printBASCode(objLineInfo, " TF[%s]", label_uf_tf);
+		}
+		else if (label_vector.size() == 2){
+			memset(label_uf_tf, 0x00, 32);
+			strcpy(label_uf_tf, label_vector[1].name);
+			label_vector.pop_back();
+			memset(label_params, 0x00, sizeof(1024));
+			serializeFunctionParam(label_vector, label_params);
+			printBASCode(objLineInfo, "PR[%s]", label_params);
+			printBASCode(objLineInfo, " TF[%s]", label_uf_tf);
+		}
+	}
+	else {
+		if (label_vector.size() == 6){
+			memset(label_params, 0x00, sizeof(1024));
+			serializeFunctionParam(label_vector, label_params);
+			printBASCode(objLineInfo, "%s)", label_params);
+		}
+		else if (label_vector.size() == 1){
+			memset(label_params, 0x00, sizeof(1024));
+			serializeFunctionParam(label_vector, label_params);
+			printBASCode(objLineInfo, "PR[%s]", label_params);
+		}
+	}
+	return 1 ;
+}
+
 /************************************************* 
 	Function:		generateOffsetCondExecute
 	Description:	parse <TB/TA/DB> node and output basic code.
@@ -1196,6 +1366,9 @@ int generateMoveInstruction(xmlNodePtr nodeInstructionStatement, LineInfo objLin
 			else if((xmlStrcasecmp(name, BAD_CAST"offset_pr")==0)
 			      ||(xmlStrcasecmp(name, BAD_CAST"tool_offset_pr")==0)){
 				generateOffsetPR(nodeInstructionParam, objLineInfo);
+			}
+			else if(xmlStrcasecmp(name, BAD_CAST"offset")==0){
+				generateOffsetVECandPR(nodeInstructionParam, objLineInfo);
 			}
 			else if((xmlStrcasecmp(name, BAD_CAST"ev")==0)
 					||(xmlStrcasecmp(name, BAD_CAST"ind_ev")==0)){
@@ -2117,7 +2290,7 @@ int parse_xml_file(char * file_name){
 			sprintf(objLineInfo.xPath, "%s", 
 			 		(char *)xmlGetNodePath(nodeHead));
             generateIncludeFile(nodeHead, objLineInfo);
-            break;
+        //    break;
         }
     }
     // if(nodeHead == NULL){
@@ -2136,7 +2309,7 @@ int parse_xml_file(char * file_name){
 			sprintf(objLineInfo.xPath, "%s", 
 			 		(char *)xmlGetNodePath(nodeProgBody));
             generateProgBody(nodeProgBody, objLineInfo);
-            break;
+        //   break;
         }
     }
     // if(nodeProgBody == NULL){

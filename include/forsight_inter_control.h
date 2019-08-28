@@ -47,6 +47,12 @@ void setWarning(__int64 warn);
 #else
 void setWarning(long long int warn);
 #endif 
+
+void AddUseDefinedStructure(struct thread_control_block * objThreadCntrolBlock, 
+							std::string structName, vector<eval_struct_member> vecMembers);
+void AddUseDefinedStructureVar(struct thread_control_block * objThreadCntrolBlock, 
+							std::string varName, std::string structName);
+
 void setMessage(int warn);
 bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instruction * instruction);
 // bool getIntprtCtrl(InterpreterControl& intprt_ctrl);

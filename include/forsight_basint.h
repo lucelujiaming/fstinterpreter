@@ -187,6 +187,12 @@ struct thread_control_block {
 	char home_pose_exp[LAB_LEN];
 	Joint currentJoint ;
 	PoseEuler currentCart ;
+	
+// Use defined struct type
+	std::map<std::string, vector<eval_struct_member> > mapUseDefinedStructType ;
+	
+// Use defined struct type variable
+//	std::map<std::string, vector<eval_struct_var> > vecUseDefinedVariables ;
 } ;
 #ifndef WIN32
 extern fst_log::Logger* log_ptr_;

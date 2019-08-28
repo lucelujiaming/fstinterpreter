@@ -7,6 +7,7 @@
 #ifndef WIN32
 #include "reg_manager_interface_wrapper.h"
 using namespace fst_ctrl ;
+using namespace basic_alg ;
 #endif
 #include "reg_manager/forsight_registers_manager.h"
 
@@ -31,6 +32,8 @@ std::vector<BaseRegData> forgesight_read_valid_hr_lst(int start_id, int size);
 
 int forgesight_registers_manager_get_joint(Joint &joint);
 int forgesight_registers_manager_get_cart(PoseEuler &pos);
+int forgesight_registers_manager_get_posture(Posture &posture);
+int forgesight_registers_manager_get_turn(Turn &turn);
 int forgesight_registers_manager_cartToJoint(PoseEuler pos, Joint &joint);
 int forgesight_registers_manager_jointToCart(Joint joint, PoseEuler &pos);
 int forgesight_registers_manager_get_user_opmode(int& mode);

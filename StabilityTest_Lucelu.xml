@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <prog>
   <head>
-    <include>Pick</include>
+    <include>PushCard</include>
+  </head>
+  <head>
+    <include>PopCard</include>
   </head>
   <prog_body>
     <function name="main">

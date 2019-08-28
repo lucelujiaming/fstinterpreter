@@ -1,4 +1,5 @@
-IMPORT Pick
+IMPORT PushCard
+IMPORT PopCard
 SUB main ()
     R[1]  = 1  
     R[2]  = 1  

@@ -1,4 +1,7 @@
 // #include "stdafx.h"
+#ifdef WIN32
+#pragma warning(disable : 4786)
+#endif
 #include "stdio.h"
 #include "string.h"
 #include "setjmp.h"
@@ -214,7 +217,7 @@ bool call_internal_func(int index, eval_value *result,
 bool call_rand (eval_value *result, const char * valFirst,const char * valSecond,const char * valThird, 
 				const char * valFourth, const char * valFiveth)
 {
-	result->setFloatValue((float)rand());
+	result->setDoubleValue((float)rand());
     return true ;
 }
 
@@ -224,7 +227,7 @@ bool call_sin  (eval_value *result, const char * valFirst,const char * valSecond
 	if(valFirst)
 	{
 		double val = atof(valFirst);
-		result->setFloatValue(sin(val));
+		result->setDoubleValue(sin(val));
     	return true ;
 	}
 	return false;
@@ -236,7 +239,7 @@ bool call_cos  (eval_value *result, const char * valFirst,const char * valSecond
 	if(valFirst)
 	{
 		double val = atof(valFirst);
-		result->setFloatValue(cos(val));
+		result->setDoubleValue(cos(val));
     	return true ;
 	}
 	return false;
@@ -248,7 +251,7 @@ bool call_tan  (eval_value *result, const char * valFirst,const char * valSecond
 	if(valFirst)
 	{
 		double val = atof(valFirst);
-		result->setFloatValue(tan(val));
+		result->setDoubleValue(tan(val));
     	return true ;
 	}
 	return false;
@@ -260,7 +263,7 @@ bool call_asin (eval_value *result, const char * valFirst,const char * valSecond
 	if(valFirst)
 	{
 		double val = atof(valFirst);
-		result->setFloatValue(asin(val));
+		result->setDoubleValue(asin(val));
     	return true ;
 	}
 	return false;
@@ -272,7 +275,7 @@ bool call_acos (eval_value *result, const char * valFirst,const char * valSecond
 	if(valFirst)
 	{
 		double val = atof(valFirst);
-		result->setFloatValue(acos(val));
+		result->setDoubleValue(acos(val));
     	return true ;
 	}
 	return false;
@@ -284,7 +287,7 @@ bool call_atan (eval_value *result, const char * valFirst,const char * valSecond
 	if(valFirst)
 	{
 		double val = atof(valFirst);
-		result->setFloatValue(atan(val));
+		result->setDoubleValue(atan(val));
     	return true ;
 	}
 	return false;
@@ -297,7 +300,7 @@ bool call_atan2(eval_value *result, const char * valFirst,const char * valSecond
 	{
 		double val = atof(valFirst);
 		double valTwo = atof(valSecond);
-		result->setFloatValue(atan2(val, valTwo));
+		result->setDoubleValue(atan2(val, valTwo));
     	return true ;
 	}
 	return false;
@@ -309,7 +312,7 @@ bool call_sinh (eval_value *result, const char * valFirst,const char * valSecond
 	if(valFirst)
 	{
 		double val = atof(valFirst);
-		result->setFloatValue(sinh(val));
+		result->setDoubleValue(sinh(val));
     	return true ;
 	}
 	return false;
@@ -321,7 +324,7 @@ bool call_cosh (eval_value *result, const char * valFirst,const char * valSecond
 	if(valFirst)
 	{
 		double val = atof(valFirst);
-		result->setFloatValue(cosh(val));
+		result->setDoubleValue(cosh(val));
     	return true ;
 	}
 	return false;
@@ -333,7 +336,7 @@ bool call_tanh (eval_value *result, const char * valFirst,const char * valSecond
 	if(valFirst)
 	{
 		double val = atof(valFirst);
-		result->setFloatValue(tanh(val));
+		result->setDoubleValue(tanh(val));
     	return true ;
 	}
 	return false;
@@ -344,7 +347,7 @@ bool call_exp  (eval_value *result, const char * valFirst,const char * valSecond
 	if(valFirst)
 	{
 		double val = atof(valFirst);
-		result->setFloatValue(exp(val));
+		result->setDoubleValue(exp(val));
     	return true ;
 	}
 	return false;
@@ -356,7 +359,7 @@ bool call_pow  (eval_value *result, const char * valFirst,const char * valSecond
 	{
 		double val = atof(valFirst);
 		int   valTwo = atoi(valSecond);
-		result->setFloatValue(pow(val, valTwo));
+		result->setDoubleValue(pow(val, valTwo));
     	return true ;
 	}
 	return false;
@@ -367,7 +370,7 @@ bool call_sqrt (eval_value *result, const char * valFirst,const char * valSecond
 	if(valFirst)
 	{
 		double val = atof(valFirst);
-		result->setFloatValue(sqrt(val));
+		result->setDoubleValue(sqrt(val));
     	return true ;
 	}
 	return false;
@@ -378,7 +381,7 @@ bool call_log  (eval_value *result, const char * valFirst,const char * valSecond
 	if(valFirst)
 	{
 		double val = atof(valFirst);
-		result->setFloatValue(log(val));
+		result->setDoubleValue(log(val));
     	return true ;
 	}
 	return false;
@@ -389,7 +392,7 @@ bool call_log10(eval_value *result, const char * valFirst,const char * valSecond
 	if(valFirst)
 	{
 		double val = atof(valFirst);
-		result->setFloatValue(log10(val));
+		result->setDoubleValue(log10(val));
     	return true ;
 	}
 	return false;
@@ -400,7 +403,7 @@ bool call_ceil (eval_value *result, const char * valFirst,const char * valSecond
 	if(valFirst)
 	{
 		double val = atof(valFirst);
-		result->setFloatValue(ceil(val));
+		result->setDoubleValue(ceil(val));
     	return true ;
 	}
 	return false;
@@ -411,7 +414,7 @@ bool call_floor(eval_value *result, const char * valFirst,const char * valSecond
 	if(valFirst)
 	{
 		double val = atof(valFirst);
-		result->setFloatValue(floor(val));
+		result->setDoubleValue(floor(val));
     	return true ;
 	}
 	return false;
@@ -422,7 +425,7 @@ bool call_fabs (eval_value *result, const char * valFirst,const char * valSecond
 	if(valFirst)
 	{
 		double val = atof(valFirst);
-		result->setFloatValue(fabs(val));
+		result->setDoubleValue(fabs(val));
     	return true ;
 	}
 	return false;
@@ -434,7 +437,7 @@ bool call_ldexp (eval_value *result, const char * valFirst,const char * valSecon
 	{
 		double val = atof(valFirst);
 		int    valTwo = atoi(valSecond);
-		result->setFloatValue(ldexp(val, valTwo));
+		result->setDoubleValue(ldexp(val, valTwo));
     	return true ;
 	}
 	return false;
@@ -447,7 +450,7 @@ bool call_modf (eval_value *result, const char * valFirst,const char * valSecond
 	{
 		double val = atof(valFirst);
 		double valTwo ;
-		result->setFloatValue(modf(val, &valTwo));
+		result->setDoubleValue(modf(val, &valTwo));
     	return true ;
 	}
 	return false;
@@ -459,7 +462,7 @@ bool call_fmod (eval_value *result, const char * valFirst,const char * valSecond
 	{
 		double val = atof(valFirst);
 		double valTwo = atof(valSecond);
-		result->setFloatValue(fmod(val, valTwo));
+		result->setDoubleValue(fmod(val, valTwo));
     	return true ;
 	}
 	return false;
@@ -471,7 +474,7 @@ bool call_hypot(eval_value *result, const char * valFirst,const char * valSecond
 	{
 		double val = atof(valFirst);
 		double valTwo = atof(valSecond);
-		result->setFloatValue(hypot(val, valTwo));
+		result->setDoubleValue(hypot(val, valTwo));
     	return true ;
 	}
 	return false;
@@ -498,7 +501,7 @@ bool call_gcd(eval_value *result, const char * valFirst,const char * valSecond,c
 	{
 		double val = atof(valFirst);
 		double valTwo = atof(valSecond);
-		result->setFloatValue(Stein_GCD((int)val, (int)valTwo));
+		result->setDoubleValue(Stein_GCD((int)val, (int)valTwo));
     	return true ;
 	}
 	return false;
@@ -512,7 +515,7 @@ bool call_lcm(eval_value *result, const char * valFirst,const char * valSecond,c
 		double val = atof(valFirst);
 		double valTwo = atof(valSecond);
 		iLcm = (int)val * (int)valTwo /(int)Stein_GCD((int)val, (int)valTwo);
-		result->setFloatValue(iLcm);
+		result->setDoubleValue(iLcm);
     	return true ;
 	}
 	return false;
@@ -523,7 +526,7 @@ bool call_degrees(eval_value *result, const char * valFirst,const char * valSeco
 	if(valFirst)
 	{
 		double val = atof(valFirst);
-		result->setFloatValue(RAD2DEG(val));
+		result->setDoubleValue(RAD2DEG(val));
     	return true ;
 	}
 	return false;
@@ -534,7 +537,7 @@ bool call_radians(eval_value *result, const char * valFirst,const char * valSeco
 	if(valFirst)
 	{
 		double val = atof(valFirst);
-		result->setFloatValue(DEG2RAD(val));
+		result->setDoubleValue(DEG2RAD(val));
     	return true ;
 	}
 	return false;
@@ -551,7 +554,7 @@ bool call_isleapyear(eval_value *result, const char * valFirst,const char * valS
 	if(valFirst)
 	{
 		double val = atof(valFirst);
-		result->setFloatValue(IsLeapYear((int)val));
+		result->setDoubleValue(IsLeapYear((int)val));
     	return true ;
 	}
 	return false;
@@ -587,7 +590,7 @@ bool call_getmaxday(eval_value *result, const char * valFirst,const char * valSe
 	{
 		double val = atof(valFirst);
 		double valTwo = atof(valSecond);
-		result->setFloatValue(GetMaxDay((int)val, (int)valTwo));
+		result->setDoubleValue(GetMaxDay((int)val, (int)valTwo));
     	return true ;
 	}
 	return false;
@@ -615,7 +618,7 @@ bool call_getdays(eval_value *result, const char * valFirst,const char * valSeco
 		double val = atof(valFirst);
 		double valTwo = atof(valSecond);
 		double valThr = atof(valThird);
-		result->setFloatValue(GetDays((int)val, (int)valTwo, (int)valThr));
+		result->setDoubleValue(GetDays((int)val, (int)valTwo, (int)valThr));
     	return true ;
 	}
 	return false;
@@ -626,8 +629,8 @@ bool call_strlen (eval_value *result, const char * valFirst,
 {
 	if(valFirst)
 	{
-		result->setFloatValue(strlen(valFirst));
-	//	FST_INFO("result = %f", result->getFloatValue());
+		result->setDoubleValue(strlen(valFirst));
+	//	FST_INFO("result = %f", result->getDoubleValue());
     	return true ;
 	}
 	return false;
@@ -641,13 +644,14 @@ bool call_findstr (eval_value *result, const char * valFirst,
 	    char * strRet = strstr(valFirst, valSecond);
 		if(strRet == NULL)
 		{
-			result->setFloatValue(-1.0);
+			FST_INFO("call_findstr use strstr('%s', '%s')", valFirst, valSecond);
+			result->setDoubleValue(-1.0);
 			return false ;
 		}
 		else 
 		{
-			result->setFloatValue((int)(strRet - valFirst));
-		//	FST_INFO("result = %f", result->getFloatValue());
+			result->setDoubleValue((int)(strRet - valFirst));
+			FST_INFO("result = %f", result->getDoubleValue());
 			return true ;
 		}
 	}
@@ -825,7 +829,7 @@ bool call_atoi     (eval_value *result, const char * valFirst,const char * valSe
 	if(valFirst)
 	{
 		int val = atoi(valFirst);
-		result->setFloatValue((float)val);
+		result->setDoubleValue((float)val);
 	    return true ;
 	}
 	return false;
@@ -836,7 +840,7 @@ bool call_atof     (eval_value *result, const char * valFirst,const char * valSe
 	if(valFirst)
 	{
 		double val = atof(valFirst);
-		result->setFloatValue(val);
+		result->setDoubleValue(val);
 	    return true ;
 	}
 	return false;

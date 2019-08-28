@@ -253,6 +253,7 @@ typedef struct _MoveCommandDestination
     PoseEuler       pose_target;
     Joint           joint_target;
 	Posture         posture ;
+	Turn            turn ;
 } MoveCommandDestination;
 
 typedef struct

@@ -1,4 +1,7 @@
 // #include "stdafx.h"
+#ifdef WIN32
+#pragma warning(disable : 4786)
+#endif
 #include "stdio.h"
 #include "string.h"
 #include "setjmp.h"
@@ -253,7 +256,7 @@ bool reg_manager_interface_getPosePr(PoseEuler *ptr, uint16_t num)
 	Input:			ptr        -  PoseEuler Data of PR
 	Return: 		1 - success
 *************************************************/
-bool reg_manager_interface_setPosePr(PoseEuler *ptr, Posture *posture, uint16_t num)
+bool reg_manager_interface_setPosePr(PoseEuler *ptr, Posture *posture, Turn *turn, uint16_t num)
 {
 	bool bRet = false ;
 #ifndef WIN32
@@ -281,13 +284,23 @@ bool reg_manager_interface_setPosePr(PoseEuler *ptr, Posture *posture, uint16_t 
 		objPrRegDataIpc.value.pos[7] = 0.0;
 		objPrRegDataIpc.value.pos[8] = 0.0;
 		
-		objPrRegDataIpc.value.posture[0] = posture->arm ;
-		objPrRegDataIpc.value.posture[1] = posture->elbow ;
-		objPrRegDataIpc.value.posture[2] = posture->wrist ;
-		objPrRegDataIpc.value.posture[3] = posture->flip  ;
+		objPrRegDataIpc.value.posture[0] = posture->flip ;
+		objPrRegDataIpc.value.posture[1] = posture->arm ;
+		objPrRegDataIpc.value.posture[2] = posture->elbow ;
+		objPrRegDataIpc.value.posture[3] = posture->wrist  ;
+		
+		objPrRegDataIpc.value.turn[0]    = turn->j1 ;
+		objPrRegDataIpc.value.turn[1]    = turn->j2 ;
+		objPrRegDataIpc.value.turn[2]    = turn->j3 ;
+		objPrRegDataIpc.value.turn[3]    = turn->j4 ;
+		objPrRegDataIpc.value.turn[4]    = turn->j5 ;
+		objPrRegDataIpc.value.turn[5]    = turn->j6 ;
+		objPrRegDataIpc.value.turn[6]    = turn->j7 ;
+		objPrRegDataIpc.value.turn[7]    = turn->j8 ;
+		objPrRegDataIpc.value.turn[8]    = turn->j9 ;
 		
 		bRet = g_objRegManagerInterface->setPrReg(&objPrRegDataIpc);
-		FST_INFO("setPr: id = %d (%f, %f, %f, %f, %f, %f) at %d with %s ", num, 
+		FST_INFO("setPosePr: id = %d (%f, %f, %f, %f, %f, %f) at %d with %s ", num, 
 			objPrRegDataIpc.value.pos[0], objPrRegDataIpc.value.pos[1], 
 			objPrRegDataIpc.value.pos[2], objPrRegDataIpc.value.pos[3], 
 			objPrRegDataIpc.value.pos[4], objPrRegDataIpc.value.pos[5], num, bRet?"TRUE":"FALSE");
@@ -353,7 +366,7 @@ bool reg_manager_interface_getJointPr(Joint *ptr, uint16_t num)
 	Input:			ptr        -  Joint Data of PR
 	Return: 		1 - success
 *************************************************/
-bool reg_manager_interface_setJointPr(Joint *ptr, Posture *posture, uint16_t num)
+bool reg_manager_interface_setJointPr(Joint *ptr, Posture *posture, Turn *turn, uint16_t num)
 {
 	bool bRet = false ;
 #ifndef WIN32
@@ -382,13 +395,28 @@ bool reg_manager_interface_setJointPr(Joint *ptr, Posture *posture, uint16_t num
 			objPrRegDataIpc.value.pos[6] = 0.0;
 			objPrRegDataIpc.value.pos[7] = 0.0;
 			objPrRegDataIpc.value.pos[8] = 0.0;
-			
-			objPrRegDataIpc.value.posture[0] = posture->arm ;
-			objPrRegDataIpc.value.posture[1] = posture->elbow ;
-			objPrRegDataIpc.value.posture[2] = posture->wrist ;
-			objPrRegDataIpc.value.posture[3] = posture->flip  ;
+		
+			objPrRegDataIpc.value.posture[0] = posture->flip ;
+			objPrRegDataIpc.value.posture[1] = posture->arm ;
+			objPrRegDataIpc.value.posture[2] = posture->elbow ;
+			objPrRegDataIpc.value.posture[3] = posture->wrist  ;
+
+			objPrRegDataIpc.value.turn[0]    = turn->j1 ;
+			objPrRegDataIpc.value.turn[1]    = turn->j2 ;
+			objPrRegDataIpc.value.turn[2]    = turn->j3 ;
+			objPrRegDataIpc.value.turn[3]    = turn->j4 ;
+			objPrRegDataIpc.value.turn[4]    = turn->j5 ;
+			objPrRegDataIpc.value.turn[5]    = turn->j6 ;
+			objPrRegDataIpc.value.turn[6]    = turn->j7 ;
+			objPrRegDataIpc.value.turn[7]    = turn->j8 ;
+			objPrRegDataIpc.value.turn[8]    = turn->j9 ;
 		
 			bRet = g_objRegManagerInterface->setPrReg(&objPrRegDataIpc);
+			
+			FST_INFO("setJointPr: id = %d (%f, %f, %f, %f, %f, %f) at %d with %s ", num, 
+				objPrRegDataIpc.value.pos[0], objPrRegDataIpc.value.pos[1], 
+				objPrRegDataIpc.value.pos[2], objPrRegDataIpc.value.pos[3], 
+				objPrRegDataIpc.value.pos[4], objPrRegDataIpc.value.pos[5], num, bRet?"TRUE":"FALSE");
 		}
 	}
 	else
@@ -1306,4 +1334,47 @@ bool reg_manager_interface_getUserOpMode(int& mode)
 	return true ;
 }
 
+bool reg_manager_interface_getPosture(Posture &posture)
+{
+	bool bRet = false ;
+#ifndef WIN32
+	if(g_objRegManagerInterface)
+	{
+		bRet = g_objRegManagerInterface->getPosture(posture);
+		if(bRet)
+		{
+			return bRet ;
+		}
+	}
+	else
+	{
+		FST_ERROR("g_objRegManagerInterface is NULL");
+	}
+#else
+	bRet = true ;
+#endif
+	return true ;
+}
+
+bool reg_manager_interface_getTurn(Turn &turn)
+{
+	bool bRet = false ;
+#ifndef WIN32
+	if(g_objRegManagerInterface)
+	{
+		bRet = g_objRegManagerInterface->getTurn(turn);
+		if(bRet)
+		{
+			return bRet ;
+		}
+	}
+	else
+	{
+		FST_ERROR("g_objRegManagerInterface is NULL");
+	}
+#else
+	bRet = true ;
+#endif
+	return true ;
+}
 

@@ -36,9 +36,9 @@ void* macro_instr_thread(void* arg)
 		{
 			objThdCtrlBlockPtr = getThreadControlBlock();
 			if(objThdCtrlBlockPtr == NULL) break ;
-			value.setFloatValue(0.0);
+			value.setDoubleValue(0.0);
 			value = forgesight_get_io_status(objThdCtrlBlockPtr, (char *)it->first.c_str());
-			if((value.getFloatValue() != 0.0) 
+			if((value.getDoubleValue() != 0.0) 
 				&&(it->second.iValue == 0)
 				&&(strlen(it->second.program_name) > 0)
 				&&(it->second.bIsRunning == false))

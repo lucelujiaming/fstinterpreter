@@ -1,4 +1,7 @@
 // #include "stdafx.h"
+#ifdef WIN32
+#pragma warning(disable : 4786)
+#endif
 #include "stdio.h"
 #include "string.h"
 #include "setjmp.h"
@@ -218,10 +221,10 @@ int forgesight_registers_manager_get_register(
 						value->getJointValue().j5_, value->getJointValue().j6_);
 				}
 				
-				posture.arm   = objPrRegData.value.posture[0];	
-				posture.elbow = objPrRegData.value.posture[1];	
-				posture.wrist = objPrRegData.value.posture[2];	
-				posture.flip  = objPrRegData.value.posture[3];
+				posture.flip   = objPrRegData.value.posture[0];	
+				posture.arm = objPrRegData.value.posture[1];	
+				posture.elbow = objPrRegData.value.posture[2];	
+				posture.wrist  = objPrRegData.value.posture[3];
 				value->setPosture(posture);
 							
 				turn.j1   = objPrRegData.value.turn[0];
@@ -254,10 +257,10 @@ int forgesight_registers_manager_get_register(
 				value->setPoseValue(&objPoseEuler);
 			}
 				
-			posture.arm   = objPrRegData.value.posture[0];	
-			posture.elbow = objPrRegData.value.posture[1];	
-			posture.wrist = objPrRegData.value.posture[2];	
-			posture.flip  = objPrRegData.value.posture[3];
+			posture.flip   = objPrRegData.value.posture[0];	
+			posture.arm = objPrRegData.value.posture[1];	
+			posture.elbow = objPrRegData.value.posture[2];	
+			posture.wrist  = objPrRegData.value.posture[3];
 			value->setPosture(posture);
 						
 			turn.j1   = objPrRegData.value.turn[0];
@@ -290,9 +293,9 @@ int forgesight_registers_manager_get_register(
 				serror(objThreadCntrolBlock, 4) ; 
 			else
 #ifndef WIN32
-				value->setFloatValue(objPoseEuler.point_.x_);
+				value->setDoubleValue(objPoseEuler.point_.x_);
 #else
-				value->setFloatValue(objPoseEuler.position.x);
+				value->setDoubleValue(objPoseEuler.position.x);
 #endif
 		}
 		else if (!strcmp(reg_member, TXT_POSE_Y))
@@ -303,9 +306,9 @@ int forgesight_registers_manager_get_register(
 				serror(objThreadCntrolBlock, 4) ; 
 			else
 #ifndef WIN32
-				value->setFloatValue(objPoseEuler.point_.y_);
+				value->setDoubleValue(objPoseEuler.point_.y_);
 #else
-				value->setFloatValue(objPoseEuler.position.y);
+				value->setDoubleValue(objPoseEuler.position.y);
 #endif
 		}
 		else if (!strcmp(reg_member, TXT_POSE_Z))
@@ -316,9 +319,9 @@ int forgesight_registers_manager_get_register(
 				serror(objThreadCntrolBlock, 4) ; 
 			else
 #ifndef WIN32
-				value->setFloatValue(objPoseEuler.point_.z_);
+				value->setDoubleValue(objPoseEuler.point_.z_);
 #else
-				value->setFloatValue(objPoseEuler.position.z);
+				value->setDoubleValue(objPoseEuler.position.z);
 #endif
 		}
 		else if (!strcmp(reg_member, TXT_POSE_A))
@@ -329,9 +332,9 @@ int forgesight_registers_manager_get_register(
 				serror(objThreadCntrolBlock, 4) ; 
 			else
 #ifndef WIN32
-				value->setFloatValue(objPoseEuler.euler_.a_);
+				value->setDoubleValue(objPoseEuler.euler_.a_);
 #else
-				value->setFloatValue(objPoseEuler.orientation.a);
+				value->setDoubleValue(objPoseEuler.orientation.a);
 #endif
 		}
 		else if (!strcmp(reg_member, TXT_POSE_B))
@@ -342,9 +345,9 @@ int forgesight_registers_manager_get_register(
 				serror(objThreadCntrolBlock, 4) ; 
 			else
 #ifndef WIN32
-				value->setFloatValue(objPoseEuler.euler_.b_);
+				value->setDoubleValue(objPoseEuler.euler_.b_);
 #else
-				value->setFloatValue(objPoseEuler.orientation.b);
+				value->setDoubleValue(objPoseEuler.orientation.b);
 #endif
 		}
 		else if (!strcmp(reg_member, TXT_POSE_C))
@@ -355,9 +358,9 @@ int forgesight_registers_manager_get_register(
 				serror(objThreadCntrolBlock, 4) ; 
 			else
 #ifndef WIN32
-				value->setFloatValue(objPoseEuler.euler_.c_);
+				value->setDoubleValue(objPoseEuler.euler_.c_);
 #else
-				value->setFloatValue(objPoseEuler.orientation.c);
+				value->setDoubleValue(objPoseEuler.orientation.c);
 #endif
 		}
 		else if (!strcmp(reg_member, TXT_JOINT))
@@ -377,9 +380,9 @@ int forgesight_registers_manager_get_register(
 				serror(objThreadCntrolBlock, 4) ; 
 			else
 #ifndef WIN32
-				value->setFloatValue(objJoint.j1_);
+				value->setDoubleValue(objJoint.j1_);
 #else
-				value->setFloatValue(objJoint.j1);
+				value->setDoubleValue(objJoint.j1);
 #endif
 		}
 		else if (!strcmp(reg_member, TXT_JOINT_J2))
@@ -390,9 +393,9 @@ int forgesight_registers_manager_get_register(
 				serror(objThreadCntrolBlock, 4) ; 
 			else
 #ifndef WIN32
-				value->setFloatValue(objJoint.j2_);
+				value->setDoubleValue(objJoint.j2_);
 #else
-				value->setFloatValue(objJoint.j2);
+				value->setDoubleValue(objJoint.j2);
 #endif
 		}
 		else if (!strcmp(reg_member, TXT_JOINT_J3))
@@ -403,9 +406,9 @@ int forgesight_registers_manager_get_register(
 				serror(objThreadCntrolBlock, 4) ; 
 			else
 #ifndef WIN32
-				value->setFloatValue(objJoint.j3_);
+				value->setDoubleValue(objJoint.j3_);
 #else
-				value->setFloatValue(objJoint.j3);
+				value->setDoubleValue(objJoint.j3);
 #endif
 		}
 		else if (!strcmp(reg_member, TXT_JOINT_J4))
@@ -416,9 +419,9 @@ int forgesight_registers_manager_get_register(
 				serror(objThreadCntrolBlock, 4) ; 
 			else
 #ifndef WIN32
-				value->setFloatValue(objJoint.j4_);
+				value->setDoubleValue(objJoint.j4_);
 #else
-				value->setFloatValue(objJoint.j4);
+				value->setDoubleValue(objJoint.j4);
 #endif
 		}
 		else if (!strcmp(reg_member, TXT_JOINT_J5))
@@ -429,9 +432,9 @@ int forgesight_registers_manager_get_register(
 				serror(objThreadCntrolBlock, 4) ; 
 			else
 #ifndef WIN32
-				value->setFloatValue(objJoint.j5_);
+				value->setDoubleValue(objJoint.j5_);
 #else
-				value->setFloatValue(objJoint.j5);
+				value->setDoubleValue(objJoint.j5);
 #endif
 		}
 		else if (!strcmp(reg_member, TXT_JOINT_J6))
@@ -442,9 +445,9 @@ int forgesight_registers_manager_get_register(
 				serror(objThreadCntrolBlock, 4) ; 
 			else
 #ifndef WIN32
-				value->setFloatValue(objJoint.j6_);
+				value->setDoubleValue(objJoint.j6_);
 #else
-				value->setFloatValue(objJoint.j6);
+				value->setDoubleValue(objJoint.j6);
 #endif
 		}
 		else if (!strcmp(reg_member, TXT_JOINT_J7))
@@ -455,9 +458,9 @@ int forgesight_registers_manager_get_register(
 				serror(objThreadCntrolBlock, 4) ; 
 			else
 #ifndef WIN32
-				value->setFloatValue(objJoint.j7_);
+				value->setDoubleValue(objJoint.j7_);
 #else
-				value->setFloatValue(objJoint.j7);
+				value->setDoubleValue(objJoint.j7);
 #endif
 		}
 		else if (!strcmp(reg_member, TXT_JOINT_J8))
@@ -468,9 +471,9 @@ int forgesight_registers_manager_get_register(
 				serror(objThreadCntrolBlock, 4) ; 
 			else
 #ifndef WIN32
-				value->setFloatValue(objJoint.j8_);
+				value->setDoubleValue(objJoint.j8_);
 #else
-				value->setFloatValue(objJoint.j8);
+				value->setDoubleValue(objJoint.j8);
 #endif
 		}
 		else if (!strcmp(reg_member, TXT_JOINT_J9))
@@ -481,9 +484,9 @@ int forgesight_registers_manager_get_register(
 				serror(objThreadCntrolBlock, 4) ; 
 			else
 #ifndef WIN32
-				value->setFloatValue(objJoint.j9_);
+				value->setDoubleValue(objJoint.j9_);
 #else
-				value->setFloatValue(objJoint.j9);
+				value->setDoubleValue(objJoint.j9);
 #endif
 		}
 		// General parameters for XML content
@@ -496,15 +499,15 @@ int forgesight_registers_manager_get_register(
 			{
 #ifndef WIN32
 				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.pos[0]);
+					value->setDoubleValue(objPrRegData.value.pos[0]);
 				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.pos[0]);
+					value->setDoubleValue(objPrRegData.value.pos[0]);
 #else
 
 				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.cartesian_pos.position.x);
+					value->setDoubleValue(objPrRegData.value.cartesian_pos.position.x);
 				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.joint_pos[0]);
+					value->setDoubleValue(objPrRegData.value.joint_pos[0]);
 #endif
 				else
 		       		FST_INFO("PR[%d].pos_type = %d ", 
@@ -520,14 +523,14 @@ int forgesight_registers_manager_get_register(
 			{
 #ifndef WIN32
 				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.pos[1]);
+					value->setDoubleValue(objPrRegData.value.pos[1]);
 				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.pos[1]);
+					value->setDoubleValue(objPrRegData.value.pos[1]);
 #else
 				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.cartesian_pos.position.y);
+					value->setDoubleValue(objPrRegData.value.cartesian_pos.position.y);
 				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.joint_pos[1]);
+					value->setDoubleValue(objPrRegData.value.joint_pos[1]);
 #endif
 				else
 		       		FST_INFO("PR[%d].pos_type = %d ", 
@@ -543,14 +546,14 @@ int forgesight_registers_manager_get_register(
 			{
 #ifndef WIN32
 				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.pos[2]);
+					value->setDoubleValue(objPrRegData.value.pos[2]);
 				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.pos[2]);
+					value->setDoubleValue(objPrRegData.value.pos[2]);
 #else
 				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.cartesian_pos.position.z);
+					value->setDoubleValue(objPrRegData.value.cartesian_pos.position.z);
 				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.joint_pos[2]);
+					value->setDoubleValue(objPrRegData.value.joint_pos[2]);
 #endif
 				else
 		       		FST_INFO("PR[%d].pos_type = %d ", 
@@ -566,14 +569,14 @@ int forgesight_registers_manager_get_register(
 			{
 #ifndef WIN32
 				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.pos[3]);
+					value->setDoubleValue(objPrRegData.value.pos[3]);
 				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.pos[3]);
+					value->setDoubleValue(objPrRegData.value.pos[3]);
 #else
 				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.cartesian_pos.orientation.a);
+					value->setDoubleValue(objPrRegData.value.cartesian_pos.orientation.a);
 				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.joint_pos[3]);
+					value->setDoubleValue(objPrRegData.value.joint_pos[3]);
 #endif
 				else
 		       		FST_INFO("PR[%d].pos_type = %d ", 
@@ -589,14 +592,14 @@ int forgesight_registers_manager_get_register(
 			{
 #ifndef WIN32
 				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.pos[4]);
+					value->setDoubleValue(objPrRegData.value.pos[4]);
 				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.pos[4]);
+					value->setDoubleValue(objPrRegData.value.pos[4]);
 #else
 				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.cartesian_pos.orientation.b);
+					value->setDoubleValue(objPrRegData.value.cartesian_pos.orientation.b);
 				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.joint_pos[4]);
+					value->setDoubleValue(objPrRegData.value.joint_pos[4]);
 #endif
 				else
 		       		FST_INFO("PR[%d].pos_type = %d ", 
@@ -612,14 +615,14 @@ int forgesight_registers_manager_get_register(
 			{
 #ifndef WIN32
 				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.pos[5]);
+					value->setDoubleValue(objPrRegData.value.pos[5]);
 				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.pos[5]);
+					value->setDoubleValue(objPrRegData.value.pos[5]);
 #else
 				if(PR_REG_POS_TYPE_CARTESIAN == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.cartesian_pos.orientation.c);
+					value->setDoubleValue(objPrRegData.value.cartesian_pos.orientation.c);
 				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
-					value->setFloatValue(objPrRegData.value.joint_pos[5]);
+					value->setDoubleValue(objPrRegData.value.joint_pos[5]);
 #endif
 				else
 		       		FST_INFO("PR[%d].pos_type = %d ", 
@@ -668,6 +671,7 @@ int forgesight_registers_manager_set_register(
 		struct thread_control_block* objThreadCntrolBlock, 
 		char *name, eval_value * valueStart)
 {
+	bool isSetOK = false ;
 	eval_value value;
 	int boolValue;
 
@@ -683,6 +687,7 @@ int forgesight_registers_manager_set_register(
 	PoseEuler pose ;
 	Joint joint ;
 	Posture posture = {1, 1, -1, 0};
+	Turn    turn    = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 //	pl_t pltValue ;
 	
 	std::string strValue;
@@ -719,6 +724,7 @@ int forgesight_registers_manager_set_register(
 			{
 				pose    = valueStart->getPoseValue();
 				posture = valueStart->getPosture();
+				turn    = valueStart->getTurn();
 				FST_INFO("Set POSE->PR:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
 #ifndef WIN32
 					pose.point_.x_, pose.point_.y_, pose.point_.z_, 
@@ -728,13 +734,16 @@ int forgesight_registers_manager_set_register(
 					pose.orientation.a, pose.orientation.b, pose.orientation.c,
 #endif
 					reg_idx);
-				reg_manager_interface_setPosePr(&pose, &posture, iRegIdx);
+				isSetOK = reg_manager_interface_setPosePr(&pose, &posture, &turn, iRegIdx);
+				if(isSetOK == false)
+					serror(objThreadCntrolBlock, 4);
 				return 0 ;
 			}
 			else if (valueStart->hasType(TYPE_JOINT) == TYPE_JOINT)
 			{
 				joint = valueStart->getJointValue();
 				posture = valueStart->getPosture();
+				turn    = valueStart->getTurn();
 				FST_INFO("Set JOINT->PR:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
 #ifndef WIN32
 					joint.j1_, joint.j2_, joint.j3_, joint.j4_, joint.j5_, joint.j6_, 
@@ -742,7 +751,9 @@ int forgesight_registers_manager_set_register(
 					joint.j1, joint.j2, joint.j3, joint.j4, joint.j5, joint.j6, 
 #endif
 					reg_idx);
-				reg_manager_interface_setJointPr(&joint, &posture, iRegIdx);
+				isSetOK = reg_manager_interface_setJointPr(&joint, &posture, &turn, iRegIdx);
+				if(isSetOK == false)
+					serror(objThreadCntrolBlock, 4);
 				return 0 ;
 			}
 			else if (valueStart->hasType(TYPE_STRING) == TYPE_STRING)
@@ -770,11 +781,13 @@ int forgesight_registers_manager_set_register(
 						joint.j5  = atof(strArray[5].c_str()); 
 						joint.j6  = atof(strArray[6].c_str());
 #endif
-						posture.arm      = atoi(strArray[7].c_str()); 
-						posture.elbow    = atoi(strArray[8].c_str()); 
-						posture.wrist    = atoi(strArray[9].c_str());
-						posture.flip     = atoi(strArray[10].c_str()); 
-						reg_manager_interface_setJointPr(&joint, &posture, iRegIdx);
+						posture.flip     = atoi(strArray[7].c_str()); 
+						posture.arm    = atoi(strArray[8].c_str()); 
+						posture.elbow     = atoi(strArray[9].c_str());
+						posture.wrist    = atoi(strArray[10].c_str()); 
+						isSetOK = reg_manager_interface_setJointPr(&joint, &posture, &turn, iRegIdx);
+						if(isSetOK == false)
+							serror(objThreadCntrolBlock, 4);
 					}
 					else if(strArray[0] == "POSE")
 					{
@@ -793,11 +806,13 @@ int forgesight_registers_manager_set_register(
 						pose.orientation.b = atof(strArray[5].c_str()); 
 						pose.orientation.c = atof(strArray[6].c_str());
 #endif	
-						posture.arm      = atoi(strArray[7].c_str()); 
-						posture.elbow    = atoi(strArray[8].c_str()); 
-						posture.wrist    = atoi(strArray[9].c_str());
-						posture.flip     = atoi(strArray[10].c_str()); 
-						reg_manager_interface_setPosePr(&pose, &posture, iRegIdx);
+						posture.flip      = atoi(strArray[7].c_str()); 
+						posture.arm    = atoi(strArray[8].c_str()); 
+						posture.elbow    = atoi(strArray[9].c_str());
+						posture.wrist     = atoi(strArray[10].c_str()); 
+						isSetOK = reg_manager_interface_setPosePr(&pose, &posture, &turn, iRegIdx);
+						if(isSetOK == false)
+							serror(objThreadCntrolBlock, 4);
 					}
 					return 0 ;
 				}
@@ -806,47 +821,47 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_POSE))
 		{
-			if (valueStart->hasType(TYPE_FLOAT) == TYPE_FLOAT)
+			if (valueStart->hasType(TYPE_DOUBLE) == TYPE_DOUBLE)
 			{
 #ifndef WIN32
-				pose.point_.x_ = (double)valueStart->getFloatValue();
+				pose.point_.x_ = (double)valueStart->getDoubleValue();
 #else
-				pose.position.x = (double)valueStart->getFloatValue();
+				pose.position.x = (double)valueStart->getDoubleValue();
 #endif
 
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-				pose.point_.y_ = (double)value.getFloatValue();
+				pose.point_.y_ = (double)value.getDoubleValue();
 #else
-				pose.position.y = (double)value.getFloatValue();
+				pose.position.y = (double)value.getDoubleValue();
 #endif
 
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-				pose.point_.z_ = (double)value.getFloatValue();
+				pose.point_.z_ = (double)value.getDoubleValue();
 #else
-				pose.position.z = (double)value.getFloatValue();
+				pose.position.z = (double)value.getDoubleValue();
 #endif
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-				pose.euler_.a_ = (double)value.getFloatValue();
+				pose.euler_.a_ = (double)value.getDoubleValue();
 #else
-				pose.orientation.a = (double)value.getFloatValue();
+				pose.orientation.a = (double)value.getDoubleValue();
 #endif
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-				pose.euler_.b_ = (double)value.getFloatValue();
+				pose.euler_.b_ = (double)value.getDoubleValue();
 #else
-				pose.orientation.b = (double)value.getFloatValue();
+				pose.orientation.b = (double)value.getDoubleValue();
 #endif
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-				pose.euler_.c_ = (double)value.getFloatValue();
+				pose.euler_.c_ = (double)value.getDoubleValue();
 #else
-				pose.orientation.c = (double)value.getFloatValue();
+				pose.orientation.c = (double)value.getDoubleValue();
 #endif
 
 				FST_INFO("Set FLOAT->POSE:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
@@ -858,13 +873,16 @@ int forgesight_registers_manager_set_register(
 					pose.orientation.a, pose.orientation.b, pose.orientation.c,
 #endif
 					reg_idx);
-				reg_manager_interface_setPosePr(&pose, &posture, iRegIdx);
+				isSetOK = reg_manager_interface_setPosePr(&pose, &posture, &turn, iRegIdx);
+				if(isSetOK == false)
+					serror(objThreadCntrolBlock, 4);
 	 	      	return 0 ;
 			}
 			else if (valueStart->hasType(TYPE_POSE) == TYPE_POSE)
 			{
 				pose = valueStart->getPoseValue();
 				posture = valueStart->getPosture();
+				turn    = valueStart->getTurn();
 				FST_INFO("Set POSE->POSE:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
 #ifndef WIN32
 					pose.point_.x_, pose.point_.y_, pose.point_.z_, 
@@ -874,13 +892,15 @@ int forgesight_registers_manager_set_register(
 					pose.orientation.a, pose.orientation.b, pose.orientation.c,
 #endif
 					reg_idx);
-				reg_manager_interface_setPosePr(&pose, &posture, iRegIdx);
+				isSetOK = reg_manager_interface_setPosePr(&pose, &posture, &turn, iRegIdx);
+				if(isSetOK == false)
+					serror(objThreadCntrolBlock, 4);
 	    	   	return 0 ;
 			}
 		}
 		else if (!strcmp(reg_member, TXT_POSE_X))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
@@ -891,7 +911,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.cartesian_pos.position.x = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else
 				{
@@ -907,7 +929,7 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_POSE_Y))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
@@ -918,7 +940,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.cartesian_pos.position.y = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else
 				{
@@ -934,7 +958,7 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_POSE_Z))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
@@ -945,7 +969,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.cartesian_pos.position.z = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else
 				{
@@ -961,7 +987,7 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_POSE_A))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
@@ -972,7 +998,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.cartesian_pos.orientation.a = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else
 				{
@@ -988,7 +1016,7 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_POSE_B))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
@@ -999,7 +1027,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.cartesian_pos.orientation.b = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else
 				{
@@ -1015,7 +1045,7 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_POSE_C))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
@@ -1026,7 +1056,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.cartesian_pos.orientation.c = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else
 				{
@@ -1042,47 +1074,47 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_JOINT))
 		{
-			if (valueStart->hasType(TYPE_FLOAT) == TYPE_FLOAT)
+			if (valueStart->hasType(TYPE_DOUBLE) == TYPE_DOUBLE)
 			{
 #ifndef WIN32
-				joint.j1_ = (double)valueStart->getFloatValue();
+				joint.j1_ = (double)valueStart->getDoubleValue();
 #else
-				joint.j1 = (double)valueStart->getFloatValue();
+				joint.j1 = (double)valueStart->getDoubleValue();
 #endif
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-				joint.j2_ = (double)value.getFloatValue();
+				joint.j2_ = (double)value.getDoubleValue();
 #else
-				joint.j2 = (double)value.getFloatValue();
+				joint.j2 = (double)value.getDoubleValue();
 #endif
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-				joint.j3_ = (double)value.getFloatValue();
+				joint.j3_ = (double)value.getDoubleValue();
 #else
-				joint.j3 = (double)value.getFloatValue();
+				joint.j3 = (double)value.getDoubleValue();
 #endif
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-				joint.j4_ = (double)value.getFloatValue();
+				joint.j4_ = (double)value.getDoubleValue();
 #else
-				joint.j4 = (double)value.getFloatValue();
+				joint.j4 = (double)value.getDoubleValue();
 #endif
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-				joint.j5_ = (double)value.getFloatValue();
+				joint.j5_ = (double)value.getDoubleValue();
 #else
-				joint.j5 = (double)value.getFloatValue();
+				joint.j5 = (double)value.getDoubleValue();
 #endif
 				
 				get_exp(objThreadCntrolBlock, &value, &boolValue);
 #ifndef WIN32
-				joint.j6_ = (double)value.getFloatValue();
+				joint.j6_ = (double)value.getDoubleValue();
 #else
-				joint.j6 = (double)value.getFloatValue();
+				joint.j6 = (double)value.getDoubleValue();
 #endif
 				
 				FST_INFO("Set JOINT:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
@@ -1092,12 +1124,16 @@ int forgesight_registers_manager_set_register(
 					joint.j1, joint.j2, joint.j3, joint.j4, joint.j5, joint.j6, 
 #endif
 					reg_idx);
-				reg_manager_interface_setJointPr(&joint, &posture, iRegIdx);
+				isSetOK = reg_manager_interface_setJointPr(&joint, &posture, &turn, iRegIdx);
+				if(isSetOK == false)
+					serror(objThreadCntrolBlock, 4);
 	    	   	return 0 ;
 			}
 			else if (valueStart->hasType(TYPE_JOINT) == TYPE_JOINT)
 			{
 				joint = valueStart->getJointValue();
+				posture = valueStart->getPosture();
+				turn    = valueStart->getTurn();
 				FST_INFO("Set JOINT:(%f, %f, %f, %f, %f, %f) to PR[%s]", 
 #ifndef WIN32
 					joint.j1_, joint.j2_, joint.j3_, joint.j4_, joint.j5_, joint.j6_, 
@@ -1105,14 +1141,16 @@ int forgesight_registers_manager_set_register(
 					joint.j1, joint.j2, joint.j3, joint.j4, joint.j5, joint.j6, 
 #endif
 					reg_idx);
-				reg_manager_interface_setJointPr(&joint, &posture, iRegIdx);
+				isSetOK = reg_manager_interface_setJointPr(&joint, &posture, &turn, iRegIdx);
+				if(isSetOK == false)
+					serror(objThreadCntrolBlock, 4);
 	    	  	return 0 ;
 			}
 			
 		}
 		else if (!strcmp(reg_member, TXT_JOINT_J1))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
@@ -1123,7 +1161,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.joint_pos[0] = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else
 				{
@@ -1139,7 +1179,7 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_JOINT_J2))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
@@ -1150,7 +1190,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.joint_pos[1] = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else
 				{
@@ -1166,7 +1208,7 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_JOINT_J3))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
@@ -1177,7 +1219,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.joint_pos[2] = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else
 				{
@@ -1193,7 +1237,7 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_JOINT_J4))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
@@ -1204,7 +1248,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.joint_pos[3] = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else
 				{
@@ -1220,7 +1266,7 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_JOINT_J5))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
@@ -1231,7 +1277,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.joint_pos[4] = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else
 				{
@@ -1247,7 +1295,7 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_JOINT_J6))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
@@ -1258,7 +1306,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.joint_pos[5] = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else
 				{
@@ -1275,7 +1325,7 @@ int forgesight_registers_manager_set_register(
 		// General parameters for XML content
 		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J1))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
@@ -1286,7 +1336,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.cartesian_pos.position.x = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 				{
@@ -1295,7 +1347,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.joint_pos[0] = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else
 				{
@@ -1311,7 +1365,7 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J2))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
@@ -1322,7 +1376,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.cartesian_pos.position.y = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 				{
@@ -1331,7 +1387,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.joint_pos[1] = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else
 				{
@@ -1347,7 +1405,7 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J3))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
@@ -1358,7 +1416,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.cartesian_pos.position.z = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 				{
@@ -1367,7 +1427,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.joint_pos[2] = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else
 				{
@@ -1383,7 +1445,7 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J4))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
@@ -1394,7 +1456,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.cartesian_pos.orientation.a = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 				{
@@ -1403,7 +1467,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.joint_pos[3] = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else
 				{
@@ -1419,7 +1485,7 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J5))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
@@ -1430,7 +1496,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.cartesian_pos.orientation.b = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 				{
@@ -1439,7 +1507,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.joint_pos[4] = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else
 				{
@@ -1455,7 +1525,7 @@ int forgesight_registers_manager_set_register(
 		}
 		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J6))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(reg_manager_interface_getPr(&objPrRegData, iRegIdx))
 			{
@@ -1466,7 +1536,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.cartesian_pos.orientation.c = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else if(PR_REG_POS_TYPE_JOINT == objPrRegData.value.pos_type)
 				{
@@ -1475,7 +1547,9 @@ int forgesight_registers_manager_set_register(
 #else
 					objPrRegData.value.joint_pos[5] = fValue ;
 #endif
-					reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					isSetOK = reg_manager_interface_setPr(&objPrRegData, iRegIdx);
+					if(isSetOK == false)
+						serror(objThreadCntrolBlock, 4);
 				}
 				else
 				{
@@ -1563,6 +1637,16 @@ int forgesight_registers_manager_get_cart(PoseEuler &pos)
 	return reg_manager_interface_getCart(pos);
 }
 
+int forgesight_registers_manager_get_posture(Posture &posture)
+{
+	return reg_manager_interface_getPosture(posture);
+}
+
+int forgesight_registers_manager_get_turn(Turn &turn)
+{
+	return reg_manager_interface_getTurn(turn);
+}
+
 int forgesight_registers_manager_cartToJoint(PoseEuler pos, Joint &joint)
 {
 	return forgesight_registers_manager_cartToJoint(pos, joint);
@@ -1640,9 +1724,9 @@ int forgesight_registers_manager_get_resource(
 			if(bRet == false)
 				serror(objThreadCntrolBlock, 4) ; 
 			else
-				value->setFloatValue((float)iResValue);
+				value->setDoubleValue((float)iResValue);
 			// RRegData * ptr = (RRegData *)reg_content_buffer ;
-			// value->setFloatValue(ptr->value);
+			// value->setDoubleValue(ptr->value);
 		}
 		else if (!strcmp(reg_member, TXT_REG_VALUE))
 		{
@@ -1650,7 +1734,7 @@ int forgesight_registers_manager_get_resource(
 			if(bRet == false)
 				serror(objThreadCntrolBlock, 4) ; 
 			else
-				value->setFloatValue((float)iResValue);
+				value->setDoubleValue((float)iResValue);
 		}
 	}
 	else if(!strcmp(reg_name, TXT_MH))
@@ -1664,9 +1748,9 @@ int forgesight_registers_manager_get_resource(
 			if(bRet == false)
 				serror(objThreadCntrolBlock, 4) ; 
 			else
-				value->setFloatValue((float)iResValue);
+				value->setDoubleValue((float)iResValue);
 			// RRegData * ptr = (RRegData *)reg_content_buffer ;
-			// value->setFloatValue(ptr->value);
+			// value->setDoubleValue(ptr->value);
 		}
 		else if (!strcmp(reg_member, TXT_REG_VALUE))
 		{
@@ -1674,7 +1758,7 @@ int forgesight_registers_manager_get_resource(
 			if(bRet == false)
 				serror(objThreadCntrolBlock, 4) ; 
 			else
-				value->setFloatValue((float)iResValue);
+				value->setDoubleValue((float)iResValue);
 		}
 	}
 	else if(!strcmp(reg_name, TXT_R))
@@ -1688,9 +1772,9 @@ int forgesight_registers_manager_get_resource(
 			if(bRet == false)
 				serror(objThreadCntrolBlock, 4) ; 
 			else
-			    value->setFloatValue(dResValue);
+			    value->setDoubleValue(dResValue);
 			// RRegData * ptr = (RRegData *)reg_content_buffer ;
-			// value->setFloatValue(ptr->value);
+			// value->setDoubleValue(ptr->value);
 		}
 		else if (!strcmp(reg_member, TXT_REG_VALUE))
 		{
@@ -1698,7 +1782,7 @@ int forgesight_registers_manager_get_resource(
 			if(bRet == false)
 				serror(objThreadCntrolBlock, 4) ; 
 			else
-				value->setFloatValue(dResValue);
+				value->setDoubleValue(dResValue);
 		}
 	}
 	else if(!strcmp(reg_name, TXT_MR))
@@ -1708,11 +1792,11 @@ int forgesight_registers_manager_get_resource(
 			FST_INFO("getMR at %d", iRegIdx);
 			bRet = reg_manager_interface_getMr(&iResValue, iRegIdx);
 	    	FST_INFO("Get at TXT_MR with MR[%d] = %d ", iRegIdx, iResValue);
-			// value->setFloatValue(ptr->value);
+			// value->setDoubleValue(ptr->value);
 			if(bRet == false)
 				serror(objThreadCntrolBlock, 4) ; 
 			else
-				value->setFloatValue((float)iResValue);
+				value->setDoubleValue((float)iResValue);
 		}
 		else if (!strcmp(reg_member, TXT_REG_VALUE))
 		{
@@ -1720,7 +1804,7 @@ int forgesight_registers_manager_get_resource(
 			if(bRet == false)
 				serror(objThreadCntrolBlock, 4) ; 
 			else
-				value->setFloatValue((float)iResValue);
+				value->setDoubleValue((float)iResValue);
 		}
 	}
 	else if(!strcmp(reg_name, TXT_SR))
@@ -1736,7 +1820,7 @@ int forgesight_registers_manager_get_resource(
 			else
 			{
 				value->setStringValue(strResValue);
-				value->setFloatValue(atof(strResValue.c_str()));
+				value->setDoubleValue(atof(strResValue.c_str()));
 			}
 		}
 		else if (!strcmp(reg_member, TXT_REG_VALUE))
@@ -1747,7 +1831,7 @@ int forgesight_registers_manager_get_resource(
 			else
 			{
 				value->setStringValue(strResValue);
-				value->setFloatValue(atof(strResValue.c_str()));
+				value->setDoubleValue(atof(strResValue.c_str()));
 			}
 		}
 	}
@@ -1759,7 +1843,7 @@ int forgesight_registers_manager_get_resource(
 			||(keyVar.key_type == KEYTYPE_INT64)
 			||(keyVar.key_type == KEYTYPE_DOUBLE))
 		{
-			value->setFloatValue(1.0);
+			value->setDoubleValue(1.0);
 		}
 		else if(keyVar.key_type == KEYTYPE_BYTEARRAY)
 		{
@@ -1775,6 +1859,7 @@ int forgesight_registers_manager_set_resource(
 							struct thread_control_block* objThreadCntrolBlock, 
 							char *name, key_variable keyVar, eval_value * valueStart)
 {
+	bool isSetOK = false ;
 	eval_value value;
 //	int boolValue;
 
@@ -1822,10 +1907,12 @@ int forgesight_registers_manager_set_resource(
 	{
 		if(strlen(reg_member) == 0)
 		{
-			if(valueStart->hasType(TYPE_FLOAT) == TYPE_FLOAT)
+			if(valueStart->hasType(TYPE_DOUBLE) == TYPE_DOUBLE)
 			{    
-				int iValue = (int)valueStart->getFloatValue();
-			    reg_manager_interface_setValueMI(&iValue, iRegIdx);
+				int iValue = (int)valueStart->getDoubleValue();
+			    isSetOK = reg_manager_interface_setValueMI(&iValue, iRegIdx);
+				if(isSetOK == false)
+					serror(objThreadCntrolBlock, 4);
 			}
 			else if(valueStart->hasType(TYPE_STRING) == TYPE_STRING)
 			{
@@ -1833,15 +1920,19 @@ int forgesight_registers_manager_set_resource(
 				strValue = valueStart->getStringValue();
 				
 				int iValue = (int)atof(strValue.c_str());
-			    reg_manager_interface_setValueMI(&iValue, iRegIdx);
+			    isSetOK = reg_manager_interface_setValueMI(&iValue, iRegIdx);
+				if(isSetOK == false)
+					serror(objThreadCntrolBlock, 4);
 			}
 	       	return 0 ;
 		}
 		else if (!strcmp(reg_member, TXT_REG_VALUE))
 		{
-			int iValue = (int)valueStart->getFloatValue();
+			int iValue = (int)valueStart->getDoubleValue();
 			FST_INFO("Set VALUE:(%f) to MI[%s]", iValue, reg_idx);
-			reg_manager_interface_setValueMI(&iValue, iRegIdx);
+			isSetOK = reg_manager_interface_setValueMI(&iValue, iRegIdx);
+			if(isSetOK == false)
+				serror(objThreadCntrolBlock, 4);
 	       	return 0 ;
 		}
 	}
@@ -1849,10 +1940,12 @@ int forgesight_registers_manager_set_resource(
 	{
 		if(strlen(reg_member) == 0)
 		{
-			if(valueStart->hasType(TYPE_FLOAT) == TYPE_FLOAT)
+			if(valueStart->hasType(TYPE_DOUBLE) == TYPE_DOUBLE)
 			{    
-				int iValue = (int)valueStart->getFloatValue();
-			    reg_manager_interface_setValueMH(&iValue, iRegIdx);
+				int iValue = (int)valueStart->getDoubleValue();
+			    isSetOK = reg_manager_interface_setValueMH(&iValue, iRegIdx);
+				if(isSetOK == false)
+					serror(objThreadCntrolBlock, 4);
 			}
 			else if(valueStart->hasType(TYPE_STRING) == TYPE_STRING)
 			{
@@ -1860,15 +1953,19 @@ int forgesight_registers_manager_set_resource(
 				strValue = valueStart->getStringValue();
 				
 				int iValue = (int)atof(strValue.c_str());
-			    reg_manager_interface_setValueMH(&iValue, iRegIdx);
+			    isSetOK = reg_manager_interface_setValueMH(&iValue, iRegIdx);
+				if(isSetOK == false)
+					serror(objThreadCntrolBlock, 4);
 			}
 	       	return 0 ;
 		}
 		else if (!strcmp(reg_member, TXT_REG_VALUE))
 		{
-			int iValue = (int)valueStart->getFloatValue();
+			int iValue = (int)valueStart->getDoubleValue();
 			FST_INFO("Set VALUE:(%d) to MH[%s]", iValue, reg_idx);
-			reg_manager_interface_setValueMH(&iValue, iRegIdx);
+			isSetOK = reg_manager_interface_setValueMH(&iValue, iRegIdx);
+			if(isSetOK == false)
+				serror(objThreadCntrolBlock, 4);
 	       	return 0 ;
 		}
 	}
@@ -1876,11 +1973,13 @@ int forgesight_registers_manager_set_resource(
 	{
 		if(strlen(reg_member) == 0)
 		{
-			if(valueStart->hasType(TYPE_FLOAT) == TYPE_FLOAT)
+			if(valueStart->hasType(TYPE_DOUBLE) == TYPE_DOUBLE)
 			{    
-				double fValue = valueStart->getFloatValue();
+				double fValue = valueStart->getDoubleValue();
 				FST_INFO("Set FLOAT:(%f) to R[%s]", fValue, reg_idx);
-			    reg_manager_interface_setValueR(&fValue, iRegIdx);
+			    isSetOK = reg_manager_interface_setValueR(&fValue, iRegIdx);
+				if(isSetOK == false)
+					serror(objThreadCntrolBlock, 4);
 			}
 			else if(valueStart->hasType(TYPE_STRING) == TYPE_STRING)
 			{
@@ -1888,16 +1987,20 @@ int forgesight_registers_manager_set_resource(
 				strValue = valueStart->getStringValue();
 				
 				double fValue = atof(strValue.c_str());
-			    reg_manager_interface_setValueR(&fValue, iRegIdx);
+			    isSetOK = reg_manager_interface_setValueR(&fValue, iRegIdx);
+				if(isSetOK == false)
+					serror(objThreadCntrolBlock, 4);
 			}
 			FST_INFO("Set to R[%s]", reg_idx);
 	       	return 0 ;
 		}
 		else if (!strcmp(reg_member, TXT_REG_VALUE))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			FST_INFO("Set VALUE:(%f) to SR[%s]", fValue, reg_idx);
-			reg_manager_interface_setValueR(&fValue, iRegIdx);
+			isSetOK = reg_manager_interface_setValueR(&fValue, iRegIdx);
+			if(isSetOK == false)
+				serror(objThreadCntrolBlock, 4);
 	       	return 0 ;
 		}
 	}
@@ -1905,10 +2008,12 @@ int forgesight_registers_manager_set_resource(
 	{
 		if(strlen(reg_member) == 0)
 		{
-			if(valueStart->hasType(TYPE_FLOAT) == TYPE_FLOAT)
+			if(valueStart->hasType(TYPE_DOUBLE) == TYPE_DOUBLE)
 			{    
-				int iValue = (int)valueStart->getFloatValue();
-			    reg_manager_interface_setValueMr(&iValue, iRegIdx);
+				int iValue = (int)valueStart->getDoubleValue();
+			    isSetOK = reg_manager_interface_setValueMr(&iValue, iRegIdx);
+				if(isSetOK == false)
+					serror(objThreadCntrolBlock, 4);
 			}
 			else if(valueStart->hasType(TYPE_STRING) == TYPE_STRING)
 			{
@@ -1918,15 +2023,19 @@ int forgesight_registers_manager_set_resource(
 				FST_INFO("Set MR token:(%s) to TYPE_STRING %s", 
 						objThreadCntrolBlock->token, strValue.c_str());
 				int iValue = (int)atof(strValue.c_str());
-			    reg_manager_interface_setValueMr(&iValue, iRegIdx);
+			    isSetOK = reg_manager_interface_setValueMr(&iValue, iRegIdx);
+				if(isSetOK == false)
+					serror(objThreadCntrolBlock, 4);
 			}
 	       	return 0 ;
 		}
 		else if (!strcmp(reg_member, TXT_REG_VALUE))
 		{
-			int iValue = (int)valueStart->getFloatValue();
+			int iValue = (int)valueStart->getDoubleValue();
 			FST_INFO("Set VALUE:(%d) to MR[%s]", iValue, reg_idx);
-			reg_manager_interface_setValueMr(&iValue, iRegIdx);
+			isSetOK = reg_manager_interface_setValueMr(&iValue, iRegIdx);
+			if(isSetOK == false)
+				serror(objThreadCntrolBlock, 4);
 	       	return 0 ;
 		}
 	}
@@ -1939,16 +2048,20 @@ int forgesight_registers_manager_set_resource(
 			{
 				FST_INFO("Set TYPE_STRING token:(%s) to %s", 
 						objThreadCntrolBlock->token, strValue.c_str());
-			   reg_manager_interface_setValueSr(strValue, iRegIdx);
+			   isSetOK = reg_manager_interface_setValueSr(strValue, iRegIdx);
+				if(isSetOK == false)
+					serror(objThreadCntrolBlock, 4);
 			}
-			else if(valueStart->hasType(TYPE_FLOAT) == TYPE_FLOAT)
+			else if(valueStart->hasType(TYPE_DOUBLE) == TYPE_DOUBLE)
 			{
 			    char cStringValue[64];
-			    sprintf(cStringValue, "%f", valueStart->getFloatValue());
+			    sprintf(cStringValue, "%f", valueStart->getDoubleValue());
 				strValue = std::string(cStringValue);
 				FST_INFO("Set TYPE_STRING token:(%s) to %s", 
 						objThreadCntrolBlock->token, cStringValue);
-			    reg_manager_interface_setValueSr(strValue, iRegIdx);
+			    isSetOK = reg_manager_interface_setValueSr(strValue, iRegIdx);
+				if(isSetOK == false)
+					serror(objThreadCntrolBlock, 4);
 			}
 			else if(valueStart->hasType(TYPE_POSE) == TYPE_POSE)
 			{
@@ -1972,15 +2085,17 @@ int forgesight_registers_manager_set_resource(
 #endif	
 				sprintf(cStringValue, "%s|%d|%d|%d|%d",
 					cStringValue, 
-					valueStart->getPosture().arm  ,
+					valueStart->getPosture().flip  ,
+					valueStart->getPosture().arm,
 					valueStart->getPosture().elbow,
-					valueStart->getPosture().wrist,
-					valueStart->getPosture().flip);
+					valueStart->getPosture().wrist);
 
 				strValue = std::string(cStringValue);
 				FST_INFO("Set TYPE_STRING token:(%s) to %s", 
 					objThreadCntrolBlock->token, cStringValue);
-				reg_manager_interface_setValueSr(strValue, iRegIdx);
+				isSetOK = reg_manager_interface_setValueSr(strValue, iRegIdx);
+				if(isSetOK == false)
+					serror(objThreadCntrolBlock, 4);
 			}
 			else if(valueStart->hasType(TYPE_JOINT) == TYPE_JOINT)
 			{
@@ -2004,14 +2119,16 @@ int forgesight_registers_manager_set_resource(
 #endif
 				sprintf(cStringValue, "%s|%d|%d|%d|%d",
 					cStringValue, 
-					valueStart->getPosture().arm  ,
+					valueStart->getPosture().flip  ,
+					valueStart->getPosture().arm,
 					valueStart->getPosture().elbow,
-					valueStart->getPosture().wrist,
-					valueStart->getPosture().flip);
+					valueStart->getPosture().wrist);
 				strValue = std::string(cStringValue);
 				FST_INFO("Set TYPE_STRING token:(%s) to %s", 
 					objThreadCntrolBlock->token, cStringValue);
-				reg_manager_interface_setValueSr(strValue, iRegIdx);
+				isSetOK = reg_manager_interface_setValueSr(strValue, iRegIdx);
+				if(isSetOK == false)
+					serror(objThreadCntrolBlock, 4);
 			}
 	       	return 0 ;
 		}
@@ -2021,7 +2138,9 @@ int forgesight_registers_manager_set_resource(
 			FST_INFO("Set VALUE:(%s) to SR[%s]", 
 				objThreadCntrolBlock->token, reg_idx);
 			strValue = std::string(objThreadCntrolBlock->token);
-			reg_manager_interface_setValueSr(strValue, iRegIdx);
+			isSetOK = reg_manager_interface_setValueSr(strValue, iRegIdx);
+			if(isSetOK == false)
+				serror(objThreadCntrolBlock, 4);
 	       	return 0 ;
 		}
 	}
@@ -2113,18 +2232,18 @@ int forgesight_registers_manager_get_point(
 			{
 				objPoseEuler = value.getPoseValue();
 #ifndef WIN32
-				valueStart->setFloatValue(objPoseEuler.point_.x_);
+				valueStart->setDoubleValue(objPoseEuler.point_.x_);
 #else
-				valueStart->setFloatValue(objPoseEuler.position.x);
+				valueStart->setDoubleValue(objPoseEuler.position.x);
 #endif
 			}
 			else if(TYPE_JOINT == value.hasType(TYPE_JOINT))
 			{
 				objJoint = value.getJointValue();
 #ifndef WIN32
-				valueStart->setFloatValue(objJoint.j1_);
+				valueStart->setDoubleValue(objJoint.j1_);
 #else
-				valueStart->setFloatValue(objJoint.j1);
+				valueStart->setDoubleValue(objJoint.j1);
 #endif
 			}
 		}
@@ -2134,18 +2253,18 @@ int forgesight_registers_manager_get_point(
 			{
 				objPoseEuler = value.getPoseValue();
 #ifndef WIN32
-				valueStart->setFloatValue(objPoseEuler.point_.y_);
+				valueStart->setDoubleValue(objPoseEuler.point_.y_);
 #else
-				valueStart->setFloatValue(objPoseEuler.position.y);
+				valueStart->setDoubleValue(objPoseEuler.position.y);
 #endif
 			}
 			else if(TYPE_JOINT == value.hasType(TYPE_JOINT))
 			{
 				objJoint = value.getJointValue();
 #ifndef WIN32
-				valueStart->setFloatValue(objJoint.j2_);
+				valueStart->setDoubleValue(objJoint.j2_);
 #else
-				valueStart->setFloatValue(objJoint.j2);
+				valueStart->setDoubleValue(objJoint.j2);
 #endif
 			}
 		}
@@ -2155,18 +2274,18 @@ int forgesight_registers_manager_get_point(
 			{
 				objPoseEuler = value.getPoseValue();
 #ifndef WIN32
-				valueStart->setFloatValue(objPoseEuler.point_.z_);
+				valueStart->setDoubleValue(objPoseEuler.point_.z_);
 #else
-				valueStart->setFloatValue(objPoseEuler.position.z);
+				valueStart->setDoubleValue(objPoseEuler.position.z);
 #endif
 			}
 			else if(TYPE_JOINT == value.hasType(TYPE_JOINT))
 			{
 				objJoint = value.getJointValue();
 #ifndef WIN32
-				valueStart->setFloatValue(objJoint.j3_);
+				valueStart->setDoubleValue(objJoint.j3_);
 #else
-				valueStart->setFloatValue(objJoint.j3);
+				valueStart->setDoubleValue(objJoint.j3);
 #endif
 			}
 		}
@@ -2176,18 +2295,18 @@ int forgesight_registers_manager_get_point(
 			{
 				objPoseEuler = value.getPoseValue();
 #ifndef WIN32
-				valueStart->setFloatValue(objPoseEuler.euler_.a_);
+				valueStart->setDoubleValue(objPoseEuler.euler_.a_);
 #else
-				valueStart->setFloatValue(objPoseEuler.orientation.a);
+				valueStart->setDoubleValue(objPoseEuler.orientation.a);
 #endif
 			}
 			else if(TYPE_JOINT == value.hasType(TYPE_JOINT))
 			{
 				objJoint = value.getJointValue();
 #ifndef WIN32
-				valueStart->setFloatValue(objJoint.j4_);
+				valueStart->setDoubleValue(objJoint.j4_);
 #else
-				valueStart->setFloatValue(objJoint.j4);
+				valueStart->setDoubleValue(objJoint.j4);
 #endif
 			}
 		}
@@ -2197,18 +2316,18 @@ int forgesight_registers_manager_get_point(
 			{
 				objPoseEuler = value.getPoseValue();
 #ifndef WIN32
-				valueStart->setFloatValue(objPoseEuler.euler_.b_);
+				valueStart->setDoubleValue(objPoseEuler.euler_.b_);
 #else
-				valueStart->setFloatValue(objPoseEuler.orientation.b);
+				valueStart->setDoubleValue(objPoseEuler.orientation.b);
 #endif
 			}
 			else if(TYPE_JOINT == value.hasType(TYPE_JOINT))
 			{
 				objJoint = value.getJointValue();
 #ifndef WIN32
-				valueStart->setFloatValue(objJoint.j5_);
+				valueStart->setDoubleValue(objJoint.j5_);
 #else
-				valueStart->setFloatValue(objJoint.j5);
+				valueStart->setDoubleValue(objJoint.j5);
 #endif
 			}
 		}
@@ -2218,18 +2337,18 @@ int forgesight_registers_manager_get_point(
 			{
 				objPoseEuler = value.getPoseValue();
 #ifndef WIN32
-				valueStart->setFloatValue(objPoseEuler.euler_.c_);
+				valueStart->setDoubleValue(objPoseEuler.euler_.c_);
 #else
-				valueStart->setFloatValue(objPoseEuler.orientation.c);
+				valueStart->setDoubleValue(objPoseEuler.orientation.c);
 #endif
 			}
 			else if(TYPE_JOINT == value.hasType(TYPE_JOINT))
 			{
 				objJoint = value.getJointValue();
 #ifndef WIN32
-				valueStart->setFloatValue(objJoint.j6_);
+				valueStart->setDoubleValue(objJoint.j6_);
 #else
-				valueStart->setFloatValue(objJoint.j6);
+				valueStart->setDoubleValue(objJoint.j6);
 #endif
 			}
 		}
@@ -2306,7 +2425,7 @@ int forgesight_registers_manager_set_point(
 		
 		if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J1))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(TYPE_POSE == value.hasType(TYPE_POSE))
 			{
@@ -2336,7 +2455,7 @@ int forgesight_registers_manager_set_point(
 		}
 		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J2))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(TYPE_POSE == value.hasType(TYPE_POSE))
 			{
@@ -2366,7 +2485,7 @@ int forgesight_registers_manager_set_point(
 		}
 		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J3))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(TYPE_POSE == value.hasType(TYPE_POSE))
 			{
@@ -2396,7 +2515,7 @@ int forgesight_registers_manager_set_point(
 		}
 		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J4))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(TYPE_POSE == value.hasType(TYPE_POSE))
 			{
@@ -2426,7 +2545,7 @@ int forgesight_registers_manager_set_point(
 		}
 		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J5))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(TYPE_POSE == value.hasType(TYPE_POSE))
 			{
@@ -2456,7 +2575,7 @@ int forgesight_registers_manager_set_point(
 		}
 		else if (!strcmp(reg_member, TXT_PR_POSE_JOINT_J6))
 		{
-			double fValue = valueStart->getFloatValue();
+			double fValue = valueStart->getDoubleValue();
 			
 			if(TYPE_POSE == value.hasType(TYPE_POSE))
 			{
