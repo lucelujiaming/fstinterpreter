@@ -693,8 +693,8 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
             	FST_ERROR("Can not JUMP in EXECUTE_R ");
            		break;
 			}
-            FST_INFO("jump to line:%s", intprt_ctrl.jump_line);
 			iLineNum = getLineNumFromXPathVector(objThdCtrlBlockPtr, intprt_ctrl.jump_line);
+            FST_INFO("jump to line:%s return %d", intprt_ctrl.jump_line, iLineNum);
 			if(iLineNum > 0)
             {
             	setLinenum(objThdCtrlBlockPtr, iLineNum);

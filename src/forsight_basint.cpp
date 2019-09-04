@@ -70,8 +70,6 @@
 #define DIM       35
 #define NOP       36
 
-enum var_inner_type { FORSIGHT_CHAR, FORSIGHT_INT, FORSIGHT_FLOAT };
-
 #define FORSIGHT_RETURN_VALUE   "forsight_return_value"
 #define FORSIGHT_CURRENT_JOINT  "j_pos"
 #define FORSIGHT_CURRENT_POS    "l_pos"
@@ -398,13 +396,13 @@ int getLinenum(
 *************************************************/ 
 void setLinenum(struct thread_control_block* objThreadCntrolBlock, int iLinenum)
 {
-    FST_INFO("setLinenum : %d at the %dth thread", 
-		iLinenum, objThreadCntrolBlock->iThreadIdx);
 	objThreadCntrolBlock->iLineNum = iLinenum;
 	if(iLinenum < (int)objThreadCntrolBlock->vector_XPath.size())
 	{
-		FST_INFO("setLinenum: setCurLine (%d) at %s", 
-			iLinenum, objThreadCntrolBlock->vector_XPath[iLinenum].c_str());
+		FST_INFO("setLinenum: setCurLine (%d) at %s (%08X) at the %dth thread", 
+			iLinenum, objThreadCntrolBlock->vector_XPath[iLinenum].c_str(), 
+			objThreadCntrolBlock->prog_jmp_line[iLinenum].start_prog_pos, 
+			objThreadCntrolBlock->iThreadIdx);
 		setCurLine(objThreadCntrolBlock, 
 			(char *)objThreadCntrolBlock->vector_XPath[iLinenum].c_str(), iLinenum);
 	}
@@ -448,9 +446,11 @@ void printCurrentLine(struct thread_control_block* objThreadCntrolBlock, int iId
 	{
 		*cLineContentPtr++=*cLineContentProgPtr++;
 	}
-	FST_INFO("\t(%d) (%d): (%s  %s) at (%d)", 
-		objThreadCntrolBlock->iLineNum, iIdx, 
-		objThreadCntrolBlock->token, cLineContent,
+	FST_INFO("\t(%08X - %08X) (%d): ( %s ) at %d", 
+		objThreadCntrolBlock->prog_jmp_line[iIdx].start_prog_pos, 
+		objThreadCntrolBlock->prog_jmp_line[iIdx].end_prog_pos, 
+		objThreadCntrolBlock->iLineNum, // iIdx, objThreadCntrolBlock->token, 
+		cLineContent,
 		objThreadCntrolBlock->iThreadIdx);
 }
 
@@ -468,6 +468,7 @@ void printProgJmpLine(struct thread_control_block* objThreadCntrolBlock)
 	// Scan the labels in the import files
 	proglabelsScan = objThreadCntrolBlock->prog ;
 	iLineNumTemp   = objThreadCntrolBlock->iLineNum ;
+	
 	for(unsigned i=0; i < objThreadCntrolBlock->prog_jmp_line.size(); i++)
 	{
 	    objThreadCntrolBlock->iLineNum = i; 
@@ -693,6 +694,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	  objProgLineInfo.type     = END_PROG ;
 	  objThreadCntrolBlock->prog_jmp_line.push_back(objProgLineInfo);
 
+	  // printProgJmpLine(objThreadCntrolBlock);
       memset(cLineContent, 0x00, LINE_CONTENT_LEN);
 	  sprintf(cLineContent, "%s::main", objThreadCntrolBlock->project_name);
       char * loc = find_label(objThreadCntrolBlock, cLineContent); // "main");
@@ -1129,14 +1131,30 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	Output: 		NULL
 	Return: 		NULL
 *************************************************/ 
-int  jump_prog_from_line(struct thread_control_block * objThreadCntrolBlock, int iNum)
+bool  jump_prog_from_line(struct thread_control_block * objThreadCntrolBlock, int iNum)
 {
-	if(iNum < (int)objThreadCntrolBlock->prog_jmp_line.size())
+	if(iNum > 0)
 	{
-		objThreadCntrolBlock->prog = objThreadCntrolBlock->prog_jmp_line[iNum].start_prog_pos;
-		return iNum ;
+		// iLineNum start from one and prog_jmp_line start from zero.
+		int iJmpLine = iNum - 1;
+		
+		if(iNum < (int)objThreadCntrolBlock->prog_jmp_line.size())
+		{
+			objThreadCntrolBlock->prog = objThreadCntrolBlock->prog_jmp_line[iJmpLine].start_prog_pos;
+			return true ;
+		}
+		else
+		{
+			FST_INFO("jump_prog_from_line out of range iNum = %d", iNum);
+			return false;
+		}
 	}
-	return 0;
+	else
+	{
+		FST_INFO("jump_prog_from_line input illegal iNum = %d", iNum);
+		return false;
+	}
+	return false;
 }
 
 /************************************************* 
@@ -2849,6 +2867,7 @@ bool call_inner_func(struct thread_control_block * objThreadCntrolBlock, eval_va
     }
 	else if(count == PARAM_NUM_TWO)
 	{
+    	FST_INFO("call_internal_func(%d, result, %s, %s)", funcIdx, temp[0], temp[1]); 
 		return call_internal_func(funcIdx, result, temp[0], temp[1]);
     }
 	else if(count == PARAM_NUM_THR)

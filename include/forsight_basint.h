@@ -109,7 +109,6 @@ struct sub_label {
 
 struct var_type {
     char var_name[LAB_LEN]; // name
-    // var_inner_type v_type; // data type
 	eval_value value ;
 };
 
@@ -223,7 +222,7 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock, char *s,
 int erase_var(struct thread_control_block * objThreadCntrolBlock, char *vname);
 
 void find_eol(struct thread_control_block * objThreadCntrolBlock);
-int  jump_prog_from_line(struct thread_control_block * objThreadCntrolBlock, int iNum);
+bool  jump_prog_from_line(struct thread_control_block * objThreadCntrolBlock, int iNum);
 int  calc_line_from_prog(struct thread_control_block * objThreadCntrolBlock);
 void serror(struct thread_control_block * objThreadCntrolBlock, int error);
 
