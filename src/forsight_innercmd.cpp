@@ -3131,9 +3131,9 @@ void mergeImportXPathToProjectXPath(
 				contentImportSepPtr - contentImportLine);
 			strcpy(contentImportXPath,   contentImportSepPtr + 1);
 			iImportLineNum = atoi(contentImportLineNum);
-		//	FST_INFO("%03d:%s", iImportLineNum + iMainLineCount, 
+		//	FST_INFO("%04d:%s", iImportLineNum + iMainLineCount, 
 		//		contentImportSepPtr + 1);
-			fprintf(xpath_main_file, "%03d:%s", iImportLineNum + iMainLineCount, 
+			fprintf(xpath_main_file, "%04d:%s", iImportLineNum + iMainLineCount, 
 				contentImportSepPtr + 1);
 		}
 	}
@@ -3148,9 +3148,11 @@ void mergeImportXPathToProjectXPath(
 	Input:			fname                  - import file name
 	Return: 		NULL
 *************************************************/ 
+#define   XPATH_VECTOR_BLOCK_SIZE    1024
 void generateXPathVector(
 		struct thread_control_block* objThreadCntrolBlock, char * fname)
 {
+	int iXPathVectorSize = XPATH_VECTOR_BLOCK_SIZE;
 	char xpath_file_name[FILE_PATH_LEN];
 	int iLineNum = 0 ;
 	char contentLine[FILE_PATH_LEN];
@@ -3174,7 +3176,7 @@ void generateXPathVector(
 	}
 	
 	// Pre-arrange
-	objThreadCntrolBlock->vector_XPath.resize(1024);
+	objThreadCntrolBlock->vector_XPath.resize(iXPathVectorSize);
 
 	memset(contentLine,    0x00, FILE_PATH_LEN);
 	while(fgets(contentLine,sizeof(contentLine),xpath_file)!=NULL)  
@@ -3196,6 +3198,11 @@ void generateXPathVector(
 				strcpy(contentXPath,   contentSepPtr + 1);
 			}
 			iLineNum = atoi(contentLineNum);
+			if(iLineNum >= iXPathVectorSize)
+			{
+				iXPathVectorSize += XPATH_VECTOR_BLOCK_SIZE ;
+				objThreadCntrolBlock->vector_XPath.resize(iXPathVectorSize);
+			}
 			objThreadCntrolBlock->vector_XPath[iLineNum] = string(contentXPath) ;
 		}
 	}

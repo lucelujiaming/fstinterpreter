@@ -95,16 +95,16 @@ int exportBASCode(LineInfo objLineInfo, char *title, char *format, char * value)
 	// FST_INFO(title);
 	fprintf(fpMix,"%s", title);
 	
-	// FST_INFO("(%03d)", g_lineNum);
-	fprintf(fpMix,"(%03d)", g_lineNum);
-	fprintf(fpXPath,"%03d:%s:", g_lineNum, objLineInfo.fileName);
+	// FST_INFO("(%04d)", g_lineNum);
+	fprintf(fpMix,"(%04d)", g_lineNum);
+	fprintf(fpXPath,"%04d:%s:", g_lineNum, objLineInfo.fileName);
 
 #ifdef PRINT_XPATH
 	if(strlen(title) > 0)
 	{
 		iPathLen =  strlen(objLineInfo.xPath) ;
-		// FST_INFO("(%03d)%s", iPathLen, objLineInfo.xPath);
-		fprintf(fpMix,"(%03d)%s", iPathLen, objLineInfo.xPath);
+		// FST_INFO("(%04d)%s", iPathLen, objLineInfo.xPath);
+		fprintf(fpMix,"(%04d)%s", iPathLen, objLineInfo.xPath);
 		fprintf(fpXPath,"%s\n", objLineInfo.xPath);
 		for(int i = 100 ; i > iPathLen; i--)
 		{

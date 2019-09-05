@@ -96,7 +96,7 @@ int main(int  argc, char *argv[])
 #else
 			if (intprt_ctrl.cmd == fst_base::INTERPRETER_SERVER_CMD_LAUNCH)
 			{
-				parseCtrlComand(intprt_ctrl, "SR_regTest_0827");
+				parseCtrlComand(intprt_ctrl, "MR_regTest_Large");
 				Sleep(1);
 				intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_RESUME ;
 				parseCtrlComand(intprt_ctrl, "");
