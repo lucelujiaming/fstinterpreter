@@ -77,6 +77,9 @@
 #define FORSIGHT_REGISTER_ON    "on"
 #define FORSIGHT_REGISTER_OFF   "off"
 
+#define FORSIGHT_REGISTER_TRUE    "true"
+#define FORSIGHT_REGISTER_FALSE   "false"
+
 #define FORSIGHT_TIMER_START    "start"
 #define FORSIGHT_TIMER_STOP     "stop"
 #define FORSIGHT_TIMER_RESET    "reset"
@@ -446,10 +449,10 @@ void printCurrentLine(struct thread_control_block* objThreadCntrolBlock, int iId
 	{
 		*cLineContentPtr++=*cLineContentProgPtr++;
 	}
-	FST_INFO("\t(%08X - %08X) (%d): ( %s ) at %d", 
+	FST_INFO("\t(%08X - %08X) (%d): (%s %s ) at %d", 
 		objThreadCntrolBlock->prog_jmp_line[iIdx].start_prog_pos, 
 		objThreadCntrolBlock->prog_jmp_line[iIdx].end_prog_pos, 
-		objThreadCntrolBlock->iLineNum, // iIdx, objThreadCntrolBlock->token, 
+		objThreadCntrolBlock->iLineNum, objThreadCntrolBlock->token, 
 		cLineContent,
 		objThreadCntrolBlock->iThreadIdx);
 }
@@ -1439,25 +1442,26 @@ void assignment(struct thread_control_block * objThreadCntrolBlock)
 *************************************************/ 
 void print(struct thread_control_block * objThreadCntrolBlock)
 {
+  char cPrintOutput[4096];
   eval_value answer;
   int boolValue;
 
   int len=0, spaces;
   char last_delim;
 
+  memset(cPrintOutput, 0x00, 4096);
   do {
     get_token(objThreadCntrolBlock); /* get next list item */
     if(objThreadCntrolBlock->tok==EOL || objThreadCntrolBlock->tok==FINISHED) break;
     if(objThreadCntrolBlock->token_type==QUOTE) { /* is string */
-      FST_INFO("%s", objThreadCntrolBlock->token);
-      len += strlen(objThreadCntrolBlock->token);
+      len += sprintf(cPrintOutput, "%s %s", cPrintOutput, objThreadCntrolBlock->token);
       get_token(objThreadCntrolBlock);
     }
     else { /* is expression */
       putback(objThreadCntrolBlock);
       get_exp(objThreadCntrolBlock, &answer, &boolValue);
       get_token(objThreadCntrolBlock);
-      len += printf("%d", (int)answer.getDoubleValue());
+	  len += sprintf(cPrintOutput, "%s %f", cPrintOutput, answer.getDoubleValue());
     }
     last_delim = *(objThreadCntrolBlock->token);
 
@@ -1466,7 +1470,7 @@ void print(struct thread_control_block * objThreadCntrolBlock)
       spaces = 8 - (len % 8);
       len += spaces; /* add in the tabbing position */
       while(spaces) {
-	  FST_INFO(" ");
+	  sprintf(cPrintOutput, "%s ", cPrintOutput);
         spaces--;
       }
     }
@@ -1477,10 +1481,11 @@ void print(struct thread_control_block * objThreadCntrolBlock)
   			|| *(objThreadCntrolBlock->token)==',');
 
   if(objThreadCntrolBlock->tok==EOL || objThreadCntrolBlock->tok==FINISHED) {
-    if(last_delim != ';' && last_delim!=',') FST_INFO("");
+    if(last_delim != ';' && last_delim!=',') sprintf(cPrintOutput, "%s", cPrintOutput);
   }
   else serror(objThreadCntrolBlock, 0); /* error is not , or ; */
 
+  FST_INFO(cPrintOutput);
 }
 
 /************************************************* 
@@ -1506,6 +1511,19 @@ void scan_labels(struct thread_control_block * objThreadCntrolBlock,
   char *temp;
 
   temp = objThreadCntrolBlock->prog;   /* save pointer to top of program */
+  
+  // Add Fake label to prevent nesting import
+  sprintf(objLabel.name, "%s", pname);
+  objLabel.p = objThreadCntrolBlock->prog_end;
+  if(find_label(objThreadCntrolBlock, objLabel.name) == '\0')
+  {
+     addr = add_label(objThreadCntrolBlock, objLabel);
+  }
+  else
+  {
+	  FST_ERROR("Omitting info: Duplicate sub_label = %s", objLabel.name);
+	  return;
+  }
 
   /* if the first token in the file is a label */
   objProgLineInfo.start_prog_pos = objThreadCntrolBlock->prog ;
@@ -1523,7 +1541,14 @@ void scan_labels(struct thread_control_block * objThreadCntrolBlock,
 	objLabel.p = objThreadCntrolBlock->prog;
 	addr = add_label(objThreadCntrolBlock, objLabel);
       if(addr==-1 || addr==-2) {
-          (addr==-1) ?serror(objThreadCntrolBlock, 5):serror(objThreadCntrolBlock, 6);
+          if(addr==-1) 
+		  {
+			  serror(objThreadCntrolBlock, 5);
+		  }
+		  else
+		  {
+			  serror(objThreadCntrolBlock, 6);
+		  }
       }
   }
   else if(objThreadCntrolBlock->token_type==COMMAND) {
@@ -1541,7 +1566,14 @@ void scan_labels(struct thread_control_block * objThreadCntrolBlock,
 		  bisFindEOL = 1 ;
 		  addr = add_label(objThreadCntrolBlock, objLabel);
 		  if(addr==-1 || addr==-2) {
-			  (addr==-1) ?serror(objThreadCntrolBlock, 5):serror(objThreadCntrolBlock, 6);
+			  if(addr==-1)
+			  {
+				  serror(objThreadCntrolBlock, 5);
+			  }
+		      else
+			  {
+				  serror(objThreadCntrolBlock, 6);
+			  }
 		  }
 	  }
   }
@@ -1589,7 +1621,14 @@ void scan_labels(struct thread_control_block * objThreadCntrolBlock,
 
 		  addr = add_label(objThreadCntrolBlock, objLabel);
 		  if(addr==-1 || addr==-2) {
-			  (addr==-1) ?serror(objThreadCntrolBlock, 5):serror(objThreadCntrolBlock, 6);
+			  if(addr==-1) 
+			  {
+				  serror(objThreadCntrolBlock, 5);
+			  }
+			  else
+			  {
+				  serror(objThreadCntrolBlock, 6);
+			  }
 		  }
     }
 	else if(objThreadCntrolBlock->token_type==COMMAND) {
@@ -1605,7 +1644,14 @@ void scan_labels(struct thread_control_block * objThreadCntrolBlock,
 		    bisFindEOL = 1 ;
 	        addr = add_label(objThreadCntrolBlock, objLabel);
 	        if(addr==-1 || addr==-2) {
-	          (addr==-1) ?serror(objThreadCntrolBlock, 5):serror(objThreadCntrolBlock, 6);
+				if(addr==-1)
+				{
+					serror(objThreadCntrolBlock, 5);
+				}
+				else
+				{
+					serror(objThreadCntrolBlock, 6);
+				}
 	        }
 		}
 	}
@@ -3100,6 +3146,7 @@ void exec_import(struct thread_control_block * objThreadCntrolBlock)
   char * temp = objLabel.name ;
   memset(objLabel.name, 0x00, LAB_LEN);
   
+  // Save Module name into objLabel.name
   while((*objThreadCntrolBlock->prog != '\r') 
 	  &&(*objThreadCntrolBlock->prog != '\n'))
   {
@@ -3149,7 +3196,10 @@ void exec_import(struct thread_control_block * objThreadCntrolBlock)
 /*
  *	  addr = add_label(objThreadCntrolBlock, objLabel);
  *    if(addr==-1 || addr==-2) {
- *        (addr==-1) ?serror(objThreadCntrolBlock, 5):serror(objThreadCntrolBlock, 6);
+ *        if(addr==-1)
+			serror(objThreadCntrolBlock, 5);
+		  else
+		    serror(objThreadCntrolBlock, 6);
  *    }
  */
 }
@@ -4565,6 +4615,16 @@ eval_value find_var(struct thread_control_block * objThreadCntrolBlock,
 		return value ;
 	}
 	else if(!strcmp(vname, FORSIGHT_REGISTER_OFF))
+	{
+		value.setDoubleValue(0.0);
+		return value ;
+	}
+	else if(!strcmp(vname, FORSIGHT_REGISTER_TRUE))
+	{
+		value.setDoubleValue(1.0);
+		return value ;
+	}
+	else if(!strcmp(vname, FORSIGHT_REGISTER_FALSE))
 	{
 		value.setDoubleValue(0.0);
 		return value ;

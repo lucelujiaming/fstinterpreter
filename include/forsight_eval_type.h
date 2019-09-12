@@ -723,7 +723,7 @@ public:
 				iValue = 1 ;
 			else {
 				for(t=ex-1; t>0; --t) 
-					iValue = (iValue) * ex;
+					iValue = iValue * iValue;
 			}
 		}
 		else if(hasType(TYPE_DOUBLE) == TYPE_DOUBLE){
@@ -731,7 +731,7 @@ public:
 				dValue = 1 ;
 			else {
 				for(t=ex-1; t>0; --t) 
-					dValue = (dValue) * ex;
+					dValue = dValue * dValue;
 			}
 		}
 		else {
