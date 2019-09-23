@@ -30,6 +30,17 @@
 
 // #define USE_WAITING_R
 
+#ifndef WIN32
+void prgRoutine(fst_log::Logger* log_ptr, 
+					ControllerSm* state_machine_ptr, 
+					fst_mc::MotionControl* motion_control_ptr, 
+					RegManager* reg_manager_ptr, 
+                    IoMapping* io_mapping_ptr, 
+                    IoManager* io_manager_ptr, 
+                    fst_hal::ModbusManager* modbus_manager_ptr);
+InterpreterPublish* getInterpreterPublishPtr();
+#endif
+
 void resetProgramNameAndLineNum(struct thread_control_block * objThdCtrlBlockPtr);
 
 char * getProgramName();
@@ -64,7 +75,7 @@ unsigned __stdcall script_func(void* arg);
 #else
 void* script_func(void* arg);
 #endif
-void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr); 
+void parseCtrlComand(InterpreterControl intprt_ctrl, char * requestDataPtr); 
 							// (struct thread_control_block * objThdCtrlBlock);
 void initInterpreter();
 void uninitInterpreter();

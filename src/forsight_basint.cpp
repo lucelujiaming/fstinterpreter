@@ -12,6 +12,7 @@
 #include "time.h"
 #ifndef WIN32
 #include "error_code.h"
+#include<sys/mman.h>
 #else
 #include "macro_instr_mgr.h"
 #include <io.h>
@@ -237,7 +238,13 @@ HANDLE    g_basic_interpreter_handle[NUM_THREAD + 1];
 extern MacroInstrMgr  *  g_macro_instr_mgr_ptr; 
 #else
 pthread_t g_basic_interpreter_handle[NUM_THREAD + 1];
-fst_log::Logger * log_ptr_ = NULL;
+fst_log::Logger *      log_ptr_            = NULL;
+ControllerSm*          state_machine_ptr_  = NULL;
+fst_mc::MotionControl* motion_control_ptr_ = NULL;
+RegManager*            reg_manager_ptr_    = NULL;
+IoMapping*             io_mapping_ptr_     = NULL;
+IoManager*             io_manager_ptr_     = NULL;
+fst_hal::ModbusManager* modbus_manager_ptr_ = NULL; 
 #endif
 
 /************************************************* 
@@ -253,6 +260,16 @@ unsigned __stdcall basic_interpreter(void* arg)
 void* basic_interpreter(void* arg)
 #endif
 {
+#ifdef WIN32
+	FST_INFO("Starting call_interpreter and memory will be locked in the Linux platform.");
+#else
+    if (mlockall(MCL_CURRENT|MCL_FUTURE) == -1)     
+	{        
+		FST_ERROR("mlockall failed"); 
+		return MC_FAIL_IN_INIT; 
+	}
+#endif // WIN32
+
 	int iIdx = 0;
 	//  int iRet = 0;
 	struct thread_control_block * objThreadCntrolBlock
@@ -658,7 +675,7 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	  objThreadCntrolBlock->select_and_cycle_tos = 0; /* initialize the FOR stack index */
 	  objThreadCntrolBlock->gosub_tos = 0; /* initialize the GOSUB stack index */
 	  objThreadCntrolBlock->is_abort  = false;
-	  objThreadCntrolBlock->is_paused = false;
+//	  objThreadCntrolBlock->is_paused = false;
 	  
 	  get_token(objThreadCntrolBlock);
  	  while(objThreadCntrolBlock->tok == IMPORT)
@@ -784,11 +801,11 @@ int call_interpreter(struct thread_control_block* objThreadCntrolBlock, int mode
 	}
 	// Wait Trajectory
 #ifndef WIN32
-    ret = g_objRegManagerInterface->isNextInstructionNeeded();
+    ret = state_machine_ptr_->isNextInstructionNeeded();
     while (ret == false)
     {
         usleep(1000);
-    	ret = g_objRegManagerInterface->isNextInstructionNeeded();
+    	ret = state_machine_ptr_->isNextInstructionNeeded();
     }
 #endif
   	if((objThreadCntrolBlock->prog_mode == STEP_MODE)
@@ -4913,9 +4930,18 @@ bool basic_thread_create(int iIdx, void * args)
 	{
 		ret = true;
 	}
-#else
+#else    
+	pthread_attr_t thread_attr;
+	struct sched_param schedule_param;
+
+	pthread_attr_init(&thread_attr);
+	pthread_attr_setschedpolicy(&thread_attr,SCHED_RR);
+	schedule_param.sched_priority = 50;
+	pthread_attr_setschedparam(&thread_attr, &schedule_param); 
+	pthread_attr_setinheritsched(&thread_attr, PTHREAD_EXPLICIT_SCHED); //有这行，设置优先级才会生效
+	
 	if (0 == pthread_create(
-		&(g_basic_interpreter_handle[iIdx]), NULL, basic_interpreter, args))
+		&(g_basic_interpreter_handle[iIdx]), &thread_attr, basic_interpreter, args))
 	{
 		ret = true;
 	}

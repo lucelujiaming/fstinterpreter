@@ -2838,7 +2838,9 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 				Sleep(100);
 				break;
 #else
-			    usleep(1000);
+                // IO_Manager use 10ms, So I use 5ms
+			    // usleep(1000);
+			    usleep(5000);
 #endif
 			    now = time(0);
 
@@ -2871,7 +2873,9 @@ int call_Wait(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 				Sleep(100);
 				break;
 #else
-			    usleep(1000);
+                // IO_Manager use 10ms, So I use 5ms
+			    // usleep(1000);
+			    usleep(5000);
 #endif
 			    now = time(0);
 				objThreadCntrolBlock->prog = wait_stack.while_loc;
@@ -2952,11 +2956,11 @@ int call_Pause(int iLineNum, struct thread_control_block* objThreadCntrolBlock)
 #endif
 	}
 */
-    objThreadCntrolBlock->is_paused = true;
+//    objThreadCntrolBlock->is_paused = true;
     FST_INFO("call_Pause: Enter waitInterpreterStateleftPaused %d ", iLineNum);
 	waitInterpreterStateleftPaused(objThreadCntrolBlock);
     FST_INFO("call_Pause: Left  waitInterpreterStateleftPaused %d ", iLineNum);
-    objThreadCntrolBlock->is_paused = false;
+//    objThreadCntrolBlock->is_paused = false;
     find_eol(objThreadCntrolBlock);
     return 1;   
 }
@@ -3033,18 +3037,18 @@ int call_BLDC_CTRL(int iLineNum, struct thread_control_block* objThreadCntrolBlo
 #ifdef WIN32
     return 0; 
 #else
-	if(g_objRegManagerInterface)
-	{
-//		bRet = g_objRegManagerInterface->setBLDC(iVel);
-		if(bRet)
-		{
-			return bRet ;
-		}
-	}
-	else
-	{
-		FST_ERROR("g_objRegManagerInterface is NULL");
-	}
+//	if(g_objRegManagerInterface)
+//	{
+//  //		bRet = g_objRegManagerInterface->setBLDC(iVel);
+//		if(bRet)
+//		{
+//			return bRet ;
+//		}
+//	}
+//	else
+//	{
+//		FST_ERROR("g_objRegManagerInterface is NULL");
+//	}
     return 1;   
 #endif
 }

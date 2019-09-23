@@ -122,6 +122,12 @@ void resetProgramNameAndLineNum(struct thread_control_block * objThdCtrlBlockPtr
 	setProgramName(objThdCtrlBlockPtr, (char *)""); 
 }
 
+#ifndef WIN32
+InterpreterPublish* getInterpreterPublishPtr()
+{
+	return &g_interpreter_publish ;
+}
+#endif
 /************************************************* 
 	Function:		getProgramName
 	Description:	get running Program Name
@@ -336,7 +342,8 @@ void setWarning(long long int warn)
 #endif  
 {
 #ifndef WIN32
-	g_objInterpreterServer->sendEvent(INTERPRETER_EVENT_TYPE_ERROR, &warn);
+	// g_objInterpreterServer->sendEvent(INTERPRETER_EVENT_TYPE_ERROR, &warn);
+	fst_base::ErrorMonitor::instance()->add(warn);
 #endif  
 }
 
@@ -349,7 +356,8 @@ void setWarning(long long int warn)
 void setMessage(int warn)
 {
 #ifndef WIN32
-	g_objInterpreterServer->sendEvent(INTERPRETER_EVENT_TYPE_MESSAGE, &warn);
+	// g_objInterpreterServer->sendEvent(INTERPRETER_EVENT_TYPE_MESSAGE, &warn);
+	fst_base::ErrorMonitor::instance()->add(warn);
 #endif  
 }
 
@@ -376,15 +384,15 @@ bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instructio
 		if (instruction->is_additional == false)
 		{
 	     	FST_INFO("setInstruction:: instr.target.cnt = %f .", instruction->target.cnt);
-			ret = g_objRegManagerInterface->setInstruction(instruction);
+			state_machine_ptr_->getNewInstruction(instruction);
 		}
 		else
 		{
 	     	FST_INFO("setInstruction:: instr.target.cnt = %f .", instruction->target.cnt);
-			ret = g_objRegManagerInterface->setInstruction(instruction);
+			state_machine_ptr_->getNewInstruction(instruction);
 		}
 		
-	    if (ret)
+//	    if (ret)
 	    {
 //	        if (is_backward)
 //	        {
@@ -412,12 +420,12 @@ bool setInstruction(struct thread_control_block * objThdCtrlBlockPtr, Instructio
      //       return false;
     }while(!ret);
 	
-    ret = g_objRegManagerInterface->isNextInstructionNeeded();
+    ret = state_machine_ptr_->isNextInstructionNeeded();
     FST_INFO("wait ctrl_status.is_permitted == false");
     while (ret == false)
     {
         usleep(1000);
-    	ret = g_objRegManagerInterface->isNextInstructionNeeded();
+    	ret = state_machine_ptr_->isNextInstructionNeeded();
     }
     FST_INFO("ctrl_status.is_permitted == true");
 #endif
@@ -559,7 +567,7 @@ void waitInterpreterStateToPaused(
 	Input:			requestDataPtr         - Command parameters
 	Return: 		NULL
 *************************************************/ 
-void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr) 
+void parseCtrlComand(InterpreterControl intprt_ctrl, char * requestDataPtr) 
 	// (struct thread_control_block * objThdCtrlBlockPtr)
 {
 //	InterpreterState interpreterState  = IDLE_R;
@@ -683,11 +691,11 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 				FST_ERROR("Can not JUMP macro ");
 				break;
 			}
-			if(objThdCtrlBlockPtr->is_paused == true)
-			{
-            	FST_ERROR("Can not JUMP in calling Pause ");
-           		break;
-			}
+//			if(objThdCtrlBlockPtr->is_paused == true)
+//			{
+//           	FST_ERROR("Can not JUMP in calling Pause ");
+//         		break;
+//			}
 			if(getPrgmState() == INTERPRETER_EXECUTE)
 			{
             	FST_ERROR("Can not JUMP in EXECUTE_R ");
@@ -725,11 +733,11 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 				FST_ERROR("Can not FORWARD macro ");
 				break;
 			}
-			if(objThdCtrlBlockPtr->is_paused == true)
-			{
-            	FST_ERROR("Can not FORWARD in calling Pause ");
-           		break;
-			}
+//			if(objThdCtrlBlockPtr->is_paused == true)
+//			{
+//            	FST_ERROR("Can not FORWARD in calling Pause ");
+//           		break;
+//			}
 			if(getPrgmState() == INTERPRETER_EXECUTE)
 			{
             	FST_ERROR("Can not FORWARD in EXECUTE_R ");
@@ -738,8 +746,9 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 	        // Checking prog_mode on 190125 
 			if(objThdCtrlBlockPtr->prog_mode != STEP_MODE)
 			{
-            	FST_ERROR("Can not FORWARD in other mode ");
-           		break;
+            //	FST_ERROR("Can not FORWARD in other mode ");
+            	FST_INFO("Using FORWARD would switch mode ");
+  			    setProgMode(objThdCtrlBlockPtr, STEP_MODE);
 			}
 			
             // objThdCtrlBlockPtr->prog_mode = STEP_MODE ;
@@ -773,11 +782,11 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 				FST_ERROR("Can not BACKWARD macro ");
 				break;
 			}
-			if(objThdCtrlBlockPtr->is_paused == true)
-			{
-            	FST_ERROR("Can not BACKWARD in calling Pause ");
-           		break;
-			}
+//			if(objThdCtrlBlockPtr->is_paused == true)
+//			{
+//            	FST_ERROR("Can not BACKWARD in calling Pause ");
+//         		break;
+//			}
 			if(getPrgmState() == INTERPRETER_EXECUTE)
 			{
             	FST_ERROR("Can not BACKWARD in EXECUTE_R ");
@@ -786,8 +795,10 @@ void parseCtrlComand(InterpreterControl intprt_ctrl, void * requestDataPtr)
 	        // Checking prog_mode on 190125 
 			if(objThdCtrlBlockPtr->prog_mode != STEP_MODE)
 			{
-            	FST_ERROR("Can not BACKWARD in other mode ");
-           		break;
+            //	FST_ERROR("Can not BACKWARD in other mode ");
+            	FST_INFO("Using FORWARD would switch mode ");
+  			    setProgMode(objThdCtrlBlockPtr, STEP_MODE);
+           	//	break;
 			}
 			// Revert checking condition on 190125
 			// if(lastCmd == fst_base::INTERPRETER_SERVER_CMD_FORWARD)

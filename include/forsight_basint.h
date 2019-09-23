@@ -29,8 +29,10 @@
 #else
 #include <pthread.h>
 // #include "motion_plan_arm_group.h"
+#include "controller_sm.h"
+#include "reg_manager.h"
+#include "io_mapping.h"
 #endif
-
 
 using namespace std;
 
@@ -157,7 +159,7 @@ struct thread_control_block {
 	vector<prog_line_info> prog_jmp_line;   // jmp_line info
 	ProgMode  prog_mode ; 					// = 0;   /* 0 - run to end, 1 - step  */
 	ExecuteDirection  execute_direction ;  	/* 0 - FORWARD, 1 - BACKWARD  */
-	bool is_abort , is_paused, is_in_macro; 
+	bool is_abort, is_in_macro; //  , is_paused; 
 	int  is_main_thread ; 					// = 0;   /* 0 - Monitor, 1 - Main  */
 	
 	char token[80];					// Current token
@@ -195,6 +197,12 @@ struct thread_control_block {
 } ;
 #ifndef WIN32
 extern fst_log::Logger* log_ptr_;
+extern ControllerSm* state_machine_ptr_;
+extern fst_mc::MotionControl* motion_control_ptr_;
+extern RegManager* reg_manager_ptr_;
+extern IoMapping* io_mapping_ptr_;
+extern IoManager* io_manager_ptr_;
+extern fst_hal::ModbusManager* modbus_manager_ptr_; 
 #endif
 void setLinenum(struct thread_control_block* objThreadCntrolBlock, int iLinenum);
 // LineNumState getLinenum(struct thread_control_block* objThreadCntrolBlock, int & num);

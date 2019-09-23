@@ -50,9 +50,16 @@ int main(int  argc, char *argv[])
 	signal(SIGINT, signalInterrupt);
 	if(log_ptr_ == NULL)
 	{
-		log_ptr_ = new fst_log::Logger();
+		log_ptr_ = log_ptr;
     	FST_LOG_INIT("Interpreter");
 	}
+	
+	state_machine_ptr_  = state_machine_ptr;
+	motion_control_ptr_ = motion_control_ptr;
+	reg_manager_ptr_    = reg_manager_ptr;
+	io_mapping_ptr_     = io_mapping_ptr;
+	io_manager_ptr_     = io_manager_ptr;
+	modbus_manager_ptr_ = modbus_manager_ptr;
 #else
 	//	append_io_mapping();
 	intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_LAUNCH ;
@@ -96,7 +103,7 @@ int main(int  argc, char *argv[])
 #else
 			if (intprt_ctrl.cmd == fst_base::INTERPRETER_SERVER_CMD_LAUNCH)
 			{
-				parseCtrlComand(intprt_ctrl, "TestCalcArea");
+				parseCtrlComand(intprt_ctrl, "PAUSE");
 				Sleep(1);
 				intprt_ctrl.cmd = fst_base::INTERPRETER_SERVER_CMD_RESUME ;
 				parseCtrlComand(intprt_ctrl, "");

@@ -697,8 +697,9 @@ int parseProgramProp(struct thread_control_block * objThreadCntrolBlock, char * 
 		switch ((child->type)&255)
 		{
 		case cJSON_True:	
-			FST_INFO("cJSON_True"); break;
+			FST_INFO("parseProgramProp::cJSON_True"); break;
 		case cJSON_Number:
+			FST_INFO("parseProgramProp::cJSON_Number");
 			if(isMainThread)
 			{
 				if(strcmp(child->string, "launchCode") == 0)
@@ -709,6 +710,7 @@ int parseProgramProp(struct thread_control_block * objThreadCntrolBlock, char * 
 			}
 			break;
 		case cJSON_String:	
+			FST_INFO("parseProgramProp::cJSON_String");
 			if(strcmp(child->string, "programType") == 0)
 			{
 				if(isMainThread)
@@ -738,12 +740,12 @@ int parseProgramProp(struct thread_control_block * objThreadCntrolBlock, char * 
 			}
 			break;
 		case cJSON_Array:
-			FST_INFO("parseDIOMap: cJSON_Array %s", child->string);
+			FST_INFO("parseProgramProp: cJSON_Array %s", child->string);
 			if(strcmp(child->string, "poses") == 0)
 				parsePoses(objThreadCntrolBlock, child);
 			break;
 		case cJSON_Object:	
-			// FST_INFO("cJSON_Object"); 
+			FST_INFO("parseProgramProp: cJSON_Object"); 
 			break;
 		}
 		child = child->next ;
@@ -796,6 +798,10 @@ int append_program_prop_mapper(struct thread_control_block * objThreadCntrolBloc
 		fclose(f);
 		parseProgramProp(objThreadCntrolBlock, data, isMainThread);
 		free(data);
+	}
+	else
+	{
+	   FST_INFO("append_program_prop_mapper: Can not find %s", fname); 
 	}
 	
 #ifdef WIN32

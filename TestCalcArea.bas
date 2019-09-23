@@ -5,8 +5,8 @@ SUB main ()
     # MR[20] = 720
     # MR[21] = -800
     # MR[22] = 500
-    XV = 720
-    YV = -800
+    XV = 720.456 % 5
+    YV = -800.456 @ 6
     ZV = 500
     # main loop
     WHILE 1
